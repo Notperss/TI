@@ -4,290 +4,290 @@
 
 @section('content')
 
-    <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
+  <!-- BEGIN: Content-->
+  <div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
 
-            {{-- breadcumb --}}
-            <div class="content-header row">
-                <div class="mb-2 content-header-left col-md-6 col-12 breadcrumb-new">
-                    <h3 class="mb-0 content-header-title d-inline-block">Dashboard</h3>
-                    <div class="row breadcrumbs-top d-inline-block">
-                        <h3 class="mb-0 content-header-title d-inline-block">Teknologi Informasi</h3>
-                    </div>
-                </div>
-            </div>
-            {{-- Card --}}
-            <div class="content-body">
-                <div class="row">
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content info ">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="info">5</h1>
-                                            <strong>Jumlah PC</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-tv font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-1 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-info">
-                                            Lihat Selengkapnya..</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content amber darken-4">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="amber darken-4">600</h1>
-                                            <strong>Jumlah Server Fisik</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-server  font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-1 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-amber btn-darken-4">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12 ">
-                        <div class="card pull-up ">
-                            <div class="card-content teal">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <i class="la la-credit-card font-large-2 float-right"></i>
-                                            <h1 class="teal">600</h1>
-                                            <strong>Jumlah Laporan Kerusakan Bulan Ini</strong>
-                                        </div>
-                                    </div>
-                                    <div class="mt-1 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-teal">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up bg">
-                            <div class="card-content  danger">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <i class="la la-file font-large-2 float-right "></i>
-                                            <h1 class="danger">600</h1>
-                                            <strong>Jumlah Laporan kerusakan Belum Selesai</strong>
-                                        </div>
-                                    </div>
-                                    <div class="mt-1 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-danger">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up bg">
-                            <div class="card-content  primary">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="primary">5</h1>
-                                            <strong>5</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-terminal font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-primary">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up bg">
-                            <div class="card-content info">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="info">6</h1>
-                                            <strong>6</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-edit  font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-info">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content  warning">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="warning">7</h1>
-                                            <strong>7</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-comment font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-warning">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content success">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="success">8</h1>
-                                            <strong>8</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-book font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-success">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content primary">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="primary">9</h1>
-                                            <strong>9</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-terminal font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-primary">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content info">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="info">10</h1>
-                                            <strong>10</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-edit font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-info">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content warning">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="warning">11</h1>
-                                            <strong>11</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-comment font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-warning">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-lg-6 col-12">
-                        <div class="card pull-up ">
-                            <div class="card-content success">
-                                <div class="card-body">
-                                    <div class="media d-flex">
-                                        <div class="media-body text-left">
-                                            <h1 class="success">12</h1>
-                                            <strong>12</strong>
-                                        </div>
-                                        <div>
-                                            <i class="la la-book font-large-2 float-right"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 mb-0 box-shadow-2">
-                                        <a href="#" class="btn btn-block btn-success">
-                                            Lihat Selengkapnya ...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+      {{-- breadcumb --}}
+      <div class="content-header row">
+        <div class="mb-2 content-header-left col-md-6 col-12 breadcrumb-new">
+          <h3 class="mb-0 content-header-title d-inline-block">Dashboard</h3>
+          <div class="row breadcrumbs-top d-inline-block">
+            <h3 class="mb-0 content-header-title d-inline-block">Teknologi Informasi</h3>
+          </div>
         </div>
+      </div>
+      {{-- Card --}}
+      <div class="content-body">
+        <div class="row">
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content info ">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="info">5</h1>
+                      <strong>Jumlah PC</strong>
+                    </div>
+                    <div>
+                      <i class="la la-tv font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-info">
+                      Lihat Selengkapnya..</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content amber darken-4">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="amber darken-4">600</h1>
+                      <strong>Jumlah Server Fisik</strong>
+                    </div>
+                    <div>
+                      <i class="la la-server  font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-amber btn-darken-4">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12 ">
+            <div class="card pull-up ">
+              <div class="card-content teal">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <i class="la la-credit-card font-large-2 float-right"></i>
+                      <h1 class="teal">600</h1>
+                      <strong>Jumlah Laporan Kerusakan Bulan Ini</strong>
+                    </div>
+                  </div>
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-teal">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up bg">
+              <div class="card-content  danger">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <i class="la la-file font-large-2 float-right "></i>
+                      <h1 class="danger">600</h1>
+                      <strong>Jumlah Laporan kerusakan Belum Selesai</strong>
+                    </div>
+                  </div>
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-danger">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up bg">
+              <div class="card-content  primary">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="primary">5</h1>
+                      <strong>5</strong>
+                    </div>
+                    <div>
+                      <i class="la la-terminal font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-primary">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up bg">
+              <div class="card-content info">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="info">6</h1>
+                      <strong>6</strong>
+                    </div>
+                    <div>
+                      <i class="la la-edit  font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-info">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content  warning">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="warning">7</h1>
+                      <strong>7</strong>
+                    </div>
+                    <div>
+                      <i class="la la-comment font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-warning">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content success">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="success">8</h1>
+                      <strong>8</strong>
+                    </div>
+                    <div>
+                      <i class="la la-book font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-success">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content primary">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="primary">9</h1>
+                      <strong>9</strong>
+                    </div>
+                    <div>
+                      <i class="la la-terminal font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-primary">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content info">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="info">10</h1>
+                      <strong>10</strong>
+                    </div>
+                    <div>
+                      <i class="la la-edit font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-info">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content warning">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="warning">11</h1>
+                      <strong>11</strong>
+                    </div>
+                    <div>
+                      <i class="la la-comment font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-warning">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+            <div class="card pull-up ">
+              <div class="card-content success">
+                <div class="card-body">
+                  <div class="media d-flex">
+                    <div class="media-body text-left">
+                      <h1 class="success">12</h1>
+                      <strong>12</strong>
+                    </div>
+                    <div>
+                      <i class="la la-book font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 mb-0 box-shadow-2">
+                    <a href="#" class="btn btn-block btn-success">
+                      Lihat Selengkapnya ...</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
-    </div>
-    <!-- END: Content-->
+  </div>
+  </div>
+  <!-- END: Content-->
 
 
 
@@ -491,18 +491,11 @@
     </script>
 @endpush --}}
 @push('after-style')
-    <style>
-        .pull-up {
-            background: linear-gradient(to top,
-                    white,
-                    rgba(143, 143, 143, 0.678));
-        }
-
-        /* .pull-up {
-                    background: linear-gradient(to top,
-                            white,
-                            rgba(0, 140, 255, 0.507));
-
-                } */
-    </style>
+  <style>
+    .pull-up {
+      background: linear-gradient(to top,
+          white,
+          rgba(214, 212, 212, 0.678));
+    }
+  </style>
 @endpush
