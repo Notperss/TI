@@ -579,9 +579,64 @@
           <i></i><span>Jenis Pekerjaan</span>
         </a>
       </li>
-
     </ul>
+
     {{-- END Kegiatan Harian --}}
+
+    @if (Auth::user()->detail_user->type_user_id == 1)
+      {{-- @can('management_access') --}}
+      <li class="nav-item"><a href="#"><i
+            class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') || request()->is('backsite/type_user') || request()->is('backsite/type_user/*') || request()->is('backsite/*/type_user') || request()->is('backsite/*/type_user/*') ? 'bx bx-group bx-flashing' : 'bx bx-group' }}"></i><span
+            class="menu-title" data-i18n="Management Access">Management Access</span></a>
+        <ul class="menu-content">
+          {{-- @can('type_user_access') --}}
+          <li
+            class="{{ request()->is('backsite/type_user') || request()->is('backsite/type_user/*') || request()->is('backsite/*/type_user') || request()->is('backsite/*/type_user/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.type_user.index') }}">
+              <i></i><span>Type User</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+          {{-- @can('user_access') --}}
+          <li
+            class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.user.index') }}">
+              <i></i><span>User</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+        </ul>
+      </li>
+      {{-- @endcan --}}
+    @endif
+
+    {{-- @can('setting') --}}
+    <li class=" nav-item"><a href="#"><i
+          class="{{ request()->is('logout') || request()->is('backsite/profile') || request()->is('backsite/profile/*') || request()->is('backsite/*/profile') || request()->is('backsite/*/profile/*') ? 'bx bx-brightness bx-flashing' : 'bx bx-brightness' }}"></i><span
+          class="menu-title" data-i18n="Setting">Setting</span></a>
+      <ul class="menu-content">
+        {{-- @can('profile') --}}
+        <li
+          class="{{ request()->is('backsite/profile') || request()->is('backsite/profile/*') || request()->is('backsite/*/profile') || request()->is('backsite/*/profile/*') ? 'active' : '' }} ">
+          <a class="menu-item" href="{{ route('backsite.profile.index') }}">
+            <i></i><span>Profil</span>
+          </a>
+        </li>
+        {{-- @endcan --}}
+
+        {{-- @can('logout') --}}
+        <li class="{{ request()->is('logout') ? 'active' : '' }} ">
+          <a class="menu-item" href="{{ route('logout') }}"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i></i><span>Logout</span>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
+          </a>
+        </li>
+      </ul>
+    </li>
+
 
     {{-- END --}}
 
