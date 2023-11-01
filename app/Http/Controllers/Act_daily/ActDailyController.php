@@ -17,6 +17,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\MasterData\Location\LocationRoom;
 use App\Http\Requests\Data\Act_daily\StoreActDailyRequest;
 use App\Http\Requests\Data\Act_daily\UpdateActDailyRequest;
+use Illuminate\Console\View\Components\Confirm;
 
 class ActDailyController extends Controller
 {
@@ -33,10 +34,33 @@ class ActDailyController extends Controller
 
             return DataTables::of($actdaily)
                 ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group mr-1 mb-1">
+                <button type="button" class="btn btn-cyan btn-sm mr-1" title="Tambah File" onclick="upload(' . $item->id . ')"><i
+                        class="bx bx-file"></i></button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.act_daily.show', $item->id) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Aktivitas Harian" class="dropdown-item">
+                        Show
+                    </a>
+                    <a class="dropdown-item" href="' . route('backsite.act_daily.edit', $item->id) . '">
+                        Edit
+                                </a>
+                    <form action="' . route('backsite.act_daily.destroy', $item->id) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('delete') . csrf_field() . '
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+             </div>
 
-                ->addColumn('action', 'pages/data/act_daily/action_activity')
-
-                ->rawColumns(['action'])
+                ';
+                })
+                ->rawColumns(['action',])
                 ->toJson();
         }
 
@@ -53,8 +77,8 @@ class ActDailyController extends Controller
      */
     public function create()
     {
-        $executor =  Auth::user()->name;
-        $user_id =  Auth::user()->id;
+        $executor = Auth::user()->name;
+        $user_id = Auth::user()->id;
         $user = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
         $work_type = Workcat::latest()->get();
         $location_room = LocationRoom::orderBy('name', 'asc')->get();
@@ -113,8 +137,8 @@ class ActDailyController extends Controller
         $actdaily = ActDaily::find($id);
 
 
-        $executor =  Auth::user()->name;
-        $user_id =  Auth::user()->id;
+        $executor = Auth::user()->name;
+        $user_id = Auth::user()->id;
         $user = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
         $work_type = Workcat::latest()->get();
         $location_room = LocationRoom::orderBy('name', 'asc')->get();
@@ -193,7 +217,7 @@ class ActDailyController extends Controller
             ];
 
             $msg = [
-                'data' => view('pages.data.act_daily.upload_file', $data)->render()
+                'data' => view('pages.data.act_daily.upload_file', $data)->render(),
             ];
 
             return response()->json($msg);
@@ -208,7 +232,7 @@ class ActDailyController extends Controller
                 $file = $image->storeAs('assets/file-daily-activity', $image->getClientOriginalName());
                 DailyActivityFile::create([
                     'daily_activity_id' => $request->id,
-                    'file'        => $file
+                    'file' => $file,
                 ]);
             }
         }
@@ -225,11 +249,11 @@ class ActDailyController extends Controller
 
             $daily_activity_file = DailyActivityFile::where('daily_activity_id', $id)->get();
             $data = [
-                'datafile' => $daily_activity_file
+                'datafile' => $daily_activity_file,
             ];
 
             $msg = [
-                'data' => view('pages.data.act_daily.detail_file', $data)->render()
+                'data' => view('pages.data.act_daily.detail_file', $data)->render(),
             ];
 
             return response()->json($msg);
@@ -266,7 +290,7 @@ class ActDailyController extends Controller
             ];
 
             $msg = [
-                'data' => view('pages.data.act_daily.action_activity', $data)->render()
+                'data' => view('pages.data.act_daily.action_activity', $data)->render(),
             ];
 
             return response()->json($msg);

@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'nik' => [
-                'required', 'string', 'max:50', 'unique:detail_user,nik', Rule::unique('detail_user')
+                'required', 'string', 'max:50', 'unique:detail_user,nik', Rule::unique('detail_user'),
             ],
             'name' => [
                 'required', 'string', 'max:255',
@@ -37,6 +37,9 @@ class StoreUserRequest extends FormRequest
             'job_position' => [
                 'required', 'string', 'max:255',
             ],
+            'type_user_id' => [
+                'required', 'string', 'max:255',
+            ],
             'status' => [
                 'required', 'string', 'max:255',
             ],
@@ -44,7 +47,7 @@ class StoreUserRequest extends FormRequest
                 'mimes:png,jpg,jpeg',
             ],
             'email' => [
-                'required', 'unique:users,email', Rule::unique('users')
+                'required', 'unique:users,email', Rule::unique('users'),
             ],
             // add validation for role this here
         ];

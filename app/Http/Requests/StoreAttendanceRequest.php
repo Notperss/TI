@@ -25,29 +25,23 @@ class StoreAttendanceRequest extends FormRequest
     {
         return [
 
-            'hadir' => [
-                'required', 'max:255'
+            'users_id' => [
+                'required',
             ],
-            'sakit' => [
-                'required', 'max:255'
-            ],
-            'izin' => [
-                'required', 'max:255'
-            ],
-            'absen' => [
-                'required', 'max:255'
-            ],
-            'cuti' => [
-                'required', 'max:255'
+            'category' => [
+                'required',
             ],
             'file' => [
                 'mimes:png,jpg,pdf',
             ],
-            'tanggal' => [
-                'required', 'max:255'
+            'start_date' => [
+                'required',
             ],
-            'keterangan' => [
-                'max:255',
+            'finish_date' => [
+                'required',
+            ],
+            'description' => [
+                'required', 'max:255',
             ],
         ];
     }

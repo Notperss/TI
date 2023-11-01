@@ -37,7 +37,7 @@
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-info">
-                      Lihat Selengkapnya..</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -59,7 +59,7 @@
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-amber btn-darken-4">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -79,7 +79,7 @@
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-teal">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-danger">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -121,7 +121,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-primary">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -143,7 +143,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-info">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -165,7 +165,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-warning">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -187,7 +187,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-success">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -209,7 +209,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-primary">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -231,7 +231,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-info">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -253,7 +253,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-warning">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>
@@ -275,7 +275,7 @@
                   </div>
                   <div class="mt-3 mb-0 box-shadow-2">
                     <a href="#" class="btn btn-block btn-sm btn-success">
-                      Lihat Selengkapnya ...</a>
+                      See More ..</a>
                   </div>
                 </div>
               </div>

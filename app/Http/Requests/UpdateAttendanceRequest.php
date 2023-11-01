@@ -25,26 +25,23 @@ class UpdateAttendanceRequest extends FormRequest
     {
         return [
 
-            'hadir' => [
+            'users_id' => [
                 'required',
             ],
-            'sakit' => [
-                'required',
-            ],
-            'izin' => [
-                'required',
-            ],
-            'absen' => [
-                'required',
-            ],
-            'cuti' => [
+            'category' => [
                 'required',
             ],
             'file' => [
                 'mimes:png,jpg,pdf',
             ],
-            'tanggal' => [
+            'start_date' => [
                 'required',
+            ],
+            'finish_date' => [
+                'required',
+            ],
+            'description' => [
+                'required', 'max:255',
             ],
         ];
     }

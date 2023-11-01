@@ -3,6 +3,7 @@
 namespace App\Models\ManagementAccess;
 
 use App\Models\Act_daily\ActDaily;
+use App\Models\Attendance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -59,5 +60,9 @@ class DetailUser extends Model
     {
         // 2 parameter (path model, field foreign key)
         return $this->hasOne(ActDaily::class, 'executor');
+    }
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'users_id', 'id');
     }
 }

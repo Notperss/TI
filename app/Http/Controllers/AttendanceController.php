@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Attendance;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreAttendanceRequest;
 use App\Http\Requests\UpdateAttendanceRequest;
 
@@ -17,9 +21,46 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $attendance = Attendance::orderby('created_at', 'desc')->get();
+        if (request()->ajax()) {
 
-        return view('pages.adm.attendance.index', compact('attendance'));
+            $attendance = Attendance::with('detail_user.user')->orderby('created_at', 'desc');
+
+            return DataTables::of($attendance)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group mr-1 mb-1">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Aktivitas Harian" class="dropdown-item">
+                        Show
+                    </a>
+                    <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">
+                        Edit
+                                </a>
+                    <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('delete') . csrf_field() . '
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+            </div>
+                ';
+                })
+                ->editColumn('start_date', function ($item) {
+                    return Carbon::parse($item->start_date)->translatedFormat('l, d F Y');
+                })
+                ->editColumn('finish_date', function ($item) {
+                    return Carbon::parse($item->finish_date)->translatedFormat('l, d F Y');
+                })
+                ->rawColumns(['action',])
+                ->toJson();
+        }
+
+        return view('pages.adm.attendance.index');
     }
 
     /**
@@ -29,7 +70,9 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        return view('pages.adm.attendance.create');
+        $user = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
+
+        return view('pages.adm.attendance.create', compact('user'));
     }
 
     /**
@@ -47,7 +90,6 @@ class AttendanceController extends Controller
         if ($request->hasFile('file')) {
             $data['file'] = $request->file('file')->store('storage/app/assets/file-attendance');
         }
-
         // store to database
         Attendance::create($data);
 
@@ -66,6 +108,7 @@ class AttendanceController extends Controller
         $decrypt_id = decrypt($id);
         $attendance = Attendance::find($decrypt_id);
 
+
         return view('pages.adm.attendance.show', compact('attendance'));
     }
 
@@ -79,7 +122,9 @@ class AttendanceController extends Controller
     {
         $decrypt_id = decrypt($id);
         $attendance = Attendance::find($decrypt_id);
-        return view('pages.adm.attendance.edit', compact('attendance'));
+        $users = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
+
+        return view('pages.adm.attendance.edit', compact('attendance', 'users'));
     }
 
     /**

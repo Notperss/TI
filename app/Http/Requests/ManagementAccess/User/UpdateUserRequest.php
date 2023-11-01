@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
         $user = $this->user();
         return [
             'nik' => [
-                'required', 'string', 'max:50',  Rule::unique('detail_user')->ignore($this->user)
+                'required', 'string', 'max:50', Rule::unique('detail_user')->ignore($this->user),
             ],
             'name' => [
                 'required', 'string', 'max:255',
@@ -36,7 +36,7 @@ class UpdateUserRequest extends FormRequest
             'job_position' => [
                 'required', 'string', 'max:255',
             ],
-            'status' => [
+            'type_user_id' => [
                 'required', 'string', 'max:255',
             ],
             'status' => [
@@ -46,7 +46,7 @@ class UpdateUserRequest extends FormRequest
                 'mimes:png,jpg,jpeg',
             ],
             'email' => [
-                'required', 'email', Rule::unique('users')->ignore($this->user)
+                'required', 'email', Rule::unique('users')->ignore($this->user),
             ],
             // add validation for role this here
         ];

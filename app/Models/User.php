@@ -78,4 +78,9 @@ class User extends Authenticatable
         // 2 parameter (path model, field foreign key)
         return $this->hasMany(ActDaily::class, 'users_id');
     }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'users_id');
+    }
 }
