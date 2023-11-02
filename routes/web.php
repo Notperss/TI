@@ -11,6 +11,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Data\WorkProgramController;
 use App\Http\Controllers\Act_daily\WorkcatController;
 use App\Http\Controllers\Act_daily\ActDailyController;
+use App\Http\Controllers\Adm\PPController;
 use App\Http\Controllers\Data\DailyActivityController;
 use App\Http\Controllers\MasterData\EmployeeController;
 use App\Http\Controllers\MasterData\SoftwareController;
@@ -148,6 +149,15 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     Route::resource('jobdesk', JobdeskController::class);
 
+    Route::resource('pp', PPController::class);
+
+    Route::controller(PPController::class)->group(function () {
+        Route::post('/pp/form_upload', 'form_upload')->name('pp.form_upload');
+        Route::post('/pp/upload', 'upload')->name('pp.upload');
+        Route::post('/pp/show_file', 'show_file')->name('pp.show_file');
+        Route::delete('/pp/{id}/hapus_file', 'hapus_file')->name('pp.hapus_file');
+    });
+
     Route::resource('attendance', AttendanceController::class);
 
     Route::resource('act_daily', ActDailyController::class);
@@ -157,11 +167,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/act_daily/upload', 'upload')->name('act_daily.upload');
         Route::post('/act_daily/show_file', 'show_file')->name('act_daily.show_file');
         Route::delete('/act_daily/{id}/hapus_file', 'hapus_file')->name('act_daily.hapus_file');
-        // Route::get('/act_daily/{id}/edit', 'edit')->name('act_daily.edit');
-        // Route::delete('delete/{id}', 'destroy')->name('act_daily.destroy');
-        // Route::get('/act_daily/show', 'show')->name('act_daily.show');
     });
-    // Route::post('/act_daily/{id}', [ActDaily::class, 'show'])->name('act_daily.show');
 
 
     Route::resource('workcat', WorkcatController::class);

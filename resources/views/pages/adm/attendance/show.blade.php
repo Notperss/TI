@@ -34,11 +34,18 @@
   </tr>
   <tr>
     <th>keterangan</th>
-    <td>{{ isset($attendance->description) ? $attendance->description : 'N/A' }}</td>
+    <td style="word-break: break-all">{{ isset($attendance->description) ? $attendance->description : 'N/A' }}</td>
   </tr>
   <tr>
     <th>File</th>
-    <td> <a data-fancybox="gallery" data-src="{{ asset('storage/' . $attendance->file) }}" class="blue accent-4">Show</a>
+    @if ($attendance->file)
+      <td> <a data-fancybox="gallery" data-src="{{ asset('storage/' . $attendance->file) }}"
+          class="badge bg-blue text-white">
+          Show
+        </a>
+      @else
+      <td> No File!</td>
+    @endif
     </td>
     </td>
   </tr>

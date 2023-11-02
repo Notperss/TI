@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreAttendanceRequest;
 use App\Http\Requests\UpdateAttendanceRequest;
+use App\Models\ManagementAccess\DetailUser;
 
 class AttendanceController extends Controller
 {
@@ -70,8 +71,8 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        $user = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
-
+        // $user = User::where(['name', '!=', 'Administrator'],[DetailUser::where('status','1')])->orderBy('name', 'asc')->get();
+        $user = DetailUser::where('status', '1')->get();
         return view('pages.adm.attendance.create', compact('user'));
     }
 
@@ -122,8 +123,8 @@ class AttendanceController extends Controller
     {
         $decrypt_id = decrypt($id);
         $attendance = Attendance::find($decrypt_id);
-        $users = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
-
+        // $users = User::where(['name', '!=', 'Administrator'], ['status', '1'])->orderBy('name', 'asc')->get();
+        $users = DetailUser::where('status', '1')->get();
         return view('pages.adm.attendance.edit', compact('attendance', 'users'));
     }
 

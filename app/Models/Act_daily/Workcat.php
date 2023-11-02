@@ -9,7 +9,7 @@ class Workcat extends Model
 {
     use HasFactory;
 
-    protected $table = 'workcat';
+    // protected $table = 'workcat';
 
     protected $guarded = 'id';
 

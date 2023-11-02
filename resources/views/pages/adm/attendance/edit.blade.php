@@ -87,14 +87,13 @@
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file"
-                            onchange="previewImage()">
+                          <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
                         </div>
                         <p class="text-muted"><small class="text-danger">Hanya dapat
                             mengunggah 1 file</small></p>
-                        <img class="img-preview img-fluid mb-1 col-md-6">
+                        <img class="img-preview img-fluid mb-1 col-md-6" alt="">
                         @if ($errors->has('file'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
@@ -105,7 +104,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
-                      <div class="col-md-7">
+                      <div class="col-md-7" id="editor">
                         <textarea rows="5" class="form-control summernote" id="description" name="description">{{ $attendance->description }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
@@ -129,6 +128,4 @@
       </div>
     </div>
   </div>
-
-
 @endsection

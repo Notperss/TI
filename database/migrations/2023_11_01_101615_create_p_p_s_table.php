@@ -12,13 +12,17 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('workcats', function (Blueprint $table) {
+        Schema::create('pps', function (Blueprint $table) {
             $table->id();
-            $table->string('job_type');
-            $table->string('description')->nullable();
-            $table->string('terminal_id')->nullable();
+            $table->string('no_pp');
+            $table->year('year');
+            $table->date('date');
+            $table->string('job_name');
+            $table->string('job_value');
+            $table->string('rkap');
+            $table->string('stats');
+            $table->longText('description');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +33,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('workcats');
+        Schema::dropIfExists('p_p_s');
     }
 };

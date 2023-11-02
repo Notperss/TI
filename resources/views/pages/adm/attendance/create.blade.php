@@ -32,7 +32,7 @@
                           </option>
                           @foreach ($user as $key => $user_item)
                             <option value="{{ $user_item->id }}">
-                              {{ $user_item->name }}</option>
+                              {{ $user_item->user->name }}</option>
                           @endforeach
                         </select>
                         @if ($errors->has('nik'))
@@ -91,8 +91,7 @@
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file"
-                            onchange="previewImage()">
+                          <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
                         </div>

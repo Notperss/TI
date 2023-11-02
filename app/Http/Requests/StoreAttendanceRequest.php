@@ -31,9 +31,6 @@ class StoreAttendanceRequest extends FormRequest
             'category' => [
                 'required',
             ],
-            'file' => [
-                'mimes:png,jpg,pdf',
-            ],
             'start_date' => [
                 'required',
             ],

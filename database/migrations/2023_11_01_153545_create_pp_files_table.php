@@ -12,13 +12,14 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('workcats', function (Blueprint $table) {
+        Schema::create('pp_files', function (Blueprint $table) {
             $table->id();
-            $table->string('job_type');
-            $table->string('description')->nullable();
-            $table->string('terminal_id')->nullable();
+            $table->bigInteger('pp_id');
+            $table->string('name_file')->nullable();
+            $table->string('type_file')->nullable();
+            $table->string('file');
+            $table->longText('description_file')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('workcats');
+        Schema::dropIfExists('pp_files');
     }
 };

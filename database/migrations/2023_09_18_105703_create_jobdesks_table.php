@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,6 +14,14 @@ return new class extends Migration
     {
         Schema::create('jobdesks', function (Blueprint $table) {
             $table->id();
+            $table->string('jobdesk');
+            $table->string('year');
+            $table->string('general');
+            $table->string('technical');
+            $table->longText('description');
+            $table->interger('type');
+            $table->interger('status');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -183,8 +183,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/pp') || request()->is('backsite/pp/*') || request()->is('backsite/*/pp') || request()->is('backsite/*/pp/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.pp.index') }}">
               <i></i><span>PP</span>
             </a>
           </li>

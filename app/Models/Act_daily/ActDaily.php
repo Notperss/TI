@@ -11,7 +11,7 @@ class ActDaily extends Model
 {
     use HasFactory;
 
-    public $table = 'act_daily';
+    // public $table = 'act_daily';
 
     protected $fillable = [
         'executor',
