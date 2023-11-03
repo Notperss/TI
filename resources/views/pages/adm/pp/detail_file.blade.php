@@ -20,10 +20,11 @@
             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Action</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a type="button" data-fancybox="gallery" data-src="{{ asset('storage/' . $file->file) }}"
-                class="btn text-nowrap ">
+              <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap ">
                 Show
               </a>
+              <a type="button" href="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap"
+                download>Download</a>
               {{-- <a class="dropdown-item" href="{{ route('backsite.pp.edit', encrypt($file->id)) }}">
                 Edit
               </a> --}}

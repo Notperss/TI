@@ -66,7 +66,7 @@
           </div>
           <div class="form-group row">
             <label class="col-md-4 label-control" for="file">File
-              <code style="color:red;">required</code></label>
+              <code style="color:red;">*</code></label>
             <div class="col-md-8">
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="file" name="file[]" multiple="multiple"
@@ -94,6 +94,10 @@ onchange="javascript:updateList()" />
           </div>
         </div>
         <div class="modal-footer">
+          <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-success float-left" href>
+            <i class="la la-check-square-o"></i> Cancel
+          </a>
+
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
             <i class="la la-check-square-o"></i> Upload

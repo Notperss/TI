@@ -122,18 +122,16 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="file">Tambah File<code
-                          style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <button type="button" class="btn btn-cyan btn-lg mr-1" title="Tambah File"
-                          onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i></button>
+                        <button type="button" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah File"
+                          onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i> Tambah File</button>
                       </div>
                     </div>
                     <div class="form-group row">
                       <div class="table-responsive">
                         <table
                           class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                          id="pp-table" aria-label="">
+                          id="pp-table">
                           <thead>
                             <tr>
                               <th class="text-center" style="width: 5%;">No</th>
@@ -158,6 +156,8 @@
                                       class="btn text-nowrap ">
                                       Show
                                     </a>
+                                    <a type="button" href="{{ asset('storage/' . $file->file) }}"
+                                      class="btn text-nowrap" download>Download</a>
                                     <form action="{{ route('backsite.pp.hapus_file', $file->id ?? '') }}"
                                       method="POST"
                                       onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
