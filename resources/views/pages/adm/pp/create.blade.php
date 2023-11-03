@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Absensi')
+@section('title', 'PP')
 @section('content')
   <div class="app-content content" id="pp">
     <div class="content-overlay"></div>
@@ -13,8 +13,8 @@
             <div class="col-12">
               <div class="card">
 
-                <div class="card-header bg-success text-white my-1">
-                  <h4 class="card-title text-white">Tambah Absensi</h4>
+                <div class="card-header bg-success">
+                  <h4 class="card-title text-white">Tambah Data PP</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.pp.store') }}" method="POST"
                   enctype="multipart/form-data">

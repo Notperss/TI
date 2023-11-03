@@ -13,7 +13,7 @@
             <div class="col-12">
               <div class="card">
 
-                <div class="card-header bg-success text-white my-1">
+                <div class="card-header bg-success">
                   <h4 class="card-title text-white">Tambah Absensi</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.attendance.store') }}" method="POST"
