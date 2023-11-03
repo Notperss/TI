@@ -19,8 +19,8 @@ return new class extends Migration {
             $table->string('general');
             $table->string('technical');
             $table->longText('description');
-            $table->interger('type');
-            $table->interger('status');
+            $table->bigInteger('type');
+            $table->bigInteger('status');
             $table->softDeletes();
             $table->timestamps();
         });
