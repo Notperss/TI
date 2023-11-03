@@ -78,9 +78,11 @@ class PPController extends Controller
         $data = $request->all();
 
         // store to database
-        PP::create($data);
+        $pp = PP::create($data);
+        $pp_id = $pp->id;
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.pp.index');
+        return redirect()->route('backsite.pp.edit', $pp_id);
+
 
     }
 

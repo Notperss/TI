@@ -3,7 +3,7 @@
 {{-- set title --}}
 @section('title', 'Absensi')
 @section('content')
-  <div class="app-content content" id="pp">
+  <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
 
@@ -123,15 +123,16 @@
                     </div>
                     <div class="form-group row">
                       <div class="col-md-4">
-                        <button type="button" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah File"
-                          onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i> Tambah File</button>
+                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2"
+                          title="Tambah File" onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i>
+                          Tambah File</button>
                       </div>
                     </div>
                     <div class="form-group row">
                       <div class="table-responsive">
                         <table
                           class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                          id="pp-table">
+                          aria-label="">
                           <thead>
                             <tr>
                               <th class="text-center" style="width: 5%;">No</th>
@@ -158,13 +159,9 @@
                                     </a>
                                     <a type="button" href="{{ asset('storage/' . $file->file) }}"
                                       class="btn text-nowrap" download>Download</a>
-                                    <form action="{{ route('backsite.pp.hapus_file', $file->id ?? '') }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
-                                      <input type="hidden" name="_method" value="DELETE">
-                                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                      <input type="submit" class="btn"value="Delete">
-                                    </form>
+                                    <button type="button" class="btn text-nowrap" onclick="thisFileUpload()">
+                                      Delete
+                                    </button>
                                   </div>
                                 </div>
                               </td>
@@ -186,6 +183,12 @@
                 </form>
               </div>
             </div>
+            <form action="{{ route('backsite.pp.hapus_file', $file->id ?? '') }}" method="POST"
+              onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+              <input type="hidden" name="_method" value="DELETE">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <input type="submit" style="display: none;" id="delete_file" class="btn"value="Delete">
+            </form>
           </div>
       </div>
       </section>
@@ -204,6 +207,11 @@
 
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+  <script>
+    function thisFileUpload() {
+      document.getElementById("delete_file").click();
+    }
+  </script>
   <script>
     function upload(id) {
       $.ajaxSetup({
@@ -228,5 +236,13 @@
         }
       });
     }
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      $('html,body').animate({
+        scrollTop: document.body.scrollHeight
+      }, "slow");
+    })
   </script>
 @endpush

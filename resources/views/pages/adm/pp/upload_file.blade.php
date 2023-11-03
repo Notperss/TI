@@ -94,8 +94,8 @@ onchange="javascript:updateList()" />
           </div>
         </div>
         <div class="modal-footer">
-          <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-success float-left" href>
-            <i class="la la-check-square-o"></i> Cancel
+          <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
+            <i class="la la-close"></i> Cancel
           </a>
 
           <button type="submit" style="width:120px;" class="btn btn-cyan"
