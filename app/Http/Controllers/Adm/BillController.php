@@ -80,7 +80,7 @@ class BillController extends Controller
         }
 
         alert()->success('Sukses', 'File Berhasil diupload');
-        return redirect()->route('backsite.bill.create', $pp);
+        return redirect()->route('backsite.bill.create_bill', $pp);
     }
 
     /**
