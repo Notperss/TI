@@ -2,6 +2,7 @@
 // controller
 
 
+use App\Http\Controllers\Adm\BillController;
 use App\Models\Act_daily\Workcat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -148,6 +149,16 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('vendor_ti', VendorTiController::class);
 
     Route::resource('jobdesk', JobdeskController::class);
+
+    Route::resource('bill', BillController::class);
+
+    Route::controller(BillController::class)->group(function () {
+        Route::get('/bill/{id}/create_bill', 'create_bill')->name('bill.create_bill');
+        Route::post('/bill/form_upload', 'form_upload')->name('bill.form_upload');
+        Route::post('/bill/upload', 'upload')->name('bill.upload');
+        Route::post('/bill/show_file', 'show_file')->name('bill.show_file');
+        Route::delete('/bill/{id}/hapus_file', 'hapus_file')->name('bill.hapus_file');
+    });
 
     Route::resource('pp', PPController::class);
 

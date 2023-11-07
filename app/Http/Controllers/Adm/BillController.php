@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Adm;
 
-use Carbon\Carbon;
 use App\Models\Adm\PP;
+use App\Models\Adm\Bill;
 use App\Models\Adm\Pp_file;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\Adm\PP\StorePPRequest;
-use App\Http\Requests\Adm\PP\UpdatePPRequest;
+use App\Http\Requests\Adm\Bill\StoreBillRequest;
+use App\Http\Requests\Adm\Bill\UpdateBillRequest;
 
-class PPController extends Controller
+class BillController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,30 +33,15 @@ class PPController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Aktivitas Harian" class="dropdown-item">
-                        Show
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.pp.edit', $item->id) . '">
-                        Edit
-                     </a>
                     <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
-                        Tambah tagihan
-                     </a>
-                    <form action="' . route('backsite.pp.destroy', encrypt($item->id)) . '" method="POST"
-                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
-                    </form>
+                        Tambah Tagihan </a>
             </div>
                 ';
                 })
                 ->rawColumns(['action',])
                 ->toJson();
         }
-        return view("pages.adm.pp.index");
+        return view("pages.adm.bill.index");
     }
 
     /**
@@ -66,117 +51,110 @@ class PPController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.pp.create");
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Adm\PP\StorePPRequest  $request
+     * @param  \App\Http\Requests\Adm\Bill\StoreBillRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePPRequest $request)
+    public function store(StoreBillRequest $request)
     {
-        // get all request from frontsite
-        $data = $request->all();
-
-        // store to database
-        $pp = PP::create($data);
-        $pp_id = $pp->id;
+        $pp = PP::find($request->id);
 
         // save to file test material
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
-                $file = $image->storeAs('assets/file-pp', $image->getClientOriginalName());
-                Pp_file::create([
-                    'pp_id' => $pp_id,
-                    'name_file' => $request->name_file,
-                    'type_file' => $request->type_file,
-                    'description_file' => $request->description_file,
+                $file = $image->storeAs('assets/file-bill', $image->getClientOriginalName());
+                Bill::create([
+                    'pp_id' => $request->id,
+                    'bill_to' => $request->bill_to,
+                    'bill_value' => $request->bill_value,
+                    'date' => $request->date,
+                    'description' => $request->description,
                     'file' => $file,
                 ]);
             }
         }
-        alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.pp.edit', $pp_id);
 
-
+        alert()->success('Sukses', 'File Berhasil diupload');
+        return redirect()->route('backsite.bill.create', $pp);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Models\Adm\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Bill $bill)
     {
-        $decrypt_id = decrypt($id);
-        $pp = PP::find($decrypt_id);
-
-        return view('pages.adm.pp.show', compact('pp'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Models\Adm\Bill  $bill
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $pp = PP::find($id);
-        $datafile = Pp_file::where('pp_id', $id)->get();
-        return view('pages.adm.pp.edit', compact('pp', 'datafile'));
+        $bill = Bill::find($id);
+        $filepath = storage_path($bill->file);
+        $fileName = basename($filepath);
+        return view('pages.adm.bill.edit', compact('bill', 'fileName'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Adm\PP\UpdatePPRequest  $request
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Http\Requests\Adm\Bill\UpdateBillRequest  $request
+     * @param  \App\Models\Adm\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePPRequest $request, PP $pp)
+    public function update(UpdateBillRequest $request, Bill $bill)
     {
         // get all request from frontsite
         $data = $request->all();
 
+        // cari old photo
+        $path_file = $bill['file'];
+
+        // upload process here
+        if ($request->hasFile('file')) {
+
+            $data['file'] = $request->file('file')->storeAs('assets/file-bill', $request->file('file')->getClientOriginalName());
+            // hapus file
+            if ($path_file != null || $path_file != '') {
+                Storage::delete($path_file);
+            }
+        } else {
+            $data['file'] = $path_file;
+        }
+
+
         // update to database
-        $pp->update($data);
+        $bill->update($data);
+
+        $pp_id = $bill->pp_id;
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.pp.index');
+        return redirect()->route('backsite.bill.create_bill', $pp_id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Models\Adm\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Bill $bill)
     {
-        // deskripsi id
-        $decrypt_id = decrypt($id);
-        $pp = PP::find($decrypt_id);
-
-        $pp->forceDelete();
-
-        $pp_file = Pp_file::where('pp_id', $decrypt_id)->get();
-        // hapus file
-        foreach ($pp_file as $file) {
-            if ($file->file != null || $file->file != '') {
-                Storage::delete($file->file);
-            }
-
-        }
-        $pp_file = Pp_file::where('pp_id', $decrypt_id)->forceDelete();
-
-        alert()->success('Sukses', 'Data berhasil dihapus');
-        return back();
+        //
     }
-
     // get form upload daily activity
     public function form_upload(Request $request)
     {
@@ -189,7 +167,7 @@ class PPController extends Controller
             ];
 
             $msg = [
-                'data' => view('pages.adm.pp.upload_file', $data)->render(),
+                'data' => view('pages.adm.bill.upload_file', $data)->render(),
             ];
 
             return response()->json($msg);
@@ -240,20 +218,27 @@ class PPController extends Controller
     // hapus file dailiy activity
     public function hapus_file($id)
     {
-        $pp_file = Pp_file::find($id);
+        $bill = Bill::find($id);
 
         // cari old photo
-        $path_file = $pp_file['file'];
+        $path_file = $bill['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 
-        $pp_file->forceDelete();
+        $bill->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
-
+    public function create_bill(Request $request)
+    {
+        $id = $request->id;
+        $pp = PP::find($id);
+        $datafile = Pp_file::where('pp_id', $id)->get();
+        $bills = Bill::where('pp_id', $id)->get();
+        return view('pages.adm.bill.create_bill', compact('pp', 'datafile', 'bills'));
+    }
 }

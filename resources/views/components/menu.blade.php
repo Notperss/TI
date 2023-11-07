@@ -192,8 +192,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/bill') || request()->is('backsite/bill/*') || request()->is('backsite/*/bill') || request()->is('backsite/*/bill/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.bill.index') }}">
               <i></i><span>Tagihan</span>
             </a>
           </li>

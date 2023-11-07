@@ -18,7 +18,7 @@ class Pp_file extends Model
         "description_file",
     ];
 
-    public function pp_file()
+    public function pp()
     {
         return $this->belongsTo(PP::class, "id");
     }

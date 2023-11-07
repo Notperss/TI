@@ -101,10 +101,25 @@
                           <option value="1">Aktif</option>
                           <option value="2">Tidak Aktif</option>
                         </select>
-
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('stats') }}</p>
+                        @endif
+                      </div>
+                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
+                      <div class="col-md-4">
+                        <select name="type_bill" id="type_bill" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="LUMPSUM">Lumpsum
+                          </option>
+                          <option value="RUTIN">Rutin
+                          </option>
+                        </select>
+                        @if ($errors->has('type_bill'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('type_bill') }}</p>
                         @endif
                       </div>
                     </div>
@@ -112,11 +127,79 @@
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
                       <div class="col-md-10">
-                        <textarea rows="5" class="form-control" id="description" name="description" required>{{ old('description') }}</textarea>
+                        <textarea rows="5" class="form-control mb-3" id="description" name="description" required>{{ old('description') }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
                         @endif
+                      </div>
+                    </div>
+                    {{-- UPLOAD FILE --}}
+                    <div class="form-body">
+                      <div class="form-section">
+                        <p>
+                        <h4>Upload File</h4>
+                        </p>
+                      </div>
+                      {{-- <input type="hidden" name="id" id="id" value="{{ $id }}"> --}}
+                      <div class="form-group row">
+                        <label class="col-md-2 label-control" for="name_file">Nama File</label>
+                        <div class="col-md-4">
+                          <input type="text" id="name_file" name="name_file" class="form-control"
+                            value="{{ old('name_file') }}">
+                          @if ($errors->has('name_file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('name_file') }}</p>
+                          @endif
+                        </div>
+                        <label class="col-md-1 label-control" for="type_file">Tipe File</label>
+                        <div class="col-md-5">
+                          <select name="type_file" id="type_file" class="form-control select2">
+                            <option value="{{ '' }}" disabled selected>
+                              Choose
+                            </option>
+                            <option value="MEMO">Memo</option>
+                            <option value="PENAWARAN KONTRAK">Penawaran Kontrak</option>
+                            <option value="ADDENDUM">Addendum</option>
+                            <option value="LAIN-LAIN">Lain-lain</option>
+                          </select>
+
+                          @if ($errors->has('type_file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('type_file') }}</p>
+                          @endif
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-2 label-control" for="description_file">Keterangan</label>
+                        <div class="col-md-10">
+                          <textarea rows="5" class="form-control" id="description_file" name="description_file">{{ old('description_file') }}</textarea>
+                          @if ($errors->has('description_file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('description_file') }}</p>
+                          @endif
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-2 label-control" for="file">File</label>
+                        <div class="col-md-10">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="file" name="file[]"
+                              multiple="multiple" onchange="updateList()">
+                            <label class="custom-file-label" for="file" aria-describedby="file">Pilih
+                              File</label>
+                          </div>
+                          <p class="text-muted"><small class="text-danger">Dapat
+                              mengunggah lebih dari 1 file</small></p>
+                          @if ($errors->has('file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('file') }}</p>
+                          @endif
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <p class="col-md-2 ml-5">Selected File :</p>
+                        <div id="fileList" class="col-md-5" style="word-break: break-all"></div>
                       </div>
                     </div>
                   </div>
@@ -149,4 +232,15 @@
 
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+  <script>
+    updateList = function() {
+      var input = document.getElementById('file');
+      var output = document.getElementById('fileList');
+      var children = "";
+      for (var i = 0; i < input.files.length; ++i) {
+        children += '<li>' + input.files.item(i).name + '</li>';
+      }
+      output.innerHTML = '<ul>' + children + '</ul>';
+    }
+  </script>
 @endpush

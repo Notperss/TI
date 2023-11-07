@@ -11,10 +11,29 @@
     </thead>
     @foreach ($datafile as $file)
       <tbody>
+      <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
-        <td class="text-center">{{ $file->type_file }}</td>
-        <td class="text-center">{{ $file->name_file }}</td>
-        <td class="text-center">{{ $file->description_file }}</td>
+        <td class="text-center">
+          @if ($file->type_file)
+            {{ $file->type_file }}
+          @else
+            <p style="color:red;">Type File is Empty!</p>
+          @endif
+        </td>
+        <td class="text-center">
+          @if ($file->name_file)
+            {{ $file->name_file }}
+          @else
+            <p style="color:red;">Name File is Empty!</p>
+          @endif
+        </td>
+        <td class="text-center">
+          @if ($file->description_file)
+            {{ $file->description_file }}
+          @else
+            <p style="color:red;">Description is Empty!</p>
+          @endif
+        </td>
         <td class="text-center">
           <div class="btn-group mr-1 mb-1">
             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
