@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Adm;
 
+use App\Http\Requests\Adm\Letter\StoreLetterRequest;
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Attendance;
+use App\Models\Adm\Letter;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Adm\Letter\UpdateLetterRequest;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\StoreAttendanceRequest;
-use App\Http\Requests\UpdateAttendanceRequest;
-use App\Models\ManagementAccess\DetailUser;
 
-class AttendanceController extends Controller
+class LetterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,24 +22,24 @@ class AttendanceController extends Controller
     {
         if (request()->ajax()) {
 
-            $attendance = Attendance::with('detail_user.user')->orderby('created_at', 'desc');
+            $letter = Letter::orderby('created_at', 'desc');
 
-            return DataTables::of($attendance)
+            return DataTables::of($letter)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
-            <div class="btn-group mr-1 mb-1">
+            <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
+                    <a href="#mymodal" data-remote="' . route('backsite.letter.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="' . route('backsite.letter.edit', $item->id) . '">
                         Edit
-                                </a>
-                    <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
+                    </a>
+                    <form action="' . route('backsite.letter.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -51,17 +49,24 @@ class AttendanceController extends Controller
             </div>
                 ';
                 })
-                ->editColumn('start_date', function ($item) {
-                    return Carbon::parse($item->start_date)->translatedFormat('l, d F Y');
+                ->editColumn('file', function ($item) {
+                    return '<a type="button" data-fancybox
+                                data-src="' . asset('storage/' . $item->file) . '"
+                                class="btn btn-info btn-sm text-white ">
+                                Show
+                            </a>
+                            <a type="button" href="' . asset('storage/' . $item->file) . '"
+                                    class="btn btn-primary btn-sm" download>Download    
+                            </a>
+                                ';
                 })
-                ->editColumn('finish_date', function ($item) {
-                    return Carbon::parse($item->finish_date)->translatedFormat('l, d F Y');
+                ->editColumn('date_letter', function ($item) {
+                    return Carbon::parse($item->date_letter)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action',])
+                ->rawColumns(['action', 'file'])
                 ->toJson();
         }
-
-        return view('pages.adm.attendance.index');
+        return view("pages.adm.letter.index");
     }
 
     /**
@@ -71,82 +76,79 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        // $user = User::where(['name', '!=', 'Administrator'],[DetailUser::where('status','1')])->orderBy('name', 'asc')->get();
-        $user = DetailUser::where('status', '1')->get();
-        return view('pages.adm.attendance.create', compact('user'));
+        return view("pages.adm.letter.create");
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreAttendanceRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAttendanceRequest $request)
+    public function store(StoreLetterRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
 
+
         // upload process here
         if ($request->hasFile('file')) {
-            $data['file'] = $request->file('file')->store('storage/app/assets/file-attendance');
+            $data['file'] = $request->file('file')->storeAs('assets/file-letter', $request->file('file')->getClientOriginalName());
         }
         // store to database
-        Attendance::create($data);
+        Letter::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.attendance.index');
+        return redirect()->route('backsite.letter.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Models\Adm\Letter  $letter
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $decrypt_id = decrypt($id);
-        $attendance = Attendance::find($decrypt_id);
+        $letter = Letter::find($decrypt_id);
 
-
-        return view('pages.adm.attendance.show', compact('attendance'));
+        return view('pages.adm.letter.show', compact('letter'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Models\Adm\Letter  $letter
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Letter $letter)
     {
-        $decrypt_id = decrypt($id);
-        $attendance = Attendance::find($decrypt_id);
-        // $users = User::where(['name', '!=', 'Administrator'], ['status', '1'])->orderBy('name', 'asc')->get();
-        $users = DetailUser::where('status', '1')->get();
-        return view('pages.adm.attendance.edit', compact('attendance', 'users'));
+        $letter = Letter::findOrFail($letter->id);
+        $filepath = storage_path($letter->file);
+        $fileName = basename($filepath);
+        return view('pages.adm.letter.edit', compact('letter', 'fileName'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateAttendanceRequest  $request
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Adm\Letter  $letter
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAttendanceRequest $request, Attendance $attendance)
+    public function update(UpdateLetterRequest $request, Letter $letter)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // cari old photo
-        $path_file = $attendance['file'];
+        $path_file = $letter['file'];
 
         // upload process here
         if ($request->hasFile('file')) {
 
-            $data['file'] = $request->file('file')->store('storage/app/assets/file-attendance');
+            $data['file'] = $request->file('file')->storeAs('assets/file-letter', $request->file('file')->getClientOriginalName());
             // hapus file
             if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
@@ -157,26 +159,26 @@ class AttendanceController extends Controller
 
 
         // update to database
-        $attendance->update($data);
+        $letter->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.attendance.index');
+        return redirect()->route('backsite.letter.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Models\Adm\Letter  $letter
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $attendance = Attendance::find($decrypt_id);
+        $letter = Letter::find($decrypt_id);
 
         // cari old photo
-        $path_file = $attendance['file'];
+        $path_file = $letter['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
@@ -184,7 +186,7 @@ class AttendanceController extends Controller
         }
 
         // hapus location
-        $attendance->forceDelete();
+        $letter->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Adm\Bill;
+namespace App\Http\Requests\Adm\Letter;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBillRequest extends FormRequest
+class UpdateLetterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,10 @@ class StoreBillRequest extends FormRequest
     public function rules()
     {
         return [
-            "pp_id" => "required",
-            "bill_to" => "required|max:225",
-            "bill_value" => "required|max:225",
-            "date" => "required",
+            "no_letter" => "required",
+            "date_letter" => "required",
+            "type_letter" => "required",
             "description" => "required",
-            "file" => "required",
         ];
     }
 }

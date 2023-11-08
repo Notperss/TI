@@ -24,7 +24,11 @@ class UpdateBillRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "bill_to" => "required|max:225",
+            "bill_value" => "required|max:225",
+            "date" => "required",
+            "description" => "required",
+
         ];
     }
 }

@@ -75,15 +75,19 @@
                           <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
+                          <p class="mt-1">Latest file:</p>
+                          <div id="fileList" style="word-break: break-all">
+                            <ul>
+                              <li> {{ $fileName }}</li>
+                            </ul>
+                          </div>
+                          @if ($errors->has('file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('file') }}</p>
+                          @endif
                         </div>
-                        @if ($errors->has('file'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('file') }}</p>
-                        @endif
-                      </div>
-                      <p class="mr-2">Latest file:</p>
-                      <div id="fileList" style="word-break: break-all">
-                        <li> {{ $fileName }}</li>
+
+
                       </div>
                     </div>
                     <div class="form-actions ">

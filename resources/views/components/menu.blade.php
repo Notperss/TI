@@ -201,8 +201,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/letter') || request()->is('backsite/letter/*') || request()->is('backsite/*/letter') || request()->is('backsite/*/letter/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.letter.index') }}">
               <i></i><span>Surat Keluar/Masuk</span>
             </a>
           </li>

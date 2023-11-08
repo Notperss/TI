@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Adm;
 
+use Carbon\Carbon;
 use App\Models\Adm\PP;
 use App\Models\Adm\Bill;
 use App\Models\Adm\Pp_file;
@@ -23,22 +24,49 @@ class BillController extends Controller
     {
         if (request()->ajax()) {
 
-            $pp = PP::orderby('created_at', 'desc');
+            $bill = Bill::with('pp')->orderby('created_at', 'desc');
 
-            return DataTables::of($pp)
+            return DataTables::of($bill)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
-            <div class="btn-group mr-1 mb-1">
+            <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
-                        Tambah Tagihan </a>
+                    <a class="dropdown-item" href="' . route('backsite.bill.edit', $item->id) . '">
+                        Edit </a>
+                        <form action="' . route('backsite.bill.hapus_file', $item->id ?? '') . '" method="POST"
+                onsubmit="return confirm(\'Anda yakin ingin menghapus data ini ?\');">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                <input type="submit" id="delete_file" class="dropdown-item" value="Delete">
+            </form>
             </div>
                 ';
+                })->editColumn('file', function ($item) {
+                return '<a type="button" data-fancybox
+                                data-src="' . asset('storage/' . $item->file) . '"
+                                class="btn btn-info btn-sm text-white ">
+                                Show
+                            </a>
+                            <a type="button" href="' . asset('storage/' . $item->file) . '"
+                                class="btn btn-primary btn-sm" download>
+                                Unduh
+                            </a>
+                                ';
+            })
+                ->editColumn('date', function ($item) {
+                    return Carbon::parse($item->date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action',])
+                ->editColumn('pp.no_pp', function ($item) {
+                    return '
+                    <a  style="text-decoration: none; color: inherit;"  title="Lihat Semua Tagihan"
+                        href="' . route('backsite.bill.create_bill', $item->pp_id) . '" >' . $item->pp->no_pp . '</a>
+                    ';
+
+                })
+                ->rawColumns(['action', 'file', 'date', 'pp.no_pp',])
                 ->toJson();
         }
         return view("pages.adm.bill.index");
@@ -51,7 +79,9 @@ class BillController extends Controller
      */
     public function create()
     {
-        //
+        $pp = PP::orderBy("created_at", "desc")->get();
+        return view("pages.adm.bill.create", compact('pp'));
+
     }
 
     /**
@@ -62,25 +92,20 @@ class BillController extends Controller
      */
     public function store(StoreBillRequest $request)
     {
-        $pp = PP::find($request->id);
 
-        // save to file test material
+        // get all request from frontsite
+        $data = $request->all();
+
+
+        // upload process here
         if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
-                $file = $image->storeAs('assets/file-bill', $image->getClientOriginalName());
-                Bill::create([
-                    'pp_id' => $request->id,
-                    'bill_to' => $request->bill_to,
-                    'bill_value' => $request->bill_value,
-                    'date' => $request->date,
-                    'description' => $request->description,
-                    'file' => $file,
-                ]);
-            }
+            $data['file'] = $request->file('file')->storeAs('assets/file-bill', $request->file('file')->getClientOriginalName());
         }
+        // store to database
+        Bill::create($data);
 
-        alert()->success('Sukses', 'File Berhasil diupload');
-        return redirect()->route('backsite.bill.create_bill', $pp);
+        alert()->success('Sukses', 'Data berhasil ditambahkan');
+        return redirect()->route('backsite.bill.index');
     }
 
     /**
@@ -142,7 +167,7 @@ class BillController extends Controller
         $pp_id = $bill->pp_id;
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.bill.create_bill', $pp_id);
+        return redirect()->route('backsite.bill.index');
     }
 
     /**
@@ -241,4 +266,28 @@ class BillController extends Controller
         $bills = Bill::where('pp_id', $id)->get();
         return view('pages.adm.bill.create_bill', compact('pp', 'datafile', 'bills'));
     }
+
+    public function store_bill(StoreBillRequest $request)
+    {
+        $pp = PP::find($request->id);
+
+        // save to file test material
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $image) {
+                $file = $image->storeAs('assets/file-bill', $image->getClientOriginalName());
+                Bill::create([
+                    'pp_id' => $request->id,
+                    'bill_to' => $request->bill_to,
+                    'bill_value' => $request->bill_value,
+                    'date' => $request->date,
+                    'description' => $request->description,
+                    'file' => $file,
+                ]);
+            }
+        }
+
+        alert()->success('Sukses', 'File Berhasil diupload');
+        return redirect()->route('backsite.bill.create_bill', $pp);
+    }
+
 }

@@ -69,15 +69,11 @@
               <code style="color:red;">*</code></label>
             <div class="col-md-8">
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="file" name="file[]" multiple="multiple"
-                  onchange="updateList()" required>
+                <input type="file" class="custom-file-input" id="file" name="file[]" onchange="updateList()"
+                  required>
                 <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                   File</label>
               </div>
-
-              <p class="text-muted"><small class="text-danger">Dapat
-                  mengunggah lebih dari 1 file</small></p>
-
               @if ($errors->has('file'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('file') }}</p>
@@ -85,12 +81,6 @@
             </div>
             <p class="col-md-4">Selected File :</p>
             <div id="fileList" style="word-break: break-all"></div>
-            {{-- <input type="file" multiple name="file" id="file"
-onchange="javascript:updateList()" />
-
-  <p>Selected files:</p>
-
-  <div id="fileList"></div> --}}
           </div>
         </div>
         <div class="modal-footer">

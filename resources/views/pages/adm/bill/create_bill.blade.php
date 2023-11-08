@@ -16,7 +16,7 @@
                 <div class="card-header bg-success">
                   <h4 class="card-title text-white">Tambah Data Tagihan</h4>
                 </div>
-                <form class="form" action="{{ route('backsite.bill.store', $pp->id) }}" method="POST"
+                <form class="form" action="{{ route('backsite.bill.store_bill', $pp->id) }}" method="POST"
                   enctype="multipart/form-data">
                   @csrf
                   <div class="form-body container">

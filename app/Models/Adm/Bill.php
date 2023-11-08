@@ -12,6 +12,6 @@ class Bill extends Model
 
     public function pp()
     {
-        return $this->belongsTo(PP::class, 'id');
+        return $this->belongsTo(PP::class, 'pp_id');
     }
 }

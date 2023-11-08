@@ -34,7 +34,7 @@ class PPController extends Controller
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Aktivitas Harian" class="dropdown-item">
+                        data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
                         Show
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.pp.edit', $item->id) . '">
@@ -84,19 +84,6 @@ class PPController extends Controller
         $pp = PP::create($data);
         $pp_id = $pp->id;
 
-        // save to file test material
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
-                $file = $image->storeAs('assets/file-pp', $image->getClientOriginalName());
-                Pp_file::create([
-                    'pp_id' => $pp_id,
-                    'name_file' => $request->name_file,
-                    'type_file' => $request->type_file,
-                    'description_file' => $request->description_file,
-                    'file' => $file,
-                ]);
-            }
-        }
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.pp.edit', $pp_id);
 

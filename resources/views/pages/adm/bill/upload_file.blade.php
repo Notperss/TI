@@ -18,7 +18,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form" action="{{ route('backsite.bill.store') }}" method="POST" enctype="multipart/form-data">
+      <form class="form" action="{{ route('backsite.bill.store_bill') }}" method="POST"
+        enctype="multipart/form-data">
 
         @csrf
         <div class="modal-body">
