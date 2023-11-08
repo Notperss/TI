@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Adm\PP;
-
+namespace App\Http\Requests\Adm\Letter;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePPRequest extends FormRequest
+class StoreLetterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +24,9 @@ class UpdatePPRequest extends FormRequest
     public function rules()
     {
         return [
-            "no_pp" => "required",
-            "job_name" => "required",
-            "job_value" => "required",
-            "rkap" => "required",
-            "date" => "required",
-            "year" => "required",
-            "stats" => "required",
-            "type_bill" => "required",
+            "no_letter" => "required",
+            "date_letter" => "required",
+            "type_letter" => "required",
             "description" => "required",
         ];
     }

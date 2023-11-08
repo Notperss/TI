@@ -12,17 +12,13 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('pps', function (Blueprint $table) {
+        Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->string('no_pp');
-            $table->year('year');
+            $table->string('bill_to');
+            $table->string('bill_value');
             $table->date('date');
-            $table->string('job_name');
-            $table->string('job_value');
-            $table->string('rkap');
-            $table->string('stats');
-            $table->string('type_bill');
             $table->longText('description');
+            $table->string('file');
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('p_p_s');
+        Schema::dropIfExists('bills');
     }
 };

@@ -34,12 +34,15 @@ class PPController extends Controller
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Aktivitas Harian" class="dropdown-item">
+                        data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
                         Show
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.pp.edit', $item->id) . '">
                         Edit
-                                </a>
+                     </a>
+                    <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
+                        Tambah tagihan
+                     </a>
                     <form action="' . route('backsite.pp.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
@@ -80,6 +83,7 @@ class PPController extends Controller
         // store to database
         $pp = PP::create($data);
         $pp_id = $pp->id;
+
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.pp.edit', $pp_id);
 

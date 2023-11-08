@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'PP')
+@section('title', 'Tagihan')
 @section('content')
-  <div class="app-content content">
+  <div class="app-content content" id="bill">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
 
@@ -14,32 +14,29 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Edit Data PP</h4>
+                  <h4 class="card-title text-white">Tambah Data Tagihan</h4>
                 </div>
-                <form class="form" action="{{ route('backsite.pp.update', $pp->id) }}" method="POST"
+                <form class="form" action="{{ route('backsite.bill.store_bill', $pp->id) }}" method="POST"
                   enctype="multipart/form-data">
                   @csrf
-                  @method('PUT')
                   <div class="form-body container">
                     <div class="form-section">
-                      <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="no_pp">No PP</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" id="no_pp" name="no_pp"
-                          value="{{ old('no_pp', $pp->no_pp) }}" required>
+                          value="{{ old('no_pp', $pp->no_pp) }}" readonly>
                         </select>
                         @if ($errors->has('no_pp'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('no_pp') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="date">Tanggal PP<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="date">Tanggal PP</label>
                       <div class="col-md-4">
                         <input type="date" class="form-control" id="date" name="date"
-                          value="{{ old('date', $pp->date) }}" required>
+                          value="{{ old('date', $pp->date) }}" readonly>
                         </select>
                         @if ($errors->has('date'))
                           <p style="font-style: bold; color: red;">
@@ -48,21 +45,19 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="job_name">Nama Pekerjaan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="job_name">Nama Pekerjaan</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" id="job_name" name="job_name"
-                          value="{{ old('job_name', $pp->job_name) }}" required>
+                          value="{{ old('job_name', $pp->job_name) }}" readonly>
                         @if ($errors->has('job_name'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('job_name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP</label>
                       <div class="col-md-4">
                         <input type="text" id="rkap" name="rkap" class="form-control"
-                          value="{{ old('rkap', $pp->rkap) }}" required>
+                          value="{{ old('rkap', $pp->rkap) }}" readonly>
                         @if ($errors->has('rkap'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('rkap') }}</p>
@@ -71,21 +66,20 @@
                     </div>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="year">Tahun
-                        <code style="color:red;">*</code></label>
+                      </label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="year" id="year" data-provide="datepicker"
-                          data-date-format="yyyy" data-date-min-view-mode="2" autocomplete="off"
-                          value="{{ old('year', $pp->year) }}" readonly required>
+                        <input type="text" class="form-control" name="year" id="year"
+                          value="{{ old('year', $pp->year) }}" readonly>
                         @if ($errors->has('year'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('year') }}</p>
                         @endif
                       </div>
                       <label class="col-md-2 label-control" for="job_value">Nilai Pekerjaan
-                        <code style="color:red;">*</code></label>
+                      </label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="job_value" id="job_value"
-                          value="{{ old('job_value', $pp->job_value) }}" required>
+                          value="{{ old('job_value', $pp->job_value) }}" readonly>
                         @if ($errors->has('job_value'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('job_value') }}</p>
@@ -93,9 +87,9 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="stats">Status</label>
                       <div class="col-md-4">
-                        <select name="stats" id="stats" class="form-control select2" required>
+                        <select name="stats" id="stats" class="form-control select2" disabled>
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
@@ -111,7 +105,7 @@
                       </div>
                       <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
                       <div class="col-md-4">
-                        <select name="type_bill" id="type_bill" class="form-control select2" required>
+                        <select name="type_bill" id="type_bill" class="form-control select2" disabled>
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
@@ -128,24 +122,33 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-10">
-                        <textarea rows="5" class="form-control" id="description" name="description" required>{{ old('description', $pp->description) }}</textarea>
+                        <textarea rows="5" class="form-control" id="description" name="description" readonly>{{ old('description', $pp->description) }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
                         @endif
                       </div>
                     </div>
-                    <div class="form-group row">
-                      <div class="col-md-4">
-                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2"
-                          title="Tambah File" onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i>
-                          Tambah File</button>
+                    <div class="form-group">
+                      <label>
+                        <h5 class="mr-3">Lihat File</h5>
+                      </label>
+                      <div class="btn-group btn-group-toggle">
+                        <label for="openFileTrue" class="btn btn-outline-info btn-sm">Lihat
+                          <input type="radio" class="custom-control-input" name="open_file" id="openFileTrue"
+                            v-model="open_file" :value="true" />
+                        </label>
+                      </div>
+                      <div class="btn-group btn-group-toggle">
+                        <label for="openFileFalse" class="btn btn-outline-info btn-sm">Tutup
+                          <input type="radio" class="custom-control-input" name="open_file" id="openFileFalse"
+                            v-model="open_file" :value="false" checked />
+                        </label>
                       </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group" v-if="open_file">
                       <div class="table-responsive">
                         <table
                           class="table table-striped table-bordered text-inputs-searching default-table activity-table"
@@ -159,8 +162,9 @@
                               <th style="text-align:center; width:10px;">Action</th>
                             </tr>
                           </thead>
-                          @foreach ($datafile as $file)
+                          @forelse ($datafile as $file)
                             <tbody>
+                              <td hidden>{{ $file->id }}</td>
                               <td class="text-center">{{ $loop->iteration }}</td>
                               <td class="text-center">
                                 @if ($file->type_file)
@@ -184,7 +188,7 @@
                                 @endif
                               </td>
                               <td class="text-center">
-                                <div class="btn-group mr-1 mb-1">
+                                <div class="btn-group">
                                   <button type="button" class="btn btn-info btn-sm dropdown-toggle"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                   <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
@@ -194,14 +198,69 @@
                                     </a>
                                     <a type="button" href="{{ asset('storage/' . $file->file) }}"
                                       class="btn text-nowrap" download>Download</a>
-                                    <button type="button" class="btn text-nowrap" onclick="thisFileUpload()">
+                                  </div>
+                                </div>
+                              </td>
+                            </tbody>
+                          @empty
+                            <td colspan="5" class="text-center">No data available in table</td>
+                          @endforelse
+                        </table>
+                      </div>
+                    </div>
+                    <div class="form-section"></div>
+                    <div class="form-group row">
+                      <div class="col-md-4">
+                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2"
+                          title="Tambah Tagihan" onclick="bill_form('{{ $pp->id }}')"><i class="bx bx-file"></i>
+                          Tambah Tagihan</button>
+                      </div>
+                      <div class="table-responsive col-md-12">
+                        <table class="table table-striped table-bordered default-table activity-table mb-4"
+                          aria-label="">
+                          <thead>
+                            <tr>
+                              <th class="text-center" style="width: 5%;">No</th>
+                              <th class="text-center">Tagihan Ke</th>
+                              <th class="text-center">Tanggal</th>
+                              <th class="text-center">Nilai Tagihan</th>
+                              <th class="text-center">keterangan</th>
+                              <th class="text-center">File</th>
+                              <th style="text-align:center; width:10px;">Action</th>
+                            </tr>
+                          </thead>
+                          @forelse ($bills as $bill)
+                            <tbody>
+                              <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                              <td class="text-center">{{ $bill->bill_to }}</td>
+                              <td class="text-center">{{ $bill->date }}</td>
+                              <td class="text-center">{{ $bill->bill_value }}</td>
+                              <td class="text-center">{{ $bill->description }}</td>
+                              <td class="text-center"> <a type="button" data-fancybox
+                                  data-src="{{ asset('storage/' . $bill->file) }}"
+                                  class="btn btn-info btn-sm text-white ">
+                                  Show
+                                </a></td>
+                              <td class="text-center">
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-info btn-sm dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                  <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                    <a class="btn text-nowrap" href="{{ route('backsite.bill.edit', $bill->id) }}">
+                                      Edit
+                                    </a>
+                                    <a type="button" href="{{ asset('storage/' . $bill->file) }}"
+                                      class="btn text-nowrap" download>Download File</a>
+                                    <button type="button" class="btn text-nowrap" onclick="thisFileDelete()">
                                       Delete
                                     </button>
                                   </div>
                                 </div>
                               </td>
                             </tbody>
-                          @endforeach
+                          @empty
+                            <td colspan="7" class="text-center">No data available in table</td>
+                          @endforelse
                         </table>
                       </div>
                     </div>
@@ -212,24 +271,24 @@
                       onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
                       <i class="la la-check-square-o"></i> Simpan
                     </button>
-                    <a href="{{ route('backsite.pp.index') }}" class="btn btn-success text-left ml-2">
+                    <a href="{{ route('backsite.bill.index') }}" class="btn btn-success text-left ml-2">
                       <i class="la la-arrow-left"></i> Kembali</a>
                   </div>
                 </form>
               </div>
             </div>
-            <form action="{{ route('backsite.pp.hapus_file', $file->id ?? '') }}" method="POST"
+            <form action="{{ route('backsite.bill.hapus_file', $bill->id ?? '') }}" method="POST"
               onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
               <input type="hidden" name="_method" value="DELETE">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <input type="submit" style="display: none;" id="delete_file" class="btn"value="Delete">
             </form>
           </div>
+        </section>
       </div>
-      </section>
     </div>
   </div>
-  </div>
+
 
   <div class="viewmodal" style="display: none;"></div>
 
@@ -241,14 +300,15 @@
 @endpush
 
 @push('after-script')
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0/dist/vue.js"></script>
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
   <script>
-    function thisFileUpload() {
+    function thisFileDelete() {
       document.getElementById("delete_file").click();
     }
   </script>
   <script>
-    function upload(id) {
+    function bill_form(id) {
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -257,7 +317,7 @@
 
       $.ajax({
         type: "post",
-        url: "{{ route('backsite.pp.form_upload') }}",
+        url: "{{ route('backsite.bill.form_upload') }}",
         data: {
           id: id
         },
@@ -271,13 +331,25 @@
         }
       });
     }
+
+    var bill = new Vue({
+      el: "#bill",
+      mounted() {
+
+      },
+      data() {
+        return {
+          open_file: false,
+        }
+      }
+    });
   </script>
 
-  <script>
+  {{-- <script>
     $(document).ready(function() {
       $('html,body').animate({
         scrollTop: document.body.scrollHeight
       }, "slow");
     })
-  </script>
+  </script> --}}
 @endpush

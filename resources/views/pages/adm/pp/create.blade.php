@@ -101,10 +101,25 @@
                           <option value="1">Aktif</option>
                           <option value="2">Tidak Aktif</option>
                         </select>
-
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('stats') }}</p>
+                        @endif
+                      </div>
+                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
+                      <div class="col-md-4">
+                        <select name="type_bill" id="type_bill" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="LUMPSUM">Lumpsum
+                          </option>
+                          <option value="RUTIN">Rutin
+                          </option>
+                        </select>
+                        @if ($errors->has('type_bill'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('type_bill') }}</p>
                         @endif
                       </div>
                     </div>
@@ -112,7 +127,7 @@
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
                       <div class="col-md-10">
-                        <textarea rows="5" class="form-control" id="description" name="description" required>{{ old('description') }}</textarea>
+                        <textarea rows="5" class="form-control mb-3" id="description" name="description" required>{{ old('description') }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
@@ -149,4 +164,15 @@
 
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+  <script>
+    updateList = function() {
+      var input = document.getElementById('file');
+      var output = document.getElementById('fileList');
+      var children = "";
+      for (var i = 0; i < input.files.length; ++i) {
+        children += '<li>' + input.files.item(i).name + '</li>';
+      }
+      output.innerHTML = '<ul>' + children + '</ul>';
+    }
+  </script>
 @endpush

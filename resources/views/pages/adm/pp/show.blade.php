@@ -39,6 +39,18 @@
     </td>
   </tr>
   <tr>
+    <th>Tipe Tagihan</th>
+    <td>
+      @if ($pp->type_bill == 'LUMPSUM')
+        <span class="badge badge-info">{{ 'Lumpsum' }}</span>
+      @elseif($pp->type_bill == 'RUTIN')
+        <span class="badge badge-secondary">{{ 'Rutin' }}</span>
+      @else
+        <span>{{ 'N/A' }}</span>
+      @endif
+    </td>
+  </tr>
+  <tr>
     <th>Keterangan</th>
     <td>{!! isset($pp->description) ? $pp->description : 'N/A' !!}</td>
   </tr>

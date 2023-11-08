@@ -18,10 +18,18 @@ class PP extends Model
         "job_value",
         "description",
         "rkap",
-        "stats",];
+        "stats",
+        "type_bill",
+    ];
 
-    public function pp()
+    public function pp_file()
     {
         return $this->hasMany(Pp_file::class, "pp_id", "id");
     }
+    public function bill()
+    {
+        return $this->hasMany(Bill::class, "pp_id", "id");
+    }
+
+
 }

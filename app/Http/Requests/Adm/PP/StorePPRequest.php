@@ -31,6 +31,7 @@ class StorePPRequest extends FormRequest
             "date" => "required",
             "year" => "required",
             "stats" => "required",
+            "type_bill" => "required",
             "description" => "required",
         ];
     }
