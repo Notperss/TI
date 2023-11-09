@@ -212,7 +212,7 @@
           <li
             class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Memo</span>
+              <i></i><span>Permintaan Uang</span>
             </a>
           </li>
           {{-- @endcan --}}
@@ -221,7 +221,25 @@
           <li
             class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>PJ</span>
+              <i></i><span>ATK</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+
+          {{-- @can('location_detail') --}}
+          <li
+            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+              <i></i><span>Peminjaman TI</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+
+          {{-- @can('location_detail') --}}
+          <li
+            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+              <i></i><span>Form TI</span>
             </a>
           </li>
           {{-- @endcan --}}
@@ -231,15 +249,6 @@
             class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
               <i></i><span>Kendaraan</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Tagihan</span>
             </a>
           </li>
           {{-- @endcan --}}
