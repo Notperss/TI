@@ -210,8 +210,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/demand') || request()->is('backsite/demand/*') || request()->is('backsite/*/demand') || request()->is('backsite/*/demand/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.demand.index') }}">
               <i></i><span>Permintaan Uang</span>
             </a>
           </li>
@@ -219,8 +219,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/atk') || request()->is('backsite/atk/*') || request()->is('backsite/*/atk') || request()->is('backsite/*/atk/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.atk.index') }}">
               <i></i><span>ATK</span>
             </a>
           </li>
@@ -228,8 +228,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/lendingfacility') || request()->is('backsite/lendingfacility/*') || request()->is('backsite/*/lendingfacility') || request()->is('backsite/*/lendingfacility/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.lendingfacility.index') }}">
               <i></i><span>Peminjaman TI</span>
             </a>
           </li>

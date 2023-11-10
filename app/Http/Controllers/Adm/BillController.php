@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Adm\PP;
 use App\Models\Adm\Bill;
 use App\Models\Adm\Pp_file;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -48,7 +49,7 @@ class BillController extends Controller
                 return '<a type="button" data-fancybox
                                 data-src="' . asset('storage/' . $item->file) . '"
                                 class="btn btn-info btn-sm text-white ">
-                                Show
+                                Lihat
                             </a>
                             <a type="button" href="' . asset('storage/' . $item->file) . '"
                                 class="btn btn-primary btn-sm" download>
@@ -99,7 +100,12 @@ class BillController extends Controller
 
         // upload process here
         if ($request->hasFile('file')) {
-            $data['file'] = $request->file('file')->storeAs('assets/file-bill', $request->file('file')->getClientOriginalName());
+            $files = $request->file('file');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename . '.' . $extension;
+            $data['file'] = $request->file('file')->storeAs('assets/file-bill', $fullname);
         }
         // store to database
         Bill::create($data);
@@ -150,8 +156,12 @@ class BillController extends Controller
 
         // upload process here
         if ($request->hasFile('file')) {
-
-            $data['file'] = $request->file('file')->storeAs('assets/file-bill', $request->file('file')->getClientOriginalName());
+            $files = $request->file('file');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename . '.' . $extension;
+            $data['file'] = $request->file('file')->storeAs('assets/file-bill', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
@@ -267,14 +277,18 @@ class BillController extends Controller
         return view('pages.adm.bill.create_bill', compact('pp', 'datafile', 'bills'));
     }
 
-    public function store_bill(StoreBillRequest $request)
+    public function store_bill(Request $request)
     {
         $pp = PP::find($request->id);
 
         // save to file test material
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
-                $file = $image->storeAs('assets/file-bill', $image->getClientOriginalName());
+                $file = $image->getClientOriginalName();
+                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $ext = $image->getClientOriginalExtension();
+                $fullname = $basename . '.' . $ext;
+                $file = $image->storeAs('assets/file-bill', $fullname);
                 Bill::create([
                     'pp_id' => $request->id,
                     'bill_to' => $request->bill_to,

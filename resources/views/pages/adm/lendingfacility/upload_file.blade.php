@@ -18,53 +18,49 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form" action="{{ route('backsite.bill.store_bill') }}" method="POST"
-        enctype="multipart/form-data">
+      <form class="form" action="{{ route('backsite.pp.upload') }}" method="POST" enctype="multipart/form-data">
 
         @csrf
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="bill_to">Tagihan Ke <code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="type_file">Tipe File<code style="color:red;">*</code></label>
             <div class="col-md-8">
-              <input type="text" id="bill_to" name="bill_to" class="form-control" value="{{ old('bill_to') }}"
-                required>
-              @if ($errors->has('bill_to'))
+              <select name="type_file" id="type_file" class="form-control select2" required>
+                <option value="{{ '' }}" disabled selected>
+                  Choose
+                </option>
+                <option value="MEMO">Memo</option>
+                <option value="PENAWARAN KONTRAK">Penawaran Kontrak</option>
+                <option value="ADDENDUM">Addendum</option>
+                <option value="LAIN-LAIN">Lain-lain</option>
+              </select>
+
+              @if ($errors->has('type_file'))
                 <p style="font-style: bold; color: red;">
-                  {{ $errors->first('bill_to') }}</p>
+                  {{ $errors->first('type_file') }}</p>
               @endif
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="date">Tanggal<code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="name_file">Nama File<code style="color:red;">*</code></label>
             <div class="col-md-8">
-              <input type="date" id="date" name="date" class="form-control" value="{{ old('date') }}"
+              <input type="text" id="name_file" name="name_file" class="form-control" value="{{ old('name_file') }}"
                 required>
-              @if ($errors->has('date'))
+              @if ($errors->has('name_file'))
                 <p style="font-style: bold; color: red;">
-                  {{ $errors->first('date') }}</p>
+                  {{ $errors->first('name_file') }}</p>
               @endif
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="bill_value">Nilai Tagihan<code
+            <label class="col-md-4 label-control" for="description_file">Keterangan<code
                 style="color:red;">*</code></label>
             <div class="col-md-8">
-              <input type="text" id="bill_value" name="bill_value" class="form-control"
-                value="{{ old('bill_value') }}" required>
-              @if ($errors->has('bill_value'))
+              <textarea rows="5" class="form-control" id="description_file" name="description_file" required>{{ old('description_file') }}</textarea>
+              @if ($errors->has('description_file'))
                 <p style="font-style: bold; color: red;">
-                  {{ $errors->first('bill_value') }}</p>
-              @endif
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-md-4 label-control" for="description">Keterangan<code style="color:red;">*</code></label>
-            <div class="col-md-8">
-              <textarea rows="5" class="form-control" id="description" name="description" required>{{ old('description') }}</textarea>
-              @if ($errors->has('description'))
-                <p style="font-style: bold; color: red;">
-                  {{ $errors->first('description') }}</p>
+                  {{ $errors->first('description_file') }}</p>
               @endif
             </div>
           </div>

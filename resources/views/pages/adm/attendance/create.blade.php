@@ -112,7 +112,7 @@
                         <textarea rows="5" class="form-control summernote" id="description" name="description"></textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('file') }}</p>
+                            {{ $errors->first('description') }}</p>
                         @endif
                       </div>
                     </div>

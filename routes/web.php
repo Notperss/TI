@@ -12,6 +12,9 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Data\WorkProgramController;
 use App\Http\Controllers\Act_daily\WorkcatController;
 use App\Http\Controllers\Act_daily\ActDailyController;
+use App\Http\Controllers\Adm\ATKController;
+use App\Http\Controllers\Adm\DemandController;
+use App\Http\Controllers\Adm\LendingFacilityController;
 use App\Http\Controllers\Adm\LetterController;
 use App\Http\Controllers\Adm\PPController;
 use App\Http\Controllers\Data\DailyActivityController;
@@ -150,6 +153,12 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('vendor_ti', VendorTiController::class);
 
     Route::resource('jobdesk', JobdeskController::class);
+
+    Route::resource('demand', DemandController::class);
+
+    Route::resource('lendingfacility', LendingFacilityController::class);
+
+    Route::resource('atk', ATKController::class);
 
     Route::resource('letter', LetterController::class);
 

@@ -39,9 +39,8 @@
   <tr>
     <th>File</th>
     @if ($attendance->file)
-      <td> <a data-fancybox="gallery" data-src="{{ asset('storage/' . $attendance->file) }}"
-          class="badge bg-blue text-white">
-          Show
+      <td> <a data-fancybox data-src="{{ asset('storage/' . $attendance->file) }}" class="badge bg-blue text-white">
+          Lihat
         </a>
       @else
       <td> No File!</td>

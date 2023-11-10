@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Adm;
 
-use Carbon\Carbon;
-use App\Models\Adm\PP;
-use App\Models\Adm\Pp_file;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Adm\LendingFacility;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\Adm\PP\StorePPRequest;
-use App\Http\Requests\Adm\PP\UpdatePPRequest;
+use App\Http\Requests\Adm\LendingFacility\StoreLendingFacilityRequest;
+use App\Http\Requests\Adm\LendingFacility\UpdateLendingFacilityRequest;
 
-class PPController extends Controller
+class LendingFacilityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,27 +22,27 @@ class PPController extends Controller
     {
         if (request()->ajax()) {
 
-            $pp = PP::orderby('created_at', 'desc');
+            $lendingfacility = LendingFacility::orderby('created_at', 'desc');
 
-            return DataTables::of($pp)
+            return DataTables::of($lendingfacility)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
-            <div class="btn-group mr-1 mb-1">
+            <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
+                    <a href="#mymodal" data-remote="' . route('backsite.lendingfacility.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.pp.edit', $item->id) . '">
+                    <a class="dropdown-item" href="' . route('backsite.lendingfacility.edit', $item->id) . '">
                         Edit
-                     </a>
+                    </a>
                     <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
                         Tambah tagihan
-                     </a>
-                    <form action="' . route('backsite.pp.destroy', encrypt($item->id)) . '" method="POST"
+                    </a>
+                    <form action="' . route('backsite.lendingfacility.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -57,7 +55,7 @@ class PPController extends Controller
                 ->rawColumns(['action',])
                 ->toJson();
         }
-        return view("pages.adm.pp.index");
+        return view("pages.adm.lendingfacility.index");
     }
 
     /**
@@ -67,26 +65,26 @@ class PPController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.pp.create");
+        return view("pages.adm.lendingfacility.create");
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Adm\PP\StorePPRequest  $request
+     * @param  \App\Http\Requests\Adm\LendingFacility\StoreLendingFacilityRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePPRequest $request)
+    public function store(StoreLendingFacilityRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // store to database
-        $pp = PP::create($data);
-        $pp_id = $pp->id;
+        $lendingfacility = LendingFacility::create($data);
+        $lendingfacility_id = $lendingfacility->id;
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.pp.edit', $pp_id);
+        return redirect()->route('backsite.lendingfacility.edit', $lendingfacility_id);
 
 
     }
@@ -94,72 +92,72 @@ class PPController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Models\Adm\LendingFacility  $lendingFacility
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $decrypt_id = decrypt($id);
-        $pp = PP::find($decrypt_id);
+        $lendingfacility = LendingFacility::find($decrypt_id);
 
-        return view('pages.adm.pp.show', compact('pp'));
+        return view('pages.adm.lendingfacility.show', compact('lendingfacility'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Models\Adm\LendingFacility  $lendingFacility
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $pp = PP::find($id);
-        $datafile = Pp_file::where('pp_id', $id)->get();
-        return view('pages.adm.pp.edit', compact('pp', 'datafile'));
+        $lendingfacility = LendingFacility::find($id);
+        $datafile = LendingFacility_file::where('lendingfacility_id', $id)->get();
+        return view('pages.adm.lendingfacility.edit', compact('lendingfacility', 'datafile'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Adm\PP\UpdatePPRequest  $request
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Http\Requests\Adm\LendingFacility\UpdateLendingFacilityRequest  $request
+     * @param  \App\Models\Adm\LendingFacility  $lendingFacility
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePPRequest $request, PP $pp)
+    public function update(UpdateLendingFacilityRequest $request, LendingFacility $lendingfacility)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // update to database
-        $pp->update($data);
+        $lendingfacility->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.pp.index');
+        return redirect()->route('backsite.lendingfacility.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Adm\PP  $pP
+     * @param  \App\Models\Adm\LendingFacility  $lendingFacility
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $pp = PP::find($decrypt_id);
+        $lendingfacility = LendingFacility::find($decrypt_id);
 
-        $pp->forceDelete();
+        $lendingfacility->forceDelete();
 
-        $pp_file = Pp_file::where('pp_id', $decrypt_id)->get();
+        $lendingfacility_file = LendingFacility_file::where('lendingfacility_id', $decrypt_id)->get();
         // hapus file
-        foreach ($pp_file as $file) {
+        foreach ($lendingfacility_file as $file) {
             if ($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
 
         }
-        $pp_file = Pp_file::where('pp_id', $decrypt_id)->forceDelete();
+        $lendingfacility_file = LendingFacility_file::where('lendingfacility_id', $decrypt_id)->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
@@ -171,13 +169,13 @@ class PPController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $row = PP::find($id);
+            $row = LendingFacility::find($id);
             $data = [
                 'id' => $row['id'],
             ];
 
             $msg = [
-                'data' => view('pages.adm.pp.upload_file', $data)->render(),
+                'data' => view('pages.adm.lendingfacility.upload_file', $data)->render(),
             ];
 
             return response()->json($msg);
@@ -186,7 +184,7 @@ class PPController extends Controller
 
     public function upload(Request $request)
     {
-        $pp = PP::find($request->id);
+        $lendingfacility = LendingFacility::find($request->id);
 
         // save to file test material
         if ($request->hasFile('file')) {
@@ -195,9 +193,9 @@ class PPController extends Controller
                 $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
                 $ext = $image->getClientOriginalExtension();
                 $fullname = $basename . '.' . $ext;
-                $file = $image->storeAs('assets/file-pp', $fullname);
-                Pp_file::create([
-                    'pp_id' => $request->id,
+                $file = $image->storeAs('assets/file-lendingfacility', $fullname);
+                LendingFacility_file::create([
+                    'lendingfacility_id' => $request->id,
                     'name_file' => $request->name_file,
                     'type_file' => $request->type_file,
                     'description_file' => $request->description_file,
@@ -207,7 +205,7 @@ class PPController extends Controller
         }
 
         alert()->success('Sukses', 'File Berhasil diupload');
-        return redirect()->route('backsite.pp.edit', $pp);
+        return redirect()->route('backsite.lendingfacility.edit', $lendingfacility);
     }
 
     // get show_file software
@@ -216,13 +214,13 @@ class PPController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $pp_file = Pp_file::where('pp_id', $id)->get();
+            $lendingfacility_file = LendingFacility_file::where('lendingfacility_id', $id)->get();
             $data = [
-                'datafile' => $pp_file,
+                'datafile' => $lendingfacility_file,
             ];
 
             $msg = [
-                'data' => view('pages.adm.pp.detail_file', $data)->render(),
+                'data' => view('pages.adm.lendingfacility.detail_file', $data)->render(),
             ];
 
             return response()->json($msg);
@@ -232,17 +230,17 @@ class PPController extends Controller
     // hapus file dailiy activity
     public function hapus_file($id)
     {
-        $pp_file = Pp_file::find($id);
+        $lendingfacility_file = LendingFacility_file::find($id);
 
         // cari old photo
-        $path_file = $pp_file['file'];
+        $path_file = $lendingfacility_file['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 
-        $pp_file->forceDelete();
+        $lendingfacility_file->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

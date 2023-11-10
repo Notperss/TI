@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Adm;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Attendance;
+use App\Models\Adm\Demand;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\ManagementAccess\DetailUser;
-use App\Http\Requests\StoreAttendanceRequest;
-use App\Http\Requests\UpdateAttendanceRequest;
+use App\Http\Requests\Adm\Demand\StoreDemandRequest;
+use App\Http\Requests\Adm\Demand\UpdateDemandRequest;
 
-class AttendanceController extends Controller
+class DemandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,9 +23,9 @@ class AttendanceController extends Controller
     {
         if (request()->ajax()) {
 
-            $attendance = Attendance::with('detail_user.user')->orderby('created_at', 'desc');
+            $demand = Demand::orderby('created_at', 'desc');
 
-            return DataTables::of($attendance)
+            return DataTables::of($demand)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
@@ -35,14 +33,14 @@ class AttendanceController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="' . route('backsite.demand.show', encrypt($item->id)) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="' . route('backsite.demand.edit', encrypt($item->id)) . '">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="' . route('backsite.demand.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -52,17 +50,21 @@ class AttendanceController extends Controller
             </div>
                 ';
                 })
-                ->editColumn('start_date', function ($item) {
-                    return Carbon::parse($item->start_date)->translatedFormat('l, d F Y');
+                ->editColumn('date_demand', function ($item) {
+                    return Carbon::parse($item->date_demand)->translatedFormat('l, d F Y');
                 })
-                ->editColumn('finish_date', function ($item) {
-                    return Carbon::parse($item->finish_date)->translatedFormat('l, d F Y');
+                ->editColumn('date_pj', function ($item) {
+                    if ($item->date_pj) {
+                        return '<span>Selesai</span>';
+                    } else {
+                        return '<span>Proccess</span>';
+                    }
                 })
-                ->rawColumns(['action',])
+                ->rawColumns(['action', 'date_demand', 'date_pj'])
                 ->toJson();
         }
 
-        return view('pages.adm.attendance.index');
+        return view('pages.adm.demand.index');
     }
 
     /**
@@ -73,17 +75,16 @@ class AttendanceController extends Controller
     public function create()
     {
         // $user = User::where(['name', '!=', 'Administrator'],[DetailUser::where('status','1')])->orderBy('name', 'asc')->get();
-        $user = DetailUser::where('status', '1')->get();
-        return view('pages.adm.attendance.create', compact('user'));
+        return view('pages.adm.demand.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreAttendanceRequest  $request
+     * @param  \App\Http\Requests\Adm\Demand\StoreDemandRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAttendanceRequest $request)
+    public function store(StoreDemandRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
@@ -95,59 +96,72 @@ class AttendanceController extends Controller
             $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
             $fullname = $basename . '.' . $extension;
-            $data['file'] = $request->file('file')->storeAs('assets/file-attendance', $fullname);
+            $data['file'] = $request->file('file')->storeAs('assets/file-demand', $fullname);
         }
+        // upload process here
+        if ($request->hasFile('file_pj')) {
+            $files = $request->file('file_pj');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename . '.' . $extension;
+            $data['file_pj'] = $request->file('file_pj')->storeAs('assets/file-demand', $fullname);
+        }
+
         // store to database
-        Attendance::create($data);
+        Demand::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.attendance.index');
+        return redirect()->route('backsite.demand.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $decrypt_id = decrypt($id);
-        $attendance = Attendance::find($decrypt_id);
+        $demand = Demand::find($decrypt_id);
 
 
-        return view('pages.adm.attendance.show', compact('attendance'));
+        return view('pages.adm.demand.show', compact('demand'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $decrypt_id = decrypt($id);
-        $attendance = Attendance::find($decrypt_id);
-        // $users = User::where(['name', '!=', 'Administrator'], ['status', '1'])->orderBy('name', 'asc')->get();
-        $users = DetailUser::where('status', '1')->get();
-        return view('pages.adm.attendance.edit', compact('attendance', 'users'));
+        $demand = Demand::find($decrypt_id);
+        $filepath = storage_path($demand->file);
+        $filepathPj = storage_path($demand->file_pj);
+        $fileName = basename($filepath);
+        $fileNamePj = basename($filepathPj);
+        return view('pages.adm.demand.edit', compact('demand', 'fileName', 'fileNamePj'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateAttendanceRequest  $request
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Http\Requests\Adm\Bill\UpdateBillRequest  $request
+     * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAttendanceRequest $request, Attendance $attendance)
+    public function update(UpdateDemandRequest $request, Demand $demand)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // cari old photo
-        $path_file = $attendance['file'];
+        $path_file = $demand['file'];
+        $path_file_pj = $demand['file_pj'];
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -156,7 +170,7 @@ class AttendanceController extends Controller
             $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
             $fullname = $basename . '.' . $extension;
-            $data['file'] = $request->file('file')->storeAs('assets/file-attendance', $fullname);
+            $data['file'] = $request->file('file')->storeAs('assets/file-demand', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
@@ -165,36 +179,56 @@ class AttendanceController extends Controller
             $data['file'] = $path_file;
         }
 
+        // upload process here
+        if ($request->hasFile('file_pj')) {
+            $files = $request->file('file_pj');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename . '.' . $extension;
+            $data['file_pj'] = $request->file('file_pj')->storeAs('assets/file-demand', $fullname);
+            // hapus file
+            if ($path_file_pj != null || $path_file_pj != '') {
+                Storage::delete($path_file_pj);
+            }
+        } else {
+            $data['file_pj'] = $path_file_pj;
+        }
+
 
         // update to database
-        $attendance->update($data);
+        $demand->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.attendance.index');
+        return redirect()->route('backsite.demand.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Attendance  $attendance
+     * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $attendance = Attendance::find($decrypt_id);
+        $demand = Demand::find($decrypt_id);
 
         // cari old photo
-        $path_file = $attendance['file'];
+        $path_file = $demand['file'];
+        $path_file_pj = $demand['file_pj'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
+        if ($path_file_pj != null || $path_file_pj != '') {
+            Storage::delete($path_file_pj);
+        }
 
         // hapus location
-        $attendance->forceDelete();
+        $demand->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

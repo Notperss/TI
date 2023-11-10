@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Adm;
 
-use App\Http\Requests\Adm\Letter\StoreLetterRequest;
-use Carbon\Carbon;
-use App\Models\Adm\Letter;
+use App\Models\Adm\ATK;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Adm\Letter\UpdateLetterRequest;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\Adm\ATK\StoreATKRequest;
+use App\Http\Requests\Adm\ATK\UpdateATKRequest;
 
-class LetterController extends Controller
+class ATKController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,24 +23,24 @@ class LetterController extends Controller
     {
         if (request()->ajax()) {
 
-            $letter = Letter::orderby('created_at', 'desc');
+            $atk = ATK::orderby('created_at', 'desc');
 
-            return DataTables::of($letter)
+            return DataTables::of($atk)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
-            <div class="btn-group">
+            <div class="btn-group mr-1 mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.letter.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
+                    <a href="#mymodal" data-remote="' . route('backsite.atk.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data ATK" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.letter.edit', $item->id) . '">
+                    <a class="dropdown-item" href="' . route('backsite.atk.edit', encrypt($item->id)) . '">
                         Edit
-                    </a>
-                    <form action="' . route('backsite.letter.destroy', encrypt($item->id)) . '" method="POST"
+                                </a>
+                    <form action="' . route('backsite.atk.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -67,13 +68,14 @@ class LetterController extends Controller
                                 ';
                     }
                 })
-                ->editColumn('date_letter', function ($item) {
-                    return Carbon::parse($item->date_letter)->translatedFormat('l, d F Y');
+                ->editColumn('date', function ($item) {
+                    return Carbon::parse($item->date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action', 'file'])
+                ->rawColumns(['action', 'date', 'file'])
                 ->toJson();
         }
-        return view("pages.adm.letter.index");
+
+        return view('pages.adm.atk.index');
     }
 
     /**
@@ -83,79 +85,87 @@ class LetterController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.letter.create");
+        return view('pages.adm.atk.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Adm\ATK\StoreATKRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLetterRequest $request)
+    public function store(StoreATKRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
 
-
         // upload process here
         if ($request->hasFile('file')) {
-            $data['file'] = $request->file('file')->storeAs('assets/file-letter', $request->file('file')->getClientOriginalName());
+            $files = $request->file('file');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename . '.' . $extension;
+            $data['file'] = $request->file('file')->storeAs('assets/file-atk', $fullname);
         }
         // store to database
-        Letter::create($data);
+        ATK::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.atk.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
+        $atk = ATK::find($decrypt_id);
 
-        return view('pages.adm.letter.show', compact('letter'));
+
+        return view('pages.adm.atk.show', compact('atk'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
-    public function edit(Letter $letter)
+    public function edit($id)
     {
-        $letter = Letter::findOrFail($letter->id);
-        $filepath = storage_path($letter->file);
-        $fileName = basename($filepath);
-        return view('pages.adm.letter.edit', compact('letter', 'fileName'));
+        $decrypt_id = decrypt($id);
+        $atk = ATK::find($decrypt_id);
+        return view('pages.adm.atk.edit', compact('atk', ));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Http\Requests\Adm\ATK\UpdateATKRequest  $request
+     * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLetterRequest $request, Letter $letter)
+    public function update(UpdateATKRequest $request, ATK $atk)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $atk['file'];
 
         // upload process here
         if ($request->hasFile('file')) {
-
-            $data['file'] = $request->file('file')->storeAs('assets/file-letter', $request->file('file')->getClientOriginalName());
+            $files = $request->file('file');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename . '.' . $extension;
+            $data['file'] = $request->file('file')->storeAs('assets/file-atk', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
@@ -166,26 +176,25 @@ class LetterController extends Controller
 
 
         // update to database
-        $letter->update($data);
+        $atk->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.atk.index');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
+        $atk = ATK::find($decrypt_id);
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $atk['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
@@ -193,7 +202,7 @@ class LetterController extends Controller
         }
 
         // hapus location
-        $letter->forceDelete();
+        $atk->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

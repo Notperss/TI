@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Act_daily;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Act_daily\Workcat;
 use App\Models\Act_daily\ActDaily;
@@ -14,10 +15,10 @@ use App\Models\Data\DailyActivityFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\MasterData\Work\WorkType;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Console\View\Components\Confirm;
 use App\Models\MasterData\Location\LocationRoom;
 use App\Http\Requests\Data\Act_daily\StoreActDailyRequest;
 use App\Http\Requests\Data\Act_daily\UpdateActDailyRequest;
-use Illuminate\Console\View\Components\Confirm;
 
 class ActDailyController extends Controller
 {
@@ -229,7 +230,12 @@ class ActDailyController extends Controller
         // save to file test material
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
-                $file = $image->storeAs('assets/file-daily-activity', $image->getClientOriginalName());
+                $file = $image->getClientOriginalName();
+                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $ext = $image->getClientOriginalExtension();
+                $fullname = $basename . '.' . $ext;
+                $file = $image->storeAs('assets/file-daily-activity', $fullname);
+
                 DailyActivityFile::create([
                     'daily_activity_id' => $request->id,
                     'file' => $file,
