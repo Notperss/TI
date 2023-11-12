@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'PP')
+@section('title', 'Peminjaman')
 @section('content')
   <div class="app-content content">
     <div class="content-overlay"></div>
@@ -14,10 +14,10 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Edit Data PP</h4>
+                  <h4 class="card-title text-white">Edit Data Peminjaman</h4>
                 </div>
-                <form class="form" action="{{ route('backsite.pp.update', $pp->id) }}" method="POST"
-                  enctype="multipart/form-data">
+                <form class="form" action="{{ route('backsite.lendingfacility.update', $lendingfacility->id) }}"
+                  method="POST" enctype="multipart/form-data">
                   @csrf
                   @method('PUT')
                   <div class="form-body container">
@@ -25,105 +25,27 @@
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" id="no_pp" name="no_pp"
-                          value="{{ old('no_pp', $pp->no_pp) }}" required>
-                        </select>
-                        @if ($errors->has('no_pp'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('no_pp') }}</p>
-                        @endif
-                      </div>
-                      <label class="col-md-2 label-control" for="date">Tanggal PP<code
+                      <label class="col-md-2 label-control" for="borrower">Peminjam<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="date" class="form-control" id="date" name="date"
-                          value="{{ old('date', $pp->date) }}" required>
+                        <input type="text" class="form-control" id="borrower" name="borrower"
+                          value="{{ old('borrower', $lendingfacility->borrower) }}" required>
                         </select>
-                        @if ($errors->has('date'))
+                        @if ($errors->has('borrower'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('date') }}</p>
+                            {{ $errors->first('borrower') }}</p>
                         @endif
                       </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="job_name">Nama Pekerjaan<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" id="job_name" name="job_name"
-                          value="{{ old('job_name', $pp->job_name) }}" required>
-                        @if ($errors->has('job_name'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('job_name') }}</p>
-                        @endif
-                      </div>
-                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" id="rkap" name="rkap" class="form-control"
-                          value="{{ old('rkap', $pp->rkap) }}" required>
-                        @if ($errors->has('rkap'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('rkap') }}</p>
-                        @endif
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="year">Tahun
-                        <code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" name="year" id="year" data-provide="datepicker"
-                          data-date-format="yyyy" data-date-min-view-mode="2" autocomplete="off"
-                          value="{{ old('year', $pp->year) }}" readonly required>
-                        @if ($errors->has('year'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('year') }}</p>
-                        @endif
-                      </div>
-                      <label class="col-md-2 label-control" for="job_value">Nilai Pekerjaan
-                        <code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" name="job_value" id="job_value"
-                          value="{{ old('job_value', $pp->job_value) }}" required>
-                        @if ($errors->has('job_value'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('job_value') }}</p>
-                        @endif
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="stats" id="stats" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1"{{ $pp->stats == 1 ? 'selected' : '' }}>Aktif</option>
-                          <option value="2"{{ $pp->stats == 2 ? 'selected' : '' }}>Tidak Aktif
-                          </option>
-                        </select>
 
-                        @if ($errors->has('stats'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
-                        @endif
-                      </div>
-                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
+                      <label class="col-md-2 label-control" for="date_lend">Tanggal Pinjam<code
+                          style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="type_bill" id="type_bill" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="LUMPSUM"{{ $pp->type_bill == 'LUMPSUM' ? 'selected' : '' }}>
-                            Lumpsum
-                          </option>
-                          <option value="RUTIN"{{ $pp->type_bill == 'RUTIN' ? 'selected' : '' }}>Rutin
-                          </option>
+                        <input type="date" class="form-control" id="date_lend" name="date_lend"
+                          value="{{ old('date_lend', $lendingfacility->date_lend) }}" required>
                         </select>
-                        @if ($errors->has('type_bill'))
+                        @if ($errors->has('date_lend'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('type_bill') }}</p>
+                            {{ $errors->first('date_lend') }}</p>
                         @endif
                       </div>
                     </div>
@@ -131,78 +53,90 @@
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
                       <div class="col-md-10">
-                        <textarea rows="5" class="form-control" id="description" name="description" required>{{ old('description', $pp->description) }}</textarea>
+                        <input type="text" class="form-control" id="description" name="description"
+                          value="{{ old('description', $lendingfacility->description) }}" required>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('file') }}</p>
+                            {{ $errors->first('description') }}</p>
                         @endif
                       </div>
                     </div>
+
                     <div class="form-group row">
                       <div class="col-md-4">
-                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2"
-                          title="Tambah File" onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i>
-                          Tambah File</button>
+                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah Item"
+                          onclick="upload({{ $lendingfacility->id }})"><i class="bx bx-file"></i>
+                          Tambah Item</button>
                       </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="table-responsive">
-                        <table
-                          class="table table-striped table-bordered text-inputs-searching default-table activity-table"
+                      <div class="table-responsive col-md-12">
+                        <table class="table table-striped table-bordered default-table activity-table mb-4"
                           aria-label="">
                           <thead>
                             <tr>
                               <th class="text-center" style="width: 5%;">No</th>
-                              <th class="text-center">Tipe File</th>
-                              <th class="text-center">Nama File</th>
-                              <th class="text-center">Keterangan</th>
+                              <th class="text-center">Nama item</th>
+                              <th class="text-center">Category</th>
+                              <th class="text-center">Barcode</th>
+                              <th class="text-center">Gambar</th>
                               <th style="text-align:center; width:10px;">Action</th>
                             </tr>
                           </thead>
-                          @foreach ($datafile as $file)
+                          @forelse ($lending_goods as $lends)
                             <tbody>
-                              <td class="text-center">{{ $loop->iteration }}</td>
+                              <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                              <td class="text-center">{{ $lends->name }}</td>
+                              <td class="text-center">{{ $lends->category }}</td>
+                              <td class="text-center">{{ $lends->barcode }}</td>
                               <td class="text-center">
-                                @if ($file->type_file)
-                                  {{ $file->type_file }}
-                                @else
-                                  <p style="color:red;">Type File is Empty!</p>
-                                @endif
+                                <a type="button" data-fancybox data-src="{{ asset('storage/' . $lends->file) }}"
+                                  class="btn btn-info btn-sm text-white ">
+                                  Show
+                                </a>
                               </td>
                               <td class="text-center">
-                                @if ($file->name_file)
-                                  {{ $file->name_file }}
-                                @else
-                                  <p style="color:red;">Name File is Empty!</p>
-                                @endif
-                              </td>
-                              <td class="text-center">
-                                @if ($file->description_file)
-                                  {{ $file->description_file }}
-                                @else
-                                  <p style="color:red;">Description is Empty!</p>
-                                @endif
-                              </td>
-                              <td class="text-center">
-                                <div class="btn-group mr-1 mb-1">
+                                <div class="btn-group">
                                   <button type="button" class="btn btn-info btn-sm dropdown-toggle"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                   <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                                    <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}"
-                                      class="btn text-nowrap ">
-                                      Show
+                                    <a class="btn text-nowrap" href="">
+                                      Edit
                                     </a>
-                                    <a type="button" href="{{ asset('storage/' . $file->file) }}"
-                                      class="btn text-nowrap" download>Download</a>
-                                    <button type="button" class="btn text-nowrap" onclick="thisFileUpload()">
+                                    <a type="button" href="" class="btn text-nowrap" download>Download File</a>
+                                    <button type="button" class="btn text-nowrap" onclick="thisFileDelete()">
                                       Delete
                                     </button>
                                   </div>
                                 </div>
                               </td>
                             </tbody>
-                          @endforeach
+                          @empty
+                            <td class="text-center" colspan="6">Data Not Found!</td>
+                          @endforelse
                         </table>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="date_return" class="col-md-2 label-control">Tanggal Kembali</label>
+                      <div class="col-md-4">
+                        <input type="date" class="form-control" id="date_return" name="date_return"
+                          value="{{ old('date_return', $lendingfacility->date_return) }}" required>
+                        </select>
+                        @if ($errors->has('date_return'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('date_return') }}</p>
+                        @endif
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="note">Catatan<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-10">
+                        <textarea rows="5" class="form-control mb-3" id="note" name="note" required>{{ old('note', $lendingfacility->note) }}</textarea>
+                        @if ($errors->has('note'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('note') }}</p>
+                        @endif
                       </div>
                     </div>
                   </div>
@@ -210,12 +144,13 @@
                     <button type="submit" name="action" value="submit" style="width:120px;"
                       class="btn btn-cyan float-right mr-2"
                       onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-                      <i class="la la-check-square-o"></i> Simpan
+                      <i class="la la-check-square-o"></i> Submit
                     </button>
-                    <a href="{{ route('backsite.pp.index') }}" class="btn btn-success text-left ml-2">
+                    <a href="{{ route('backsite.lendingfacility.index') }}" class="btn btn-success text-left ml-2">
                       <i class="la la-arrow-left"></i> Kembali</a>
                   </div>
                 </form>
+
               </div>
             </div>
             <form action="{{ route('backsite.pp.hapus_file', $file->id ?? '') }}" method="POST"
@@ -257,7 +192,7 @@
 
       $.ajax({
         type: "post",
-        url: "{{ route('backsite.pp.form_upload') }}",
+        url: "{{ route('backsite.lendingfacility.form_upload') }}",
         data: {
           id: id
         },

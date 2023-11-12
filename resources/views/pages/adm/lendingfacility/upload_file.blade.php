@@ -13,54 +13,57 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload File PP</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Upload File Peminjaman</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form" action="{{ route('backsite.pp.upload') }}" method="POST" enctype="multipart/form-data">
-
+      <form class="form" action="{{ route('backsite.lendingfacility.upload') }}" method="POST"
+        enctype="multipart/form-data">
         @csrf
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="type_file">Tipe File<code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="name">Nama Barang<code style="color:red;">*</code></label>
             <div class="col-md-8">
-              <select name="type_file" id="type_file" class="form-control select2" required>
+              <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}"
+                required>
+              @if ($errors->has('name'))
+                <p style="font-style: bold; color: red;">
+                  {{ $errors->first('name') }}</p>
+              @endif
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 label-control" for="category">Category Barang<code
+                style="color:red;">*</code></label>
+            <div class="col-md-8">
+              <select name="category" id="category" class="form-control select2" required>
                 <option value="{{ '' }}" disabled selected>
                   Choose
                 </option>
-                <option value="MEMO">Memo</option>
-                <option value="PENAWARAN KONTRAK">Penawaran Kontrak</option>
-                <option value="ADDENDUM">Addendum</option>
+                <option value="PC">PC</option>
+                <option value="MONITOR">Monitor</option>
+                <option value="PRINTER">Printer</option>
+                <option value="KEYBOARD">Keyboard</option>
+                <option value="MOUSE">Mouse</option>
                 <option value="LAIN-LAIN">Lain-lain</option>
               </select>
 
-              @if ($errors->has('type_file'))
+              @if ($errors->has('category'))
                 <p style="font-style: bold; color: red;">
-                  {{ $errors->first('type_file') }}</p>
+                  {{ $errors->first('category') }}</p>
               @endif
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="name_file">Nama File<code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="barcode">Barcode<code style="color:red;">*</code></label>
             <div class="col-md-8">
-              <input type="text" id="name_file" name="name_file" class="form-control" value="{{ old('name_file') }}"
+              <input type="text" id="barcode" name="barcode" class="form-control" value="{{ old('barcode') }}"
                 required>
-              @if ($errors->has('name_file'))
+              @if ($errors->has('barcode'))
                 <p style="font-style: bold; color: red;">
-                  {{ $errors->first('name_file') }}</p>
-              @endif
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-md-4 label-control" for="description_file">Keterangan<code
-                style="color:red;">*</code></label>
-            <div class="col-md-8">
-              <textarea rows="5" class="form-control" id="description_file" name="description_file" required>{{ old('description_file') }}</textarea>
-              @if ($errors->has('description_file'))
-                <p style="font-style: bold; color: red;">
-                  {{ $errors->first('description_file') }}</p>
+                  {{ $errors->first('barcode') }}</p>
               @endif
             </div>
           </div>
@@ -99,3 +102,24 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style>
+  .modal {
+    text-align: center;
+    padding: 0 !important;
+  }
+
+  .modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+  }
+
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+  }
+</style>

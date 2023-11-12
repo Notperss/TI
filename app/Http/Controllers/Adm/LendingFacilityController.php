@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Adm;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Models\Adm\LendingGoods;
 use App\Models\Adm\LendingFacility;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -51,8 +53,12 @@ class LendingFacilityController extends Controller
                     </form>
             </div>
                 ';
-                })
-                ->rawColumns(['action',])
+                })->editColumn('date_return', function ($item) {
+                return Carbon::parse($item->date_return)->translatedFormat('l, d F Y');
+            })->editColumn('date_lend', function ($item) {
+                return Carbon::parse($item->date_lend)->translatedFormat('l, d F Y');
+            })
+                ->rawColumns(['action', 'date_return', 'date_lend'])
                 ->toJson();
         }
         return view("pages.adm.lendingfacility.index");
@@ -63,7 +69,7 @@ class LendingFacilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         return view("pages.adm.lendingfacility.create");
     }
@@ -112,8 +118,8 @@ class LendingFacilityController extends Controller
     public function edit($id)
     {
         $lendingfacility = LendingFacility::find($id);
-        $datafile = LendingFacility_file::where('lendingfacility_id', $id)->get();
-        return view('pages.adm.lendingfacility.edit', compact('lendingfacility', 'datafile'));
+        $lending_goods = LendingGoods::where('lendingfacility_id', $id)->get();
+        return view('pages.adm.lendingfacility.edit', compact('lendingfacility', 'lending_goods'));
     }
 
     /**
@@ -149,15 +155,15 @@ class LendingFacilityController extends Controller
 
         $lendingfacility->forceDelete();
 
-        $lendingfacility_file = LendingFacility_file::where('lendingfacility_id', $decrypt_id)->get();
+        $lending_goods = LendingGoods::where('lendingfacility_id', $decrypt_id)->get();
         // hapus file
-        foreach ($lendingfacility_file as $file) {
+        foreach ($lending_goods as $file) {
             if ($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
 
         }
-        $lendingfacility_file = LendingFacility_file::where('lendingfacility_id', $decrypt_id)->forceDelete();
+        $lending_goods = LendingGoods::where('lendingfacility_id', $decrypt_id)->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
@@ -194,11 +200,11 @@ class LendingFacilityController extends Controller
                 $ext = $image->getClientOriginalExtension();
                 $fullname = $basename . '.' . $ext;
                 $file = $image->storeAs('assets/file-lendingfacility', $fullname);
-                LendingFacility_file::create([
+                LendingGoods::create([
                     'lendingfacility_id' => $request->id,
-                    'name_file' => $request->name_file,
-                    'type_file' => $request->type_file,
-                    'description_file' => $request->description_file,
+                    'name' => $request->name,
+                    'category' => $request->category,
+                    'barcode' => $request->barcode,
                     'file' => $file,
                 ]);
             }
@@ -214,9 +220,9 @@ class LendingFacilityController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $lendingfacility_file = LendingFacility_file::where('lendingfacility_id', $id)->get();
+            $lendingGoods = LendingGoods::where('lendingfacility_id', $id)->get();
             $data = [
-                'datafile' => $lendingfacility_file,
+                'datafile' => $lendingGoods,
             ];
 
             $msg = [
@@ -230,17 +236,17 @@ class LendingFacilityController extends Controller
     // hapus file dailiy activity
     public function hapus_file($id)
     {
-        $lendingfacility_file = LendingFacility_file::find($id);
+        $lendingGoods = LendingGoods::find($id);
 
         // cari old photo
-        $path_file = $lendingfacility_file['file'];
+        $path_file = $lendingGoods['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 
-        $lendingfacility_file->forceDelete();
+        $lendingGoods->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

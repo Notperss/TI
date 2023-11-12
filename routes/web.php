@@ -158,6 +158,13 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     Route::resource('lendingfacility', LendingFacilityController::class);
 
+    Route::controller(LendingFacilityController::class)->group(function () {
+        Route::post('/lendingfacility/form_upload', 'form_upload')->name('lendingfacility.form_upload');
+        Route::post('/lendingfacility/upload', 'upload')->name('lendingfacility.upload');
+        Route::post('/lendingfacility/show_file', 'show_file')->name('lendingfacility.show_file');
+        Route::delete('/lendingfacility/{id}/hapus_file', 'hapus_file')->name('lendingfacility.hapus_file');
+    });
+
     Route::resource('atk', ATKController::class);
 
     Route::resource('letter', LetterController::class);

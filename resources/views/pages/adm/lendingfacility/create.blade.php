@@ -26,7 +26,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="borrower">Peminjam<code
                           style="color:red;">*</code></label>
-                      <div class="col-md-4">
+                      <div class="col-md-5">
                         <input type="text" class="form-control" id="borrower" name="borrower"
                           value="{{ old('borrower') }}" required>
                         </select>
@@ -35,10 +35,12 @@
                             {{ $errors->first('borrower') }}</p>
                         @endif
                       </div>
+                    </div>
 
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="date_lend">Tanggal Pinjam<code
                           style="color:red;">*</code></label>
-                      <div class="col-md-4">
+                      <div class="col-md-5">
                         <input type="date" class="form-control" id="date_lend" name="date_lend"
                           value="{{ old('date_lend') }}" required>
                         </select>
@@ -48,6 +50,20 @@
                         @endif
                       </div>
                     </div>
+
+                    <div class="form-group row">
+                      <label for="date_return" class="col-md-2 label-control">Tanggal Kembali</label>
+                      <div class="col-md-5">
+                        <input type="date" class="form-control" id="date_return" name="date_return"
+                          value="{{ old('date_return') }}">
+                        </select>
+                        @if ($errors->has('date_return'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('date_return') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
@@ -57,70 +73,6 @@
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-md-4">
-                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah Item"
-                          onclick=""><i class="bx bx-file"></i>
-                          Tambah Item</button>
-                      </div>
-                      <div class="table-responsive col-md-12">
-                        <table class="table table-striped table-bordered default-table activity-table mb-4"
-                          aria-label="">
-                          <thead>
-                            <tr>
-                              <th class="text-center" style="width: 5%;">No</th>
-                              <th class="text-center">Nama item</th>
-                              <th class="text-center">Category</th>
-                              <th class="text-center">Barcode</th>
-                              <th class="text-center">Gambar</th>
-                              <th style="text-align:center; width:10px;">Action</th>
-                            </tr>
-                          </thead>
-                          {{-- @forelse ($bills as $bill) --}}
-                          <tbody>
-                            <td class="text-center" style="width: 5%;"></td>
-                            <td class="text-center"></td>
-                            <td class="text-center"></td>
-                            <td class="text-center"></td>
-                            <td class="text-center"> <a type="button" data-fancybox data-src=""
-                                class="btn btn-info btn-sm text-white ">
-                                Show
-                              </a></td>
-                            <td class="text-center">
-                              <div class="btn-group">
-                                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
-                                  aria-haspopup="true" aria-expanded="false">Action</button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                                  <a class="btn text-nowrap" href="">
-                                    Edit
-                                  </a>
-                                  <a type="button" href="" class="btn text-nowrap" download>Download File</a>
-                                  <button type="button" class="btn text-nowrap" onclick="thisFileDelete()">
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
-                            </td>
-                          </tbody>
-                          {{-- @empty --}}
-                          {{-- @endforelse --}}
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label for="date_return" class="col-md-2 label-control">Tanggal Kembali</label>
-                      <div class="col-md-4">
-                        <input type="date" class="form-control" id="date_return" name="date_return"
-                          value="{{ old('date_return') }}" required>
-                        </select>
-                        @if ($errors->has('date_return'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('date_return') }}</p>
                         @endif
                       </div>
                     </div>
@@ -155,25 +107,4 @@
   </div>
   </div>
 
-
 @endsection
-
-@push('after-style')
-  <link rel="stylesheet" type="text/css"
-    href="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
-@endpush
-
-@push('after-script')
-  <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-  <script>
-    updateList = function() {
-      var input = document.getElementById('file');
-      var output = document.getElementById('fileList');
-      var children = "";
-      for (var i = 0; i < input.files.length; ++i) {
-        children += '<li>' + input.files.item(i).name + '</li>';
-      }
-      output.innerHTML = '<ul>' + children + '</ul>';
-    }
-  </script>
-@endpush
