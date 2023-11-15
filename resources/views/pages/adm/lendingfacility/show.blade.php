@@ -1,58 +1,28 @@
 <table class="table table-bordered">
-  <input type="hidden" name="id" id="id" value="{{ $pp->id }}">
+  <input type="hidden" name="id" id="id" value="{{ $lendingfacility->id }}">
   <tr>
-    <th>No PP</th>
-    <td>{{ isset($pp->no_pp) ? $pp->no_pp : 'N/A' }}
-    </td>
+    <th>Peminjam</th>
+    <td>{{ isset($lendingfacility->borrower) ? $lendingfacility->borrower : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Nama Pekerjaan</th>
-    <td>{{ isset($pp->job_name) ? $pp->job_name : 'N/A' }}</td>
-  </tr>
-  <tr>
-    <th>Nilai Pekerjaan</th>
-    <td>{{ isset($pp->job_value) ? $pp->job_value : 'N/A' }}</td>
-  </tr>
-  <tr>
-    <th>Nilai RKAP</th>
-    <td>{{ isset($pp->rkap) ? $pp->rkap : 'N/A' }}</td>
-  </tr>
-  <tr>
-    <th>Tanggal</th>
-    <td>{{ isset($pp->date) ? Carbon\Carbon::parse($pp->date)->translatedFormat('l, d F Y') : 'N/A' }}
-    </td>
-  </tr>
-  <tr>
-    <th>Tahun</th>
-    <td>{{ isset($pp->year) ? $pp->year : 'N/A' }}</td>
-  </tr>
-  <tr>
-    <th>Status</th>
+    <th>Tanggal Pinjam</th>
     <td>
-      @if ($pp->stats == 1)
-        <span class="badge badge-success">{{ 'Aktif' }}</span>
-      @elseif($pp->stats == 2)
-        <span class="badge badge-danger">{{ 'Tidak Aktif' }}</span>
-      @else
-        <span>{{ 'N/A' }}</span>
-      @endif
+      {{ isset($lendingfacility->date_lend) ? Carbon\Carbon::parse($lendingfacility->date_lend)->translatedFormat('l, d F Y') : 'N/A' }}
     </td>
   </tr>
   <tr>
-    <th>Tipe Tagihan</th>
+    <th>Tanggal Kembali</th>
     <td>
-      @if ($pp->type_bill == 'LUMPSUM')
-        <span class="badge badge-info">{{ 'Lumpsum' }}</span>
-      @elseif($pp->type_bill == 'RUTIN')
-        <span class="badge badge-secondary">{{ 'Rutin' }}</span>
-      @else
-        <span>{{ 'N/A' }}</span>
-      @endif
+      {{ isset($lendingfacility->date_return) ? Carbon\Carbon::parse($lendingfacility->date_return)->translatedFormat('l, d F Y') : 'N/A' }}
     </td>
   </tr>
   <tr>
     <th>Keterangan</th>
-    <td>{!! isset($pp->description) ? $pp->description : 'N/A' !!}</td>
+    <td>{{ isset($lendingfacility->description) ? $lendingfacility->description : 'N/A' }}</td>
+  </tr>
+  <tr>
+    <th>Catatan</th>
+    <td>{!! isset($lendingfacility->note) ? $lendingfacility->note : 'N/A' !!}</td>
   </tr>
 </table>
 <table class="table table-bordered tampildata" style="word-break: break-all">
@@ -69,7 +39,7 @@
     let id = $('#id').val();
     $.ajax({
       type: "post",
-      url: "{{ route('backsite.pp.show_file') }}",
+      url: "{{ route('backsite.lendingfacility.show_file') }}",
       data: {
         id: id
       },

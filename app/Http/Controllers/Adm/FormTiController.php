@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Adm;
 
 use Carbon\Carbon;
-use App\Models\Adm\Letter;
+use App\Models\Adm\Form;
+use App\Models\Adm\FormTi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\Adm\Letter\StoreLetterRequest;
-use App\Http\Requests\Adm\Letter\UpdateLetterRequest;
+use App\Http\Requests\Adm\FormTi\StoreFormTiRequest;
+use App\Http\Requests\Adm\FormTi\UpdateFormTiRequest;
 
-class LetterController extends Controller
+
+class FormTiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +25,9 @@ class LetterController extends Controller
     {
         if (request()->ajax()) {
 
-            $letter = Letter::orderby('created_at', 'desc');
+            $form_ti = FormTi::orderby('created_at', 'desc');
 
-            return DataTables::of($letter)
+            return DataTables::of($form_ti)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
@@ -33,14 +35,14 @@ class LetterController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.letter.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
+                    <a href="#mymodal" data-remote="' . route('backsite.form_ti.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.letter.edit', $item->id) . '">
+                    <a class="dropdown-item" href="' . route('backsite.form_ti.edit', $item->id) . '">
                         Edit
                     </a>
-                    <form action="' . route('backsite.letter.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="' . route('backsite.form_ti.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -49,7 +51,9 @@ class LetterController extends Controller
                     </form>
             </div>
                 ';
-                })
+                })->editColumn('date_form', function ($item) {
+                return Carbon::parse($item->date_form)->translatedFormat('l, d F Y');
+            })
                 ->editColumn('file', function ($item) {
                     if ($item->file) {
                         return '<a type="button" data-fancybox
@@ -58,23 +62,18 @@ class LetterController extends Controller
                                 Lihat
                             </a>
                             <a type="button" href="' . asset('storage/' . $item->file) . '"
-                                    class="btn btn-primary btn-sm" download>
-                                    Unduh  
+                                class="btn btn-warning btn-sm" download>
+                                Unduh
                             </a>
                                 ';
                     } else {
-                        return '
-                            <span>File Not Found!</span>
-                                ';
+                        return '<span>File not found!</span>';
                     }
                 })
-                ->editColumn('date_letter', function ($item) {
-                    return Carbon::parse($item->date_letter)->translatedFormat('l, d F Y');
-                })
-                ->rawColumns(['action', 'file'])
+                ->rawColumns(['action', 'date_form', 'file'])
                 ->toJson();
         }
-        return view("pages.adm.letter.index");
+        return view("pages.adm.form_ti.index");
     }
 
     /**
@@ -82,22 +81,22 @@ class LetterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view("pages.adm.letter.create");
+        $forms = Form::orderby("created_at", "desc")->get();
+        return view("pages.adm.form_ti.create", compact("forms"));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Adm\FormTi\StoreFormTiRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLetterRequest $request)
+    public function store(StoreFormTiRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
-
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -108,55 +107,55 @@ class LetterController extends Controller
             $fullname = $basename . '.' . $extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
         }
-        // store to database
-        Letter::create($data);
+
+        $form_ti = FormTi::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.form_ti.index');
+
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\FormTi  $lendingFacility
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
+        $form_ti = FormTi::find($decrypt_id);
 
-        return view('pages.adm.letter.show', compact('letter'));
+        return view('pages.adm.form_ti.show', compact('form_ti'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\FormTi  $lendingFacility
      * @return \Illuminate\Http\Response
      */
-    public function edit(Letter $letter)
+    public function edit($id)
     {
-        $letter = Letter::findOrFail($letter->id);
-        $filepath = storage_path($letter->file);
-        $fileName = basename($filepath);
-        return view('pages.adm.letter.edit', compact('letter', 'fileName'));
+        $form_ti = FormTi::find($id);
+        $forms = Form::orderBy('created_at', 'desc')->get();
+        return view('pages.adm.form_ti.edit', compact('form_ti', 'forms'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Http\Requests\Adm\FormTi\UpdateFormTiRequest  $request
+     * @param  \App\Models\Adm\FormTi  $lendingFacility
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLetterRequest $request, Letter $letter)
+    public function update(UpdateFormTiRequest $request, FormTi $form_ti)
     {
         // get all request from frontsite
         $data = $request->all();
 
-        // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $form_ti['file'];
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -174,36 +173,34 @@ class LetterController extends Controller
             $data['file'] = $path_file;
         }
 
-
         // update to database
-        $letter->update($data);
+        $form_ti->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.form_ti.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\FormTi  $lendingFacility
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
+        $form_ti = FormTi::find($decrypt_id);
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $form_ti['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 
-        // hapus location
-        $letter->forceDelete();
+        $form_ti->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

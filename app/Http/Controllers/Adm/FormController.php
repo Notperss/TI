@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Adm;
 
-use Carbon\Carbon;
-use App\Models\Adm\Letter;
+use App\Models\Adm\Form;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\Adm\Letter\StoreLetterRequest;
-use App\Http\Requests\Adm\Letter\UpdateLetterRequest;
+use App\Http\Requests\Adm\Form\StoreFormRequest;
+use App\Http\Requests\Adm\Form\UpdateFormRequest;
 
-class LetterController extends Controller
+class FormController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,24 +21,21 @@ class LetterController extends Controller
     {
         if (request()->ajax()) {
 
-            $letter = Letter::orderby('created_at', 'desc');
+            $form = Form::orderby('created_at', 'desc');
 
-            return DataTables::of($letter)
+            return DataTables::of($form)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
-            <div class="btn-group">
+            <div class="btn-group mr-1 mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.letter.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
-                        Show
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.letter.edit', $item->id) . '">
+
+                    <a class="dropdown-item" href="' . route('backsite.form.edit', encrypt($item->id)) . '">
                         Edit
-                    </a>
-                    <form action="' . route('backsite.letter.destroy', encrypt($item->id)) . '" method="POST"
+                                </a>
+                    <form action="' . route('backsite.form.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -58,7 +53,7 @@ class LetterController extends Controller
                                 Lihat
                             </a>
                             <a type="button" href="' . asset('storage/' . $item->file) . '"
-                                    class="btn btn-primary btn-sm" download>
+                                    class="btn btn-warning btn-sm" download>
                                     Unduh  
                             </a>
                                 ';
@@ -68,13 +63,12 @@ class LetterController extends Controller
                                 ';
                     }
                 })
-                ->editColumn('date_letter', function ($item) {
-                    return Carbon::parse($item->date_letter)->translatedFormat('l, d F Y');
-                })
-                ->rawColumns(['action', 'file'])
+
+                ->rawColumns(['action', 'date', 'file'])
                 ->toJson();
         }
-        return view("pages.adm.letter.index");
+
+        return view('pages.adm.form.index');
     }
 
     /**
@@ -84,20 +78,19 @@ class LetterController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.letter.create");
+        return view('pages.adm.form.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Adm\Form\StoreFormRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLetterRequest $request)
+    public function store(StoreFormRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
-
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -109,54 +102,50 @@ class LetterController extends Controller
             $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
         }
         // store to database
-        Letter::create($data);
+        Form::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.form.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\Form  $form
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
-
-        return view('pages.adm.letter.show', compact('letter'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\Form  $form
      * @return \Illuminate\Http\Response
      */
-    public function edit(Letter $letter)
+    public function edit($id)
     {
-        $letter = Letter::findOrFail($letter->id);
-        $filepath = storage_path($letter->file);
-        $fileName = basename($filepath);
-        return view('pages.adm.letter.edit', compact('letter', 'fileName'));
+        $decrypt_id = decrypt($id);
+        $form = Form::find($decrypt_id);
+        return view('pages.adm.form.edit', compact('form', ));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Http\Requests\Adm\Form\UpdateFormRequest  $request
+     * @param  \App\Models\Adm\Form  $form
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLetterRequest $request, Letter $letter)
+    public function update(UpdateFormRequest $request, Form $form)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $form['file'];
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -176,26 +165,25 @@ class LetterController extends Controller
 
 
         // update to database
-        $letter->update($data);
+        $form->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.form.index');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\Adm\Form  $form
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
+        $form = Form::find($decrypt_id);
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $form['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
@@ -203,9 +191,10 @@ class LetterController extends Controller
         }
 
         // hapus location
-        $letter->forceDelete();
+        $form->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
 }
+

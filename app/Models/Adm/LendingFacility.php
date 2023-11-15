@@ -2,6 +2,7 @@
 
 namespace App\Models\Adm;
 
+use App\Models\MasterData\Goods\Barang;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,4 +23,10 @@ class LendingFacility extends Model
     {
         return $this->hasMany(LendingGoods::class, 'lendingfacility_id', 'id');
     }
+
+    public function barang()
+    {
+        return $this->hasMany(Barang::class, 'id');
+    }
+
 }

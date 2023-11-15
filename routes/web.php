@@ -2,22 +2,25 @@
 // controller
 
 
-use App\Http\Controllers\Adm\BillController;
 use App\Models\Act_daily\Workcat;
+use App\Models\Act_daily\ActDaily;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Adm\PPController;
+use App\Http\Controllers\Adm\ATKController;
 use App\Http\Controllers\JobdeskController;
+use App\Http\Controllers\Adm\BillController;
+use App\Http\Controllers\Adm\FormController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Adm\DemandController;
+use App\Http\Controllers\Adm\FormTiController;
+use App\Http\Controllers\Adm\LetterController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Data\WorkProgramController;
 use App\Http\Controllers\Act_daily\WorkcatController;
 use App\Http\Controllers\Act_daily\ActDailyController;
-use App\Http\Controllers\Adm\ATKController;
-use App\Http\Controllers\Adm\DemandController;
-use App\Http\Controllers\Adm\LendingFacilityController;
-use App\Http\Controllers\Adm\LetterController;
-use App\Http\Controllers\Adm\PPController;
 use App\Http\Controllers\Data\DailyActivityController;
+use App\Http\Controllers\Adm\LendingFacilityController;
 use App\Http\Controllers\MasterData\EmployeeController;
 use App\Http\Controllers\MasterData\SoftwareController;
 use App\Http\Controllers\MasterData\VendorTiController;
@@ -40,14 +43,15 @@ use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
+use App\Http\Controllers\MasterData\Goods\GoodsController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
+use App\Http\Controllers\MasterData\Goods\BarangController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
 use App\Http\Controllers\MasterData\Location\LocationSubController;
 use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
-use App\Models\Act_daily\ActDaily;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,6 +160,25 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     Route::resource('demand', DemandController::class);
 
+    Route::resource('atk', ATKController::class);
+
+    Route::resource('letter', LetterController::class);
+
+    Route::resource('barang', BarangController::class);
+
+    Route::resource('attendance', AttendanceController::class);
+
+    Route::resource('form', FormController::class);
+
+    Route::resource('form_ti', FormTiController::class);
+
+    Route::controller(FormTiController::class)->group(function () {
+        Route::post('/form_ti/form_upload', 'form_upload')->name('form_ti.form_upload');
+        Route::post('/form_ti/upload', 'upload')->name('form_ti.upload');
+        Route::post('/form_ti/show_file', 'show_file')->name('form_ti.show_file');
+        Route::delete('/form_ti/{id}/hapus_file', 'hapus_file')->name('form_ti.hapus_file');
+    });
+
     Route::resource('lendingfacility', LendingFacilityController::class);
 
     Route::controller(LendingFacilityController::class)->group(function () {
@@ -164,10 +187,6 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/lendingfacility/show_file', 'show_file')->name('lendingfacility.show_file');
         Route::delete('/lendingfacility/{id}/hapus_file', 'hapus_file')->name('lendingfacility.hapus_file');
     });
-
-    Route::resource('atk', ATKController::class);
-
-    Route::resource('letter', LetterController::class);
 
     Route::resource('bill', BillController::class);
 
@@ -189,8 +208,6 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::delete('/pp/{id}/hapus_file', 'hapus_file')->name('pp.hapus_file');
     });
 
-    Route::resource('attendance', AttendanceController::class);
-
     Route::resource('act_daily', ActDailyController::class);
 
     Route::controller(ActDailyController::class)->group(function () {
@@ -199,7 +216,6 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/act_daily/show_file', 'show_file')->name('act_daily.show_file');
         Route::delete('/act_daily/{id}/hapus_file', 'hapus_file')->name('act_daily.hapus_file');
     });
-
 
     Route::resource('workcat', WorkcatController::class);
 });

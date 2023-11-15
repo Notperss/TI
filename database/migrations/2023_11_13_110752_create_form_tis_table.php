@@ -12,12 +12,13 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('goods', function (Blueprint $table) {
+        Schema::create('form_tis', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('category');
-            $table->string('barcode');
+            $table->string('no_form');
+            $table->string('type_form');
             $table->string('file')->nullable();
+            $table->date('date_form');
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('goods');
+        Schema::dropIfExists('form_tis');
     }
 };

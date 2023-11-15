@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Adm;
+namespace App\Http\Controllers\MasterData\Goods;
 
-use Carbon\Carbon;
-use App\Models\Adm\Letter;
+use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
+use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\Adm\Letter\StoreLetterRequest;
-use App\Http\Requests\Adm\Letter\UpdateLetterRequest;
 
-class LetterController extends Controller
+class BarangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +22,9 @@ class LetterController extends Controller
     {
         if (request()->ajax()) {
 
-            $letter = Letter::orderby('created_at', 'desc');
+            $barang = Barang::orderby('created_at', 'desc');
 
-            return DataTables::of($letter)
+            return DataTables::of($barang)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
@@ -33,14 +32,14 @@ class LetterController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.letter.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="' . route('backsite.barang.show', encrypt($item->id)) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.letter.edit', $item->id) . '">
+                    <a class="dropdown-item" href="' . route('backsite.barang.edit', $item->id) . '">
                         Edit
                     </a>
-                    <form action="' . route('backsite.letter.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="' . route('backsite.barang.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -68,13 +67,10 @@ class LetterController extends Controller
                                 ';
                     }
                 })
-                ->editColumn('date_letter', function ($item) {
-                    return Carbon::parse($item->date_letter)->translatedFormat('l, d F Y');
-                })
-                ->rawColumns(['action', 'file'])
+                ->rawColumns(['file', 'action'])
                 ->toJson();
         }
-        return view("pages.adm.letter.index");
+        return view("pages.master-data.barang.index");
     }
 
     /**
@@ -84,7 +80,7 @@ class LetterController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.letter.create");
+        return view('pages.master-data.barang.create');
     }
 
     /**
@@ -93,7 +89,7 @@ class LetterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLetterRequest $request)
+    public function store(StoreGoodsRequest $request)
     {
         // get all request from frontsite
         $data = $request->all();
@@ -106,57 +102,55 @@ class LetterController extends Controller
             $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
             $fullname = $basename . '.' . $extension;
-            $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
+            $data['file'] = $request->file('file')->storeAs('assets/file-goods', $fullname);
         }
         // store to database
-        Letter::create($data);
+        Barang::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.barang.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\MasterData\Goods\Barang  $barang
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
 
-        return view('pages.adm.letter.show', compact('letter'));
+        $decrypt_id = decrypt($id);
+        $barang = Barang::find($decrypt_id);
+        return view('pages.master-data.barang.show', compact('barang'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\MasterData\Goods\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function edit(Letter $letter)
+    public function edit(Barang $barang)
     {
-        $letter = Letter::findOrFail($letter->id);
-        $filepath = storage_path($letter->file);
-        $fileName = basename($filepath);
-        return view('pages.adm.letter.edit', compact('letter', 'fileName'));
+        $barang = Barang::find($barang->id);
+        return view('pages.master-data.barang.edit', compact('barang'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\MasterData\Goods\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLetterRequest $request, Letter $letter)
+    public function update(UpdateGoodsRequest $request, Barang $barang)
     {
         // get all request from frontsite
         $data = $request->all();
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $barang['file'];
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -165,7 +159,7 @@ class LetterController extends Controller
             $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
             $fullname = $basename . '.' . $extension;
-            $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
+            $data['file'] = $request->file('file')->storeAs('assets/file-goods', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
@@ -176,26 +170,26 @@ class LetterController extends Controller
 
 
         // update to database
-        $letter->update($data);
+        $barang->update($data);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.letter.index');
+        return redirect()->route('backsite.barang.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Adm\Letter  $letter
+     * @param  \App\Models\MasterData\Goods\Barang  $barang
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $letter = Letter::find($decrypt_id);
+        $barang = Barang::find($decrypt_id);
 
         // cari old photo
-        $path_file = $letter['file'];
+        $path_file = $barang['file'];
 
         // hapus file
         if ($path_file != null || $path_file != '') {
@@ -203,7 +197,7 @@ class LetterController extends Controller
         }
 
         // hapus location
-        $letter->forceDelete();
+        $barang->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Peminjaman Fasilitas')
+@section('title', 'Form')
 
 @section('content')
 
@@ -28,12 +28,12 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">Peminjaman Fasilitas</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Form</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">Peminjaman Fasilitas</li>
+                <li class="breadcrumb-item active">Form</li>
               </ol>
             </div>
           </div>
@@ -46,8 +46,8 @@
           <div class="row">
             <div class="col-12">
 
-              <a href="{{ route('backsite.lendingfacility.create') }}" class="btn btn-success col-2 mb-2">
-                Tambah Data Peminjaman</a>
+              <a href="{{ route('backsite.form.create') }}" class="btn btn-success col-2 mb-2">
+                Tambah Data Form</a>
             </div>
           </div>
         </section>
@@ -61,21 +61,20 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">List PP</h4>
+                  <h4 class="card-title">List Form</h4>
                   <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                 </div>
                 <div class="card-body card-dashboard">
 
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                      id="lending-table">
+                      id="atk-table" aria-label="">
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Tgl Pinjam</th>
-                          <th>Peminjam</th>
-                          <th>Tgl Kembali</th>
-                          <th>Catatan</th>
+                          <th>Nama Form</th>
+                          <th>Keterangan</th>
+                          <th>File</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -83,10 +82,9 @@
                       </tbody>
                       <tfoot hidden>
                         <th>No</th>
-                        <th>Tgl Pinjam</th>
-                        <th>Peminjam</th>
-                        <th>Tgl Kembali</th>
-                        <th>Catatan</th>
+                        <th>Nama Form</th>
+                        <th>Keterangan</th>
+                        <th>File</th>
                         <th>Action</th>
                       </tfoot>
                     </table>
@@ -101,40 +99,35 @@
 
   </div>
   </div>
-  <div class="viewmodal" style="display: none;"></div>
   <!-- END: Content-->
 @endsection
 @push('after-script')
   <script>
-    var datatable = $('#lending-table').dataTable({
+    var datatable = $('#atk-table').dataTable({
       processing: true,
       serverSide: true,
       ordering: true,
       ajax: {
-        url: "{{ route('backsite.lendingfacility.index') }}",
+        url: "{{ route('backsite.form.index') }}",
       },
       columns: [{
           data: 'DT_RowIndex',
           name: 'DT_RowIndex',
           orderable: false,
           searchable: false,
-          width: '3%',
+        },
+
+        {
+          data: 'name_form',
+          name: 'name_form',
         },
         {
-          data: 'date_lend',
-          name: 'date_lend',
+          data: 'description',
+          name: 'description',
         },
         {
-          data: 'borrower',
-          name: 'borrower',
-        },
-        {
-          data: 'date_return',
-          name: 'date_return',
-        },
-        {
-          data: 'note',
-          name: 'note',
+          data: 'file',
+          name: 'file',
         },
         {
           data: 'action',
@@ -150,6 +143,17 @@
       }, ],
     });
 
+    // $('.default-table').DataTable({
+    //   "order": [],
+    //   "paging": true,
+    //   "lengthMenu": [
+    //     [5, 10, 25, 50, 100, -1],
+    //     [5, 10, 25, 50, 100, "All"]
+    //   ],
+    //   "pageLength": 10
+    // });
+
+
 
     jQuery(document).ready(function($) {
       $('#mymodal').on('show.bs.modal', function(e) {
@@ -160,35 +164,10 @@
         modal.find('.modal-title').html(button.data("title"));
       });
     });
-
-
-    function upload(id) {
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
-
-      $.ajax({
-        type: "post",
-        url: "{{ route('backsite.pp.form_upload') }}",
-        data: {
-          id: id
-        },
-        dataType: "json",
-        success: function(response) {
-          $('.viewmodal').html(response.data).show();
-          $('#upload').modal('show');
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-        }
-      });
-    }
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" style="width:90%" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title"></h5>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Adm\LendingFacility;
+namespace App\Http\Requests\Adm\FormTi;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateLendingFacilityRequest extends FormRequest
+class StoreFormTiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class UpdateLendingFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            'date_lend' => 'required',
-            'borrower' => 'required',
-            'description' => 'required',
+            //
         ];
     }
 }

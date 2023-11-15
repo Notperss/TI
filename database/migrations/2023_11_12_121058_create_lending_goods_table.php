@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('category');
             $table->string('barcode');
-            $table->string('file');
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

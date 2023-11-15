@@ -153,6 +153,24 @@
           </li>
           {{-- @endcan --}}
 
+          {{-- @can('location_room') --}}
+          <li
+            class="{{ request()->is('backsite/form') || request()->is('backsite/form/*') || request()->is('backsite/*/form') || request()->is('backsite/*/form/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.form.index') }}">
+              <i></i><span>Form </span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+
+          {{-- @can('location_room') --}}
+          <li
+            class="{{ request()->is('backsite/barang') || request()->is('backsite/barang/*') || request()->is('backsite/*/barang') || request()->is('backsite/*/barang/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.barang.index') }}">
+              <i></i><span>Barang</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+
         </ul>
       </li>
       {{-- END Master Data --}}
@@ -237,18 +255,9 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/form_ti') || request()->is('backsite/form_ti/*') || request()->is('backsite/*/form_ti') || request()->is('backsite/*/form_ti/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.form_ti.index') }}">
               <i></i><span>Form TI</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Kendaraan</span>
             </a>
           </li>
           {{-- @endcan --}}

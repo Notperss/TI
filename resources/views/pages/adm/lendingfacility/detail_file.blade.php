@@ -3,9 +3,9 @@
     <thead>
       <tr>
         <th class="text-center" style="width: 5px;">No</th>
-        <th class="text-center" style="width: 25px;">Tipe File</th>
-        <th class="text-center" style="width: 30px;">Nama File</th>
-        <th class="text-center" style="width: 30px;">Keterangan</th>
+        <th class="text-center" style="width: 25px;">Nama Item</th>
+        <th class="text-center" style="width: 30px;">Category</th>
+        <th class="text-center" style="width: 30px;">Barcode</th>
         <th style="text-align:center; width:10px;">Action</th>
       </tr>
     </thead>
@@ -14,24 +14,24 @@
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
-          @if ($file->type_file)
-            {{ $file->type_file }}
-          @else
-            <p style="color:red;">Type File is Empty!</p>
-          @endif
-        </td>
-        <td class="text-center">
-          @if ($file->name_file)
-            {{ $file->name_file }}
+          @if ($file->barang->name)
+            {{ $file->barang->name }}
           @else
             <p style="color:red;">Name File is Empty!</p>
           @endif
         </td>
         <td class="text-center">
-          @if ($file->description_file)
-            {{ $file->description_file }}
+          @if ($file->barang->category)
+            {{ $file->barang->category }}
           @else
-            <p style="color:red;">Description is Empty!</p>
+            <p style="color:red;">Category name is Empty!</p>
+          @endif
+        </td>
+        <td class="text-center">
+          @if ($file->barang->barcode)
+            {{ $file->barang->barcode }}
+          @else
+            <p style="color:red;">Barcode name is Empty!</p>
           @endif
         </td>
         <td class="text-center">
@@ -39,10 +39,11 @@
             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Action</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap ">
+              <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->barang->file) }}"
+                class="btn text-nowrap ">
                 Show
               </a>
-              <a type="button" href="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap"
+              <a type="button" href="{{ asset('storage/' . $file->barang->file) }}" class="btn text-nowrap"
                 download>Download</a>
               {{-- <a class="dropdown-item" href="{{ route('backsite.pp.edit', encrypt($file->id)) }}">
                 Edit

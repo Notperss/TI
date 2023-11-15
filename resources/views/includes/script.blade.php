@@ -31,37 +31,31 @@
 {{-- third party --}}
 <script src="{{ url('https://unpkg.com/boxicons@latest/dist/boxicons.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-    integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
 {{-- preview --}}
 <script>
-    function previewImage() {
-        const file = document.querySelector('#file');
-        const imgPreview = document.querySelector('.img-preview');
+  function previewImage() {
+    const file = document.querySelector('#file');
+    const imgPreview = document.querySelector('.img-preview');
 
-        imgPreview.style.display = 'block';
+    imgPreview.style.display = 'block';
 
-        const oFReader = new FileReader();
-        oFReader.readAsDataURL(file.files[0]);
+    const oFReader = new FileReader();
+    oFReader.readAsDataURL(file.files[0]);
 
-        oFReader.onload = function(oFREvent) {
-            imgPreview.src = oFREvent.target.result;
-        }
+    oFReader.onload = function(oFREvent) {
+      imgPreview.src = oFREvent.target.result;
     }
+  }
 </script>
 
-{{-- datatables --}}
-{{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script> --}}
-{{-- <script>
-    $('.default-table').DataTable({
-        "order": [],
-        "paging": true,
-        "lengthMenu": [
-            [5, 10, 25, 50, 100, -1],
-            [5, 10, 25, 50, 100, "All"]
-        ],
-        "pageLength": 10
-    });
-</script> --}}
+<script>
+  $(document).ready(function() {
+    $('.select2').select2();
+  });
+</script>

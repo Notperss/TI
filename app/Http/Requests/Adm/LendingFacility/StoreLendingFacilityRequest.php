@@ -24,7 +24,9 @@ class StoreLendingFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'date_lend' => 'required',
+            'borrower' => 'required',
+            'description' => 'required',
         ];
     }
 }

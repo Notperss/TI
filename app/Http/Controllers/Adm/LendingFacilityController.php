@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Adm\LendingFacility\StoreLendingFacilityRequest;
 use App\Http\Requests\Adm\LendingFacility\UpdateLendingFacilityRequest;
+use App\Models\MasterData\Goods\Barang;
 
 class LendingFacilityController extends Controller
 {
@@ -40,9 +41,6 @@ class LendingFacilityController extends Controller
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.lendingfacility.edit', $item->id) . '">
                         Edit
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
-                        Tambah tagihan
                     </a>
                     <form action="' . route('backsite.lendingfacility.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
@@ -118,7 +116,7 @@ class LendingFacilityController extends Controller
     public function edit($id)
     {
         $lendingfacility = LendingFacility::find($id);
-        $lending_goods = LendingGoods::where('lendingfacility_id', $id)->get();
+        $lending_goods = LendingGoods::with('barang')->where('lendingfacility_id', $id)->get();
         return view('pages.adm.lendingfacility.edit', compact('lendingfacility', 'lending_goods'));
     }
 
@@ -175,9 +173,11 @@ class LendingFacilityController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $row = LendingFacility::find($id);
+            $row = LendingFacility::with('barang')->find($id);
+            $barang = Barang::orderBy('id', 'asc')->get();
             $data = [
                 'id' => $row['id'],
+                'barang' => $barang,
             ];
 
             $msg = [
@@ -192,23 +192,10 @@ class LendingFacilityController extends Controller
     {
         $lendingfacility = LendingFacility::find($request->id);
 
-        // save to file test material
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
-                $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
-                $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
-                $file = $image->storeAs('assets/file-lendingfacility', $fullname);
-                LendingGoods::create([
-                    'lendingfacility_id' => $request->id,
-                    'name' => $request->name,
-                    'category' => $request->category,
-                    'barcode' => $request->barcode,
-                    'file' => $file,
-                ]);
-            }
-        }
+        LendingGoods::create([
+            'lendingfacility_id' => $request->id,
+            'goods_id' => $request->goods_id,
+        ]);
 
         alert()->success('Sukses', 'File Berhasil diupload');
         return redirect()->route('backsite.lendingfacility.edit', $lendingfacility);
@@ -220,9 +207,9 @@ class LendingFacilityController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $lendingGoods = LendingGoods::where('lendingfacility_id', $id)->get();
+            $lendinggoods = Lendinggoods::where('lendingfacility_id', $id)->with('barang')->get();
             $data = [
-                'datafile' => $lendingGoods,
+                'datafile' => $lendinggoods,
             ];
 
             $msg = [
@@ -237,16 +224,8 @@ class LendingFacilityController extends Controller
     public function hapus_file($id)
     {
         $lendingGoods = LendingGoods::find($id);
+        $lendingGoods->delete();
 
-        // cari old photo
-        $path_file = $lendingGoods['file'];
-
-        // hapus file
-        if ($path_file != null || $path_file != '') {
-            Storage::delete($path_file);
-        }
-
-        $lendingGoods->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

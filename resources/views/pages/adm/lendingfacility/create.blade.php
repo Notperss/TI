@@ -52,19 +52,6 @@
                     </div>
 
                     <div class="form-group row">
-                      <label for="date_return" class="col-md-2 label-control">Tanggal Kembali</label>
-                      <div class="col-md-5">
-                        <input type="date" class="form-control" id="date_return" name="date_return"
-                          value="{{ old('date_return') }}">
-                        </select>
-                        @if ($errors->has('date_return'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('date_return') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
                       <div class="col-md-10">
@@ -73,17 +60,6 @@
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>
-                        @endif
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="note">Catatan<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-10">
-                        <textarea rows="5" class="form-control mb-3" id="note" name="note" required>{{ old('note') }}</textarea>
-                        @if ($errors->has('note'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('note') }}</p>
                         @endif
                       </div>
                     </div>
