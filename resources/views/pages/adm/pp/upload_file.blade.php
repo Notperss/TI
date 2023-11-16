@@ -9,6 +9,7 @@
     output.innerHTML = '<ul>' + children + '</ul>';
   }
 </script>
+
 <div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -19,7 +20,6 @@
         </button>
       </div>
       <form class="form" action="{{ route('backsite.pp.upload') }}" method="POST" enctype="multipart/form-data">
-
         @csrf
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
@@ -87,7 +87,6 @@
           <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
             <i class="la la-close"></i> Cancel
           </a>
-
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
             <i class="la la-check-square-o"></i> Upload
@@ -98,4 +97,28 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+  @media (min-width: 768px) {
+
+    .modal {
+      text-align: center;
+      padding: 0 !important;
+    }
+
+    .modal:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -4px;
+    }
+
+    .modal-dialog {
+      display: inline-block;
+      text-align: left;
+      vertical-align: middle;
+      width: 600px;
+      margin: 30px auto;
+    }
+  }
+</style>

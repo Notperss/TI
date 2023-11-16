@@ -39,9 +39,15 @@
   <tr>
     <th>File</th>
     @if ($attendance->file)
-      <td> <a data-fancybox data-src="{{ asset('storage/' . $attendance->file) }}" class="badge bg-blue text-white">
+      <td>
+        <a type="button" data-fancybox data-src="{{ asset('storage/' . $attendance->file) }}"
+          class="btn btn-info btn-sm text-white">
           Lihat
         </a>
+        <a type="button" href="{{ asset('storage/' . $attendance->file) }}" class="btn btn-warning btn-sm" download>
+          Unduh
+        </a>
+        <p class="mt-1">Latest File : {{ pathinfo($attendance->file, PATHINFO_FILENAME) }}</p>
       @else
       <td> No File!</td>
     @endif

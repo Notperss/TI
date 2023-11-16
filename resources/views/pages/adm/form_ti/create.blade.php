@@ -28,7 +28,7 @@
                       <label class="col-md-2 label-control" for="type_form">Tipe Form<code
                           style="color:red;">*</code></label>
                       <div class="col-md-5">
-                        <select name="type_form" id="type_form" class="form-control">
+                        <select name="type_form" id="type_form" class="form-control select2">
                           <option value="" disabled selected>Choose</option>
                           @foreach ($forms as $form)
                             <option value="{{ $form->name_form }}">{{ $form->name_form }}</option>

@@ -64,7 +64,7 @@ class LetterController extends Controller
                                 ';
                     } else {
                         return '
-                            <span>File Not Found!</span>
+                            <span>File not found</span>
                                 ';
                     }
                 })

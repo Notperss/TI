@@ -90,10 +90,22 @@
                           <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
+                          @if ($attendance->file)
+                            <p class="mt-1">Latest File : {{ pathinfo($attendance->file, PATHINFO_FILENAME) }}</p>
+                            <a type="button" data-fancybox data-src="{{ asset('storage/' . $attendance->file) }}"
+                              class="btn btn-info btn-sm text-white ">
+                              Lihat
+                            </a>
+                            <a type="button" href="{{ asset('storage/' . $attendance->file) }}"
+                              class="btn btn-warning btn-sm" download>
+                              Unduh
+                            </a>
+                          @else
+                            <p class="mt-1">Latest File : File not found!</p>
+                          @endif
                         </div>
                         <p class="text-muted"><small class="text-danger">Hanya dapat
                             mengunggah 1 file</small></p>
-                        <img class="img-preview img-fluid mb-1 col-md-6" alt="">
                         @if ($errors->has('file'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>

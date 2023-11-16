@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Adm;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use App\Models\Adm\LendingGoods;
 use App\Models\Adm\LendingFacility;
 use App\Http\Controllers\Controller;
+use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Adm\LendingFacility\StoreLendingFacilityRequest;
 use App\Http\Requests\Adm\LendingFacility\UpdateLendingFacilityRequest;
-use App\Models\MasterData\Goods\Barang;
 
 class LendingFacilityController extends Controller
 {
@@ -190,6 +192,33 @@ class LendingFacilityController extends Controller
 
     public function upload(Request $request)
     {
+        // Validation rules
+        $rules = [
+            'goods_id' => ['required',
+                Rule::unique('lending_goods')->where(function ($query) use ($request) {
+                    return $query->where('lendingfacility_id', $request->id);
+                }),
+            ], // Add any other rules you need
+        ];
+
+        // Custom validation messages
+        $messages = [
+            'goods_id.required' => 'Nama barang tidak boleh kosong.',
+            'goods_id.unique' => 'Nama barang tidak boleh sama',
+            // Add custom messages for other rules as needed
+        ];
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // Check if the validation fails
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // If validation passes, proceed with your original logic
         $lendingfacility = LendingFacility::find($request->id);
 
         LendingGoods::create([
@@ -197,7 +226,7 @@ class LendingFacilityController extends Controller
             'goods_id' => $request->goods_id,
         ]);
 
-        alert()->success('Sukses', 'File Berhasil diupload');
+        alert()->success('Success', 'File successfully uploaded');
         return redirect()->route('backsite.lendingfacility.edit', $lendingfacility);
     }
 

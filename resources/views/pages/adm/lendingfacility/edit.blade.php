@@ -77,6 +77,15 @@
                     <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah Item"
                       onclick="upload({{ $lendingfacility->id }})"><i class="bx bx-file"></i>
                       Tambah Item</button>
+                    @if ($errors->any())
+                      <div class="alert alert-danger">
+                        <ul>
+                          @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                          @endforeach
+                        </ul>
+                      </div>
+                    @endif
                   </div>
                   <div class="table-responsive col-md-12">
                     <table class="table table-striped table-bordered default-table activity-table mb-4" aria-label="">
@@ -99,7 +108,7 @@
                           <td class="text-center">
                             <a type="button" data-fancybox data-src="{{ asset('storage/' . $lends->barang->file) }}"
                               class="btn btn-info btn-sm text-white ">
-                              Show
+                              Lihat
                             </a> <a type="button" href="{{ asset('storage/' . $lends->barang->file) }}"
                               class="btn btn-warning btn-sm text-white" download>Unduh</a>
                           </td>
@@ -137,7 +146,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="note">Catatan</label>
                       <div class="col-md-10">
-                        <textarea rows="5" class="form-control mb-3" id="note" name="note" required>{{ old('note', $lendingfacility->note) }}</textarea>
+                        <textarea rows="5" class="form-control mb-3" id="note" name="note">{{ old('note', $lendingfacility->note) }}</textarea>
                         @if ($errors->has('note'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('note') }}</p>

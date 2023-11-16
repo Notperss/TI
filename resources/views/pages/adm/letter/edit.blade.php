@@ -115,10 +115,23 @@
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-3">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file">Latest File
-                          : {{ $fileName }}
+                          <input type="file" class="custom-file-input" id="file" name="file" required>
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
+                          @if ($letter->file)
+                            <p>Latest File
+                              : {{ $fileName }}
+                            </p>
+                            <a type="button" data-fancybox data-src="{{ asset('storage/' . $letter->file) }}"
+                              class="btn btn-info btn-sm text-white mt-0">
+                              Show
+                            </a>
+                          @else
+                            <p>Latest File
+                              : No File
+                            </p>
+                          @endif
+
                         </div>
                         <p class="text-muted"><small class="text-danger">Hanya dapat
                             mengunggah 1 file</small></p>
@@ -126,12 +139,6 @@
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
                         @endif
-                      </div>
-                      <div class="col-md-1">
-                        <a data-fancybox data-src="{{ asset('storage/' . $letter->file) }}"
-                          class="badge bg-blue badge-lg text-white">
-                          Show
-                        </a>
                       </div>
                     </div>
 

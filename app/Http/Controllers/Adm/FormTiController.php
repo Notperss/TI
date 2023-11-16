@@ -67,7 +67,7 @@ class FormTiController extends Controller
                             </a>
                                 ';
                     } else {
-                        return '<span>File not found!</span>';
+                        return '<span>File not found</span>';
                     }
                 })
                 ->rawColumns(['action', 'date_form', 'file'])

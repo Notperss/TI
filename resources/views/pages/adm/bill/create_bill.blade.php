@@ -133,7 +133,7 @@
                     </div>
                     <div class="form-group">
                       <label>
-                        <h5 class="mr-3">Lihat File</h5>
+                        <h5 class="mr-3">Lihat File PP</h5>
                       </label>
                       <div class="btn-group btn-group-toggle">
                         <label for="openFileTrue" class="btn btn-outline-info btn-sm">Lihat
@@ -233,7 +233,9 @@
                             <tbody>
                               <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
                               <td class="text-center">{{ $bill->bill_to }}</td>
-                              <td class="text-center">{{ $bill->date }}</td>
+                              <td class="text-center">
+                                {{ $bill->date ? Carbon\Carbon::parse($bill->date)->translatedFormat('l, d F Y') : 'N/A' }}
+                              </td>
                               <td class="text-center">{{ $bill->bill_value }}</td>
                               <td class="text-center">{{ $bill->description }}</td>
                               <td class="text-center"> <a type="button" data-fancybox

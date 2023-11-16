@@ -18,6 +18,15 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        @if ($errors->any())
+          <div class="alert alert-danger">
+            <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
       </div>
       <form class="form" action="{{ route('backsite.lendingfacility.upload') }}" method="POST"
         enctype="multipart/form-data">
@@ -41,7 +50,6 @@
                 {{ $errors->first('goods_id') }}</p>
             @endif
           </div>
-
           <div class="form-group row">
             <div class="col-md-4 label-control">Category</div>
             <div class="col-md-8">
@@ -58,19 +66,16 @@
             <div class="col-md-4 label-control">File</div>
             <div class="col-md-8">
               <img id="img" alt="No Picture" style="width: 75%">
-
             </div>
           </div>
-
         </div>
         <div class="modal-footer ">
           <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
             <i class="la la-close"></i> Cancel
           </a>
-
           <button type="submit" id="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-            <i class="la la-check-square-o"></i> Upload
+            <i class="la la-check-square-o"></i> Simpan
           </button>
         </div>
       </form>
