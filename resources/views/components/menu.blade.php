@@ -265,77 +265,103 @@
       </li>
       {{-- END Administrasi --}}
 
-      {{-- SI --}}
+      {{-- Sistem Informasi --}}
       <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
             class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-android bx-flashing' : 'la la-android' }}"></i><span
             class="menu-title info" data-i18n="Software"><strong>Sistem Informasi</strong></span></a>
         <ul class="menu-content">
 
           {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Job Desk</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+          <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
+                class="{{ request()->is('backsite/application') || request()->is('backsite/application/*') || request()->is('backsite/*/application') || request()->is('backsite/*/application/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i>
+              <span class="menu-item" data-i18n="application"><strong>Application</strong></span></a>
+            <ul class="menu-content">
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Aplikasi Inhouse</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/application') || request()->is('backsite/application/*') || request()->is('backsite/*/application') || request()->is('backsite/*/application/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.application.index') }}">
+                  <i></i><span>Aplikasi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Aplikasi Lisensi</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/license') || request()->is('backsite/license/*') || request()->is('backsite/*/license') || request()->is('backsite/*/license/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                  <i></i><span>Lisensi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Microsoft</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/drc-backup') || request()->is('backsite/drc-backup/*') || request()->is('backsite/*/drc-backup') || request()->is('backsite/*/drc-backup/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                  <i></i><span>DRC & Back Up</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>DRC</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/antivirus') || request()->is('backsite/antivirus/*') || request()->is('backsite/*/antivirus') || request()->is('backsite/*/antivirus/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                  <i></i><span>Antivirus</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Pembuatan Aplikasi</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/pp') || request()->is('backsite/pp/*') || request()->is('backsite/*/pp') || request()->is('backsite/*/pp/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                  <i></i><span>PP</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Maintenance Virus</span>
-            </a>
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>TPT</span>
+                </a>
+              </li>
+            </ul>
+            {{-- @endcan --}}
+
+            {{-- @can('location_detail') --}}
+          <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
+                class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                class="menu-title" data-i18n="Software"><strong>Monitoring</strong></span></a>
+            <ul class="menu-content">
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>Aplikasi</span>
+                </a>
+              </li>
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>DRC & Back Up</span>
+                </a>
+              </li>
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>TPT</span>
+                </a>
+              </li>
+            </ul>
           </li>
           {{-- @endcan --}}
         </ul>
       </li>
-      {{-- END SI --}}
+      {{-- END Sistem Informasi --}}
 
       {{-- Jaringan/Hardware --}}
       <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
@@ -443,51 +469,6 @@
         </ul>
       </li>
       {{-- END Jaringan --}}
-
-
-      {{--     Hardware 
-            <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
-                        class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'bx bx-desktop bx-flashing' : 'bx bx-desktop' }}"></i><span
-                        class="menu-title blue-grey " data-i18n="Software"><strong>Hardware</strong></span></a>
-                <ul class="menu-content">
-                     @can('location_detail') -
-                    <li
-                        class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                        <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-                            <i></i><span>Data PPFTI</span>
-                        </a>
-                    </li>
-                     @endcan
-
-             @can('location_detail') 
-                    <li
-                        class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                        <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-                            <i></i><span>Data LK</span>
-                        </a>
-                    </li>
-                     @endcan
-
-             @can('location_detail') 
-                    <li
-                        class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                        <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-                            <i></i><span>Maintenance PC</span>
-                        </a>
-                    </li>
-                     @endcan
-
-             @can('location_detail') 
-                    <li
-                        class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                        <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-                            <i></i><span>Inventaris Hardware</span>
-                        </a>
-                    </li>
-                     @endcan 
-                </ul>
-            </li>
-             END Hardware --}}
 
       {{-- Lattol --}}
       <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i

@@ -43,7 +43,6 @@ use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
-use App\Http\Controllers\MasterData\Goods\GoodsController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Goods\BarangController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
@@ -52,6 +51,7 @@ use App\Http\Controllers\MasterData\Location\LocationSubController;
 use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
+use App\Http\Controllers\SystemInformation\Application\ApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -207,6 +207,21 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/pp/show_file', 'show_file')->name('pp.show_file');
         Route::delete('/pp/{id}/hapus_file', 'hapus_file')->name('pp.hapus_file');
     });
+
+    Route::resource('application', ApplicationController::class);
+
+    Route::controller(ApplicationController::class)->group(function () {
+        Route::post('/application/form_upload_note', 'form_upload_note')->name('application.form_upload_note');
+        Route::post('/application/upload_note', 'upload_note')->name('application.upload_note');
+        Route::post('/application/show_file_note', 'show_file_note')->name('application.show_file_note');
+        Route::delete('/application/{id}/delete_file_note', 'delete_file_note')->name('application.delete_file_note');
+
+        Route::post('/application/form_upload', 'form_upload_file')->name('application.form_upload_file');
+        Route::post('/application/upload', 'upload_file')->name('application.upload_file');
+        Route::post('/application/show_file', 'show_file')->name('application.show_file');
+        Route::delete('/application/{id}/delete_file', 'delete_file')->name('application.delete_file');
+    });
+
 
     Route::resource('act_daily', ActDailyController::class);
 
