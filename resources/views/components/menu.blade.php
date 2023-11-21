@@ -290,7 +290,7 @@
               {{-- @can('location_detail') --}}
               <li
                 class="{{ request()->is('backsite/license') || request()->is('backsite/license/*') || request()->is('backsite/*/license') || request()->is('backsite/*/license/*') ? 'active' : '' }} ">
-                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                <a class="menu-item" href="{{ route('backsite.license.index') }}">
                   <i></i><span>Lisensi</span>
                 </a>
               </li>

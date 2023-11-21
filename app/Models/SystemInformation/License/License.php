@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Models\SystemInformation\Application;
+namespace App\Models\SystemInformation\License;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Application extends Model
+class License extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'user',
         'name_app',
-        'creator',
+        'type_app',
+        'product',
+        'name_vendor',
+        'version',
         'date_start',
         'date_finish',
-        'path_app',
-        'path_database',
-        'path_file',
+        'pp',
+        'barcode',
+        'num_of_licenses',
         'description',
-        'stats',
     ];
 }

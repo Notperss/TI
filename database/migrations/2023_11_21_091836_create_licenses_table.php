@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,18 +13,19 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('applications', function (Blueprint $table) {
+        Schema::create('licenses', function (Blueprint $table) {
             $table->id();
-            $table->string('user');
             $table->string('name_app');
-            $table->string('creator');
+            $table->string('type_app');
+            $table->string('product');
+            $table->string('name_vendor');
+            $table->string('version');
             $table->date('date_start');
             $table->date('date_finish');
-            $table->string('path_app');
-            $table->string('path_database');
-            $table->string('path_file')->nullable();
+            $table->string('pp');
+            $table->string('barcode');
+            $table->string('num_of_licenses');
             $table->longText('description');
-            $table->string('stats');
             $table->timestamps();
         });
     }
@@ -35,6 +37,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('applications');
+        Schema::dropIfExists('licenses');
     }
 };

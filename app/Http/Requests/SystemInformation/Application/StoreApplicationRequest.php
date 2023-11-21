@@ -24,7 +24,7 @@ class StoreApplicationRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required',
+            'user' => 'required',
             'name_app' => 'required',
             'creator' => 'required',
             'date_start' => 'required',
@@ -33,6 +33,7 @@ class StoreApplicationRequest extends FormRequest
             'path_database' => 'required',
             'path_file' => 'required',
             'description' => 'required',
+            'stats' => 'required',
         ];
     }
 }

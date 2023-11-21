@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Aplikasi')
+@section('title', 'Lisensi')
 
 @section('content')
 
@@ -28,12 +28,12 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">Aplikasi</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Lisensi</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">Aplikasi</li>
+                <li class="breadcrumb-item active">Lisensi</li>
               </ol>
             </div>
           </div>
@@ -46,8 +46,8 @@
           <div class="row">
             <div class="col-12">
 
-              <a href="{{ route('backsite.application.create') }}" class="btn btn-success col-2 mb-2">
-                Tambah Data Aplikasi</a>
+              <a href="{{ route('backsite.license.create') }}" class="btn btn-success col-2 mb-2">
+                Tambah Data Lisensi</a>
             </div>
           </div>
         </section>
@@ -68,14 +68,15 @@
 
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                      id="application-table">
+                      id="license-table">
                       <thead>
                         <tr>
                           <th>No</th>
                           <th>Nama Aplikasi</th>
-                          <th>User</th>
-                          <th>Pembuat</th>
-                          <th>Tanggal Selesai</th>
+                          <th>Jumlah Lisensi</th>
+                          <th>Versi</th>
+                          <th>Barcode</th>
+                          <th>Tanggal Berakhir</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -84,9 +85,10 @@
                       <tfoot hidden>
                         <th>No</th>
                         <th>Nama Aplikasi</th>
-                        <th>User</th>
-                        <th>Pembuat</th>
-                        <th>Tanggal Selesai</th>
+                        <th>Jumlah Lisensi</th>
+                        <th>Versi</th>
+                        <th>Barcode</th>
+                        <th>Tanggal Berakhir</th>
                         <th>Action</th>
                       </tfoot>
                     </table>
@@ -100,18 +102,17 @@
     </div>
 
   </div>
-  </div>
   <div class="viewmodal" style="display: none;"></div>
   <!-- END: Content-->
 @endsection
 @push('after-script')
   <script>
-    var datatable = $('#application-table').dataTable({
+    var datatable = $('#license-table').dataTable({
       processing: true,
       serverSide: true,
       ordering: true,
       ajax: {
-        url: "{{ route('backsite.application.index') }}",
+        url: "{{ route('backsite.license.index') }}",
       },
       columns: [{
           data: 'DT_RowIndex',
@@ -125,12 +126,16 @@
           name: 'name_app',
         },
         {
-          data: 'user',
-          name: 'user',
+          data: 'num_of_licenses',
+          name: 'num_of_licenses',
         },
         {
-          data: 'creator',
-          name: 'creator',
+          data: 'version',
+          name: 'version',
+        },
+        {
+          data: 'barcode',
+          name: 'barcode',
         },
         {
           data: 'date_finish',

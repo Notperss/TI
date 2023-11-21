@@ -16,6 +16,7 @@ use App\Http\Controllers\Adm\DemandController;
 use App\Http\Controllers\Adm\FormTiController;
 use App\Http\Controllers\Adm\LetterController;
 use App\Http\Controllers\AttendanceController;
+use App\Models\SystemInformation\License\License;
 use App\Http\Controllers\Data\WorkProgramController;
 use App\Http\Controllers\Act_daily\WorkcatController;
 use App\Http\Controllers\Act_daily\ActDailyController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\Data\Hardware\DeviceController;
 use App\Http\Controllers\ManagementAccess\UserController;
 use App\Http\Controllers\Data\Hardware\DevicePcController;
 use App\Http\Controllers\MasterData\InformationController;
+use App\Http\Controllers\MasterData\Goods\BarangController;
 use App\Http\Controllers\MasterData\Hardware\RamController;
 use App\Http\Controllers\MasterData\Network\CctvController;
 use App\Http\Controllers\Data\Hardware\DeviceMoreController;
@@ -44,11 +46,11 @@ use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
-use App\Http\Controllers\MasterData\Goods\BarangController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
 use App\Http\Controllers\MasterData\Location\LocationSubController;
 use App\Http\Controllers\MasterData\Location\LocationRoomController;
+use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
@@ -207,6 +209,16 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/pp/show_file', 'show_file')->name('pp.show_file');
         Route::delete('/pp/{id}/hapus_file', 'hapus_file')->name('pp.hapus_file');
     });
+
+    Route::resource('license', LicenseController::class);
+
+    Route::controller(LicenseController::class)->group(function () {
+        Route::post('/license/form_upload', 'form_upload')->name('license.form_upload');
+        Route::post('/license/upload', 'upload')->name('license.upload');
+        Route::post('/license/show_file', 'show_file')->name('license.show_file');
+        Route::delete('/license/{id}/delete_file', 'delete_file')->name('license.delete_file');
+    });
+
 
     Route::resource('application', ApplicationController::class);
 

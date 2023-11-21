@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Aplikasi')
+@section('title', 'Lisensi')
 @section('content')
   <div class="app-content content">
     <div class="content-overlay"></div>
@@ -14,9 +14,9 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Tambah Data Aplikasi</h4>
+                  <h4 class="card-title text-white">Tambah Data Lisensi</h4>
                 </div>
-                <form class="form" action="{{ route('backsite.application.store') }}" method="POST"
+                <form class="form" action="{{ route('backsite.license.store') }}" method="POST"
                   enctype="multipart/form-data">
                   @csrf
                   <div class="form-body container">
@@ -36,71 +36,63 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="path_app">Path Aplikasi<code
+                      <label class="col-md-2 label-control" for="type_app">Tipe Aplikasi<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" id="path_app" name="path_app"
-                          value="{{ old('path_app') }}" required>
+                        <select name="type_app" id="type_app" class="form-control select2">
+                          <option value="" disabled selected>Choose</option>
+                          <option value="LISENSI">Lisensi</option>
+                          <option value="NON LISENSI">Non Lisensi</option>
                         </select>
-                        @if ($errors->has('path_app'))
+                        </select>
+                        @if ($errors->has('type_app'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('path_app') }}</p>
+                            {{ $errors->first('type_app') }}</p>
                         @endif
                       </div>
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="user">User<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="name_vendor">Nama Produsen<code
+                          style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" id="user" name="user"
-                          value="{{ old('user') }}" required>
+                        <input type="text" class="form-control" id="name_vendor" name="name_vendor"
+                          value="{{ old('name_vendor') }}" required>
                         </select>
-                        @if ($errors->has('user'))
+                        @if ($errors->has('name_vendor'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('user') }}</p>
+                            {{ $errors->first('name_vendor') }}</p>
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="path_database">Path Database<code
+                      <label class="col-md-2 label-control" for="product">Product<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" id="path_database" name="path_database"
-                          value="{{ old('path_database') }}" required>
+                        <select name="product" id="product" class="form-control select2">
+                          <option value="" disabled selected>Choose</option>
+                          <option value="MICROSOFT">Microsoft</option>
+                          <option value="NON MICROSOFT">Non Microsoft</option>
                         </select>
-                        @if ($errors->has('path_database'))
+                        </select>
+                        @if ($errors->has('product'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('path_database') }}</p>
+                            {{ $errors->first('product') }}</p>
                         @endif
                       </div>
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="creator">Pembuat<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="version">Versi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" id="creator" name="creator"
-                          value="{{ old('creator') }}" required>
+                        <input type="text" class="form-control" id="version" name="version"
+                          value="{{ old('version') }}" required>
                         </select>
-                        @if ($errors->has('creator'))
+                        @if ($errors->has('version'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('creator') }}</p>
+                            {{ $errors->first('version') }}</p>
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="path_file">Path File/Dokumen<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" id="path_file" name="path_file"
-                          value="{{ old('path_file') }}" required>
-                        </select>
-                        @if ($errors->has('path_file'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('path_file') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="date_start">Tanggal Mulai<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -112,7 +104,21 @@
                             {{ $errors->first('date_start') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="date_finish">Tanggal Selesai<code
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="pp">PP<code style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="pp" name="pp"
+                          value="{{ old('pp') }}" required>
+                        </select>
+                        @if ($errors->has('pp'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('pp') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="date_finish">Tanggal Berakhir<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="date" class="form-control" id="date_finish" name="date_finish"
@@ -121,6 +127,32 @@
                         @if ($errors->has('date_finish'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('date_finish') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="barcode">Barcode<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="barcode" name="barcode"
+                          value="{{ old('barcode') }}" required>
+                        </select>
+                        @if ($errors->has('barcode'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('barcode') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="num_of_licenses">Jumlah Lisensi<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="num_of_licenses" name="num_of_licenses"
+                          value="{{ old('num_of_licenses') }}" required>
+                        </select>
+                        @if ($errors->has('num_of_licenses'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('num_of_licenses') }}</p>
                         @endif
                       </div>
                     </div>
@@ -137,21 +169,6 @@
                       </div>
                     </div>
 
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-3">
-                        <select name="stats" id="stats" class="form-control select2">
-                          <option value="" disabled selected></option>
-                          <option value="AKTIF">Aktif</option>
-                          <option value="TIDAK AKTIF">Tidak Aktif</option>
-                        </select>
-                        @if ($errors->has('stats'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
-                        @endif
-                      </div>
-                    </div>
                   </div>
                   <div class="form-actions ">
                     <button type="submit" name="action" value="submit" style="width:120px;"

@@ -1,64 +1,68 @@
 <table class="table table-bordered">
-  <input type="hidden" name="id" id="id" value="{{ $app->id }}">
+  <input type="hidden" name="id" id="id" value="{{ $license->id }}">
   <tr>
     <th>Nama Aplikasi</th>
-    <td>{{ isset($app->name_app) ? $app->name_app : 'N/A' }}</td>
+    <td>{{ isset($license->name_app) ? $license->name_app : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>User</th>
-    <td>{{ isset($app->user) ? $app->user : 'N/A' }}</td>
+    <th>Tipe Aplikasi</th>
+    <td>{{ isset($license->type_app) ? $license->type_app : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Pembuat</th>
-    <td>{{ isset($app->creator) ? $app->creator : 'N/A' }}</td>
+    <th>Product</th>
+    <td>{{ isset($license->product) ? $license->product : 'N/A' }}</td>
+  </tr>
+  <tr>
+    <th>Nama Produsen</th>
+    <td>{{ isset($license->name_vendor) ? $license->name_vendor : 'N/A' }}</td>
+  </tr>
+  <tr>
+    <th>Versi</th>
+    <td>{{ isset($license->version) ? $license->version : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Tanggal Mulai</th>
     <td>
-      {{ isset($app->date_start) ? Carbon\Carbon::parse($app->date_start)->translatedFormat('l, d F Y') : 'N/A' }}
+      {{ isset($license->date_start) ? Carbon\Carbon::parse($license->date_start)->translatedFormat('l, d F Y') : 'N/A' }}
     </td>
   </tr>
   <tr>
     <th>Tanggal Selesai</th>
     <td>
-      {{ isset($app->date_finish) ? Carbon\Carbon::parse($app->date_finish)->translatedFormat('l, d F Y') : 'N/A' }}
+      {{ isset($license->date_finish) ? Carbon\Carbon::parse($license->date_finish)->translatedFormat('l, d F Y') : 'N/A' }}
     </td>
   </tr>
   <tr>
-    <th>Path Aplikasi</th>
-    <td>{{ isset($app->path_app) ? $app->path_app : 'N/A' }}</td>
+    <th>PP</th>
+    <td>{{ isset($license->pp) ? $license->pp : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Path Database</th>
-    <td>{{ isset($app->path_database) ? $app->path_database : 'N/A' }}</td>
+    <th>Barcode</th>
+    <td>{{ isset($license->barcode) ? $license->barcode : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Path File/Dokumen</th>
-    <td>{{ isset($app->path_file) ? $app->path_file : 'N/A' }}</td>
+    <th>Jumlah Lisensi</th>
+    <td>{{ isset($license->num_of_licenses) ? $license->num_of_licenses : 'N/A' }}</td>
   </tr>
-  <tr>
-    <th>Keterangan</th>
-    <td>{{ isset($app->description) ? $app->description : 'N/A' }}</td>
-  </tr>
-  <tr>
+  {{-- <tr>
     <th>Tipe Surat</th>
     <td>
-      @if ($app->stats == '')
+      @if ($license->stats == '')
         <span>N/A</span>';
-      @elseif ($app->stats == 'TIDAK AKTIF')
+      @elseif ($license->stats == 'TIDAK AKTIF')
         <h5><span class="badge bg-danger">Tidak Aktif</span></h5>
-      @elseif ($app->stats == 'AKTIF')
+      @elseif ($license->stats == 'AKTIF')
         <h5><span class="badge bg-info">Aktif</span></h5>
       @else
         <h5><span> - </span></h5>
       @endif
-    </td>
+    </td> --}}
   </tr>
 </table>
 <table class="table table-bordered tampildata" style="word-break: break-all">
 </table>
 
-{{-- <script>
+<script>
   function tampilDataFile() {
     $.ajaxSetup({
       headers: {
@@ -69,7 +73,7 @@
     let id = $('#id').val();
     $.ajax({
       type: "post",
-      url: "{{ route('backsite.app.show_file') }}",
+      url: "{{ route('backsite.license.show_file') }}",
       data: {
         id: id
       },
@@ -91,4 +95,4 @@
   $(document).ready(function() {
     tampilDataFile();
   });
-</script> --}}
+</script>

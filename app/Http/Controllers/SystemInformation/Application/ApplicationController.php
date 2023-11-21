@@ -39,7 +39,7 @@ class ApplicationController extends Controller
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.application.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
+                        data-target="#mymodal" data-title="Detail Data Aplikasi" class="dropdown-item">
                         Show
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.application.edit', $item->id) . '">
@@ -118,8 +118,8 @@ class ApplicationController extends Controller
     public function edit($id)
     {
         $app = Application::find($id);
-        $notes = NoteApp::where('app_id', $id)->get();
-        $files = FileApp::where('app_id', $id)->get();
+        $notes = NoteApp::where('app_id', $id)->orderBy('created_at', 'desc')->get();
+        $files = FileApp::where('app_id', $id)->orderBy('created_at', 'desc')->get();
         return view('pages.system-information.application.edit', compact('app', 'files', 'notes'));
     }
 
