@@ -308,7 +308,7 @@
               {{-- @can('location_detail') --}}
               <li
                 class="{{ request()->is('backsite/antivirus') || request()->is('backsite/antivirus/*') || request()->is('backsite/*/antivirus') || request()->is('backsite/*/antivirus/*') ? 'active' : '' }} ">
-                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                <a class="menu-item" href="{{ route('backsite.antivirus.index') }}">
                   <i></i><span>Antivirus</span>
                 </a>
               </li>

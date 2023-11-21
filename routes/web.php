@@ -53,6 +53,7 @@ use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
+use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
 
 /*
@@ -219,6 +220,16 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::delete('/license/{id}/delete_file', 'delete_file')->name('license.delete_file');
     });
 
+
+
+    Route::resource('antivirus', AntivirusController::class);
+
+    Route::controller(AntivirusController::class)->group(function () {
+        Route::post('/antivirus/form_upload', 'form_upload')->name('antivirus.form_upload');
+        Route::post('/antivirus/upload', 'upload')->name('antivirus.upload');
+        Route::post('/antivirus/show_file', 'show_file')->name('antivirus.show_file');
+        Route::delete('/antivirus/{id}/delete_file', 'delete_file')->name('antivirus.delete_file');
+    });
 
     Route::resource('application', ApplicationController::class);
 
