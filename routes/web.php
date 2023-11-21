@@ -55,6 +55,7 @@ use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
+use App\Http\Controllers\SystemInformation\DRC\DRCController;
 
 /*
 |--------------------------------------------------------------------------
@@ -220,7 +221,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::delete('/license/{id}/delete_file', 'delete_file')->name('license.delete_file');
     });
 
-
+    Route::resource('drc', DRCController::class);
 
     Route::resource('antivirus', AntivirusController::class);
 

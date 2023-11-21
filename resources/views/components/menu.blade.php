@@ -299,7 +299,7 @@
               {{-- @can('location_detail') --}}
               <li
                 class="{{ request()->is('backsite/drc-backup') || request()->is('backsite/drc-backup/*') || request()->is('backsite/*/drc-backup') || request()->is('backsite/*/drc-backup/*') ? 'active' : '' }} ">
-                <a class="menu-item" href="{{ route('backsite.pp.index') }}">
+                <a class="menu-item" href="{{ route('backsite.drc.index') }}">
                   <i></i><span>DRC & Back Up</span>
                 </a>
               </li>
