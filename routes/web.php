@@ -19,6 +19,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Models\SystemInformation\License\License;
 use App\Http\Controllers\Data\WorkProgramController;
 use App\Http\Controllers\Act_daily\WorkcatController;
+use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\Act_daily\ActDailyController;
 use App\Http\Controllers\Data\DailyActivityController;
 use App\Http\Controllers\Adm\LendingFacilityController;
@@ -36,12 +37,15 @@ use App\Http\Controllers\Data\Hardware\DeviceMoreController;
 use App\Http\Controllers\ManagementAccess\ProfileController;
 use App\Http\Controllers\MasterData\Work\WorkTypeController;
 use App\Http\Controllers\ManagementAccess\TypeUserController;
+use App\Http\Controllers\SystemInformation\DRC\DRCController;
+use App\Http\Controllers\SystemInformation\TPT\TPTController;
 use App\Http\Controllers\Data\Hardware\DeviceMonitorController;
 use App\Http\Controllers\MasterData\Division\SectionController;
 use App\Http\Controllers\MasterData\Hardware\HardiskController;
 use App\Http\Controllers\MasterData\Hardware\MonitorController;
 use App\Http\Controllers\MasterData\Division\DivisionController;
 use App\Http\Controllers\MasterData\Location\LocationController;
+
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
@@ -49,14 +53,14 @@ use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
 use App\Http\Controllers\MasterData\Location\LocationSubController;
+use App\Models\SystemInformation\Application\ApplicationMonitoring;
 use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
-use App\Http\Controllers\SystemInformation\DRC\DRCController;
-use App\Http\Controllers\SystemInformation\TPT\TPTController;
+use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -223,6 +227,10 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('drc', DRCController::class);
+
+    Route::resource('drc-monitoring', DRCMonitoringController::class);
+
+    Route::resource('application-monitoring', ApplicationMonitoringController::class);
 
     Route::resource('tpt', TPTController::class);
 

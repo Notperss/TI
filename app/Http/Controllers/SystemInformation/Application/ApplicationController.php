@@ -28,7 +28,7 @@ class ApplicationController extends Controller
     {
         if (request()->ajax()) {
 
-            $application = Application::orderby('created_at', 'desc');
+            $application = Application::latest()->first();
 
             return DataTables::of($application)
                 ->addIndexColumn()

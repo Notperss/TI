@@ -339,14 +339,14 @@
                 class="menu-title" data-i18n="Software"><strong>Monitoring</strong></span></a>
             <ul class="menu-content">
               <li
-                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                class="{{ request()->is('backsite/application-monitoring') || request()->is('backsite/application-monitoring/*') || request()->is('backsite/*/application-monitoring') || request()->is('backsite/*/application-monitoring/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.application-monitoring.index') }}">
                   <i></i><span>Aplikasi</span>
                 </a>
               </li>
               <li
-                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                class="{{ request()->is('backsite/drc-monitoring') || request()->is('backsite/drc-monitoring/*') || request()->is('backsite/*/drc-monitoring') || request()->is('backsite/*/drc-monitoring/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.drc-monitoring.index') }}">
                   <i></i><span>DRC & Back Up</span>
                 </a>
               </li>

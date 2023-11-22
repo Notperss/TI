@@ -20,4 +20,9 @@ class Application extends Model
         'description',
         'stats',
     ];
+
+    public function app()
+    {
+        return $this->hasMany(ApplicationMonitoring::class, 'id');
+    }
 }

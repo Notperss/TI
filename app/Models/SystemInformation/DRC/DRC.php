@@ -20,4 +20,9 @@ class DRC extends Model
         'stats',
         'description',
     ];
+
+    public function drc()
+    {
+        return $this->hasMany(DRCMonitoring::class, 'id');
+    }
 }

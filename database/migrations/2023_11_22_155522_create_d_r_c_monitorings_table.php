@@ -12,10 +12,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('lending_goods', function (Blueprint $table) {
+        Schema::create('d_r_c_monitorings', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('lendingfacility_id');
-            $table->bigInteger('goods_id');
+            $table->bigInteger('drc_id');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('lending_goods');
+        Schema::dropIfExists('d_r_c_monitorings');
     }
 };
