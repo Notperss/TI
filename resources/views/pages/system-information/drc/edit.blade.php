@@ -55,13 +55,15 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="APLIKASI"{{ $drc->id == '' ? 'selected' : '' }}>Aplikasi</option>
-                          <option value="DATABASE"{{ $drc->id == '' ? 'selected' : '' }}>Database</option>
-                          <option value="FILE"{{ $drc->id == '' ? 'selected' : '' }}>File</option>
-                          <option value="DOKUMEN"{{ $drc->id == '' ? 'selected' : '' }}>Dokumen</option>
-                          <option value="SOURCECODE"{{ $drc->id == '' ? 'selected' : '' }}>Source Code</option>
-                          <option value="VM"{{ $drc->id == '' ? 'selected' : '' }}>VM</option>
-                          <option value="LAIN-LAIN"{{ $drc->id == '' ? 'selected' : '' }}>Lain-lain</option>
+                          <option value="APLIKASI"{{ $drc->category == 'APLIKASI' ? 'selected' : '' }}>Aplikasi</option>
+                          <option value="DATABASE"{{ $drc->category == 'DATABASE' ? 'selected' : '' }}>Database</option>
+                          <option value="FILE"{{ $drc->category == 'FILE' ? 'selected' : '' }}>File</option>
+                          <option value="DOKUMEN"{{ $drc->category == 'DOKUMEN' ? 'selected' : '' }}>Dokumen</option>
+                          <option value="SOURCECODE"{{ $drc->category == 'SOURCECODE' ? 'selected' : '' }}>Source Code
+                          </option>
+                          <option value="VM"{{ $drc->category == 'VM' ? 'selected' : '' }}>VM</option>
+                          <option value="LAIN-LAIN"{{ $drc->category == 'LAIN-LAIN' ? 'selected' : '' }}>Lain-lain
+                          </option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -88,12 +90,14 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="6JAM"{{ $drc->id == '' ? 'selected' : '' }}>6 Jam</option>
-                          <option value="12JAM"{{ $drc->id == '' ? 'selected' : '' }}>12 Jam</option>
-                          <option value="FILE"{{ $drc->id == '' ? 'selected' : '' }}>File</option>
-                          <option value="PERHARI"{{ $drc->id == '' ? 'selected' : '' }}>Perhari</option>
-                          <option value="PERMINGGU"{{ $drc->id == '' ? 'selected' : '' }}>Perminggu</option>
-                          <option value="PERBULAN"{{ $drc->id == '' ? 'selected' : '' }}>Perbulan</option>
+                          <option value="6JAM"{{ $drc->backup_frequency == '6JAM' ? 'selected' : '' }}>6 Jam</option>
+                          <option value="12JAM"{{ $drc->backup_frequency == '12JAM' ? 'selected' : '' }}>12 Jam</option>
+                          <option value="PERHARI"{{ $drc->backup_frequency == 'PERHARI' ? 'selected' : '' }}>Perhari
+                          </option>
+                          <option value="PERMINGGU"{{ $drc->backup_frequency == 'PERMINGGU' ? 'selected' : '' }}>
+                            Perminggu</option>
+                          <option value="PERBULAN"{{ $drc->backup_frequency == 'PERBULAN' ? 'selected' : '' }}>Perbulan
+                          </option>
                         </select>
                         @if ($errors->has('backup_frequency'))
                           <p style="font-style: bold; color: red;">
@@ -119,8 +123,9 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="AKTIF"{{ $drc->id == '' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $drc->id == '' ? 'selected' : '' }}>Tidak Aktif</option>
+                          <option value="AKTIF"{{ $drc->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                          <option value="TIDAK AKTIF"{{ $drc->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>Tidak Aktif
+                          </option>
                         </select>
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">
@@ -142,7 +147,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
-                      <div class="col-md-7">
+                      <div class="col-md-9">
                         <textarea rows="5" class="form-control summernote" id="description" name="description" required>{{ old('description', $drc->description) }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">

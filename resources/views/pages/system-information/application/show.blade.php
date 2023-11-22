@@ -41,7 +41,7 @@
     <td>{{ isset($app->description) ? $app->description : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Tipe Surat</th>
+    <th>Status</th>
     <td>
       @if ($app->stats == '')
         <span>N/A</span>';

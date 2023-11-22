@@ -75,7 +75,7 @@
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-5">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file">
+                          <input type="file" class="custom-file-input" id="file" name="file" required>
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
                           @if ($form_ti->file)

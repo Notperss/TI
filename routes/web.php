@@ -56,6 +56,7 @@ use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
 use App\Http\Controllers\SystemInformation\DRC\DRCController;
+use App\Http\Controllers\SystemInformation\TPT\TPTController;
 
 /*
 |--------------------------------------------------------------------------
@@ -222,6 +223,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('drc', DRCController::class);
+
+    Route::resource('tpt', TPTController::class);
 
     Route::resource('antivirus', AntivirusController::class);
 
