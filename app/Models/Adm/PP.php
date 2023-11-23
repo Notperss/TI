@@ -11,6 +11,7 @@ class PP extends Model
 
     protected $table = "pps";
     protected $fillable = [
+        "user_id",
         "no_pp",
         "year",
         "date",

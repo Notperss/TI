@@ -8,6 +8,7 @@ use App\Models\Adm\Pp_file;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Adm\PP\StorePPRequest;
@@ -24,7 +25,20 @@ class PPController extends Controller
     {
         if (request()->ajax()) {
 
-            $pp = PP::orderby('created_at', 'desc');
+            // // Get the current user's job ID
+            // $userJobId = auth()->user()->detail_user->job_position; // Adjust this based on your user model
+
+            // // Query data based on the job ID
+            // $pp = PP::where('user_id', $userJobId)->orderBy('created_at', 'desc');
+
+            $user = auth()->user()->detail_user;
+            $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3;
+
+            $ppQuery = $isManagerOrViceManager ? PP::orderBy('created_at', 'desc') : PP::where('user_id', $user->job_position)->orderBy('created_at', 'desc');
+
+            $pp = $ppQuery->get();
+
+
 
             return DataTables::of($pp)
                 ->addIndexColumn()
@@ -38,12 +52,12 @@ class PPController extends Controller
                         data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.pp.edit', $item->id) . '">
+                    <a class="dropdown-item" href="' . route('backsite.pp.edit', encrypt($item->id)) . '">
                         Edit
-                     </a>
+                    </a>
                     <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
                         Tambah tagihan
-                     </a>
+                    </a>
                     <form action="' . route('backsite.pp.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
@@ -67,7 +81,8 @@ class PPController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.pp.create");
+        $user_id = Auth::user()->detail_user->job_position;
+        return view("pages.adm.pp.create", compact('user_id'));
     }
 
     /**
@@ -86,7 +101,7 @@ class PPController extends Controller
         $pp_id = $pp->id;
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.pp.edit', $pp_id);
+        return redirect()->route('backsite.pp.edit', encrypt($pp_id));
 
 
     }
@@ -113,8 +128,9 @@ class PPController extends Controller
      */
     public function edit($id)
     {
-        $pp = PP::find($id);
-        $datafile = Pp_file::where('pp_id', $id)->get();
+        $decrypt_id = decrypt($id);
+        $pp = PP::find($decrypt_id);
+        $datafile = Pp_file::where('pp_id', $decrypt_id)->get();
         return view('pages.adm.pp.edit', compact('pp', 'datafile'));
     }
 
@@ -206,8 +222,8 @@ class PPController extends Controller
             }
         }
 
-        alert()->success('Sukses', 'File Berhasil diupload');
-        return redirect()->route('backsite.pp.edit', $pp);
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
     }
 
     // get show_file software

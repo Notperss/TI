@@ -24,6 +24,7 @@ class StorePPRequest extends FormRequest
     public function rules()
     {
         return [
+            "user_id" => "required",
             "no_pp" => "required",
             "job_name" => "required",
             "job_value" => "required",

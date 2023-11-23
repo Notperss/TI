@@ -8,7 +8,8 @@
           <option value="" disabled selected>Choose</option>
           @foreach ($drcs as $drc)
             <option value="{{ $drc->id }}" data-value="{{ $drc->category }}" data-value4="{{ $drc->description }}"
-              data-value3="{{ $drc->created_at }}" data-value2="{{ $drc->backup_time }}">
+              data-value3="{{ Carbon\Carbon::parse($drc->created_at)->translatedFormat('l, d F Y') }}"
+              data-value2="{{ $drc->backup_time }}">
               {{ $drc->name }}</option>
           @endforeach
         </select>

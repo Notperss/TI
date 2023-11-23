@@ -28,7 +28,7 @@ class ApplicationController extends Controller
     {
         if (request()->ajax()) {
 
-            $application = Application::latest()->first();
+            $application = Application::latest();
 
             return DataTables::of($application)
                 ->addIndexColumn()
@@ -273,8 +273,6 @@ class ApplicationController extends Controller
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
-
-
 
     public function form_upload_file(Request $request)
     {

@@ -23,6 +23,7 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
+                    <input type="hidden" id="user_id" name="user_id" value="{{ isset($user_id) ? $user_id : '' }}">
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
                       <div class="col-md-4">

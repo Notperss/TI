@@ -12,6 +12,6 @@ class DRCMonitoring extends Model
 
     public function drc_monitoring()
     {
-        return $this->belongsTo(DRC::class, 'id');
+        return $this->belongsTo(DRC::class, 'drc_id', 'id');
     }
 }

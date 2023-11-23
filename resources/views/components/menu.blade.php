@@ -351,8 +351,8 @@
                 </a>
               </li>
               <li
-                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                class="{{ request()->is('backsite/tpt') || request()->is('backsite/tpt/*') || request()->is('backsite/*/tpt') || request()->is('backsite/*/tpt/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.tpt.index') }}">
                   <i></i><span>TPT</span>
                 </a>
               </li>

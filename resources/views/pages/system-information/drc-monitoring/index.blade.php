@@ -70,7 +70,7 @@
 
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                      id="DRCmonitoring-table">
+                      id="drc_monitoring-table">
                       <thead>
                         <tr>
                           <th>No</th>
@@ -109,7 +109,7 @@
 @endsection
 @push('after-script')
   <script>
-    var datatable = $('#DRCmonitoring-table').dataTable({
+    var datatable = $('#drc_monitoring-table').dataTable({
       processing: true,
       serverSide: true,
       ordering: true,

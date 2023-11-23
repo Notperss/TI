@@ -22,9 +22,9 @@ class DRCMonitoringController extends Controller
     {
         if (request()->ajax()) {
 
-            $app = DRCMonitoring::with('drc_monitoring')->orderby('d_r_c_monitorings.created_at', 'desc');
+            $drc = DRCMonitoring::with('drc_monitoring')->orderby('d_r_c_monitorings.created_at', 'desc');
 
-            return DataTables::of($app)
+            return DataTables::of($drc)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
@@ -48,7 +48,7 @@ class DRCMonitoringController extends Controller
                 })->editColumn('drc_monitoring.created_at', function ($item) {
                 return Carbon::parse($item->drc_monitoring->created_at)->translatedFormat('l, d F Y');
             })
-                ->rawColumns(['action', 'drc_monitoring.created_at'])
+                ->rawColumns(['action', 'app_monitoring.created_at'])
                 ->toJson();
         }
         return view("pages.system-information.drc-monitoring.index");
@@ -83,8 +83,8 @@ class DRCMonitoringController extends Controller
 
         // Custom validation messages
         $messages = [
-            'drc_id.required' => 'The drc ID is required.',
-            'drc_id.unique' => 'The drc ID must be unique.',
+            'drc_id.required' => 'Data tidak boleh kosong..',
+            'drc_id.unique' => 'Data tidak boleh sama.',
             // Add custom messages for other rules as needed
         ];
 
@@ -109,7 +109,7 @@ class DRCMonitoringController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\SystemInformation\DRC\DRCMonitoring  $DRCmonitoring
+     * @param \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -123,12 +123,12 @@ class DRCMonitoringController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $DRCmonitoring
+     * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
-    public function edit(DRCMonitoring $DRCmonitoring)
+    public function edit(DRCMonitoring $drcmonitoring)
     {
-        $DRCmonitoring = DRCMonitoring::findOrFail($DRCmonitoring->id);
+        $drcmonitoring = DRCMonitoring::findOrFail($drcmonitoring->id);
         return view('pages.system-information.drc-monitoring.edit', compact('DRCmonitoring'));
     }
 
@@ -136,10 +136,10 @@ class DRCMonitoringController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $DRCmonitoring
+     * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DRCMonitoring $DRCmonitoring)
+    public function update(Request $request, DRCMonitoring $drcmonitoring)
     {
 
     }
@@ -147,17 +147,17 @@ class DRCMonitoringController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $DRCmonitoring
+     * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $DRCmonitoring = DRCMonitoring::find($decrypt_id);
+        $drcmonitoring = DRCMonitoring::find($decrypt_id);
 
         // hapus location
-        $DRCmonitoring->forceDelete();
+        $drcmonitoring->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

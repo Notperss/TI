@@ -24,6 +24,7 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
+
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
                       <div class="col-md-4">

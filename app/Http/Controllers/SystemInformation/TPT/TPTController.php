@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SystemInformation\TPT;
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -65,8 +66,10 @@ class TPTController extends Controller
                             <span>File not found</span>
                                 ';
                 }
+            })->editColumn('date', function ($item) {
+                return Carbon::parse($item->date)->translatedFormat('l, d F Y');
             })
-                ->rawColumns(['action', 'file'])
+                ->rawColumns(['action', 'file', 'date'])
                 ->toJson();
         }
         return view("pages.system-information.tpt.index");
