@@ -58,6 +58,7 @@ use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
+use App\Http\Controllers\Network\IpPhone\IpPhoneController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringController;
@@ -268,4 +269,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('workcat', WorkcatController::class);
+
+    Route::resource('ip_phone', IpPhoneController::class);
+
+
 });

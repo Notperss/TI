@@ -50,6 +50,9 @@
                           <option value="2"{{ $attendance->category == 2 ? 'selected' : '' }}>Sakit</option>
                           <option value="3"{{ $attendance->category == 3 ? 'selected' : '' }}>Dinas</option>
                           <option value="4"{{ $attendance->category == 4 ? 'selected' : '' }}>Cuti</option>
+                          <option value="5"{{ $attendance->category == 5 ? 'selected' : '' }}>IPC</option>
+                          <option value="6"{{ $attendance->category == 6 ? 'selected' : '' }}>ITD</option>
+                          <option value="7"{{ $attendance->category == 7 ? 'selected' : '' }}>Izin</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">

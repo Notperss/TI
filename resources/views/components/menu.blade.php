@@ -371,17 +371,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>IP</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/ip_phone') || request()->is('backsite/ip_phone/*') || request()->is('backsite/*/ip_phone') || request()->is('backsite/*/ip_phone/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.ip_phone.index') }}">
               <i></i><span>IP Phone</span>
             </a>
           </li>
@@ -391,7 +382,7 @@
           <li
             class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>VMS</span>
+              <i></i><span>CCTV</span>
             </a>
           </li>
           {{-- @endcan --}}
@@ -400,72 +391,44 @@
           <li
             class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Maintenance VMS</span>
+              <i></i><span>Hardware</span>
             </a>
           </li>
           {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Data CCTV</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+          <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
+                class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                class="menu-title" data-i18n="Software"><strong>Monitoring</strong></span></a>
+            <ul class="menu-content">
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Maintenance CCTV</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>IP Phone</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Maintenance Exchange</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>CCTV</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Data PPFTI</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+                  <i></i><span>Exchange</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Data LK</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Maintenance PC</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
-              <i></i><span>Inventaris Hardware</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+            </ul>
         </ul>
       </li>
       {{-- END Jaringan --}}

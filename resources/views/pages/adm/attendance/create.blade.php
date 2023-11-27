@@ -54,6 +54,9 @@
                           <option value="2">Sakit</option>
                           <option value="3">Dinas</option>
                           <option value="4">Cuti</option>
+                          <option value="5">IPC</option>
+                          <option value="6">ITD</option>
+                          <option value="7">Izin</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
