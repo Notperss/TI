@@ -9,35 +9,30 @@
     output.innerHTML = '<ul>' + children + '</ul>';
   }
 </script>
-<div class="modal fade" id="modalupload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload File Aktivitas Harian</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Upload File</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form" action="{{ route('backsite.act_daily.upload') }}" method="POST"
+      <form class="form" action="{{ route('backsite.barang.upload_file') }}" method="POST"
         enctype="multipart/form-data">
-
         @csrf
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
             <label class="col-md-4 label-control" for="file">File
-              <code style="color:red;">required</code></label>
+              <code style="color:red;">*</code></label>
             <div class="col-md-8">
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="file" name="file[]" multiple="multiple"
-                  onchange="updateList()" required>
+                <input type="file" class="custom-file-input" id="file" name="file[]" onchange="updateList()"
+                  required>
                 <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                   File</label>
               </div>
-
-              <p class="text-muted"><small class="text-danger">Dapat
-                  mengunggah lebih dari 1 file</small></p>
-
               @if ($errors->has('file'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('file') }}</p>
@@ -45,15 +40,13 @@
             </div>
             <p class="col-md-4">Selected File :</p>
             <div id="fileList" style="word-break: break-all"></div>
-            {{-- <input type="file" multiple name="file" id="file"
-onchange="javascript:updateList()" />
-
-  <p>Selected files:</p>
-
-  <div id="fileList"></div> --}}
           </div>
         </div>
         <div class="modal-footer">
+          <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
+            <i class="la la-close"></i> Cancel
+          </a>
+
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
             <i class="la la-check-square-o"></i> Upload
@@ -63,5 +56,3 @@ onchange="javascript:updateList()" />
     </div>
   </div>
 </div>
-
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}

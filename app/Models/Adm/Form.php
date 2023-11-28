@@ -11,6 +11,7 @@ class Form extends Model
 
     protected $fillable = [
         'name_form',
+        'category',
         'file',
         'description',
     ];

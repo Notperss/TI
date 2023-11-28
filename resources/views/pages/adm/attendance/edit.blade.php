@@ -42,17 +42,13 @@
                       <label class="col-md-2 label-control" for="category">Kategori Absensi<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="category" id="category" class="form-control select2">
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1"{{ $attendance->category == 1 ? 'selected' : '' }}>Absen</option>
-                          <option value="2"{{ $attendance->category == 2 ? 'selected' : '' }}>Sakit</option>
-                          <option value="3"{{ $attendance->category == 3 ? 'selected' : '' }}>Dinas</option>
-                          <option value="4"{{ $attendance->category == 4 ? 'selected' : '' }}>Cuti</option>
-                          <option value="5"{{ $attendance->category == 5 ? 'selected' : '' }}>IPC</option>
-                          <option value="6"{{ $attendance->category == 6 ? 'selected' : '' }}>ITD</option>
-                          <option value="7"{{ $attendance->category == 7 ? 'selected' : '' }}>Izin</option>
+                        <select name="category" id="category" class="form-control">
+                          <option value="" disabled selected>Choose</option>
+                          @foreach ($forms as $form)
+                            <option
+                              value="{{ $form->name_form }}"{{ $attendance->category == $form->name_form ? 'selected' : '' }}>
+                              {{ $form->name_form }}</option>
+                          @endforeach
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">

@@ -17,6 +17,7 @@
       @elseif ($attendance->category == 4)
         <h5><span class="badge bg-secondary">Cuti</span></h5>
       @else
+        {{ $attendance->category }}
       @endif
     </td>
   </tr>

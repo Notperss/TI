@@ -34,6 +34,15 @@
                             {{ $errors->first('name') }}</p>
                         @endif
                       </div>
+                      <label class="col-md-2 label-control" for="sku">SKU<code style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="sku" id="sku"
+                          value="{{ old('sku') }}" required>
+                        @if ($errors->has('sku'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('sku') }}</p>
+                        @endif
+                      </div>
                     </div>
 
                     <div class="form-group row">
@@ -44,15 +53,49 @@
                             Choose
                           </option>
                           <option value="PC">PC</option>
+                          <option value="PC AIO">PC AIO</option>
                           <option value="MONITOR">Monitor</option>
+                          <option value="TV">TV</option>
+                          <option value="PROYEKTOR">Proyektor</option>
+                          <option value="SCANNER">Scanner</option>
                           <option value="PRINTER">Printer</option>
-                          <option value="KEYBOARD">Keyboard</option>
-                          <option value="MOUSE">Mouse</option>
-                          <option value="LAIN-LAIN">Lain-lain</option>
+                          <option value="PRINTER AIO">Printer AIO</option>
+                          <option value="SWITCH">Switch</option>
+                          <option value="MIKROTIK">Mikrotik</option>
+                          <option value="WIFI">WiFi</option>
+                          <option value="CONVERTER FO">Converter FO</option>
+                          <option value="SERVER">Server</option>
+                          <option value="NAS">NAS</option>
+                          <option value="CAMERA">Camera</option>
+                          <option value="MIC">Mic</option>
+                          <option value="SPEAKER">Speaker</option>
+                          <option value="UPS">UPS</option>
+                          <option value="CCTV">CCTV</option>
+                          <option value="IP PHONE">IP Phone</option>
+                          <option value="HARDDISK EXTERNAL">Hard Disk External</option>
+                          <option value="PART PC">Part PC</option>
+                          <option value="PART SERVER">Part Server</option>
+                          <option value="PART NETWORK">Part Network</option>
+                          <option value="TOOLS">Tools</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('category') }}</p>
+                        @endif
+                      </div>
+                      <label class="col-md-2 label-control" for="type_assets">Tipe Assets</label>
+                      <div class="col-md-4">
+                        <select name="type_assets" id="type_assets" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="ASET">Aset</option>
+                          <option value="ASET TI">Aset TI</option>
+                          <option value="ASET LATOL">Aset Lattol</option>
+                        </select>
+                        @if ($errors->has('type_assets'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('type_assets') }}</p>
                         @endif
                       </div>
                     </div>
@@ -67,21 +110,48 @@
                             {{ $errors->first('barcode') }}</p>
                         @endif
                       </div>
+
+                      <label class="col-md-2 label-control" for="size">Ukuran</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="size" id="size"
+                          value="{{ old('size') }}" required>
+                        @if ($errors->has('size'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('size') }}</p>
+                        @endif
+                      </div>
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="file">File</label>
+                      <label class="col-md-2 label-control" for="brand">Merk</label>
                       <div class="col-md-4">
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file">
-                          <label class="custom-file-label" for="file" aria-describedby="file">Pilih
-                            File</label>
-                        </div>
-                        <p class="text-muted"><small class="text-danger">Hanya dapat
-                            mengunggah 1 file</small></p>
-                        @if ($errors->has('file'))
+                        <input type="text" class="form-control" name="brand" id="brand"
+                          value="{{ old('brand') }}" required>
+                        @if ($errors->has('brand'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('file') }}</p>
+                            {{ $errors->first('brand') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="stats">Status</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="stats" id="stats"
+                          value="{{ old('stats') }}" required>
+                        @if ($errors->has('stats'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('stats') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="description">Keterangan<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-9">
+                        <textarea rows="5" class="form-control summernote" id="description" name="description" required>{{ old('description') }}</textarea>
+                        @if ($errors->has('description'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('description') }}</p>
                         @endif
                       </div>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Adm\Form;
 use App\Models\Attendance;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
@@ -74,7 +75,9 @@ class AttendanceController extends Controller
     {
         // $user = User::where(['name', '!=', 'Administrator'],[DetailUser::where('status','1')])->orderBy('name', 'asc')->get();
         $user = DetailUser::where('status', '1')->get();
-        return view('pages.adm.attendance.create', compact('user'));
+        $forms = Form::where('category', 'ABSEN')->orderby("created_at", "desc")->get();
+
+        return view('pages.adm.attendance.create', compact('user', 'forms'));
     }
 
     /**
@@ -131,7 +134,9 @@ class AttendanceController extends Controller
         $attendance = Attendance::find($decrypt_id);
         // $users = User::where(['name', '!=', 'Administrator'], ['status', '1'])->orderBy('name', 'asc')->get();
         $users = DetailUser::where('status', '1')->get();
-        return view('pages.adm.attendance.edit', compact('attendance', 'users'));
+        $forms = Form::where('category', 'ABSEN')->orderby("created_at", "desc")->get();
+
+        return view('pages.adm.attendance.edit', compact('attendance', 'users', 'forms'));
     }
 
     /**

@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_form">No Form<code
+                      <label class="col-md-2 label-control" for="no_form">Pengirim<code
                           style="color:red;">*</code></label>
                       <div class="col-md-5">
                         <input type="text" class="form-control" id="no_form" name="no_form"

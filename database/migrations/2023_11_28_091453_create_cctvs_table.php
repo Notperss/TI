@@ -12,13 +12,20 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('ip_phones', function (Blueprint $table) {
+        Schema::create('cctvs', function (Blueprint $table) {
             $table->id();
-            $table->string('caller');
-            $table->string('location');
-            $table->string('barcode');
             $table->string('type');
+            $table->string('brand');
+            $table->string('location');
+            $table->string('maintainer');
+            $table->string('barcode');
+            $table->string('category');
+            $table->string('type_cctv');
             $table->string('ip');
+            $table->string('link');
+            $table->string('username_cctv');
+            $table->string('password_cctv');
+            $table->string('lon_lat');
             $table->string('stats');
             $table->date('installation_date');
             $table->string('file')->nullable();
@@ -34,6 +41,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('ip_phones');
+        Schema::dropIfExists('cctvs');
     }
 };

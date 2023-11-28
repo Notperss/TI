@@ -38,6 +38,23 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="category">Category<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-7">
+                        <select name="category" id="category" class="form-control select2" required>
+                          <option value="" disabled selected>Choose</option>
+                          <option value="PPFTI"{{ $form->category == 'PPFTI' ? 'selected' : '' }}>PPFTI</option>
+                          <option value="LK"{{ $form->category == 'LK' ? 'selected' : '' }}>LK</option>
+                          <option value="ABSEN"{{ $form->category == 'ABSEN' ? 'selected' : '' }}>Absen</option>
+                        </select>
+                        @if ($errors->has('category'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('category') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
                       <div class="col-md-7">

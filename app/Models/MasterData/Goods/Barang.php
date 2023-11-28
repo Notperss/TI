@@ -14,12 +14,22 @@ class Barang extends Model
     protected $fillable = [
         'name',
         'category',
+        'type_assets',
         'barcode',
+        'sku',
+        'brand',
+        'stats',
+        'size',
+        'description',
         'file',
     ];
     public function lending_goods()
     {
         return $this->hasMany(LendingGoods::class, 'id');
+    }
+    public function goodsfile()
+    {
+        return $this->hasMany(Goodsfile::class, 'id');
     }
 
     public function lending_facility()

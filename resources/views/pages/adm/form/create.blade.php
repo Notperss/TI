@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'ATK')
+@section('title', 'Form')
 @section('content')
   <div class="app-content content">
     <div class="content-overlay"></div>
@@ -14,7 +14,7 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Tambah ATK</h4>
+                  <h4 class="card-title text-white">Tambah Form</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.form.store') }}" method="POST"
                   enctype="multipart/form-data">
@@ -32,6 +32,23 @@
                         @if ($errors->has('name_form'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('name_form') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="category">Category<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-7">
+                        <select name="category" id="category" class="form-control select2" required>
+                          <option value="" disabled selected>Choose</option>
+                          <option value="PPFTI">PPFTI</option>
+                          <option value="LK">LK</option>
+                          <option value="ABSEN">Absen</option>
+                        </select>
+                        @if ($errors->has('category'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('category') }}</p>
                         @endif
                       </div>
                     </div>

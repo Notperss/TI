@@ -26,13 +26,14 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="type">Type<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="caller">Caller ID<code
+                          style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="type" id="type" class="form-control"
-                          value="{{ old('type', $ip_phone->type) }}" required>
-                        @if ($errors->has('type'))
+                        <input name="caller" id="caller" class="form-control"
+                          value="{{ old('caller', $ip_phone->caller) }}" required>
+                        @if ($errors->has('caller'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('type') }}</p>
+                            {{ $errors->first('caller') }}</p>
                         @endif
                       </div>
 
@@ -48,28 +49,6 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="brand">Merk<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input name="brand" id="brand" class="form-control"
-                          value="{{ old('brand', $ip_phone->brand) }}" required>
-                        @if ($errors->has('brand'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('brand') }}</p>
-                        @endif
-                      </div>
-
-                      <label class="col-md-2 label-control" for="link">Link<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input name="link" id="link" class="form-control"
-                          value="{{ old('brand', $ip_phone->brand) }}" required>
-                        @if ($errors->has('link'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('link') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input name="location" id="location" class="form-control"
@@ -80,48 +59,16 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="username_cctv">Username<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="type">Tipe<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="username_cctv" id="username_cctv" class="form-control"
-                          value="{{ old('username_cctv', $ip_phone->username_cctv) }}" required>
-                        @if ($errors->has('username_cctv'))
+                        <input name="type" id="type" class="form-control"
+                          value="{{ old('type', $ip_phone->type) }}" required>
+                        @if ($errors->has('type'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('username_cctv') }}</p>
+                            {{ $errors->first('type') }}</p>
                         @endif
                       </div>
                     </div>
-
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="maintainer">Maintainer<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="maintainer" id="maintainer" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="SWAKELOLA"{{ $ip_phone->maintainer == 'SWAKELOLA' ? 'selected' : '' }}>Swakelola
-                          </option>
-                          <option value="VENDOR"{{ $ip_phone->maintainer == 'VENDOR' ? 'selected' : '' }}>Vendor</option>
-                        </select>
-                        @if ($errors->has('maintainer'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('maintainer') }}</p>
-                        @endif
-                      </div>
-
-                      <label class="col-md-2 label-control" for="password_cctv">Password<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input name="password_cctv" id="password_cctv" class="form-control"
-                          value="{{ old('password_cctv', $ip_phone->password_cctv) }}" required>
-                        @if ($errors->has('password_cctv'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('password_cctv') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
 
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="barcode">Barcode<code
@@ -135,46 +82,12 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="lon_lat">Lon & Lat<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input name="lon_lat" id="lon_lat" class="form-control"
-                          value="{{ old('lon_lat', $ip_phone->lon_lat) }}" required>
-                        @if ($errors->has('lon_lat'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('lon_lat') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="category">Kategori<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="category" id="category" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="GARDU"{{ $ip_phone->category == 'GARDU' ? 'selected' : '' }}>Gardu</option>
-                          <option value="GERBANG"{{ $ip_phone->category == 'GERBANG' ? 'selected' : '' }}>Gerbang
-                          </option>
-                          <option value="LAJUR"{{ $ip_phone->category == 'LAJUR' ? 'selected' : '' }}>Lajur</option>
-                          <option value="MAINROAD"{{ $ip_phone->category == 'MAINROAD' ? 'selected' : '' }}>Mainroad
-                          </option>
-                          <option value="LAIN-LAIN"{{ $ip_phone->category == 'LAIN-LAIN' ? 'selected' : '' }}>Lain-lain
-                          </option>
-                        </select>
-                        @if ($errors->has('category'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('category') }}</p>
-                        @endif
-                      </div>
-
                       <label class="col-md-2 label-control" for="installation_date">Tanggal Pasang<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="date" id="installation_date" name="installation_date" class="form-control"
-                          value="{{ old('installation_date', $ip_phone->installation_date) }}" autocomplete="off">
+                          value="{{ old('installation_date', $ip_phone->installation_date) }}" autocomplete="off"
+                          required>
                         @if ($errors->has('installation_date'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('installation_date') }}</p>
@@ -183,16 +96,15 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <select name="stats" id="stats" class="form-control select2" required>
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
                           <option value="AKTIF"{{ $ip_phone->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $ip_phone->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>TIdak
-                            Aktif</option>
+                          <option value="TIDAK AKTIF"{{ $ip_phone->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>TIdak Aktif
+                          </option>
                         </select>
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">
@@ -200,24 +112,6 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="type_cctv">Type CCTV<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="type_cctv" id="type_cctv" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="PTZ"{{ $ip_phone->type_cctv == 'PTZ' ? 'selected' : '' }}>PTZ</option>
-                          <option value="FIXED"{{ $ip_phone->type_cctv == 'FIXED' ? 'selected' : '' }}>Fixed</option>
-                        </select>
-                        @if ($errors->has('type_cctv'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('type_cctv') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
                         <div class="custom-file">
@@ -250,7 +144,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
-                      <div class="col-md-7">
+                      <div class="col-md-9">
                         <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description', $ip_phone->description) }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
@@ -258,15 +152,16 @@
                         @endif
                       </div>
                     </div>
+                  </div>
 
-                    <div class="form-actions ">
-                      <button type="submit" style="width:120px;" class="btn btn-cyan float-right mr-2"
-                        onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-                        <i class="la la-check-square-o"></i> Submit
-                      </button>
-                      <a href="{{ route('backsite.ip_phone.index') }}" class="btn btn-success text-left ml-2">
-                        <i class="la la-arrow-left"></i> Kembali</a>
-                    </div>
+                  <div class="form-actions ">
+                    <button type="submit" style="width:120px;" class="btn btn-cyan float-right mr-2"
+                      onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
+                      <i class="la la-check-square-o"></i> Submit
+                    </button>
+                    <a href="{{ route('backsite.ip_phone.index') }}" class="btn btn-success text-left ml-2">
+                      <i class="la la-arrow-left"></i> Kembali</a>
+                  </div>
                 </form>
               </div>
             </div>

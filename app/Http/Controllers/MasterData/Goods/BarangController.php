@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\MasterData\Goods;
 
-use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
+use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
+use App\Models\MasterData\Goods\Goodsfile;
 
 class BarangController extends Controller
 {
@@ -134,7 +136,8 @@ class BarangController extends Controller
     public function edit(Barang $barang)
     {
         $barang = Barang::find($barang->id);
-        return view('pages.master-data.barang.edit', compact('barang'));
+        $files = Goodsfile::where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
+        return view('pages.master-data.barang.edit', compact('barang', 'files'));
     }
 
     /**
@@ -202,4 +205,58 @@ class BarangController extends Controller
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
+
+
+    public function form_upload_file(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $row = Barang::find($id);
+            $data = [
+                'id' => $row['id'],
+            ];
+
+            $msg = [
+                'data' => view('pages.master-data.barang.upload_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function upload_file(Request $request)
+    {
+        $barang = Barang::find($request->id);
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $image) {
+                $file = $image->getClientOriginalName();
+                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $ext = $image->getClientOriginalExtension();
+                $fullname = $basename . '.' . $ext;
+                $file = $image->storeAs('assets/file-barang', $fullname);
+            }
+        }
+        Goodsfile::create([
+            'goods_id' => $request->id,
+            'file' => $file,
+        ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.barang.edit', $barang);
+    }
+
+    public function delete_file($id)
+    {
+        $file = Goodsfile::find($id);
+        $file->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+
+
+
+
 }

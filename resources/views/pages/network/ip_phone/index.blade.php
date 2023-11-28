@@ -72,11 +72,11 @@
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Tipe</th>
-                          <th>Merk</th>
+                          <th>Caller ID</th>
                           <th>Lokasi</th>
                           <th>IP</th>
-                          <th>Link</th>
+                          <th>Tipe</th>
+                          <th>Barcode</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -123,12 +123,8 @@
           searchable: false,
         },
         {
-          data: 'type',
-          name: 'type',
-        },
-        {
-          data: 'brand',
-          name: 'brand',
+          data: 'caller',
+          name: 'caller',
         },
         {
           data: 'location',
@@ -139,8 +135,12 @@
           name: 'ip',
         },
         {
-          data: 'link',
-          name: 'link',
+          data: 'type',
+          name: 'type',
+        },
+        {
+          data: 'barcode',
+          name: 'barcode',
         },
         {
           data: 'stats',

@@ -58,6 +58,7 @@ use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
+use App\Http\Controllers\Network\Cctv\CctvController as CctvCctvController;
 use App\Http\Controllers\Network\IpPhone\IpPhoneController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
@@ -136,7 +137,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
     Route::resource('software', SoftwareController::class);
     // network_cctv
-    Route::resource('cctv', CctvController::class);
+    // Route::resource('cctv-old', CctvController::class);
     // hardware_hardisk
     Route::resource('hardisk', HardiskController::class);
     // hardware_monitor
@@ -175,6 +176,17 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('letter', LetterController::class);
 
     Route::resource('barang', BarangController::class);
+    Route::controller(BarangController::class)->group(function () {
+        Route::post('/barang/form_upload_note', 'form_upload_note')->name('barang.form_upload_note');
+        Route::post('/barang/upload_note', 'upload_note')->name('barang.upload_note');
+        Route::post('/barang/show_file_note', 'show_file_note')->name('barang.show_file_note');
+        Route::delete('/barang/{id}/delete_file_note', 'delete_file_note')->name('barang.delete_file_note');
+
+        Route::post('/barang/form_upload', 'form_upload_file')->name('barang.form_upload_file');
+        Route::post('/barang/upload', 'upload_file')->name('barang.upload_file');
+        Route::post('/barang/show_file', 'show_file')->name('barang.show_file');
+        Route::delete('/barang/{id}/delete_file', 'delete_file')->name('barang.delete_file');
+    });
 
     Route::resource('attendance', AttendanceController::class);
 
@@ -271,6 +283,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('workcat', WorkcatController::class);
 
     Route::resource('ip_phone', IpPhoneController::class);
+
+    Route::resource('cctv', CctvCctvController::class);
 
 
 });

@@ -24,7 +24,10 @@ class StoreFormRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name_form' => 'required|max:255',
+            'category' => 'required|max:255',
+            'file' => 'max:255',
+            'description' => 'required',
         ];
     }
 }

@@ -47,16 +47,11 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <select name="category" id="category" class="form-control select2">
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1">Absen</option>
-                          <option value="2">Sakit</option>
-                          <option value="3">Dinas</option>
-                          <option value="4">Cuti</option>
-                          <option value="5">IPC</option>
-                          <option value="6">ITD</option>
-                          <option value="7">Izin</option>
+                          <option value="" disabled selected>Choose</option>
+                          @foreach ($forms as $form)
+                            <option value="{{ $form->name_form }}">{{ $form->name_form }}</option>
+                          @endforeach
+                        </select>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">

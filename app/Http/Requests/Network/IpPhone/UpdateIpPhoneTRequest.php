@@ -24,19 +24,13 @@ class UpdateIpPhoneTRequest extends FormRequest
     public function rules()
     {
         return [
+            'caller' => 'required|max:255',
             'type' => 'required|max:255',
-            'brand' => 'required|max:255',
             'location' => 'required|max:255',
-            'maintainer' => 'required|max:255',
             'barcode' => 'required|max:255',
-            'category' => 'required|max:255',
-            'type_cctv' => 'required|max:255',
             'ip' => 'required|max:255',
-            'link' => 'required|max:255',
-            'username_cctv' => 'required|max:255',
-            'password_cctv' => 'required|max:255',
-            'lon_lat' => 'required|max:255',
             'installation_date' => 'required|max:255',
+            'file' => 'max:255',
             'description' => 'required|max:255',
             'stats' => 'required|max:255',
         ];

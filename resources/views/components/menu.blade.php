@@ -380,8 +380,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/cctv') || request()->is('backsite/cctv/*') || request()->is('backsite/*/cctv') || request()->is('backsite/*/cctv/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.cctv.index') }}">
               <i></i><span>CCTV</span>
             </a>
           </li>
