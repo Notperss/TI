@@ -179,6 +179,7 @@
                   </div>
                 </form>
 
+                {{-- belom beres ram hardisk processor --}}
                 <div class="form-group row">
                   <div class="col-md-4">
                     <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1" title="Tambah file"
@@ -237,6 +238,7 @@
                     @endforelse
                   </table>
                 </div>
+                {{-- tambahin disini --}}
 
               </div>
             </div>
