@@ -2,6 +2,7 @@
 
 namespace App\Models\MasterData\Hardware;
 
+use App\Models\Masterdata\Goods\GoodsProcessor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,5 +37,10 @@ class Processor extends Model
     {
         // 2 parameter (path model, field foreign key)
         return $this->hasMany('App\Models\Data\Hardware\DevicePC', 'processor_id');
+    }
+
+    public function goods_processor()
+    {
+        return $this->hasMany(GoodsProcessor::class, 'processor_id');
     }
 }

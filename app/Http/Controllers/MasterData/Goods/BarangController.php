@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\MasterData\Goods;
 
+use App\Models\MasterData\Goods\GoodsHardisk;
+use App\Models\MasterData\Hardware\Hardisk;
+use App\Models\MasterData\Hardware\Processor;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,6 +15,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
 use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
 use App\Models\MasterData\Goods\Goodsfile;
+use App\Models\Masterdata\Goods\GoodsProcessor;
+use App\Models\MasterData\Goods\GoodsRam;
+use App\Models\MasterData\Hardware\Ram;
 
 class BarangController extends Controller
 {
@@ -96,7 +102,6 @@ class BarangController extends Controller
         // get all request from frontsite
         $data = $request->all();
 
-
         // upload process here
         if ($request->hasFile('file')) {
             $files = $request->file('file');
@@ -107,10 +112,10 @@ class BarangController extends Controller
             $data['file'] = $request->file('file')->storeAs('assets/file-goods', $fullname);
         }
         // store to database
-        Barang::create($data);
-
+        $barang = Barang::create($data);
+        $id = $barang->id;
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.barang.index');
+        return redirect()->route('backsite.barang.edit', $id);
     }
 
     /**
@@ -137,7 +142,10 @@ class BarangController extends Controller
     {
         $barang = Barang::find($barang->id);
         $files = Goodsfile::where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
-        return view('pages.master-data.barang.edit', compact('barang', 'files'));
+        $processors = GoodsProcessor::with('processor')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
+        $rams = GoodsRam::with('ram')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
+        $hardisks = GoodsHardisk::with('hardisk')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
+        return view('pages.master-data.barang.edit', compact('barang', 'files', 'hardisks', 'processors', 'rams'));
     }
 
     /**
@@ -255,7 +263,133 @@ class BarangController extends Controller
         return back();
     }
 
+    public function form_processor(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
 
+            $row = Barang::find($id);
+            $processor = Processor::orderBy('created_at', 'desc')->get();
+
+            $data = [
+                'id' => $row['id'],
+                'processors' => $processor,
+            ];
+
+            $msg = [
+                'data' => view('pages.master-data.barang.upload_processor_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function upload_processor(Request $request)
+    {
+        $barang = Barang::find($request->id);
+        GoodsProcessor::create([
+            'goods_id' => $request->id,
+            'processor_id' => $request->processor_id,
+        ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.barang.edit', $barang);
+    }
+
+    public function delete_processor($id)
+    {
+        $processor = GoodsProcessor::find($id);
+        $processor->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+
+    public function form_ram(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $row = Barang::find($id);
+            $ram = Ram::orderBy('created_at', 'desc')->get();
+
+            $data = [
+                'id' => $row['id'],
+                'rams' => $ram,
+            ];
+
+            $msg = [
+                'data' => view('pages.master-data.barang.upload_ram_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function upload_ram(Request $request)
+    {
+        $barang = Barang::find($request->id);
+        GoodsRam::create([
+            'goods_id' => $request->id,
+            'ram_id' => $request->ram_id,
+        ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.barang.edit', $barang);
+    }
+
+    public function delete_ram($id)
+    {
+        $ram = GoodsRam::find($id);
+        $ram->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+
+    public function form_hardisk(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $row = Barang::find($id);
+            $hardisk = Hardisk::orderBy('created_at', 'desc')->get();
+
+            $data = [
+                'id' => $row['id'],
+                'hardisks' => $hardisk,
+            ];
+
+            $msg = [
+                'data' => view('pages.master-data.barang.upload_hardisk_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function upload_hardisk(Request $request)
+    {
+        $barang = Barang::find($request->id);
+        GoodsHardisk::create([
+            'goods_id' => $request->id,
+            'hardisk_id' => $request->hardisk_id,
+        ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.barang.edit', $barang);
+    }
+
+    public function delete_hardisk($id)
+    {
+        $hardisk = GoodsHardisk::find($id);
+        $hardisk->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
 
 
 

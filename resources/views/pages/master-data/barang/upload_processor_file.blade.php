@@ -9,7 +9,7 @@
     output.innerHTML = '<ul>' + children + '</ul>';
   }
 </script>
-<div class="modal fade" id="modalupload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -18,42 +18,35 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form" action="{{ route('backsite.act_daily.upload') }}" method="POST"
+      <form class="form" action="{{ route('backsite.barang.upload_processor') }}" method="POST"
         enctype="multipart/form-data">
-
         @csrf
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="file">File
-              <code style="color:red;">required</code></label>
+            <label class="col-md-4 label-control" for="file">Processor
+              <code style="color:red;">*</code></label>
             <div class="col-md-8">
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="file" name="file[]" multiple="multiple"
-                  onchange="updateList()" required>
-                <label class="custom-file-label" for="file" aria-describedby="file">Pilih
-                  File</label>
+                <select name="processor_id" id="processor_id" class="form-control select2" style="width: 100%">
+                  <option value="" selected disabled>Choose</option>
+                  @foreach ($processors as $processor)
+                    <option value="{{ $processor->id }}">{{ $processor->name }}</option>
+                  @endforeach
+                </select>
               </div>
-
-              <p class="text-muted"><small class="text-danger">Dapat
-                  mengunggah lebih dari 1 file</small></p>
-
               @if ($errors->has('file'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('file') }}</p>
               @endif
             </div>
-            <p class="col-md-4">Selected File :</p>
-            <div id="fileList" style="word-break: break-all"></div>
-            {{-- <input type="file" multiple name="file" id="file"
-onchange="javascript:updateList()" />
-
-  <p>Selected files:</p>
-
-  <div id="fileList"></div> --}}
           </div>
         </div>
         <div class="modal-footer">
+          <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
+            <i class="la la-close"></i> Cancel
+          </a>
+
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
             <i class="la la-check-square-o"></i> Upload
@@ -64,4 +57,10 @@ onchange="javascript:updateList()" />
   </div>
 </div>
 
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.select2').select2();
+  });
+</script>

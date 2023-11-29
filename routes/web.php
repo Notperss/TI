@@ -177,10 +177,20 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     Route::resource('barang', BarangController::class);
     Route::controller(BarangController::class)->group(function () {
-        Route::post('/barang/form_upload_note', 'form_upload_note')->name('barang.form_upload_note');
-        Route::post('/barang/upload_note', 'upload_note')->name('barang.upload_note');
-        Route::post('/barang/show_file_note', 'show_file_note')->name('barang.show_file_note');
-        Route::delete('/barang/{id}/delete_file_note', 'delete_file_note')->name('barang.delete_file_note');
+        Route::post('/barang/form_processor', 'form_processor')->name('barang.form_processor');
+        Route::post('/barang/upload_processor', 'upload_processor')->name('barang.upload_processor');
+        Route::post('/barang/show_processor', 'show_processor')->name('barang.show_processor');
+        Route::delete('/barang/{id}/delete_processor', 'delete_processor')->name('barang.delete_processor');
+
+        Route::post('/barang/form_ram', 'form_ram')->name('barang.form_ram');
+        Route::post('/barang/upload_ram', 'upload_ram')->name('barang.upload_ram');
+        Route::post('/barang/show_ram', 'show_ram')->name('barang.show_ram');
+        Route::delete('/barang/{id}/delete_ram', 'delete_ram')->name('barang.delete_ram');
+
+        Route::post('/barang/form_hardisk', 'form_hardisk')->name('barang.form_hardisk');
+        Route::post('/barang/upload_hardisk', 'upload_hardisk')->name('barang.upload_hardisk');
+        Route::post('/barang/show_hardisk', 'show_hardisk')->name('barang.show_hardisk');
+        Route::delete('/barang/{id}/delete_hardisk', 'delete_hardisk')->name('barang.delete_hardisk');
 
         Route::post('/barang/form_upload', 'form_upload_file')->name('barang.form_upload_file');
         Route::post('/barang/upload', 'upload_file')->name('barang.upload_file');

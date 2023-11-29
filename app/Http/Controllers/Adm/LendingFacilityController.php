@@ -176,7 +176,7 @@ class LendingFacilityController extends Controller
             $id = $request->id;
 
             $row = LendingFacility::with('barang')->find($id);
-            $barang = Barang::orderBy('id', 'asc')->get();
+            $barang = Barang::where('type_assets', 'ASET TI')->orderBy('id', 'asc')->get();
             $data = [
                 'id' => $row['id'],
                 'barang' => $barang,

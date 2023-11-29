@@ -24,9 +24,15 @@ class StoreGoodsRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'category' => 'required',
-            'barcode' => 'required',
+            'type_assets' => 'required|max:255',
+            'sku' => 'required|max:255',
+            'brand' => 'required|max:255',
+            'stats' => 'required|max:255',
+            'size' => 'required|max:255',
+            'year' => 'required|max:255',
+            'description' => 'required|max:255',
+            'name' => 'required|max:255',
+            'barcode' => 'required|max:255',
             'file' => 'mimes:png,jpg,jpeg',
         ];
     }
