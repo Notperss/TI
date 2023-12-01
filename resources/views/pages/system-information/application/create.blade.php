@@ -142,9 +142,9 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-3">
                         <select name="stats" id="stats" class="form-control select2">
-                          <option value="" disabled selected></option>
-                          <option value="AKTIF">Aktif</option>
-                          <option value="TIDAK AKTIF">Tidak Aktif</option>
+                          <option value="" disabled selected>Choose</option>
+                          <option value="1">Aktif</option>
+                          <option value="2">Tidak Aktif</option>
                         </select>
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">

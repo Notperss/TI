@@ -45,9 +45,9 @@
     <td>
       @if ($app->app_monitoring->stats == '')
         <span>N/A</span>';
-      @elseif ($app->app_monitoring->stats == 'TIDAK AKTIF')
+      @elseif ($app->app_monitoring->stats == '2')
         <h5><span class="badge bg-danger">Tidak Aktif</span></h5>
-      @elseif ($app->app_monitoring->stats == 'AKTIF')
+      @elseif ($app->app_monitoring->stats == '1')
         <h5><span class="badge bg-info">Aktif</span></h5>
       @else
         <h5><span> - </span></h5>

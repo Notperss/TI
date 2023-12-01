@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\MasterData\Location;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 // request
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\MasterData\Location\Location;
+use App\Models\MasterData\Location\LocationSub;
+// use model here
 use App\Http\Requests\MasterData\Location\LocationSub\StoreLocationSubRequest;
 use App\Http\Requests\MasterData\Location\LocationSub\UpdateLocationSubRequest;
-
-// use model here
-use App\Models\MasterData\Location\LocationSub;
 
 class LocationSubController extends Controller
 {
@@ -21,10 +22,37 @@ class LocationSubController extends Controller
      */
     public function index()
     {
-        $location_sub = LocationSub::orderBy('name', 'asc')->get();
+        if (request()->ajax()) {
 
-        return view('pages.master-data.location.location_sub.index', compact('location_sub'));
+            $location_sub = LocationSub::with('location')->orderby('created_at', 'desc');
+
+            return DataTables::of($location_sub)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a class="dropdown-item" href="' . route('backsite.location_sub.edit', encrypt($item->id)) . '">
+                        Edit
+                    </a>
+                    <form action="' . route('backsite.location_sub.destroy', encrypt($item->id)) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('delete') . csrf_field() . '
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+            </div>
+                ';
+                })
+                ->rawColumns(['action', 'date_form', 'file'])
+                ->toJson();
+        }
+        return view("pages.master-data.location.location_sub.index");
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -33,7 +61,8 @@ class LocationSubController extends Controller
      */
     public function create()
     {
-        return view('pages.master-data.location.location_sub.create');
+        $location = Location::orderBy('created_at', 'desc')->get();
+        return view('pages.master-data.location.location_sub.create', compact('location'));
     }
 
     /**
@@ -77,7 +106,9 @@ class LocationSubController extends Controller
         $decrypt_id = decrypt($id);
         $location_sub = LocationSub::find($decrypt_id);
 
-        return view('pages.master-data.location.location_sub.edit', compact('location_sub'));
+        $location = Location::orderBy('created_at', 'desc')->get();
+
+        return view('pages.master-data.location.location_sub.edit', compact('location_sub', 'location'));
     }
 
     /**

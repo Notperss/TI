@@ -27,6 +27,15 @@ class UpdateLocationRoomRequest extends FormRequest
             'name' => [
                 'required', 'string', 'max:255',
             ],
+            'location_id' => [
+                'required', 'max:255',
+            ],
+            'sub_location_id' => [
+                'required', 'max:255',
+            ],
+            'stats' => [
+                'required', 'max:255',
+            ],
         ];
     }
 }

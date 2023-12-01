@@ -4,6 +4,7 @@ namespace App\Models\ManagementAccess;
 
 use App\Models\Act_daily\ActDaily;
 use App\Models\Attendance;
+use App\Models\Network\Distribution\Distribution;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -64,5 +65,9 @@ class DetailUser extends Model
     public function attendance()
     {
         return $this->hasMany(Attendance::class, 'users_id', 'id');
+    }
+    public function distribution()
+    {
+        return $this->hasMany(Distribution::class, 'user_id', 'id');
     }
 }

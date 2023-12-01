@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\MasterData\Location;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 // request
-use App\Http\Requests\MasterData\Location\LocationRoom\StoreLocationRoomRequest;
-use App\Http\Requests\MasterData\Location\LocationRoom\UpdateLocationRoomRequest;
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\MasterData\Location\Location;
 
 // use model here
 use App\Models\MasterData\Location\LocationRoom;
+use App\Http\Requests\MasterData\Location\LocationRoom\StoreLocationRoomRequest;
+use App\Http\Requests\MasterData\Location\LocationRoom\UpdateLocationRoomRequest;
+use App\Models\MasterData\Location\LocationSub;
 
 class LocationRoomController extends Controller
 {
@@ -21,9 +24,35 @@ class LocationRoomController extends Controller
      */
     public function index()
     {
-        $location_room = LocationRoom::orderBy('name', 'asc')->get();
+        if (request()->ajax()) {
 
-        return view('pages.master-data.location.location_room.index', compact('location_room'));
+            $location_room = LocationRoom::with('location', 'sub_location')->orderby('created_at', 'desc');
+
+            return DataTables::of($location_room)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a class="dropdown-item" href="' . route('backsite.location_room.edit', encrypt($item->id)) . '">
+                        Edit
+                    </a>
+                    <form action="' . route('backsite.location_room.destroy', encrypt($item->id)) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('delete') . csrf_field() . '
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+            </div>
+                ';
+                })
+                ->rawColumns(['action',])
+                ->toJson();
+        }
+        return view("pages.master-data.location.location_room.index");
     }
 
     /**
@@ -33,7 +62,9 @@ class LocationRoomController extends Controller
      */
     public function create()
     {
-        return view('pages.master-data.location.location_room.create');
+        $location_id = Location::orderBy('created_at', 'desc')->get();
+        $sub_location = LocationSub::orderBy('created_at', 'desc')->get();
+        return view('pages.master-data.location.location_room.create', compact('location_id', 'sub_location'));
     }
 
     /**
@@ -76,8 +107,11 @@ class LocationRoomController extends Controller
         // deskripsi id
         $decrypt_id = decrypt($id);
         $location_room = LocationRoom::find($decrypt_id);
+        $location = Location::orderBy('created_at', 'desc')->get();
+        // Filter sub-locations by the selected location
+        $sub_location = LocationSub::where('location_id', $location_room->location_id)->orderBy('created_at', 'desc')->get();
 
-        return view('pages.master-data.location.location_room.edit', compact('location_room'));
+        return view('pages.master-data.location.location_room.edit', compact('location_room', 'location', 'sub_location'));
     }
 
     /**
@@ -116,5 +150,12 @@ class LocationRoomController extends Controller
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
+    }
+
+    public function getSubLocations(Request $request)
+    {
+        $locationId = $request->input('location_id');
+        $subLocations = LocationSub::where('location_id', $locationId)->get();
+        return response()->json($subLocations);
     }
 }

@@ -102,8 +102,8 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="AKTIF"{{ $ip_phone->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $ip_phone->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>TIdak Aktif
+                          <option value="1"{{ $ip_phone->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="2"{{ $ip_phone->stats == 2 ? 'selected' : '' }}>TIdak Aktif
                           </option>
                         </select>
                         @if ($errors->has('stats'))

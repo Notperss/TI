@@ -66,9 +66,9 @@
     <td>
       @if ($drc->stats == '')
         <span>N/A</span>';
-      @elseif ($drc->stats == 'AKTIF')
+      @elseif ($drc->stats == '1')
         <h5><span class="badge bg-info">Aktif</span></h5>
-      @elseif ($drc->stats == 'TIDAK AKTIF')
+      @elseif ($drc->stats == '2')
         <h5><span class="badge bg-danger">Tidak Aktif</span></h5>
       @else
       @endif

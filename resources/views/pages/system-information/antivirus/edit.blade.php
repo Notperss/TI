@@ -109,8 +109,8 @@
                       <div class="col-md-4">
                         <select name="stats" id="stats" class="form-control">
                           <option value="" disabled selected> Choose</option>
-                          <option value="AKTIF"{{ $antivirus->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $antivirus->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>Tidak
+                          <option value="1"{{ $antivirus->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="2"{{ $antivirus->stats == 2 ? 'selected' : '' }}>Tidak
                             Aktif</option>
                         </select>
                         @if ($errors->has('stats'))

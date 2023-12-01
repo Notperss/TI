@@ -143,9 +143,9 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-3">
                         <select name="stats" id="stats" class="form-control select2">
-                          <option value="" disabled selected></option>
-                          <option value="AKTIF"{{ $app->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $app->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>Tidak Aktif
+                          <option value="" disabled selected>Choose</option>
+                          <option value="1"{{ $app->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="2"{{ $app->stats == 2 ? 'selected' : '' }}>Tidak Aktif
                           </option>
                         </select>
                         @if ($errors->has('stats'))

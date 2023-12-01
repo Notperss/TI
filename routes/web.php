@@ -4,6 +4,7 @@
 
 use App\Models\Act_daily\Workcat;
 use App\Models\Act_daily\ActDaily;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Adm\PPController;
@@ -11,15 +12,16 @@ use App\Http\Controllers\Adm\ATKController;
 use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\Adm\BillController;
 use App\Http\Controllers\Adm\FormController;
+use App\Models\MasterData\Location\Location;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Adm\DemandController;
 use App\Http\Controllers\Adm\FormTiController;
 use App\Http\Controllers\Adm\LetterController;
 use App\Http\Controllers\AttendanceController;
+use App\Models\MasterData\Location\LocationSub;
 use App\Models\SystemInformation\License\License;
 use App\Http\Controllers\Data\WorkProgramController;
 use App\Http\Controllers\Act_daily\WorkcatController;
-use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\Act_daily\ActDailyController;
 use App\Http\Controllers\Data\DailyActivityController;
 use App\Http\Controllers\Adm\LendingFacilityController;
@@ -33,6 +35,7 @@ use App\Http\Controllers\MasterData\InformationController;
 use App\Http\Controllers\MasterData\Goods\BarangController;
 use App\Http\Controllers\MasterData\Hardware\RamController;
 use App\Http\Controllers\MasterData\Network\CctvController;
+use App\Http\Controllers\Network\IpPhone\IpPhoneController;
 use App\Http\Controllers\Data\Hardware\DeviceMoreController;
 use App\Http\Controllers\ManagementAccess\ProfileController;
 use App\Http\Controllers\MasterData\Work\WorkTypeController;
@@ -42,10 +45,10 @@ use App\Http\Controllers\SystemInformation\TPT\TPTController;
 use App\Http\Controllers\Data\Hardware\DeviceMonitorController;
 use App\Http\Controllers\MasterData\Division\SectionController;
 use App\Http\Controllers\MasterData\Hardware\HardiskController;
+
 use App\Http\Controllers\MasterData\Hardware\MonitorController;
 use App\Http\Controllers\MasterData\Division\DivisionController;
 use App\Http\Controllers\MasterData\Location\LocationController;
-
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
@@ -57,10 +60,11 @@ use App\Models\SystemInformation\Application\ApplicationMonitoring;
 use App\Http\Controllers\MasterData\Location\LocationRoomController;
 use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
+use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
-use App\Http\Controllers\Network\Cctv\CctvController as CctvCctvController;
-use App\Http\Controllers\Network\IpPhone\IpPhoneController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
+use App\Http\Controllers\Network\Cctv\CctvController as CctvCctvController;
+use App\Http\Controllers\Network\Distribution\DistributionController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringController;
 
@@ -100,6 +104,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('location_sub', LocationSubController::class);
     // location room
     Route::resource('location_room', LocationRoomController::class);
+    Route::get('/get-sub-locations', [LocationRoomController::class, 'getSubLocations'])->name('getSubLocations');
+
     // location detail
     Route::resource('location_detail', LocationDetailController::class);
     // division
@@ -264,6 +270,15 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/antivirus/upload', 'upload')->name('antivirus.upload');
         Route::post('/antivirus/show_file', 'show_file')->name('antivirus.show_file');
         Route::delete('/antivirus/{id}/delete_file', 'delete_file')->name('antivirus.delete_file');
+    });
+
+    Route::resource('distribution', DistributionController::class);
+
+    Route::controller(DistributionController::class)->group(function () {
+        Route::post('/distribution/form_upload', 'form_upload')->name('distribution.form_upload');
+        Route::post('/distribution/upload_file', 'upload_file')->name('distribution.upload_file');
+        Route::post('/distribution/show_file', 'show_file')->name('distribution.show_file');
+        Route::delete('/distribution/{id}/delete_file', 'delete_file')->name('distribution.delete_file');
     });
 
     Route::resource('application', ApplicationController::class);

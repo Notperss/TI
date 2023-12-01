@@ -40,7 +40,8 @@
     <div class="form-group row">
       <div class="col-md-4 label-control">Catatan</div>
       <div class="col-md-8">
-        <input type="text" class="form-control" id="description" disabled>
+        {{-- <input type="text" class="form-control" id="description" disabled> --}}
+        <textarea id="description" cols="45" rows="5" disabled></textarea>
       </div>
     </div>
   </div>
@@ -55,8 +56,6 @@
   </div>
 </form>
 
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
     $('.select2').select2();

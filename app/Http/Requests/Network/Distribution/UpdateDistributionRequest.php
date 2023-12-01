@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\MasterData\Location\LocationSub;
+namespace App\Http\Requests\Network\Distribution;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateLocationSubRequest extends FormRequest
+class UpdateDistributionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,9 @@ class UpdateLocationSubRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'required', 'string', 'max:255',
-            ],
-            'location_id' => [
-                'required', 'max:255',
-            ],
-            'stats' => [
-                'required', 'max:255',
-            ],
+            'date' => 'required',
+            'description' => 'required',
+            'file' => 'max:255',
         ];
     }
 }

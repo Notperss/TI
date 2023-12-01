@@ -4,6 +4,8 @@ namespace App\Models\MasterData\Goods;
 
 use App\Models\Adm\LendingFacility;
 use App\Models\Adm\LendingGoods;
+use App\Models\Network\Distribution\Distribution;
+use App\Models\Network\Distribution\DistributionAsset;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,9 +46,17 @@ class Barang extends Model
     {
         return $this->hasMany(GoodsHardisk::class, 'goods_id');
     }
+    public function distribution_asset()
+    {
+        return $this->hasMany(DistributionAsset::class, 'asset_id');
+    }
 
     public function lending_facility()
     {
         return $this->belongsTo(LendingFacility::class, 'id');
+    }
+    public function distribution()
+    {
+        return $this->belongsTo(Distribution::class, 'id');
     }
 }

@@ -20,22 +20,22 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $detail_user = DetailUser::all();
-        $cctv = Cctv::all()->toJson();
+        // $detail_user = DetailUser::all();
+        // $cctv = Cctv::all()->toJson();
 
-        $daily_activity = DB::table('daily_activity')
-            ->leftJoin('users as a', 'daily_activity.executor', '=', 'a.id')
-            ->leftJoin('users as b', 'daily_activity.users_id', '=', 'b.id')
-            ->leftJoin('detail_user', 'daily_activity.executor', '=', 'detail_user.user_id')
-            ->leftJoin('work_category', 'daily_activity.work_category_id', '=', 'work_category.id')
-            ->leftJoin('work_type', 'daily_activity.work_type_id', '=', 'work_type.id')
-            ->leftJoin('location_room', 'daily_activity.location_room_id', '=', 'location_room.id')
-            ->whereDate('start_date', date('Y-m-d'))
-            ->select('daily_activity.*', 'a.name as executor', 'b.name as users_id', 'detail_user.icon as icon', 'work_category.name as work_category_id', 'work_type.name as work_type_id', 'location_room.name as location_room_id', 'location_room.latitude', 'location_room.longitude')
-            ->get()
-            ->toJson();
+        // $daily_activity = DB::table('daily_activity')
+        //     ->leftJoin('users as a', 'daily_activity.executor', '=', 'a.id')
+        //     ->leftJoin('users as b', 'daily_activity.users_id', '=', 'b.id')
+        //     ->leftJoin('detail_user', 'daily_activity.executor', '=', 'detail_user.user_id')
+        //     ->leftJoin('work_category', 'daily_activity.work_category_id', '=', 'work_category.id')
+        //     ->leftJoin('work_type', 'daily_activity.work_type_id', '=', 'work_type.id')
+        //     // ->leftJoin('location_room', 'daily_activity.location_room_id', '=', 'location_room.id')
+        //     ->whereDate('start_date', date('Y-m-d'))
+        //     ->select('daily_activity.*', 'a.name as executor', 'b.name as users_id', 'detail_user.icon as icon', 'work_category.name as work_category_id', 'work_type.name as work_type_id', 'location_room.name as location_room_id', 'location_room.latitude', 'location_room.longitude')
+        //     ->get()
+        //     ->toJson();
 
-        return view('pages.dashboard.index', compact('cctv', 'daily_activity'));
+        return view('pages.dashboard.index');
     }
 
     /**

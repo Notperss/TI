@@ -1,3 +1,13 @@
+<script>
+  $('#application_id').on('change', function() {
+    var input_value = $(this).find(':selected').data('value');;
+    $('#date_start').val(input_value);
+    var input_value = $(this).find(':selected').data('value2');;
+    $('#description').val(input_value);
+    var input_value = $(this).find(':selected').data('value3');;
+    $('#stats').val(input_value);
+  });
+</script>
 <form class="form" action="{{ route('backsite.application-monitoring.store') }}" method="POST"
   enctype="multipart/form-data">
   @csrf
@@ -8,8 +18,10 @@
         <select name="application_id" id="application_id" class="form-control select2" style="width: 100%" required>
           <option value="" disabled selected>Choose</option>
           @foreach ($apps as $application)
-            <option value="{{ $application->id }}" data-value="{{ $application->date_start }}"
-              data-value2="{{ $application->description }}" data-value3="{{ $application->stats }}">
+            <option value="{{ $application->id }}"
+              data-value="{{ Carbon\Carbon::parse($application->date_start)->translatedFormat('l, d F Y') }}"
+              data-value2="{{ $application->description }}"
+              data-value3="{{ $application->stats == 1 ? 'AKTIF' : 'TIDAK AKTIF' }}">
               {{ $application->name_app }}</option>
           @endforeach
         </select>
@@ -48,23 +60,13 @@
     </button>
   </div>
 </form>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
     $('.select2').select2();
   });
-
-  $('#application_id').on('change', function() {
-    var input_value = $(this).find(':selected').data('value');;
-    $('#date_start').val(input_value);
-    var input_value = $(this).find(':selected').data('value2');;
-    $('#description').val(input_value);
-    var input_value = $(this).find(':selected').data('value3');;
-    $('#stats').val(input_value);
-  });
 </script>
+
+
 <style>
   @media (min-width: 768px) {
 

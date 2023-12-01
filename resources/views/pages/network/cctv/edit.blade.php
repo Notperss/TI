@@ -190,8 +190,8 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="AKTIF"{{ $cctv->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $cctv->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>TIdak
+                          <option value="1"{{ $cctv->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="2"{{ $cctv->stats == 2 ? 'selected' : '' }}>Tidak
                             Aktif</option>
                         </select>
                         @if ($errors->has('stats'))

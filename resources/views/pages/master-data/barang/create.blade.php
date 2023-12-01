@@ -45,7 +45,7 @@
                       </div>
                     </div>
 
-                    {{-- <div class="form-group row">
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="category">Category<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -74,6 +74,7 @@
                           <option value="CCTV">CCTV</option>
                           <option value="IP PHONE">IP Phone</option>
                           <option value="HARDDISK EXTERNAL">Hard Disk External</option>
+                          <option value="VGA CARD">VGA Card</option>
                           <option value="LAPTOP">Laptop</option>
                           <option value="PART PC">Part PC</option>
                           <option value="PART SERVER">Part Server</option>
@@ -101,7 +102,7 @@
                             {{ $errors->first('type_assets') }}</p>
                         @endif
                       </div>
-                    </div> --}}
+                    </div>
 
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="barcode">Barcode<code
@@ -127,7 +128,8 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="brand">Merk<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="brand">Merk<code
+                          style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="brand" id="brand"
                           value="{{ old('brand') }}" required>
@@ -137,10 +139,19 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="stats">Status<code
+                          style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="stats" id="stats"
-                          value="{{ old('stats') }}" required>
+                        <select name="stats" id="stats" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="1">Available</option>
+                          <option value="2">Dipakai</option>
+                          <option value="3">Perbaikan</option>
+                          <option value="4">Diserahkan</option>
+                          <option value="5">Rusak</option>
+                        </select>
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('stats') }}</p>
@@ -152,43 +163,26 @@
                       <label class="col-md-2 label-control" for="year">Tahun
                         <code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="year" id="year" data-provide="datepicker"
-                          data-date-format="yyyy" data-date-min-view-mode="2" autocomplete="off"
-                          value="{{ old('year') }}" readonly required>
+                        <input type="text" class="form-control" name="year" id="year"
+                          data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2"
+                          autocomplete="off" value="{{ old('year') }}" readonly required>
                         @if ($errors->has('year'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('year') }}</p>
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="type_assets">Tipe Assets<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="type_assets" id="type_assets" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="ASET">Aset</option>
-                          <option value="ASET TI">Aset TI</option>
-                          <option value="ASET LATOL">Aset Lattol</option>
-                        </select>
-                        @if ($errors->has('type_assets'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('type_assets') }}</p>
-                        @endif
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="file">Gambar</label>
+                      <label class="col-md-2 label-control" for="file">Gambar Barang</label>
                       <div class="col-md-4">
                         <div class="custom-file">
                           <input type="file" class="custom-file-input" id="file" name="file">
-                          <label class="custom-file-label" for="file" aria-describedby="file">Pilih
-                            @if ($errors->has('name_file'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('name_file') }}</p>
-                            @endif
+                          <label class="custom-file-label" for="file" aria-describedby="file">Pilih Gambar</label>
+                          <p class="text-muted"><small class="text-danger">Hanya dapat
+                              mengunggah 1 file</small></p>
+                          @if ($errors->has('name_file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('name_file') }}</p>
+                          @endif
                         </div>
                       </div>
                     </div>

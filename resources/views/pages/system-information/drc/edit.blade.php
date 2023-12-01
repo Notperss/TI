@@ -123,8 +123,8 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="AKTIF"{{ $drc->stats == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                          <option value="TIDAK AKTIF"{{ $drc->stats == 'TIDAK AKTIF' ? 'selected' : '' }}>Tidak Aktif
+                          <option value="1"{{ $drc->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="2"{{ $drc->stats == 2 ? 'selected' : '' }}>Tidak Aktif
                           </option>
                         </select>
                         @if ($errors->has('stats'))

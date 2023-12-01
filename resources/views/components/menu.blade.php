@@ -128,6 +128,15 @@
 
           {{-- @can('location_room') --}}
           <li
+            class="{{ request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.location_sub.index') }}">
+              <i></i><span>Sub Lokasi</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+
+          {{-- @can('location_room') --}}
+          <li
             class="{{ request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.location_room.index') }}">
               <i></i><span>Ruangan</span>
@@ -383,6 +392,15 @@
             class="{{ request()->is('backsite/cctv') || request()->is('backsite/cctv/*') || request()->is('backsite/*/cctv') || request()->is('backsite/*/cctv/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.cctv.index') }}">
               <i></i><span>CCTV</span>
+            </a>
+          </li>
+          {{-- @endcan --}}
+
+          {{-- @can('location_detail') --}}
+          <li
+            class="{{ request()->is('backsite/distribution') || request()->is('backsite/distribution/*') || request()->is('backsite/*/distribution') || request()->is('backsite/*/distribution/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.distribution.index') }}">
+              <i></i><span>Aset Deployment</span>
             </a>
           </li>
           {{-- @endcan --}}

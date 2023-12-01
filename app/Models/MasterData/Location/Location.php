@@ -2,9 +2,10 @@
 
 namespace App\Models\MasterData\Location;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\MasterData\Location\LocationRoom;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
 {
@@ -35,4 +36,16 @@ class Location extends Model
         // 2 parameter (path model, field foreign key)
         return $this->hasMany('App\Models\MasterData\Location\Location', 'location_id');
     }
+
+    public function sub_location()
+    {
+        // 2 parameter (path model, field foreign key)
+        return $this->hasMany(LocationSub::class, 'location_id', 'id');
+    }
+    public function room_location()
+    {
+        // 2 parameter (path model, field foreign key)
+        return $this->hasMany(LocationRoom::class, 'location_id', 'id');
+    }
+
 }

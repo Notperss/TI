@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
 use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
 use App\Models\MasterData\Goods\Goodsfile;
-use App\Models\Masterdata\Goods\GoodsProcessor;
+use App\Models\MasterData\Goods\GoodsProcessor;
 use App\Models\MasterData\Goods\GoodsRam;
 use App\Models\MasterData\Hardware\Ram;
 

@@ -2,9 +2,10 @@
 
 namespace App\Models\MasterData\Location;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\MasterData\Location\LocationRoom;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LocationSub extends Model
 {
@@ -24,6 +25,9 @@ class LocationSub extends Model
     // declare fillable
     protected $fillable = [
         'name',
+        'stats',
+        'description',
+        'location_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -34,5 +38,15 @@ class LocationSub extends Model
     {
         // 2 parameter (path model, field foreign key)
         return $this->hasMany('App\Models\MasterData\Location\LocationSub', 'location_sub_id');
+    }
+    public function location()
+    {
+        // 2 parameter (path model, field foreign key)
+        return $this->belongsTo(Location::class, 'location_id');
+    }
+    public function room_location()
+    {
+        // 2 parameter (path model, field foreign key)
+        return $this->hasMany(LocationRoom::class, 'sub_location_id', 'id');
     }
 }

@@ -176,8 +176,8 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="AKTIF">Aktif</option>
-                          <option value="TIDAK AKTIF">TIdak Aktif</option>
+                          <option value="1">Aktif</option>
+                          <option value="2">TIdak Aktif</option>
                         </select>
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">
