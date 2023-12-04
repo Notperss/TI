@@ -12,7 +12,15 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-
+                @if ($errors->any())
+                  <div class="alert alert-danger">
+                    <ul>
+                      @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+                @endif
                 <div class="card-header bg-success">
                   <h4 class="card-title text-white">Tambah Aset Deployment</h4>
                 </div>
@@ -43,7 +51,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="user_id">User<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select class="form-control select2" name="user_id" id="user_id">
+                        <select class="form-control select2" name="user_id" id="user_id" required>
                           <option value="" disabled selected>Choose</option>
                           @foreach ($user as $key => $user_item)
                             <option value="{{ $user_item->id }}">
@@ -96,6 +104,42 @@
                         @endif
                       </div>
                     </div>
+                    <div class="form-group row">
+                      <div class="col-md-2">Pilih Asset</div>
+                      <table id="table" class="col-md-9">
+                        <tr>
+                          <th>Name</th>
+                          <th>Category</th>
+                          <th>Barcode</th>
+                          <th>Action</th>
+                        </tr>
+                        <tr>
+                          {{-- <td><input type="text" name="inputs[0]['name']" class="form-control"></td> --}}
+                          <td>
+                            <select name="inputs[0][asset_id]" id="asset_id" class="form-control asset select2"
+                              style="width: 100%">
+                              <option value="" disabled selected>Choose</option>
+                              {{-- @foreach ($barang as $goods)
+                                <option value="{{ $goods->id }}" data-value="{{ $goods->category }}"
+                                  data-value2="{{ $goods->barcode }}">{{ $goods->name }}</option>
+                              @endforeach --}}
+                              @foreach ($barang as $goods)
+                                <option value="{{ $goods->id }}" data-value="{{ $goods->category }}"
+                                  data-value2="{{ $goods->barcode }}">
+                                  {{ $goods->name }}</option>
+                              @endforeach
+                            </select>
+                          </td>
+                          <td><input type="text" class="form-control" id="category" disabled></input>
+                          </td>
+                          <td><input type="text" class="form-control" id="barcode" disabled></input>
+                          </td>
+                          <td><button type="button" name="add" id="add" class="btn btn-success">Add</button>
+                          </td>
+                        </tr>
+
+                      </table>
+                    </div>
                   </div>
 
                   <div class="form-actions ">
@@ -114,8 +158,97 @@
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
+  <script>
+    // var i = 0;
+    // $('#add').click(function() {
+    //   ++i;
+    //   $('#table').append(
+    //     '<tr><td><select name="inputs[' + i +
+    //     '][asset_id]" id="asset_id_' + i +
+    //     '" class="form-control select21"><option value="" disabled selected>Choose</option> @foreach ($barang as $goods)<option value="{{ $goods->id }}" data-value="{{ $goods->category }}"                                  data-value2="{{ $goods->barcode }}">{{ $goods->name }}</option>@endforeach</select></td><td><input type="text" class="form-control" id="category" disabled></input></td><td><input type="text" class="form-control" id="barcode" disabled></input></td><td><button type="button" class="btn btn-danger remove-table-row">Remove</button></td></tr>'
+    //   );
+    // })
 
+    // $(document).on('change', '[id^="asset_id_"]', function() {
+    //   var input_value1 = $(this).find(':selected').data('value');
+    //   var input_value2 = $(this).find(':selected').data('value2');
+    //   $(this).closest('tr').find('.category').val(input_value1);
+    //   $(this).closest('tr').find('.barcode').val(input_value2);
+    // });
+
+    // $(document).on('click', '.remove-table-row', function() {
+    //   $(this).parents('tr').remove();
+    // })
+
+    // var i = 0;
+
+    // $('#add').click(function() {
+    //   ++i;
+    //   $('#table').append(
+    //     '<tr><td><select name="inputs[' + i +
+    //     '][asset_id]" id="asset_id_' + i +
+    //     '" class="form-control select2"><option value="" disabled selected>Choose</option> @foreach ($barang as $goods)<option value="{{ $goods->id }}" data-value="{{ $goods->category }}" data-value2="{{ $goods->barcode }}">{{ $goods->name }}</option>@endforeach</select></td><td><input type="text" class="form-control category" id="category_' +
+    //     i + '" disabled></input></td><td><input type="text" class="form-control barcode" id="barcode_' + i +
+    //     '" disabled></input></td><td><button type="button" class="btn btn-danger remove-table-row">Remove</button></td></tr>'
+    //   );
+    //   $('#asset_id_' + i).select2();
+    // });
+
+    // $(document).on('change', '[id^="asset_id_"]', function() {
+    //   var input_value1 = $(this).find(':selected').data('value');
+    //   var input_value2 = $(this).find(':selected').data('value2');
+    //   $(this).closest('tr').find('.category').val(input_value1);
+    //   $(this).closest('tr').find('.barcode').val(input_value2);
+    // });
+
+    // $(document).on('click', '.remove-table-row', function() {
+    //   $(this).closest('tr').remove();
+    // });
+
+    $(document).ready(function() {
+      // Initialize Select2 for existing elements with class select21
+      $('.select21').select2();
+
+      $('#add').click(function() {
+        // Increment index for unique IDs
+        var i = $('.select21').length + 1;
+
+        // Append a new row
+        $('#table').append(`
+      <tr>
+        <td>
+          <select name="inputs[${i}][asset_id]" class="form-control select2 select21">
+            <option value="" disabled selected>Choose</option>
+            @foreach ($barang as $goods)
+              <option value="{{ $goods->id }}" data-value="{{ $goods->category }}" data-value2="{{ $goods->barcode }}">{{ $goods->name }}</option>
+            @endforeach
+          </select>
+        </td>
+        <td><input type="text" class="form-control category" disabled></td>
+        <td><input type="text" class="form-control barcode" disabled></td>
+        <td><button type="button" class="btn btn-danger remove-table-row">Remove</button></td>
+      </tr>
+    `);
+
+        // Initialize Select2 for the newly added select element
+        $(`.select21:last`).select2();
+      });
+
+      $(document).on('change', '.select21', function() {
+        // Update corresponding input fields based on the selected option
+        var selectedOption = $(this).find(':selected');
+        $(this).closest('tr').find('.category').val(selectedOption.data('value') || '');
+        $(this).closest('tr').find('.barcode').val(selectedOption.data('value2') || '');
+      });
+
+      $(document).on('click', '.remove-table-row', function() {
+        // Remove the entire row when the "Remove" button is clicked
+        $(this).closest('tr').remove();
+      });
+    });
+  </script>
 @endsection
 @push('after-style')
   <link rel="stylesheet" type="text/css"
@@ -123,4 +256,12 @@
 @endpush
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+  <script>
+    $('#asset_id').on('change', function() {
+      var input_value = $(this).find(':selected').data('value');;
+      $('#category').val(input_value);
+      var input_value = $(this).find(':selected').data('value2');;
+      $('#barcode').val(input_value);
+    });
+  </script>
 @endpush

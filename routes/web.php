@@ -279,6 +279,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/distribution/upload_file', 'upload_file')->name('distribution.upload_file');
         Route::post('/distribution/show_file', 'show_file')->name('distribution.show_file');
         Route::delete('/distribution/{id}/delete_file', 'delete_file')->name('distribution.delete_file');
+        Route::delete('/distribution/{id}/destroy_asset', 'destroy_asset')->name('distribution.destroy_asset');
     });
 
     Route::resource('application', ApplicationController::class);
