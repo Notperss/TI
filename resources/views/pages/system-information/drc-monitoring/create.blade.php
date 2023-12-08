@@ -2,9 +2,9 @@
   @csrf
   <div class="modal-body">
     <div class="form-group row">
-      <label class="col-md-4 label-control" for="drc_id">Nama Barang<code style="color:red;">*</code></label>
+      <label class="col-md-4 label-control" for="drc_id">Nama<code style="color:red;">*</code></label>
       <div class="col-md-8">
-        <select name="drc_id" id="drc_id" class="form-control select2" style="width: 100%" required>
+        <select name="drc_id" id="drc_id" class="form-control select2" style="width: 80%" required>
           <option value="" disabled selected>Choose</option>
           @foreach ($drcs as $drc)
             <option value="{{ $drc->id }}" data-value="{{ $drc->category }}" data-value4="{{ $drc->description }}"

@@ -105,7 +105,24 @@
     var datatable = $('#room_location').dataTable({
       processing: true,
       serverSide: true,
-      ordering: true,
+      ordering: false,
+      dom: 'Bfrtip',
+      buttons: [{
+          extend: 'copy',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'excel',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'print',
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
+        },
+      ],
       ajax: {
         url: "{{ route('backsite.location_room.index') }}",
       },
@@ -134,6 +151,7 @@
           orderable: false,
           searchable: false,
           width: '15%',
+          className: 'no-print'
         },
       ],
       columnDefs: [{

@@ -4,21 +4,47 @@ namespace App\Http\Controllers\MasterData;
 
 
 use App\Models\Information;
+use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInformationRequest;
 use App\Http\Requests\UpdateInformationRequest;
 
-class InformationController extends Controller
-{
+class InformationController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $information = Information::orderBy('created_at', 'desc')->get();
-        return view('pages.master-data.information.index', compact('information'));
+    public function index() {
+        if(request()->ajax()) {
+
+            $information = Information::orderBy('created_at', 'desc')->get();
+
+            return DataTables::of($information)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a class="dropdown-item" href="'.route('backsite.information.edit', encrypt($item->id)).'">
+                        Edit
+                    </a>
+                    <form action="'.route('backsite.vendor_ti.destroy', encrypt($item->id)).'" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        '.method_field('delete').csrf_field().'
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+            </div>
+                ';
+                })
+                ->rawColumns(['action',])
+                ->toJson();
+        }
+        return view('pages.master-data.information.index');
     }
 
     /**
@@ -26,8 +52,7 @@ class InformationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('pages.master-data.information.create');
     }
 
@@ -37,8 +62,7 @@ class InformationController extends Controller
      * @param  \App\Http\Requests\StoreInformationRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreInformationRequest $request)
-    {
+    public function store(StoreInformationRequest $request) {
         $data = $request->all();
 
         Information::create($data);
@@ -54,8 +78,7 @@ class InformationController extends Controller
      * @param  \App\Models\Information  $information
      * @return \Illuminate\Http\Response
      */
-    public function show(Information $information)
-    {
+    public function show(Information $information) {
         abort(403);
     }
 
@@ -65,8 +88,7 @@ class InformationController extends Controller
      * @param  \App\Models\Information  $information
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $decrypt_id = decrypt($id);
         $information = Information::find($decrypt_id);
 
@@ -80,8 +102,7 @@ class InformationController extends Controller
      * @param  \App\Models\Information  $information
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInformationRequest $request, Information $information)
-    {
+    public function update(UpdateInformationRequest $request, Information $information) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -98,8 +119,7 @@ class InformationController extends Controller
      * @param  \App\Models\Information  $information
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $information = Information::find($decrypt_id);

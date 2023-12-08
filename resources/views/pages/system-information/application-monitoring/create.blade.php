@@ -32,7 +32,7 @@
       @endif
     </div>
     <div class="form-group row">
-      <div class="col-md-4 label-control">Tanggal</div>
+      <div class="col-md-4 label-control">Tanggal Mulai</div>
       <div class="col-md-8">
         <input type="text" class="form-control" id="date_start" disabled>
       </div>

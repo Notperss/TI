@@ -14,16 +14,14 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Adm\PP\StorePPRequest;
 use App\Http\Requests\Adm\PP\UpdatePPRequest;
 
-class PPController extends Controller
-{
+class PPController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             // // Get the current user's job ID
             // $userJobId = auth()->user()->detail_user->job_position; // Adjust this based on your user model
@@ -39,6 +37,9 @@ class PPController extends Controller
             $pp = $ppQuery->get();
 
 
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $pp = $pp->whereBetween('date', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($pp)
                 ->addIndexColumn()
@@ -48,27 +49,29 @@ class PPController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.pp.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.pp.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="'.route('backsite.pp.edit', encrypt($item->id)).'">
                         Edit
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.bill.create_bill', $item->id).'">
                         Tambah tagihan
                     </a>
-                    <form action="' . route('backsite.pp.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.pp.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
+                })->editColumn('date', function ($item) {
+                    return Carbon::parse($item->date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action',])
+                ->rawColumns(['action', 'date'])
                 ->toJson();
         }
         return view("pages.adm.pp.index");
@@ -79,8 +82,7 @@ class PPController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         $user_id = Auth::user()->detail_user->job_position;
         return view("pages.adm.pp.create", compact('user_id'));
     }
@@ -91,8 +93,7 @@ class PPController extends Controller
      * @param  \App\Http\Requests\Adm\PP\StorePPRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePPRequest $request)
-    {
+    public function store(StorePPRequest $request) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -112,8 +113,7 @@ class PPController extends Controller
      * @param  \App\Models\Adm\PP  $pP
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $pp = PP::find($decrypt_id);
 
@@ -126,8 +126,7 @@ class PPController extends Controller
      * @param  \App\Models\Adm\PP  $pP
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $decrypt_id = decrypt($id);
         $pp = PP::find($decrypt_id);
         $datafile = Pp_file::where('pp_id', $decrypt_id)->get();
@@ -141,8 +140,7 @@ class PPController extends Controller
      * @param  \App\Models\Adm\PP  $pP
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePPRequest $request, PP $pp)
-    {
+    public function update(UpdatePPRequest $request, PP $pp) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -159,8 +157,7 @@ class PPController extends Controller
      * @param  \App\Models\Adm\PP  $pP
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $pp = PP::find($decrypt_id);
@@ -169,8 +166,8 @@ class PPController extends Controller
 
         $pp_file = Pp_file::where('pp_id', $decrypt_id)->get();
         // hapus file
-        foreach ($pp_file as $file) {
-            if ($file->file != null || $file->file != '') {
+        foreach($pp_file as $file) {
+            if($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
 
@@ -182,9 +179,8 @@ class PPController extends Controller
     }
 
     // get form upload daily activity
-    public function form_upload(Request $request)
-    {
-        if ($request->ajax()) {
+    public function form_upload(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $row = PP::find($id);
@@ -200,17 +196,16 @@ class PPController extends Controller
         }
     }
 
-    public function upload(Request $request)
-    {
+    public function upload(Request $request) {
         $pp = PP::find($request->id);
 
         // save to file test material
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
+        if($request->hasFile('file')) {
+            foreach($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-pp', $fullname);
                 Pp_file::create([
                     'pp_id' => $request->id,
@@ -227,9 +222,8 @@ class PPController extends Controller
     }
 
     // get show_file software
-    public function show_file(Request $request)
-    {
-        if ($request->ajax()) {
+    public function show_file(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $pp_file = Pp_file::where('pp_id', $id)->get();
@@ -246,15 +240,14 @@ class PPController extends Controller
     }
 
     // hapus file dailiy activity
-    public function hapus_file($id)
-    {
+    public function hapus_file($id) {
         $pp_file = Pp_file::find($id);
 
         // cari old photo
         $path_file = $pp_file['file'];
 
         // hapus file
-        if ($path_file != null || $path_file != '') {
+        if($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 

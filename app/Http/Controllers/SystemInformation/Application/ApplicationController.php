@@ -17,18 +17,20 @@ use App\Models\SystemInformation\Application\Application;
 use App\Http\Requests\SystemInformation\Application\StoreApplicationRequest;
 use App\Http\Requests\SystemInformation\Application\UpdateApplicationRequest;
 
-class ApplicationController extends Controller
-{
+class ApplicationController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $application = Application::latest();
+
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $application = $application->whereBetween('date_finish', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($application)
                 ->addIndexColumn()
@@ -38,25 +40,25 @@ class ApplicationController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.application.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.application.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Aplikasi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.application.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.application.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.application.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.application.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
                 })->editColumn('date_finish', function ($item) {
-                return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
-            })->rawColumns(['action', 'date_finish',])
+                    return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
+                })->rawColumns(['action', 'date_finish',])
                 ->toJson();
         }
         return view("pages.system-information.application.index");
@@ -67,8 +69,7 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $user = Auth::user()->name;
         $user_id = Auth::user()->id;
         return view("pages.system-information.application.create", compact('user', 'user_id'));
@@ -80,8 +81,7 @@ class ApplicationController extends Controller
      * @param  \App\Http\Requests\SystemInformation\Application\StoreApplicationRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreApplicationRequest $request)
-    {
+    public function store(StoreApplicationRequest $request) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -101,8 +101,7 @@ class ApplicationController extends Controller
      * @param  \App\Models\SystemInformation\Application\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $app = Application::find($decrypt_id);
 
@@ -115,8 +114,7 @@ class ApplicationController extends Controller
      * @param  \App\Models\SystemInformation\Application\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $app = Application::find($id);
         $notes = NoteApp::where('app_id', $id)->orderBy('created_at', 'desc')->get();
         $files = FileApp::where('app_id', $id)->orderBy('created_at', 'desc')->get();
@@ -130,8 +128,7 @@ class ApplicationController extends Controller
      * @param  \App\Models\SystemInformation\Application\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateApplicationRequest $request, Application $application)
-    {
+    public function update(UpdateApplicationRequest $request, Application $application) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -148,8 +145,7 @@ class ApplicationController extends Controller
      * @param  \App\Models\SystemInformation\Application\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $application = Application::find($decrypt_id);
@@ -158,16 +154,16 @@ class ApplicationController extends Controller
 
         $note = NoteApp::where('app_id', $decrypt_id)->get();
         // hapus file
-        foreach ($note as $file) {
-            if ($file->file != null || $file->file != '') {
+        foreach($note as $file) {
+            if($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
         }
 
         $file = FileApp::where('app_id', $decrypt_id)->get();
         // hapus file
-        foreach ($file as $file) {
-            if ($file->file != null || $file->file != '') {
+        foreach($file as $file) {
+            if($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
         }
@@ -180,9 +176,8 @@ class ApplicationController extends Controller
     }
 
     // get form upload note
-    public function form_upload_note(Request $request)
-    {
-        if ($request->ajax()) {
+    public function form_upload_note(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $row = Application::find($id);
@@ -198,8 +193,7 @@ class ApplicationController extends Controller
         }
     }
 
-    public function upload_note(Request $request)
-    {
+    public function upload_note(Request $request) {
         // Validation rules
         $rules = [
             'note' => ['required'], // Add any other rules you need
@@ -217,7 +211,7 @@ class ApplicationController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -225,12 +219,12 @@ class ApplicationController extends Controller
 
         // If validation passes, proceed with your original logic
         $application = Application::find($request->id);
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
+        if($request->hasFile('file')) {
+            foreach($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-app-note', $fullname);
             }
         }
@@ -246,9 +240,8 @@ class ApplicationController extends Controller
     }
 
     // get show_file software
-    public function show_file(Request $request)
-    {
-        if ($request->ajax()) {
+    public function show_file(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $noteapp = NoteApp::where('application_id', $id)->with('barang')->get();
@@ -265,8 +258,7 @@ class ApplicationController extends Controller
     }
 
     // hapus file note
-    public function delete_file_note($id)
-    {
+    public function delete_file_note($id) {
         $noteApp = NoteApp::find($id);
         $noteApp->delete();
 
@@ -274,9 +266,8 @@ class ApplicationController extends Controller
         return back();
     }
 
-    public function form_upload_file(Request $request)
-    {
-        if ($request->ajax()) {
+    public function form_upload_file(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $row = Application::find($id);
@@ -292,8 +283,7 @@ class ApplicationController extends Controller
         }
     }
 
-    public function upload_file(Request $request)
-    {
+    public function upload_file(Request $request) {
         // Validation rules
         $rules = [
             'description' => ['required'], // Add any other rules you need
@@ -311,7 +301,7 @@ class ApplicationController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -319,12 +309,12 @@ class ApplicationController extends Controller
 
         // If validation passes, proceed with your original logic
         $application = Application::find($request->id);
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
+        if($request->hasFile('file')) {
+            foreach($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-app', $fullname);
             }
         }
@@ -339,8 +329,7 @@ class ApplicationController extends Controller
         return redirect()->route('backsite.application.edit', $application);
     }
 
-    public function delete_file($id)
-    {
+    public function delete_file($id) {
         $file = FileApp::find($id);
         $file->delete();
 

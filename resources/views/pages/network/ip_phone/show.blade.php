@@ -31,7 +31,15 @@
   </tr>
   <tr>
     <th>Status</th>
-    <td>{{ isset($ip_phone->stats) ? $ip_phone->stats : 'N/A' }}</td>
+    <td>
+      @if ($ip_phone->stats == 1)
+        <span class="badge badge-success">{{ 'Aktif' }}</span>
+      @elseif($ip_phone->stats == 2)
+        <span class="badge badge-danger">{{ 'Tidak Aktif' }}</span>
+      @else
+        <span>{{ 'N/A' }}</span>
+      @endif
+    </td>
   </tr>
   <tr>
     <th>keterangan</th>

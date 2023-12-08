@@ -68,7 +68,7 @@
 
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                      id="atk-table" aria-label="">
+                      id="form-table" aria-label="">
                       <thead>
                         <tr>
                           <th>No</th>
@@ -103,10 +103,27 @@
 @endsection
 @push('after-script')
   <script>
-    var datatable = $('#atk-table').dataTable({
+    var datatable = $('#form-table').dataTable({
       processing: true,
       serverSide: true,
-      ordering: true,
+      ordering: false,
+      dom: 'Bfrtip',
+      buttons: [{
+          extend: 'copy',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'excel',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'print',
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
+        },
+      ],
       ajax: {
         url: "{{ route('backsite.form.index') }}",
       },
@@ -128,6 +145,7 @@
         {
           data: 'file',
           name: 'file',
+          className: 'no-print'
         },
         {
           data: 'action',
@@ -135,6 +153,7 @@
           orderable: false,
           searchable: false,
           width: '15%',
+          className: 'no-print'
         },
       ],
       columnDefs: [{

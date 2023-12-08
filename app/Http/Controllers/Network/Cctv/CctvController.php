@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers\Network\Cctv;
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Network\Cctv\Cctv;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Network\Cctv\StoreCctvRequest;
 use App\Http\Requests\Network\Cctv\UpdateCctvRequest;
 
-class CctvController extends Controller
-{
+class CctvController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $cctv = Cctv::orderby('created_at', 'desc');
+
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $cctv = $cctv->whereBetween('installation_date', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($cctv)
                 ->addIndexColumn()
@@ -32,24 +35,26 @@ class CctvController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.cctv.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.cctv.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data CCTV" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.cctv.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="'.route('backsite.cctv.edit', encrypt($item->id)).'">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.cctv.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.cctv.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
+                })->editColumn('installation_date', function ($item) {
+                    return Carbon::parse($item->installation_date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action',])
+                ->rawColumns(['action', 'installation_date'])
                 ->toJson();
         }
 
@@ -61,8 +66,7 @@ class CctvController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('pages.network.cctv.create');
     }
 
@@ -72,18 +76,17 @@ class CctvController extends Controller
      * @param  \App\Http\Requests\Network\Cctv\StoreCctvRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCctvRequest $request)
-    {
+    public function store(StoreCctvRequest $request) {
         // get all request from frontsite
         $data = $request->all();
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-cctv', $fullname);
         }
         // store to database
@@ -99,8 +102,7 @@ class CctvController extends Controller
      * @param  \App\Models\Network\Cctv\Cctv  $cctv
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $cctv = Cctv::find($decrypt_id);
 
@@ -113,8 +115,7 @@ class CctvController extends Controller
      * @param  \App\Models\Network\Cctv\Cctv  $cctv
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $decrypt_id = decrypt($id);
         $cctv = Cctv::find($decrypt_id);
         return view('pages.network.cctv.edit', compact('cctv'));
@@ -127,8 +128,7 @@ class CctvController extends Controller
      * @param  \App\Models\Network\Cctv\Cctv $cctv
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCctvRequest $request, Cctv $cctv)
-    {
+    public function update(UpdateCctvRequest $request, Cctv $cctv) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -136,15 +136,15 @@ class CctvController extends Controller
         $path_file = $cctv['file'];
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-cctv', $fullname);
             // hapus file
-            if ($path_file != null || $path_file != '') {
+            if($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
             }
         } else {
@@ -165,8 +165,7 @@ class CctvController extends Controller
      * @param  \App\Models\Network\Cctv\Cctv $cctv
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $cctv = Cctv::find($decrypt_id);
@@ -175,7 +174,7 @@ class CctvController extends Controller
         $path_file = $cctv['file'];
 
         // hapus file
-        if ($path_file != null || $path_file != '') {
+        if($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 

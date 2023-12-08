@@ -11,18 +11,25 @@ use App\Models\SystemInformation\DRC\DRC;
 use Illuminate\Support\Facades\Validator;
 use App\Models\SystemInformation\DRC\DRCMonitoring;
 
-class DRCMonitoringController extends Controller
-{
+class DRCMonitoringController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $drc = DRCMonitoring::with('drc_monitoring')->orderby('d_r_c_monitorings.created_at', 'desc');
+
+            if($request->has('from_date') && $request->has('to_date')) {
+                $drc->whereHas('drc_monitoring', function ($query) use ($request) {
+                    $query->whereBetween('created_at', [
+                        $request->input('from_date'),
+                        $request->input('to_date'),
+                    ]);
+                });
+            }
 
             return DataTables::of($drc)
                 ->addIndexColumn()
@@ -32,22 +39,22 @@ class DRCMonitoringController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.drc-monitoring.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.drc-monitoring.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
                         Show
                     </a>
-                    <form action="' . route('backsite.drc-monitoring.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.drc-monitoring.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
                 })->editColumn('drc_monitoring.created_at', function ($item) {
-                return Carbon::parse($item->drc_monitoring->created_at)->translatedFormat('l, d F Y');
-            })
+                    return Carbon::parse($item->drc_monitoring->created_at)->translatedFormat('l, d F Y');
+                })
                 ->rawColumns(['action', 'app_monitoring.created_at'])
                 ->toJson();
         }
@@ -59,8 +66,7 @@ class DRCMonitoringController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         $drcs = DRC::with('drc')->orderBy('id', 'asc')->get();
         return view("pages.system-information.drc-monitoring.create", compact('drcs'));
     }
@@ -71,8 +77,7 @@ class DRCMonitoringController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         // Validation rules
         $rules = [
             'drc_id' => [
@@ -92,7 +97,7 @@ class DRCMonitoringController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -112,8 +117,7 @@ class DRCMonitoringController extends Controller
      * @param \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $drc = DRCMonitoring::with('drc_monitoring')->find($decrypt_id);
 
@@ -126,8 +130,7 @@ class DRCMonitoringController extends Controller
      * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
-    public function edit(DRCMonitoring $drcmonitoring)
-    {
+    public function edit(DRCMonitoring $drcmonitoring) {
         $drcmonitoring = DRCMonitoring::findOrFail($drcmonitoring->id);
         return view('pages.system-information.drc-monitoring.edit', compact('DRCmonitoring'));
     }
@@ -139,8 +142,7 @@ class DRCMonitoringController extends Controller
      * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DRCMonitoring $drcmonitoring)
-    {
+    public function update(Request $request, DRCMonitoring $drcmonitoring) {
 
     }
 
@@ -150,8 +152,7 @@ class DRCMonitoringController extends Controller
      * @param  \App\Models\SystemInformation\DRC\DRCMonitoring  $drcmonitoring
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $drcmonitoring = DRCMonitoring::find($decrypt_id);

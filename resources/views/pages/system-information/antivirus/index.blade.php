@@ -66,6 +66,19 @@
                 </div>
                 <div class="card-body card-dashboard">
 
+                  <div class="col col-5 mb-1">
+                    <div id="daterange-container" class="float-end" style="display: none;">
+                      <div id="daterange"
+                        style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; text-align:center">
+                        <i class="la la-calendar"></i>&nbsp;
+                        <span></span>
+                        <i class="la la-caret-down"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal Mulai</button>
+
+
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
                       id="antivirus-table" aria-label="">
@@ -107,15 +120,51 @@
   <div class="viewmodal" style="display: none;"></div>
   <!-- END: Content-->
 @endsection
+@push('after-style')
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endpush
 @push('after-script')
+  <script></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
   <script>
-    var datatable = $('#antivirus-table').dataTable({
+    var dateFilterActive = false; // Variable to track whether date filter is active
+
+    var table = $('#antivirus-table').DataTable({
       processing: true,
       serverSide: true,
-      ordering: true,
+      ordering: false,
+      lengthChange: false,
+      "pageLength": 15,
+      dom: 'Bfrtip',
+      buttons: [{
+          extend: 'copy',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'excel',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'print',
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
+        },
+      ],
       ajax: {
         url: "{{ route('backsite.antivirus.index') }}",
+        data: function(data) {
+          if (dateFilterActive) {
+            data.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
+            data.to_date = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD');
+          }
+        }
       },
+
+
       columns: [{
           data: 'DT_RowIndex',
           name: 'DT_RowIndex',
@@ -146,6 +195,17 @@
         {
           data: 'stats',
           name: 'stats',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<h5><span class="badge bg-info">Aktif</span></h5>';
+            } else if (data === '2') {
+              return '<h5><span class="badge bg-danger">Tidak Aktif</span></h5>';
+            } else {
+              return '-';
+            }
+          },
         },
         {
           data: 'action',
@@ -153,13 +213,61 @@
           orderable: false,
           searchable: false,
           width: '15%',
+          className: 'no-print' // Add this class to exclude the column from printing
         },
       ],
+
       columnDefs: [{
         className: 'text-center',
         targets: '_all'
       }, ],
     });
+
+    // Add a filter button
+    $('#filterButton').on('click', function() {
+      // Toggle the date filter status
+      dateFilterActive = !dateFilterActive;
+
+      // Show/hide the date range picker container based on the filter status
+      $('#daterange-container').toggle(dateFilterActive);
+
+      if (dateFilterActive) {
+        // Initialize date range picker if the filter is active
+        var start_date = moment().subtract(1, 'M');
+        var end_date = moment().add(1, 'day');
+
+        $('#daterange').daterangepicker({
+          startDate: start_date,
+          endDate: end_date
+        }, function(new_start_date, new_end_date) {
+          // Update the displayed date range
+          updateDateRange(new_start_date, new_end_date);
+
+          // Redraw the table if needed
+          if (new_start_date && new_end_date) {
+            table.draw();
+          } else {
+            // If no date is selected, display all data
+            table.clear().draw();
+          }
+        });
+
+        // Update the displayed date range
+        updateDateRange(start_date, end_date);
+      } else {
+        // If the filter is not active, clear the date range picker and display all data
+        $('#daterange').data('daterangepicker').remove();
+        table.clear().draw();
+      }
+    });
+
+    function updateDateRange(start_date, end_date) {
+      if (start_date && end_date) {
+        $('#daterange span').html(start_date.format('MMMM D, YYYY') + ' - ' + end_date.format('MMMM D, YYYY'));
+      } else {
+        $('#daterange span').html('All Data');
+      }
+    }
 
 
     jQuery(document).ready(function($) {

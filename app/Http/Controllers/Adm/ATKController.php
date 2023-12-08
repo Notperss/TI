@@ -12,18 +12,20 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Adm\ATK\StoreATKRequest;
 use App\Http\Requests\Adm\ATK\UpdateATKRequest;
 
-class ATKController extends Controller
-{
+class ATKController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $atk = ATK::orderby('created_at', 'desc');
+
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $atk = $atk->whereBetween('date', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($atk)
                 ->addIndexColumn()
@@ -33,31 +35,31 @@ class ATKController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.atk.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.atk.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data ATK" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.atk.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="'.route('backsite.atk.edit', encrypt($item->id)).'">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.atk.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.atk.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
                 })
                 ->editColumn('file', function ($item) {
-                    if ($item->file) {
+                    if($item->file) {
                         return '<a type="button" data-fancybox
-                                data-src="' . asset('storage/' . $item->file) . '"
+                                data-src="'.asset('storage/'.$item->file).'"
                                 class="btn btn-info btn-sm text-white ">
                                 Lihat
                             </a>
-                            <a type="button" href="' . asset('storage/' . $item->file) . '"
+                            <a type="button" href="'.asset('storage/'.$item->file).'"
                                     class="btn btn-primary btn-sm" download>
                                     Unduh  
                             </a>
@@ -83,8 +85,7 @@ class ATKController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('pages.adm.atk.create');
     }
 
@@ -94,18 +95,17 @@ class ATKController extends Controller
      * @param  \App\Http\Requests\Adm\ATK\StoreATKRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreATKRequest $request)
-    {
+    public function store(StoreATKRequest $request) {
         // get all request from frontsite
         $data = $request->all();
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-atk', $fullname);
         }
         // store to database
@@ -121,8 +121,7 @@ class ATKController extends Controller
      * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $atk = ATK::find($decrypt_id);
 
@@ -136,8 +135,7 @@ class ATKController extends Controller
      * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $decrypt_id = decrypt($id);
         $atk = ATK::find($decrypt_id);
         return view('pages.adm.atk.edit', compact('atk', ));
@@ -150,8 +148,7 @@ class ATKController extends Controller
      * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateATKRequest $request, ATK $atk)
-    {
+    public function update(UpdateATKRequest $request, ATK $atk) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -159,15 +156,15 @@ class ATKController extends Controller
         $path_file = $atk['file'];
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-atk', $fullname);
             // hapus file
-            if ($path_file != null || $path_file != '') {
+            if($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
             }
         } else {
@@ -187,8 +184,7 @@ class ATKController extends Controller
      * @param  \App\Models\Adm\ATK  $atk
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $atk = ATK::find($decrypt_id);
@@ -197,7 +193,7 @@ class ATKController extends Controller
         $path_file = $atk['file'];
 
         // hapus file
-        if ($path_file != null || $path_file != '') {
+        if($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
 
