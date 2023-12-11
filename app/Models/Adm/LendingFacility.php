@@ -17,6 +17,7 @@ class LendingFacility extends Model
         'borrower',
         'description',
         'note',
+        'stats',
     ];
 
     public function lending_good()

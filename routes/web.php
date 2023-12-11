@@ -218,8 +218,12 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('lendingfacility', LendingFacilityController::class);
+    // Route::put('/lendingfacility/returning_update', [LendingFacilityController::class, 'returning_update'])->name('lendingfacility.returning_update');
 
     Route::controller(LendingFacilityController::class)->group(function () {
+        // Route::put('/lendingfacility/returning_update/{id}', 'returning_update')->name('lendingfacility.returning_update');
+        Route::put('/lendingfacility/returning_update/{lendingfacility}', 'returning_update')->name('lendingfacility.returning_update');
+        Route::get('/lendingfacility/{id}/returning', 'returning')->name('lendingfacility.returning');
         Route::post('/lendingfacility/form_upload', 'form_upload')->name('lendingfacility.form_upload');
         Route::post('/lendingfacility/upload', 'upload')->name('lendingfacility.upload');
         Route::post('/lendingfacility/show_file', 'show_file')->name('lendingfacility.show_file');

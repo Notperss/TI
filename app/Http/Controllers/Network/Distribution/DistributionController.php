@@ -281,7 +281,6 @@ class DistributionController extends Controller {
         $goods = Barang::find($assetId);
         $goods->update(['stats' => 1]);
 
-
         // Delete the specific distribution asset
         $distributionAsset->delete();
 
@@ -289,6 +288,14 @@ class DistributionController extends Controller {
         $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
 
         if($remainingDistributionAssets->count() === 0) {
+            // cari old photo
+            $path_file = $distributionId['file'];
+
+            // hapus file
+            if($path_file != null || $path_file != '') {
+                Storage::delete($path_file);
+            }
+
             // Delete the distribution
             Distribution::where('id', $distributionId)->delete();
         }
