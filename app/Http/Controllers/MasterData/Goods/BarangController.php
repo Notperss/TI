@@ -41,7 +41,7 @@ class BarangController extends Controller
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.barang.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
+                        data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.barang.edit', $item->id) . '">
@@ -391,6 +391,30 @@ class BarangController extends Controller
         return back();
     }
 
+    public function show_file(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
 
+            $barang = Barang::find($id);
+            $file = Goodsfile::where('goods_id', $id)->get();
+            $processor = GoodsProcessor::where('goods_id', $id)->get();
+            $ram = GoodsRam::where('goods_id', $id)->get();
+            $hardisk = GoodsHardisk::where('goods_id', $id)->get();
+            $data = [
+                'datafile' => $file,
+                'processor' => $processor,
+                'ram' => $ram,
+                'hardisk' => $hardisk,
+                'barang' => $barang,
+            ];
+
+            $msg = [
+                'data' => view('pages.master-data.barang.detail_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
 
 }

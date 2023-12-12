@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Aktivitas Harian')
+@section('title', 'Link Aplikasi')
 
 @section('content')
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   <!-- BEGIN: Content-->
   <div class="app-content content">
     <div class="content-overlay"></div>
@@ -28,20 +28,18 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">Aktivitas Harian</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Link Aplikasi</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">Aktivitas Harian</li>
+                <li class="breadcrumb-item active">Link Aplikasi</li>
               </ol>
             </div>
           </div>
         </div>
       </div>
 
-      <a href="{{ route('backsite.act_daily.create') }}" class="btn btn-success col-3 mb-2">
-        Tambah Aktivitas Harian</a>
       {{-- table card --}}
       <div class="content-body">
         <section id="table-home">
@@ -50,95 +48,69 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">List Aktivitas Harian</h4>
-                  <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                  <div class="heading-elements">
-                    <ul class="list-inline mb-0">
-                      <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                      <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                    </ul>
-                  </div>
+                  <h4 class="card-title">List Application</h4>
                 </div>
-
-                <div class="card-content collapse show">
-                  <div class="card-body card-dashboard">
-
-                    <div class="col col-5 mb-1">
-                      <div id="daterange-container" class="float-end" style="display: none;">
-                        <div id="daterange"
-                          style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; text-align:center">
-                          <i class="la la-calendar"></i>&nbsp;
-                          <span></span>
-                          <i class="la la-caret-down"></i>
-                        </div>
+                <div class="card-body card-dashboard">
+                  <div class="col col-5 mb-1">
+                    <div id="daterange-container" class="float-end" style="display: none;">
+                      <div id="daterange"
+                        style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; text-align:center">
+                        <i class="la la-calendar"></i>&nbsp;
+                        <span></span>
+                        <i class="la la-caret-down"></i>
                       </div>
                     </div>
-                    <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal Mulai</button>
+                  </div>
+                  <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal</button>
 
-                    <div class="table-responsive">
-                      <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                        id="activity-table">
-                        <thead>
-                          <tr>
-                            <th>No</th>
-                            <th>No.Aktvts</th>
-                            <th>Pelaksana</th>
-                            <th>Tgl Mulai</th>
-                            <th>Jenis Pekerjaan</th>
-                            <th>Kegiatan</th>
-                            <th>Tgl Selesai</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        <tfoot hidden>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
+                      id="application-table">
+                      <thead>
+                        <tr>
                           <th>No</th>
-                          <th>No.Aktvts</th>
-                          <th>Pelaksana</th>
-                          <th>Tgl Mulai</th>
-                          <th>Jenis Pekerjaan</th>
-                          <th>Kegiatan</th>
-                          <th>Tgl Selesai</th>
+                          <th>Nama Aplikasi</th>
+                          <th>Link Aplikasi</th>
+                          <th>Catatan</th>
                           <th>Status</th>
                           <th>Action</th>
-                        </tfoot>
-                      </table>
-                    </div>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                      <tfoot hidden>
+                        <th>No</th>
+                        <th>Nama Aplikasi</th>
+                        <th>Tanggal</th>
+                        <th>Catatan</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tfoot>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
           </div>
       </div>
+      </section>
     </div>
-    </section>
+
   </div>
-
+  </div>
   <!-- END: Content-->
-  <div class="viewmodal" style="display: none;"></div>
-
 @endsection
-
 @push('after-style')
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url('https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css') }}">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
-
 @push('after-script')
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-  <script src="{{ url('https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js') }}" type="text/javascript">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
   <script>
     var dateFilterActive = false; // Variable to track whether date filter is active
 
-    var table = $('#activity-table').DataTable({
+    var table = $('#application-table').DataTable({
       processing: true,
       serverSide: true,
       ordering: false,
@@ -168,11 +140,11 @@
         },
       ],
       ajax: {
-        url: "{{ route('backsite.act_daily.index') }}",
+        url: "{{ route('backsite.application.app_link') }}",
         data: function(data) {
           if (dateFilterActive) {
-            data.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD 00:00:00');
-            data.to_date = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD 23:59:59');
+            data.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
+            data.to_date = $('#daterange').data('daterangepicker').endDate.format('YYYY-MM-DD');
           }
         }
       },
@@ -181,58 +153,48 @@
           name: 'DT_RowIndex',
           orderable: false,
           searchable: false,
+          width: '3%',
         },
         {
-          data: 'id',
-          name: 'id',
+          data: 'name_app',
+          name: 'name_app',
         },
         {
-          data: 'detail_user.user.name',
-          name: 'executor',
+          data: 'path_app',
+          name: 'path_app',
         },
         {
-          data: 'start_date',
-          name: 'start_date',
+          data: 'description',
+          name: 'description',
         },
         {
-          data: 'work_type.job_type',
-          name: 'work_type_id',
-        },
-        {
-          data: 'activity',
-          name: 'activity',
-        },
-        {
-          data: 'finish_date',
-          name: 'finish_date',
-        },
-        {
-          data: 'status',
-          name: 'status',
+          data: 'stats',
+          name: 'stats',
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';
             } else if (data === '1') {
-              return '<span class="badge bg-success">Aktif</span>';
+              return '<h5><span class="badge bg-info">Aktif</span></h5>';
             } else if (data === '2') {
-              return '<span class="badge bg-danger">Tidak Aktif</span>';
+              return '<h5><span class="badge bg-danger">Tidak Aktif</span></h5>';
             } else {
               return '-';
             }
-          }
+          },
         },
         {
           data: 'action',
           name: 'action',
           orderable: false,
           searchable: false,
+          width: '15%',
           className: 'no-print',
         },
-      ]
-      // columnDefs: [{
-      //   className: 'text-center',
-      //   targets: '_all'
-      // }, ],
+      ],
+      columnDefs: [{
+        className: 'text-center',
+        targets: '_all'
+      }, ],
     });
 
     // Add a filter button
@@ -281,7 +243,6 @@
       }
     }
 
-
     jQuery(document).ready(function($) {
       $('#mymodal').on('show.bs.modal', function(e) {
         var button = $(e.relatedTarget);
@@ -292,27 +253,6 @@
       });
     });
 
-    // $('.default-table').DataTable({
-    //     "order": [],
-    //     "paging": true,
-    //     "lengthMenu": [
-    //         [5, 10, 25, 50, 100, -1],
-    //         [5, 10, 25, 50, 100, "All"]
-    //     ],
-    //     "pageLength": 10
-    // });
-
-    // fancybox
-    Fancybox.bind('[data-fancybox="gallery"]', {
-      infinite: false
-    });
-
-    // test caseman
-    // function link() {
-    //     let windowPopUp = window.open('http://google.com', "Test Page", "width=800,height=800");
-
-    //     windowPopUp.focus();
-    // }
 
     function upload(id) {
       $.ajaxSetup({
@@ -323,14 +263,14 @@
 
       $.ajax({
         type: "post",
-        url: "{{ route('backsite.act_daily.form_upload') }}",
+        url: "{{ route('backsite.pp.form_upload') }}",
         data: {
           id: id
         },
         dataType: "json",
         success: function(response) {
           $('.viewmodal').html(response.data).show();
-          $('#modalupload').modal('show');
+          $('#upload').modal('show');
         },
         error: function(xhr, ajaxOptions, thrownError) {
           alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);

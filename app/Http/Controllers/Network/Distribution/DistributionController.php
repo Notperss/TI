@@ -20,14 +20,16 @@ use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\Network\Distribution\StoreDistributionRequest;
 use App\Http\Requests\Network\Distribution\UpdateDistributionRequest;
 
-class DistributionController extends Controller {
+class DistributionController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
-        if(request()->ajax()) {
+    public function index(Request $request)
+    {
+        if (request()->ajax()) {
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
             $distribution = DistributionAsset::
@@ -37,7 +39,7 @@ class DistributionController extends Controller {
             // if($request->filled('from_date') && $request->filled('to_date')) {
             //     $distribution = $distribution->whereBetween('created_at', [$request->from_date, $request->to_date]);
             // }
-            if($request->has('from_date') && $request->has('to_date')) {
+            if ($request->has('from_date') && $request->has('to_date')) {
                 $distribution->whereHas('distribution', function ($query) use ($request) {
                     $query->whereBetween('date', [
                         $request->input('from_date'),
@@ -56,26 +58,30 @@ class DistributionController extends Controller {
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a class="dropdown-item" href="'.route('backsite.distribution.edit', $item->distribution->id).'">
+                  <a href="#mymodal" data-remote="' . route('backsite.distribution.show', encrypt($item->distribution->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
+                        Show
+                    </a>
+                    <a class="dropdown-item" href="' . route('backsite.distribution.edit', $item->distribution->id) . '">
                         Edit
                                 </a>
-                    <form action="'.route('backsite.distribution.destroy_asset', encrypt($item->id)).'" method="POST"
+                    <form action="' . route('backsite.distribution.destroy_asset', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        '.method_field('delete').csrf_field().'
+                        ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
                 })->editColumn('asset.barcode', function ($item) {
-                    if($item->asset_id) {
+                    if ($item->asset_id) {
                         return $item->asset->barcode;
                     } else {
                         return '<span>{ Data Empty }</span>';
                     }
                 })->editColumn('asset.name', function ($item) {
-                    if($item->asset_id) {
+                    if ($item->asset_id) {
                         return $item->asset->name;
                     } else {
                         return '<span>{ Data Empty }</span>';
@@ -96,7 +102,8 @@ class DistributionController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         $location_room = LocationRoom::all();
         $user = DetailUser::where('status', '1')->get();
         $barang = Barang::where('stats', '1')->get();
@@ -109,7 +116,8 @@ class DistributionController extends Controller {
      * @param  \App\Http\Requests\Network\Distribution\StoreDistributionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         // get all request from frontsite
         $data = $request->all();
         $rules = [
@@ -133,19 +141,19 @@ class DistributionController extends Controller {
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
         // upload process here
-        if($request->hasFile('file')) {
+        if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename.'.'.$extension;
+            $fullname = $basename . '.' . $extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-distribution', $fullname);
         }
         // store to database
@@ -166,7 +174,7 @@ class DistributionController extends Controller {
 
         $assetIdsToUpdate = [];
 
-        foreach($request->inputs as $key => $value) {
+        foreach ($request->inputs as $key => $value) {
             DistributionAsset::create([
                 'distribution_id' => $distribution_id,
                 'asset_id' => $value['asset_id'],
@@ -193,9 +201,11 @@ class DistributionController extends Controller {
      * @param  \App\Models\Network\Distribution\Distribution  $distribution
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
+        $decrypt_id = decrypt($id);
 
-        $distribution = Distribution::find($id);
+        $distribution = Distribution::find($decrypt_id);
 
         return view('pages.network.distribution.show', compact('distribution'));
     }
@@ -206,7 +216,8 @@ class DistributionController extends Controller {
      * @param  \App\Models\Network\Distribution\Distribution  $distribution
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
 
         $distribution = Distribution::find($id);
         $location_room = LocationRoom::all();
@@ -222,7 +233,8 @@ class DistributionController extends Controller {
      * @param  \App\Models\Network\Distribution\Distribution $distribution
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDistributionRequest $request, Distribution $distribution) {
+    public function update(UpdateDistributionRequest $request, Distribution $distribution)
+    {
         // get all request from frontsite
         $data = $request->all();
 
@@ -230,15 +242,15 @@ class DistributionController extends Controller {
         $path_file = $distribution['file'];
 
         // upload process here
-        if($request->hasFile('file')) {
+        if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename.'.'.$extension;
+            $fullname = $basename . '.' . $extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-distribution', $fullname);
             // hapus file
-            if($path_file != null || $path_file != '') {
+            if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
             }
         } else {
@@ -259,14 +271,15 @@ class DistributionController extends Controller {
      * @param  \App\Models\Network\Distribution\Distribution $distribution
      * @return \Illuminate\Http\Response
      */
-    public function destroy_asset($id) {
+    public function destroy_asset($id)
+    {
 
         $distributionAssetId = decrypt($id);
 
         // Find the distribution asset
         $distributionAsset = DistributionAsset::find($distributionAssetId);
 
-        if(!$distributionAsset) {
+        if (! $distributionAsset) {
             // Handle the case where the distribution asset is not found
             // ...
             alert()->error('Error', 'Distribution Asset not found.');
@@ -287,12 +300,12 @@ class DistributionController extends Controller {
         // Check if there's only one distribution asset remaining
         $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
 
-        if($remainingDistributionAssets->count() === 0) {
+        if ($remainingDistributionAssets->count() === 0) {
             // cari old photo
             $path_file = $distributionId['file'];
 
             // hapus file
-            if($path_file != null || $path_file != '') {
+            if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
             }
 
@@ -326,8 +339,9 @@ class DistributionController extends Controller {
     //     return back();
     // }
 
-    public function form_upload(Request $request) {
-        if($request->ajax()) {
+    public function form_upload(Request $request)
+    {
+        if ($request->ajax()) {
             $id = $request->id;
             $barang = Barang::where('stats', '1')->get();
             $row = Distribution::find($id);
@@ -344,7 +358,8 @@ class DistributionController extends Controller {
         }
     }
 
-    public function upload_file(Request $request) {
+    public function upload_file(Request $request)
+    {
         // Validation rules
         $rules = [
             'asset_id' => ['required',
@@ -365,7 +380,7 @@ class DistributionController extends Controller {
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -385,8 +400,9 @@ class DistributionController extends Controller {
         return redirect()->route('backsite.distribution.edit', $distribution);
     }
 
-    public function show_file(Request $request) {
-        if($request->ajax()) {
+    public function show_file(Request $request)
+    {
+        if ($request->ajax()) {
             $id = $request->id;
 
             $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
@@ -402,13 +418,14 @@ class DistributionController extends Controller {
         }
     }
 
-    public function delete_file(Request $request) {
+    public function delete_file(Request $request)
+    {
         $distributionAssetId = $request->id;
 
         // Find the distribution asset
         $distributionAsset = DistributionAsset::find($distributionAssetId);
 
-        if(!$distributionAsset) {
+        if (! $distributionAsset) {
             // Handle the case where the distribution asset is not found
             // ...
             alert()->error('Error', 'Distribution Asset not found.');
@@ -430,7 +447,7 @@ class DistributionController extends Controller {
         // Check if there's only one distribution asset remaining
         $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
 
-        if($remainingDistributionAssets->count() === 0) {
+        if ($remainingDistributionAssets->count() === 0) {
             // Delete the distribution
             Distribution::where('id', $distributionId)->delete();
 
@@ -442,7 +459,8 @@ class DistributionController extends Controller {
         return back();
     }
 
-    public function goods($distributionId) {
+    public function goods($distributionId)
+    {
 
         $distribution = Distribution::findOfail($distributionId);
         $goods = $distribution->goods()->select('goods.id', 'goods.name')->get();

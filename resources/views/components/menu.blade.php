@@ -27,119 +27,160 @@
             class="menu-title danger" data-i18n="Lokasi"> <strong>Master Data </strong></span></a>
         <ul class="menu-content">
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.user.index') }}">
-              <i></i><span>User Aplikasi</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+          <li class=" nav-item"><a href="#"><i
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                class="menu-title" data-i18n="Lokasi"> <strong>User</strong></span></a>
+            <ul class="menu-content">
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.user.index') }}">
+                  <i></i><span>User Aplikasi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
 
-          {{-- @can('location_detail') --}}
-          <li
-            class="{{ request()->is('backsite/employee') || request()->is('backsite/employee/*') || request()->is('backsite/*/employee') || request()->is('backsite/*/employee/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.employee.index') }}">
-              <i></i><span>User PC</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
+              {{-- @can('location_detail') --}}
+              <li
+                class="{{ request()->is('backsite/employee') || request()->is('backsite/employee/*') || request()->is('backsite/*/employee') || request()->is('backsite/*/employee/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.employee.index') }}">
+                  <i></i><span>User PC</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+            </ul>
 
-          {{-- @can('location_detail') --}}
-          <li
+            {{-- @can('location_detail') --}}
+            {{-- <li
             class="{{ request()->is('backsite/device_pc') || request()->is('backsite/device_pc/*') || request()->is('backsite/*/device_pc') || request()->is('backsite/*/device_pc/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.device_pc.index') }}">
               <i></i><span>PC</span>
             </a>
-          </li>
-          {{-- @endcan --}}
+          </li> --}}
+            {{-- @endcan --}}
 
-          {{-- @can('location') --}}
+          <li class=" nav-item"><a href="#"><i
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                class="menu-title" data-i18n="Lokasi"> <strong>Divisi</strong></span></a>
+            <ul class="menu-content">
+
+              {{-- @can('location_sub') --}}
+              <li
+                class="{{ request()->is('backsite/division') || request()->is('backsite/division/*') || request()->is('backsite/*/division') || request()->is('backsite/*/division/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.division.index') }}">
+                  <i></i><span>Divisi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_sub') --}}
+              <li
+                class="{{ request()->is('backsite/department') || request()->is('backsite/department/*') || request()->is('backsite/*/department') || request()->is('backsite/*/department/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.department.index') }}">
+                  <i></i><span>Departemen</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_sub') --}}
+              <li
+                class="{{ request()->is('backsite/section') || request()->is('backsite/section/*') || request()->is('backsite/*/section') || request()->is('backsite/*/section/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.section.index') }}">
+                  <i></i><span>Seksi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+            </ul>
+
+          <li class=" nav-item"><a href="#"><i
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                class="menu-title" data-i18n="Lokasi"> <strong>PC </strong></span></a>
+            <ul class="menu-content">
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/motherboard') || request()->is('backsite/motherboard/*') || request()->is('backsite/*/motherboard') || request()->is('backsite/*/motherboard/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.motherboard.index') }}">
+                  <i></i><span>Motherboard</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/processor') || request()->is('backsite/processor/*') || request()->is('backsite/*/processor') || request()->is('backsite/*/processor/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.processor.index') }}">
+                  <i></i><span>Processor</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/ram') || request()->is('backsite/ram/*') || request()->is('backsite/*/ram') || request()->is('backsite/*/ram/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.ram.index') }}">
+                  <i></i><span>RAM</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/hardisk') || request()->is('backsite/hardisk/*') || request()->is('backsite/*/hardisk') || request()->is('backsite/*/hardisk/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.hardisk.index') }}">
+                  <i></i><span>Hardisk</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/monitor') || request()->is('backsite/monitor/*') || request()->is('backsite/*/monitor') || request()->is('backsite/*/monitor/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.monitor.index') }}">
+                  <i></i><span>Monitor</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+            </ul>
+
+          <li class=" nav-item"><a href="#"><i
+                class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                class="menu-title" data-i18n="Lokasi"><strong>Lokasi</strong></span></a>
+            <ul class="menu-content">
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location.index') }}">
+                  <i></i><span>Lokasi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_sub.index') }}">
+                  <i></i><span>Sub Lokasi</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+
+              {{-- @can('location_room') --}}
+              <li
+                class="{{ request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'active' : '' }} ">
+                <a class="menu-item" href="{{ route('backsite.location_room.index') }}">
+                  <i></i><span>Ruangan</span>
+                </a>
+              </li>
+              {{-- @endcan --}}
+            </ul>
+
+            {{-- @can('location') --}}
           <li
             class="{{ request()->is('backsite/jobdesk') || request()->is('backsite/jobdesk/*') || request()->is('backsite/*/jobdesk') || request()->is('backsite/*/jobdesk/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.jobdesk.index') }}">
               <i></i><span>Jobdesk</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_sub') --}}
-          <li
-            class="{{ request()->is('backsite/division') || request()->is('backsite/division/*') || request()->is('backsite/*/division') || request()->is('backsite/*/division/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.division.index') }}">
-              <i></i><span>Divisi</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/motherboard') || request()->is('backsite/motherboard/*') || request()->is('backsite/*/motherboard') || request()->is('backsite/*/motherboard/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.motherboard.index') }}">
-              <i></i><span>Motherboard</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/processor') || request()->is('backsite/processor/*') || request()->is('backsite/*/processor') || request()->is('backsite/*/processor/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.processor.index') }}">
-              <i></i><span>Processor</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/ram') || request()->is('backsite/ram/*') || request()->is('backsite/*/ram') || request()->is('backsite/*/ram/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.ram.index') }}">
-              <i></i><span>RAM</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/hardisk') || request()->is('backsite/hardisk/*') || request()->is('backsite/*/hardisk') || request()->is('backsite/*/hardisk/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.hardisk.index') }}">
-              <i></i><span>Hardisk</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/monitor') || request()->is('backsite/monitor/*') || request()->is('backsite/*/monitor') || request()->is('backsite/*/monitor/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.monitor.index') }}">
-              <i></i><span>Monitor</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location.index') }}">
-              <i></i><span>Lokasi</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_sub.index') }}">
-              <i></i><span>Sub Lokasi</span>
-            </a>
-          </li>
-          {{-- @endcan --}}
-
-          {{-- @can('location_room') --}}
-          <li
-            class="{{ request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_room.index') }}">
-              <i></i><span>Ruangan</span>
             </a>
           </li>
           {{-- @endcan --}}
@@ -157,7 +198,7 @@
           <li
             class="{{ request()->is('backsite/information') || request()->is('backsite/information/*') || request()->is('backsite/*/information') || request()->is('backsite/*/information/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.information.index') }}">
-              <i></i><span>Informasi </span>
+              <i></i><span>Informasi</span>
             </a>
           </li>
           {{-- @endcan --}}
@@ -307,7 +348,7 @@
 
               {{-- @can('location_detail') --}}
               <li
-                class="{{ request()->is('backsite/drc-backup') || request()->is('backsite/drc-backup/*') || request()->is('backsite/*/drc-backup') || request()->is('backsite/*/drc-backup/*') ? 'active' : '' }} ">
+                class="{{ request()->is('backsite/drc') || request()->is('backsite/drc/*') || request()->is('backsite/*/drc') || request()->is('backsite/*/drc/*') ? 'active' : '' }} ">
                 <a class="menu-item" href="{{ route('backsite.drc.index') }}">
                   <i></i><span>DRC & Back Up</span>
                 </a>
@@ -533,9 +574,9 @@
       {{-- END TPT --}}
 
       {{-- Link Aplikasi --}}
-      <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
-            class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-share-alt bx-flashing' : 'la la-share-alt' }}"></i><span
-            class="menu-title pink" data-i18n="Software"><strong>Link Aplikasi</strong></span></a> </li>
+      <li class=" nav-item"><a href="{{ route('backsite.application.app_link') }}"><i
+            class="{{ request()->is('backsite/application.app_link') || request()->is('backsite/application.app_link/*') || request()->is('backsite/*/application.app_link') || request()->is('backsite/*/application.app_link/*') ? 'la la-share-alt bx-flashing' : 'la la-share-alt' }}"></i><span
+            class="menu-title pink" data-i18n="application.app_link"><strong>Link Aplikasi</strong></span></a> </li>
       {{-- END Link Aplikasi --}}
 
       {{-- Kegiatan Harian --}}
@@ -544,20 +585,20 @@
             class="menu-title cyan" data-i18n="Aktivitas Harian"><strong>Aktivitas
               Harian</strong></span></a>
         <ul class="menu-content">
-      </li>
-      {{-- @can('location_detail') --}}
-      <li
-        class="{{ request()->is('backsite/act_daily') || request()->is('backsite/act_daily/*') || request()->is('backsite/*/act_daily') || request()->is('backsite/*/act_daily/*') ? 'active' : '' }} ">
-        <a class="menu-item" href="{{ route('backsite.act_daily.index') }}">
-          <i></i><span>Daily Activity</span>
-        </a>
-      </li>
-      {{-- @can('location_detail') --}}
-      <li
-        class="{{ request()->is('backsite/workcat') || request()->is('backsite/workcat/*') || request()->is('backsite/*/workcat') || request()->is('backsite/*/workcat/*') ? 'active' : '' }} ">
-        <a class="menu-item" href="{{ route('backsite.workcat.index') }}">
-          <i></i><span>Jenis Pekerjaan</span>
-        </a>
+          {{-- @can('location_detail') --}}
+          <li
+            class="{{ request()->is('backsite/act_daily') || request()->is('backsite/act_daily/*') || request()->is('backsite/*/act_daily') || request()->is('backsite/*/act_daily/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.act_daily.index') }}">
+              <i></i><span>Daily Activity</span>
+            </a>
+          </li>
+          {{-- @can('location_detail') --}}
+          <li
+            class="{{ request()->is('backsite/workcat') || request()->is('backsite/workcat/*') || request()->is('backsite/*/workcat') || request()->is('backsite/*/workcat/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.workcat.index') }}">
+              <i></i><span>Jenis Pekerjaan</span>
+            </a>
+          </li>
       </li>
     </ul>
 

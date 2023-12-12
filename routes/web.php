@@ -218,7 +218,6 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('lendingfacility', LendingFacilityController::class);
-    // Route::put('/lendingfacility/returning_update', [LendingFacilityController::class, 'returning_update'])->name('lendingfacility.returning_update');
 
     Route::controller(LendingFacilityController::class)->group(function () {
         // Route::put('/lendingfacility/returning_update/{id}', 'returning_update')->name('lendingfacility.returning_update');
@@ -287,6 +286,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('application', ApplicationController::class);
+    Route::get('/app_link', [ApplicationController::class, 'app_link'])->name('application.app_link');
 
     Route::controller(ApplicationController::class)->group(function () {
         Route::post('/application/form_upload_note', 'form_upload_note')->name('application.form_upload_note');
