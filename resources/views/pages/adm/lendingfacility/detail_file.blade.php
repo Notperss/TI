@@ -48,12 +48,14 @@
               {{-- <a class="dropdown-item" href="{{ route('backsite.pp.edit', encrypt($file->id)) }}">
                 Edit
               </a> --}}
-              <form action="{{ route('backsite.pp.hapus_file', $file->id) }}" method="POST"
-                onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
-                <input type="hidden" name="_method" value="DELETE">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="submit" class="btn"value="Delete">
-              </form>
+              {{-- @if ($file->lending_facility->stats == 1)
+                <form action="{{ route('backsite.pp.hapus_file', $file->id) }}" method="POST"
+                  onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <input type="submit" class="btn"value="Delete">
+                </form>
+              @endif --}}
             </div>
           </div>
         </td>

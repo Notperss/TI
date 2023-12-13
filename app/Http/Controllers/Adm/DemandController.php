@@ -12,18 +12,20 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Adm\Demand\StoreDemandRequest;
 use App\Http\Requests\Adm\Demand\UpdateDemandRequest;
 
-class DemandController extends Controller
-{
+class DemandController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $demand = Demand::orderby('created_at', 'desc');
+
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $demand = $demand->whereBetween('date_demand', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($demand)
                 ->addIndexColumn()
@@ -33,18 +35,18 @@ class DemandController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.demand.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.demand.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.demand.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="'.route('backsite.demand.edit', encrypt($item->id)).'">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.demand.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.demand.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
@@ -54,7 +56,7 @@ class DemandController extends Controller
                     return Carbon::parse($item->date_demand)->translatedFormat('l, d F Y');
                 })
                 ->editColumn('date_pj', function ($item) {
-                    if ($item->date_pj) {
+                    if($item->date_pj) {
                         return '<span>Selesai</span>';
                     } else {
                         return '<span>Proccess</span>';
@@ -72,8 +74,7 @@ class DemandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         // $user = User::where(['name', '!=', 'Administrator'],[DetailUser::where('status','1')])->orderBy('name', 'asc')->get();
         return view('pages.adm.demand.create');
     }
@@ -84,27 +85,26 @@ class DemandController extends Controller
      * @param  \App\Http\Requests\Adm\Demand\StoreDemandRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDemandRequest $request)
-    {
+    public function store(StoreDemandRequest $request) {
         // get all request from frontsite
         $data = $request->all();
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-demand', $fullname);
         }
         // upload process here
-        if ($request->hasFile('file_pj')) {
+        if($request->hasFile('file_pj')) {
             $files = $request->file('file_pj');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file_pj'] = $request->file('file_pj')->storeAs('assets/file-demand', $fullname);
         }
 
@@ -121,8 +121,7 @@ class DemandController extends Controller
      * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $demand = Demand::find($decrypt_id);
 
@@ -136,8 +135,7 @@ class DemandController extends Controller
      * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $decrypt_id = decrypt($id);
         $demand = Demand::find($decrypt_id);
         $filepath = storage_path($demand->file);
@@ -154,8 +152,7 @@ class DemandController extends Controller
      * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDemandRequest $request, Demand $demand)
-    {
+    public function update(UpdateDemandRequest $request, Demand $demand) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -164,15 +161,15 @@ class DemandController extends Controller
         $path_file_pj = $demand['file_pj'];
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-demand', $fullname);
             // hapus file
-            if ($path_file != null || $path_file != '') {
+            if($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
             }
         } else {
@@ -180,15 +177,15 @@ class DemandController extends Controller
         }
 
         // upload process here
-        if ($request->hasFile('file_pj')) {
+        if($request->hasFile('file_pj')) {
             $files = $request->file('file_pj');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file_pj'] = $request->file('file_pj')->storeAs('assets/file-demand', $fullname);
             // hapus file
-            if ($path_file_pj != null || $path_file_pj != '') {
+            if($path_file_pj != null || $path_file_pj != '') {
                 Storage::delete($path_file_pj);
             }
         } else {
@@ -209,8 +206,7 @@ class DemandController extends Controller
      * @param  \App\Models\Adm\Demand  $demand
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $demand = Demand::find($decrypt_id);
@@ -220,10 +216,10 @@ class DemandController extends Controller
         $path_file_pj = $demand['file_pj'];
 
         // hapus file
-        if ($path_file != null || $path_file != '') {
+        if($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
-        if ($path_file_pj != null || $path_file_pj != '') {
+        if($path_file_pj != null || $path_file_pj != '') {
             Storage::delete($path_file_pj);
         }
 

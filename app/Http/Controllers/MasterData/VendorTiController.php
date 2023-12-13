@@ -3,21 +3,48 @@
 namespace App\Http\Controllers\MasterData;
 
 use App\Models\VendorTi;
+use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVendorTiRequest;
 use App\Http\Requests\UpdateVendorTiRequest;
 
-class VendorTiController extends Controller
-{
+class VendorTiController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $vendorti = VendorTi::orderBy('created_at', 'desc')->get();
-        return view('pages.master-data.vendorti.index', compact('vendorti'));
+    public function index() {
+        if(request()->ajax()) {
+
+            $vendorti = VendorTi::orderBy('created_at', 'desc')->get();
+
+            return DataTables::of($vendorti)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a class="dropdown-item" href="'.route('backsite.vendor_ti.edit', encrypt($item->id)).'">
+                        Edit
+                    </a>
+                    <form action="'.route('backsite.vendor_ti.destroy', encrypt($item->id)).'" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        '.method_field('delete').csrf_field().'
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+            </div>
+                ';
+                })
+                ->rawColumns(['action',])
+                ->toJson();
+        }
+
+        return view('pages.master-data.vendorti.index');
     }
 
     /**
@@ -25,8 +52,7 @@ class VendorTiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('pages.master-data.vendorti.create');
     }
 
@@ -36,8 +62,7 @@ class VendorTiController extends Controller
      * @param  \App\Http\Requests\StoreVendorTiRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreVendorTiRequest $request)
-    {
+    public function store(StoreVendorTiRequest $request) {
         $data = $request->all();
 
         VendorTi::create($data);
@@ -53,8 +78,7 @@ class VendorTiController extends Controller
      * @param  \App\Models\VendorTi  $vendorTi
      * @return \Illuminate\Http\Response
      */
-    public function show(VendorTi $vendorTi)
-    {
+    public function show(VendorTi $vendorTi) {
         //
     }
 
@@ -64,8 +88,7 @@ class VendorTiController extends Controller
      * @param  \App\Models\VendorTi  $vendorTi
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $decrypt_id = decrypt($id);
         $vendorti = vendorti::find($decrypt_id);
         return view('pages.master-data.vendorti.edit', compact('vendorti'));
@@ -78,8 +101,7 @@ class VendorTiController extends Controller
      * @param  \App\Models\VendorTi  $vendorTi
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateVendorTiRequest $request, VendorTi $vendorTi)
-    {
+    public function update(UpdateVendorTiRequest $request, VendorTi $vendorTi) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -97,8 +119,7 @@ class VendorTiController extends Controller
      * @param  \App\Models\VendorTi  $vendorTi
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $decrypt_id = decrypt($id);
         $vendorti = VendorTi::find($decrypt_id);
 

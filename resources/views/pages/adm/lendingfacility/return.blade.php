@@ -16,20 +16,22 @@
                 <div class="card-header bg-success">
                   <h4 class="card-title text-white">Edit Data Peminjaman</h4>
                 </div>
-                <form class="form" action="{{ route('backsite.lendingfacility.update', $lendingfacility->id) }}"
-                  method="POST" enctype="multipart/form-data">
+                <form class="form"
+                  action="{{ route('backsite.lendingfacility.returning_update', $lendingfacility->id) }}" method="POST"
+                  enctype="multipart/form-data">
                   @csrf
                   @method('PUT')
                   <div class="form-body container">
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
+                    <input type="hidden" value='2' name="stats" id="stats">
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="borrower">Peminjam<code
                           style="color:red;">*</code></label>
                       <div class="col-md-5">
                         <input type="text" class="form-control" id="borrower" name="borrower"
-                          value="{{ old('borrower', $lendingfacility->borrower) }}" required>
+                          value="{{ old('borrower', $lendingfacility->borrower) }}" readonly required>
                         </select>
                         @if ($errors->has('borrower'))
                           <p style="font-style: bold; color: red;">
@@ -42,7 +44,7 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-5">
                         <input type="date" class="form-control" id="date_lend" name="date_lend"
-                          value="{{ old('date_lend', $lendingfacility->date_lend) }}" required>
+                          value="{{ old('date_lend', $lendingfacility->date_lend) }}" readonly required>
                         </select>
                         @if ($errors->has('date_lend'))
                           <p style="font-style: bold; color: red;">
@@ -57,7 +59,7 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-10">
                         <input type="text" class="form-control" id="description" name="description"
-                          value="{{ old('description', $lendingfacility->description) }}" required>
+                          value="{{ old('description', $lendingfacility->description) }}" readonly required>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>
@@ -73,9 +75,9 @@
                 </form>
 
                 <div class="form-group row">
-                  <div class="col-md-4">
-                    <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah Item"
-                      onclick="upload({{ $lendingfacility->id }})"><i class="bx bx-file"></i>
+                  {{-- <div class="col-md-4">
+                     <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah Item"
+                     onclick="upload({{ $lendingfacility->id }})"><i class="bx bx-file"></i>
                       Tambah Item</button>
                     @if ($errors->any())
                       <div class="alert alert-danger">
@@ -86,7 +88,7 @@
                         </ul>
                       </div>
                     @endif
-                  </div>
+                  </div> --}}
                   <div class="table-responsive col-md-12">
                     <table class="table table-striped table-bordered default-table activity-table mb-4" aria-label="">
                       <thead>
@@ -96,7 +98,7 @@
                           <th class="text-center">Category</th>
                           <th class="text-center">Barcode</th>
                           <th class="text-center">Gambar</th>
-                          <th style="text-align:center; width:10px;">Action</th>
+                          {{-- <th style="text-align:center; width:10px;">Action</th> --}}
                         </tr>
                       </thead>
                       @forelse ($lending_goods as $lends)
@@ -112,7 +114,7 @@
                             </a> <a type="button" href="{{ asset('storage/' . $lends->barang->file) }}"
                               class="btn btn-warning btn-sm text-white" download>Unduh</a>
                           </td>
-                          <td class="text-center">
+                          {{-- <td class="text-center">
                             <div class="btn-group">
                               <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">Action</button>
@@ -125,13 +127,13 @@
                                 </form>
                               </div>
                             </div>
-                          </td>
+                          </td> --}}
                         </tbody>
                       @empty
                         <td class="text-center" colspan="6">No data available in table</td>
                       @endforelse
                     </table>
-                    {{-- <div class="form-group row">
+                    <div class="form-group row">
                       <label for="date_return" class="col-md-2 label-control">Tanggal Kembali</label>
                       <div class="col-md-5">
                         <input type="date" class="form-control" id="date_return" name="date_return"
@@ -152,7 +154,7 @@
                             {{ $errors->first('note') }}</p>
                         @endif
                       </div>
-                    </div> --}}
+                    </div>
                   </div>
                 </div>
                 <div class="form-actions ">

@@ -11,14 +11,14 @@
     </td>
   </tr>
   <tr>
+    <th>Keterangan</th>
+    <td>{{ isset($lendingfacility->description) ? $lendingfacility->description : 'N/A' }}</td>
+  </tr>
+  <tr>
     <th>Tanggal Kembali</th>
     <td>
       {{ isset($lendingfacility->date_return) ? Carbon\Carbon::parse($lendingfacility->date_return)->translatedFormat('l, d F Y') : 'N/A' }}
     </td>
-  </tr>
-  <tr>
-    <th>Keterangan</th>
-    <td>{{ isset($lendingfacility->description) ? $lendingfacility->description : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Catatan</th>

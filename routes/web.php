@@ -220,6 +220,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('lendingfacility', LendingFacilityController::class);
 
     Route::controller(LendingFacilityController::class)->group(function () {
+        // Route::put('/lendingfacility/returning_update/{id}', 'returning_update')->name('lendingfacility.returning_update');
+        Route::put('/lendingfacility/returning_update/{lendingfacility}', 'returning_update')->name('lendingfacility.returning_update');
+        Route::get('/lendingfacility/{id}/returning', 'returning')->name('lendingfacility.returning');
         Route::post('/lendingfacility/form_upload', 'form_upload')->name('lendingfacility.form_upload');
         Route::post('/lendingfacility/upload', 'upload')->name('lendingfacility.upload');
         Route::post('/lendingfacility/show_file', 'show_file')->name('lendingfacility.show_file');
@@ -279,9 +282,11 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/distribution/upload_file', 'upload_file')->name('distribution.upload_file');
         Route::post('/distribution/show_file', 'show_file')->name('distribution.show_file');
         Route::delete('/distribution/{id}/delete_file', 'delete_file')->name('distribution.delete_file');
+        Route::delete('/distribution/{id}/destroy_asset', 'destroy_asset')->name('distribution.destroy_asset');
     });
 
     Route::resource('application', ApplicationController::class);
+    Route::get('/app_link', [ApplicationController::class, 'app_link'])->name('application.app_link');
 
     Route::controller(ApplicationController::class)->group(function () {
         Route::post('/application/form_upload_note', 'form_upload_note')->name('application.form_upload_note');

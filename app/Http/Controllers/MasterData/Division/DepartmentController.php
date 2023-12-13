@@ -35,7 +35,11 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return abort(404);
+        $division = Division::orderBy('name', 'asc')->get();
+        $department = Department::orderBy('created_at', 'asc')->get();
+
+        return view('pages.master-data.division.department.create', compact('division', 'department'));
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Act_daily;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -27,11 +28,15 @@ class ActDailyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
 
             $actdaily = ActDaily::with('work_type', 'detail_user.user')->orderby('start_date', 'desc');
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $actdaily = $actdaily->whereBetween('start_date', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($actdaily)
                 ->addIndexColumn()
@@ -60,8 +65,12 @@ class ActDailyController extends Controller
              </div>
 
                 ';
+                })->editColumn('start_date', function ($item) {
+                    return Carbon::parse($item->start_date)->translatedFormat('l, d F Y');
+                })->editColumn('finish_date', function ($item) {
+                    return Carbon::parse($item->finish_date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action',])
+                ->rawColumns(['action', 'start_date', 'finish_date'])
                 ->toJson();
         }
 

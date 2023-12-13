@@ -24,11 +24,15 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
 
             $application = Application::latest();
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $application = $application->whereBetween('date_finish', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($application)
                 ->addIndexColumn()
@@ -55,8 +59,8 @@ class ApplicationController extends Controller
             </div>
                 ';
                 })->editColumn('date_finish', function ($item) {
-                return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
-            })->rawColumns(['action', 'date_finish',])
+                    return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
+                })->rawColumns(['action', 'date_finish',])
                 ->toJson();
         }
         return view("pages.system-information.application.index");
@@ -346,6 +350,38 @@ class ApplicationController extends Controller
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
+    }
+
+    public function app_link(Request $request)
+    {
+        if (request()->ajax()) {
+
+            $application = Application::latest();
+
+            if ($request->filled('from_date') && $request->filled('to_date')) {
+                $application = $application->whereBetween('date_finish', [$request->from_date, $request->to_date]);
+            }
+
+            return DataTables::of($application)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    return '
+            <div class="btn-group">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.application.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data Aplikasi" class="dropdown-item">
+                        Show
+                    </a>
+            </div>
+                ';
+                })->editColumn('date_finish', function ($item) {
+                    return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
+                })->rawColumns(['action', 'date_finish',])
+                ->toJson();
+        }
+        return view("pages.system-information.application.index_link");
     }
 
 }

@@ -136,7 +136,7 @@
                   <div class="col-md-4">
                     <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1" title="Tambah file"
                       onclick="upload_file({{ $distribution->id }})"><i class="bx bx-file"></i>
-                      Tambah File</button>
+                      Tambah data asset</button>
                     @if ($errors->any())
                       <div class="alert alert-danger">
                         <ul>

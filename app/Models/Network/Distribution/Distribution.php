@@ -3,6 +3,7 @@
 namespace App\Models\Network\Distribution;
 
 use App\Models\ManagementAccess\DetailUser;
+use App\Models\MasterData\Goods\Barang;
 use App\Models\MasterData\Location\LocationRoom;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,5 +35,9 @@ class Distribution extends Model
     public function distribution_asset()
     {
         return $this->hasMany(DistributionAsset::class, 'distribution_id');
+    }
+    public function asset()
+    {
+        return $this->hasMany(Barang::class, 'id');
     }
 }

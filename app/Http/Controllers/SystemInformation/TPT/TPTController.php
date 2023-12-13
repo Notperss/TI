@@ -12,18 +12,20 @@ use App\Models\SystemInformation\TPT\TPT;
 use App\Http\Requests\SystemInformation\TPT\StoreTPTRequest;
 use App\Http\Requests\SystemInformation\TPT\UpdateTPTRequest;
 
-class TPTController extends Controller
-{
+class TPTController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $tpt = TPT::orderby('created_at', 'desc');
+
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $tpt = $tpt->whereBetween('date', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($tpt)
                 ->addIndexColumn()
@@ -33,42 +35,42 @@ class TPTController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.tpt.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.tpt.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.tpt.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.tpt.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.tpt.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.tpt.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
                 })->editColumn('file', function ($item) {
-                if ($item->file) {
-                    return '<a type="button" data-fancybox
-                                data-src="' . asset('storage/' . $item->file) . '"
+                    if($item->file) {
+                        return '<a type="button" data-fancybox
+                                data-src="'.asset('storage/'.$item->file).'"
                                 class="btn btn-info btn-sm text-white ">
                                 Lihat
                             </a>
-                            <a type="button" href="' . asset('storage/' . $item->file) . '"
+                            <a type="button" href="'.asset('storage/'.$item->file).'"
                                     class="btn btn-primary btn-sm" download>
                                     Unduh  
                             </a>
                                 ';
-                } else {
-                    return '
+                    } else {
+                        return '
                             <span>File not found</span>
                                 ';
-                }
-            })->editColumn('date', function ($item) {
-                return Carbon::parse($item->date)->translatedFormat('l, d F Y');
-            })
+                    }
+                })->editColumn('date', function ($item) {
+                    return Carbon::parse($item->date)->translatedFormat('l, d F Y');
+                })
                 ->rawColumns(['action', 'file', 'date'])
                 ->toJson();
         }
@@ -80,8 +82,7 @@ class TPTController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view("pages.system-information.tpt.create");
     }
 
@@ -91,17 +92,16 @@ class TPTController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTPTRequest $request)
-    {
+    public function store(StoreTPTRequest $request) {
         // get all request from frontsite
         $data = $request->all();
 
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-tpt', $fullname);
         }
 
@@ -118,8 +118,7 @@ class TPTController extends Controller
      * @param \App\Models\SystemInformation\TPT\TPT  $tpt
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $tpt = TPT::find($decrypt_id);
 
@@ -132,8 +131,7 @@ class TPTController extends Controller
      * @param  \App\Models\SystemInformation\TPT\TPT  $tpt
      * @return \Illuminate\Http\Response
      */
-    public function edit(TPT $tpt)
-    {
+    public function edit(TPT $tpt) {
         $tpt = TPT::findOrFail($tpt->id);
         return view('pages.system-information.tpt.edit', compact('tpt'));
     }
@@ -145,23 +143,22 @@ class TPTController extends Controller
      * @param  \App\Models\SystemInformation\TPT\TPT  $tpt
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTPTRequest $request, TPT $tpt)
-    {
+    public function update(UpdateTPTRequest $request, TPT $tpt) {
         // get all request from frontsite
         $data = $request->all();
 
         $path_file = $tpt['file'];
 
         // upload process here
-        if ($request->hasFile('file')) {
+        if($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-tpt', $fullname);
             // hapus file
-            if ($path_file != null || $path_file != '') {
+            if($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
             }
         } else {
@@ -181,8 +178,7 @@ class TPTController extends Controller
      * @param  \App\Models\SystemInformation\TPT\TPT  $tpt
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $tpt = TPT::find($decrypt_id);

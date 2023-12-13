@@ -14,18 +14,20 @@ use App\Models\SystemInformation\Antivirus\AntivirusFile;
 use App\Http\Requests\SystemInformation\Antivirus\StoreAntivirusRequest;
 use App\Http\Requests\SystemInformation\Antivirus\UpdateAntivirusRequest;
 
-class AntivirusController extends Controller
-{
+class AntivirusController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if (request()->ajax()) {
+    public function index(Request $request) {
+        if(request()->ajax()) {
 
             $antivirus = Antivirus::orderby('created_at', 'desc');
+
+            if($request->filled('from_date') && $request->filled('to_date')) {
+                $antivirus = $antivirus->whereBetween('date_start', [$request->from_date, $request->to_date]);
+            }
 
             return DataTables::of($antivirus)
                 ->addIndexColumn()
@@ -35,27 +37,27 @@ class AntivirusController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.antivirus.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.antivirus.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Lisensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.antivirus.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.antivirus.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.antivirus.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.antivirus.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
                 ';
                 })->editColumn('date_finish', function ($item) {
-                return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
-            })->editColumn('date_start', function ($item) {
-                return Carbon::parse($item->date_start)->translatedFormat('l, d F Y');
-            })->rawColumns(['action', 'date_finish', 'date_start'])
+                    return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
+                })->editColumn('date_start', function ($item) {
+                    return Carbon::parse($item->date_start)->translatedFormat('l, d F Y');
+                })->rawColumns(['action', 'date_finish', 'date_start'])
                 ->toJson();
         }
         return view("pages.system-information.antivirus.index");
@@ -66,8 +68,7 @@ class AntivirusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
 
         return view("pages.system-information.antivirus.create");
     }
@@ -78,8 +79,7 @@ class AntivirusController extends Controller
      * @param  \App\Http\Requests\SystemInformation\Antivirus\StoreAntivirusRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAntivirusRequest $request)
-    {
+    public function store(StoreAntivirusRequest $request) {
         // get all request from frontsite
         $data = $request->all();
         // dd($data);
@@ -99,8 +99,7 @@ class AntivirusController extends Controller
      * @param  \App\Models\SystemInformation\Antivirus\Antivirus  $antivirus
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $decrypt_id = decrypt($id);
         $antivirus = Antivirus::find($decrypt_id);
 
@@ -113,8 +112,7 @@ class AntivirusController extends Controller
      * @param  \App\Models\SystemInformation\Antivirus\Antivirus  $antivirus
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $antivirus = Antivirus::find($id);
         $files = AntivirusFile::where('antivirus_id', $id)->orderBy('created_at', 'desc')->get();
         return view('pages.system-information.antivirus.edit', compact('antivirus', 'files'));
@@ -127,8 +125,7 @@ class AntivirusController extends Controller
      * @param  \App\Models\SystemInformation\Antivirus\Antivirus  $antivirus
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAntivirusRequest $request, $id)
-    {
+    public function update(UpdateAntivirusRequest $request, $id) {
         // get all request from frontsite
         $data = $request->all();
 
@@ -146,8 +143,7 @@ class AntivirusController extends Controller
      * @param  \App\Models\SystemInformation\Antivirus\Antivirus  $antivirus
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $antivirus = Antivirus::find($decrypt_id);
@@ -156,8 +152,8 @@ class AntivirusController extends Controller
 
         $note = AntivirusFile::where('antivirus_id', $decrypt_id)->get();
         // hapus file
-        foreach ($note as $file) {
-            if ($file->file != null || $file->file != '') {
+        foreach($note as $file) {
+            if($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
         }
@@ -169,9 +165,8 @@ class AntivirusController extends Controller
     }
 
     // get form upload note
-    public function form_upload(Request $request)
-    {
-        if ($request->ajax()) {
+    public function form_upload(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $row = Antivirus::find($id);
@@ -187,8 +182,7 @@ class AntivirusController extends Controller
         }
     }
 
-    public function upload(Request $request)
-    {
+    public function upload(Request $request) {
         // Validation rules
         $rules = [
             'note' => ['required'], // Add any other rules you need
@@ -206,7 +200,7 @@ class AntivirusController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -214,12 +208,12 @@ class AntivirusController extends Controller
 
         // If validation passes, proceed with your original logic
         $antivirus = Antivirus::find($request->id);
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
+        if($request->hasFile('file')) {
+            foreach($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-antivirus-file', $fullname);
             }
         }
@@ -235,9 +229,8 @@ class AntivirusController extends Controller
     }
 
     // get show_file software
-    public function show_file(Request $request)
-    {
-        if ($request->ajax()) {
+    public function show_file(Request $request) {
+        if($request->ajax()) {
             $id = $request->id;
 
             $antivirusfile = AntivirusFile::where('antivirus_id', $id)->get();
@@ -254,8 +247,7 @@ class AntivirusController extends Controller
     }
 
     // hapus file note
-    public function delete_file($id)
-    {
+    public function delete_file($id) {
         $antivirusFile = AntivirusFile::find($id);
         $antivirusFile->delete();
 

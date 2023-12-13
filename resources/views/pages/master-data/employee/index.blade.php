@@ -82,7 +82,7 @@
                         <thead>
                           <tr>
                             <th style="text-align:center; width:20px;">No</th>
-                            <th class="text-center">Nip</th>
+                            <th class="text-center">NIK</th>
                             <th class="text-center">Nama</th>
                             <th class="text-center">Jabatan</th>
                             <th class="text-center">Divisi</th>

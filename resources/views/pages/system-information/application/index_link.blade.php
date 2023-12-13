@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Aplikasi')
+@section('title', 'Link Aplikasi')
 
 @section('content')
 
@@ -28,29 +28,16 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">Aplikasi</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Link Aplikasi</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">Aplikasi</li>
+                <li class="breadcrumb-item active">Link Aplikasi</li>
               </ol>
             </div>
           </div>
         </div>
-      </div>
-
-      {{-- add card --}}
-      <div class="content-body">
-        <section id="add-home">
-          <div class="row">
-            <div class="col-12">
-
-              <a href="{{ route('backsite.application.create') }}" class="btn btn-success col-2 mb-2">
-                Tambah Data Aplikasi</a>
-            </div>
-          </div>
-        </section>
       </div>
 
       {{-- table card --}}
@@ -61,11 +48,9 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">List Aplikasi</h4>
-                  <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                  <h4 class="card-title">List Application</h4>
                 </div>
                 <div class="card-body card-dashboard">
-
                   <div class="col col-5 mb-1">
                     <div id="daterange-container" class="float-end" style="display: none;">
                       <div id="daterange"
@@ -85,9 +70,9 @@
                         <tr>
                           <th>No</th>
                           <th>Nama Aplikasi</th>
-                          <th>User</th>
-                          <th>Pembuat</th>
-                          <th>Tanggal Selesai</th>
+                          <th>Link Aplikasi</th>
+                          <th>Catatan</th>
+                          <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -96,9 +81,9 @@
                       <tfoot hidden>
                         <th>No</th>
                         <th>Nama Aplikasi</th>
-                        <th>User</th>
-                        <th>Pembuat</th>
-                        <th>Tanggal Selesai</th>
+                        <th>Tanggal</th>
+                        <th>Catatan</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tfoot>
                     </table>
@@ -113,7 +98,6 @@
 
   </div>
   </div>
-  <div class="viewmodal" style="display: none;"></div>
   <!-- END: Content-->
 @endsection
 @push('after-style')
@@ -123,7 +107,6 @@
   <script></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
   <script>
     var dateFilterActive = false; // Variable to track whether date filter is active
 
@@ -157,7 +140,7 @@
         },
       ],
       ajax: {
-        url: "{{ route('backsite.application.index') }}",
+        url: "{{ route('backsite.application.app_link') }}",
         data: function(data) {
           if (dateFilterActive) {
             data.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD');
@@ -177,16 +160,27 @@
           name: 'name_app',
         },
         {
-          data: 'user',
-          name: 'user',
+          data: 'path_app',
+          name: 'path_app',
         },
         {
-          data: 'creator',
-          name: 'creator',
+          data: 'description',
+          name: 'description',
         },
         {
-          data: 'date_finish',
-          name: 'date_finish',
+          data: 'stats',
+          name: 'stats',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<h5><span class="badge bg-info">Aktif</span></h5>';
+            } else if (data === '2') {
+              return '<h5><span class="badge bg-danger">Tidak Aktif</span></h5>';
+            } else {
+              return '-';
+            }
+          },
         },
         {
           data: 'action',
@@ -286,7 +280,7 @@
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" style="width:90%" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title"></h5>

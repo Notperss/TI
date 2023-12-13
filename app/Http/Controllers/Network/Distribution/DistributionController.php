@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Network\Distribution;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -26,14 +27,29 @@ class DistributionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
             $distribution = DistributionAsset::
-                with('distribution.detail_user.user', 'asset', 'distribution.location_room', )
+                with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution')
                 ->orderby('created_at', 'desc');
+
+            // if($request->filled('from_date') && $request->filled('to_date')) {
+            //     $distribution = $distribution->whereBetween('created_at', [$request->from_date, $request->to_date]);
+            // }
+            if ($request->has('from_date') && $request->has('to_date')) {
+                $distribution->whereHas('distribution', function ($query) use ($request) {
+                    $query->whereBetween('date', [
+                        $request->input('from_date'),
+                        $request->input('to_date'),
+                    ]);
+                });
+            }
+            // if($request->filled('daterange') && $request->filled('end_date')) {
+            //     $distribution = $distribution->whereBetween('created_at', [$request->daterange, $request->end_date]);
+            // }
             return DataTables::of($distribution)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
@@ -42,14 +58,14 @@ class DistributionController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.distribution.show', encrypt($item->distribution->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data IP Phone" class="dropdown-item">
+                  <a href="#mymodal" data-remote="' . route('backsite.distribution.show', encrypt($item->distribution->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.distribution.edit', $item->distribution->id) . '">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.distribution.destroy', encrypt($item->distribution->id)) . '" method="POST"
+                    <form action="' . route('backsite.distribution.destroy_asset', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
@@ -59,20 +75,22 @@ class DistributionController extends Controller
             </div>
                 ';
                 })->editColumn('asset.barcode', function ($item) {
-                if ($item->asset_id) {
-                    return $item->asset->barcode;
-                } else {
-                    return '<span>{ Data Empty }</span>';
-                }
-            })->editColumn('asset.name', function ($item) {
-                if ($item->asset_id) {
-                    return $item->asset->name;
-                } else {
-                    return '<span>{ Data Empty }</span>';
-                }
-            })
+                    if ($item->asset_id) {
+                        return $item->asset->barcode;
+                    } else {
+                        return '<span>{ Data Empty }</span>';
+                    }
+                })->editColumn('asset.name', function ($item) {
+                    if ($item->asset_id) {
+                        return $item->asset->name;
+                    } else {
+                        return '<span>{ Data Empty }</span>';
+                    }
+                })->editColumn('distribution.date', function ($item) {
+                    return Carbon::parse($item->distribution->date)->translatedFormat('l, d F Y');
+                })
 
-                ->rawColumns(['asset.barcode', 'action', 'asset.name'])
+                ->rawColumns(['asset.barcode', 'action', 'asset.name', 'distribution.date'])
                 ->toJson();
         }
 
@@ -88,7 +106,8 @@ class DistributionController extends Controller
     {
         $location_room = LocationRoom::all();
         $user = DetailUser::where('status', '1')->get();
-        return view('pages.network.distribution.create', compact('location_room', 'user'));
+        $barang = Barang::where('stats', '1')->get();
+        return view('pages.network.distribution.create', compact('location_room', 'user', 'barang'));
     }
 
     /**
@@ -97,10 +116,36 @@ class DistributionController extends Controller
      * @param  \App\Http\Requests\Network\Distribution\StoreDistributionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDistributionRequest $request)
+    public function store(Request $request)
     {
         // get all request from frontsite
         $data = $request->all();
+        $rules = [
+            'inputs' => 'required|array',
+            'inputs.*.asset_id' => 'required|integer|unique:distribution_assets,asset_id',
+            'location_room_id' => 'required',
+            'user_id' => 'required',
+            'description' => 'required',
+            // Add any other rules you need
+        ];
+        // Custom validation messages
+        $messages = [
+            'inputs' => 'Data asset tidak boleh kosong.',
+            'inputs.*.asset_id' => 'Nama barang tidak boleh sama',
+            'location_room_id' => 'Ruangan tidak boleh kosong',
+            'user_id' => 'User tidak boleh kosong',
+            'description' => 'Keterangan tidak boleh kosong',
+            // Add custom messages for other rules as needed
+        ];
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // Check if the validation fails
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         // upload process here
         if ($request->hasFile('file')) {
@@ -115,12 +160,39 @@ class DistributionController extends Controller
         $distribution = Distribution::create($data);
         $distribution_id = $distribution->id;
 
-        DistributionAsset::create([
-            'distribution_id' => $distribution_id,
-        ]);
+
+        // foreach ($request->inputs as $key => $value) {
+        //     DistributionAsset::create([
+        //         'distribution_id' => $distribution_id,
+        //         'asset_id' => $value['asset_id'],
+        //     ]);
+        // }
+
+        // // $goods = Barang::find($request->asset_id);
+        // $goods = Barang::find($value['asset_id']);
+        // $goods->update(['stats' => 2]);
+
+        $assetIdsToUpdate = [];
+
+        foreach ($request->inputs as $key => $value) {
+            DistributionAsset::create([
+                'distribution_id' => $distribution_id,
+                'asset_id' => $value['asset_id'],
+            ]);
+
+            // Collect unique 'asset_id' values to update 'stats' field later
+            $assetIdsToUpdate[] = $value['asset_id'];
+        }
+
+        // Update 'stats' field only once for each unique 'asset_id'
+        Barang::whereIn('id', array_unique($assetIdsToUpdate))
+            ->where('stats', '!=', 2)
+            ->update(['stats' => 2]);
+
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.distribution.edit', $distribution_id);
+        return redirect()->route('backsite.distribution.index');
+        // return redirect()->route('backsite.distribution.edit', $distribution_id);
     }
 
     /**
@@ -132,10 +204,10 @@ class DistributionController extends Controller
     public function show($id)
     {
         $decrypt_id = decrypt($id);
+
         $distribution = Distribution::find($decrypt_id);
-        $location_room = LocationRoom::all();
-        $user = DetailUser::where('status', '1')->get();
-        return view('pages.network.distribution.show', compact('distribution', 'location_room', 'user'));
+
+        return view('pages.network.distribution.show', compact('distribution'));
     }
 
     /**
@@ -199,26 +271,73 @@ class DistributionController extends Controller
      * @param  \App\Models\Network\Distribution\Distribution $distribution
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy_asset($id)
     {
-        // deskripsi id
-        $decrypt_id = decrypt($id);
-        $distribution = Distribution::find($decrypt_id);
 
-        // cari old photo
-        $path_file = $distribution['file'];
+        $distributionAssetId = decrypt($id);
 
-        // hapus file
-        if ($path_file != null || $path_file != '') {
-            Storage::delete($path_file);
+        // Find the distribution asset
+        $distributionAsset = DistributionAsset::find($distributionAssetId);
+
+        if (! $distributionAsset) {
+            // Handle the case where the distribution asset is not found
+            // ...
+            alert()->error('Error', 'Distribution Asset not found.');
+            return redirect()->route('backsite.distribution.index');
         }
 
-        // hapus location
-        $distribution->forceDelete();
+        // Get the distribution ID
+        $distributionId = $distributionAsset->distribution_id;
+        $assetId = $distributionAsset->asset_id;
+
+        //update stats
+        $goods = Barang::find($assetId);
+        $goods->update(['stats' => 1]);
+
+        // Delete the specific distribution asset
+        $distributionAsset->delete();
+
+        // Check if there's only one distribution asset remaining
+        $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
+
+        if ($remainingDistributionAssets->count() === 0) {
+            // cari old photo
+            $path_file = $distributionId['file'];
+
+            // hapus file
+            if ($path_file != null || $path_file != '') {
+                Storage::delete($path_file);
+            }
+
+            // Delete the distribution
+            Distribution::where('id', $distributionId)->delete();
+        }
+
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
+
+    // public function destroy($id)
+    // {
+    //     // deskripsi id
+    //     $decrypt_id = decrypt($id);
+    //     $distribution = Distribution::find($decrypt_id);
+
+    //     // cari old photo
+    //     $path_file = $distribution['file'];
+
+    //     // hapus file
+    //     if ($path_file != null || $path_file != '') {
+    //         Storage::delete($path_file);
+    //     }
+
+    //     // hapus location
+    //     $distribution->forceDelete();
+
+    //     alert()->success('Sukses', 'Data berhasil dihapus');
+    //     return back();
+    // }
 
     public function form_upload(Request $request)
     {
@@ -267,7 +386,6 @@ class DistributionController extends Controller
                 ->withInput();
         }
 
-
         $distribution = Distribution::find($request->id);
         DistributionAsset::create([
             'distribution_id' => $request->id,
@@ -282,13 +400,78 @@ class DistributionController extends Controller
         return redirect()->route('backsite.distribution.edit', $distribution);
     }
 
-    public function delete_file($id)
+    public function show_file(Request $request)
     {
-        $file = DistributionAsset::find($id);
-        $file->delete();
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
+            $data = [
+                'datafile' => $assets,
+            ];
+
+            $msg = [
+                'data' => view('pages.network.distribution.detail_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function delete_file(Request $request)
+    {
+        $distributionAssetId = $request->id;
+
+        // Find the distribution asset
+        $distributionAsset = DistributionAsset::find($distributionAssetId);
+
+        if (! $distributionAsset) {
+            // Handle the case where the distribution asset is not found
+            // ...
+            alert()->error('Error', 'Distribution Asset not found.');
+            return redirect()->route('backsite.distribution.index');
+        }
+
+        // Get the distribution ID
+        $distributionId = $distributionAsset->distribution_id;
+        $assetId = $distributionAsset->asset_id;
+
+        //update stats
+        $goods = Barang::find($assetId);
+        $goods->update(['stats' => 1]);
+
+
+        // Delete the specific distribution asset
+        $distributionAsset->delete();
+
+        // Check if there's only one distribution asset remaining
+        $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
+
+        if ($remainingDistributionAssets->count() === 0) {
+            // Delete the distribution
+            Distribution::where('id', $distributionId)->delete();
+
+            alert()->success('Success', 'All data has been deleted');
+            return redirect()->route('backsite.distribution.index');
+        }
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
 
+    public function goods($distributionId)
+    {
+
+        $distribution = Distribution::findOfail($distributionId);
+        $goods = $distribution->goods()->select('goods.id', 'goods.name')->get();
+
+        // Mendapatkan vendor yang dipilih berdasarkan data procurement
+        $selectedGoods = $distribution->goods()->pluck('goods.id')->toArray();
+
+        return response()->json([
+            'goods' => $goods,
+            'selectedGoods' => $selectedGoods,
+        ]);
+    }
 }
+
