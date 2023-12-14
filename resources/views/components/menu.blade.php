@@ -212,14 +212,14 @@
           </li>
           {{-- @endcan --}}
 
-          {{-- @can('location_room') --}}
+          {{-- @can('location_room') 
           <li
             class="{{ request()->is('backsite/barang') || request()->is('backsite/barang/*') || request()->is('backsite/*/barang') || request()->is('backsite/*/barang/*') ? 'active' : '' }} ">
             <a class="menu-item" href="{{ route('backsite.barang.index') }}">
               <i></i><span>Barang</span>
             </a>
           </li>
-          {{-- @endcan --}}
+           @endcan --}}
 
         </ul>
       </li>
@@ -448,8 +448,8 @@
 
           {{-- @can('location_detail') --}}
           <li
-            class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
+            class="{{ request()->is('backsite/barang') || request()->is('backsite/barang/*') || request()->is('backsite/*/barang') || request()->is('backsite/*/barang/*') ? 'active' : '' }} ">
+            <a class="menu-item" href="{{ route('backsite.barang.index') }}">
               <i></i><span>Hardware</span>
             </a>
           </li>

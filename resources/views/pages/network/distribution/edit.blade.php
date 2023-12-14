@@ -132,20 +132,20 @@
 
                 <hr class="rounded">
                 {{-- File --}}
+                @if ($errors->any())
+                  <div class="alert alert-danger">
+                    <ul>
+                      @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+                @endif
                 <div class="form-group row">
                   <div class="col-md-4">
                     <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1" title="Tambah file"
                       onclick="upload_file({{ $distribution->id }})"><i class="bx bx-file"></i>
                       Tambah data asset</button>
-                    @if ($errors->any())
-                      <div class="alert alert-danger">
-                        <ul>
-                          @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                          @endforeach
-                        </ul>
-                      </div>
-                    @endif
                   </div>
                 </div>
                 <div class="table-responsive col-md-12">
@@ -160,7 +160,7 @@
                       </tr>
                     </thead>
                     @forelse ($assets as $asset)
-                      <tbody>
+                      <tbody class="border-0">
                         @if ($asset->asset_id)
                           <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
                           <td class="text-center">{{ $asset->asset->name ?? '' }}</td>
@@ -196,6 +196,57 @@
                     @endforelse
                   </table>
                 </div>
+
+                <hr class="rounded">
+                {{-- File --}}
+                <div class="form-group row">
+                  <div class="col-md-4">
+                    <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1" title="Tambah file"
+                      onclick="upload_ip({{ $distribution->id }})"><i class="bx bx-file"></i>
+                      Tambah data IP</button>
+                  </div>
+                </div>
+                <div class="table-responsive col-md-12">
+                  <table class="table table-striped table-bordered default-table activity-table mb-4" aria-label="">
+                    <thead>
+                      <tr>
+                        <th class="text-center" style="width: 5%;">No</th>
+                        <th class="text-center">IP</th>
+                        <th class="text-center">Akses Internet</th>
+                        <th class="text-center">Gateway</th>
+                        <th style="text-align:center; width:10px;">Action</th>
+                      </tr>
+                    </thead>
+                    @forelse ($ip_deployment as $ip)
+                      <tbody class="border-0">
+                        @if ($ip->distribution_id)
+                          <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                          <td class="text-center">{{ $ip->ip ?? '' }}</td>
+                          <td class="text-center">
+                            {{ $ip->internet_access == 1 ? 'Ada Internet' : 'Tidak Ada Internet' }}</td>
+                          <td class="text-center">{{ $ip->gateway ?? '' }}</td>
+
+                          <td class="text-center">
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Action</button>
+                              <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                <form action="{{ route('backsite.distribution.delete_ip', $ip->id ?? '') }}"
+                                  method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                  <input type="hidden" name="_method" value="DELETE">
+                                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                  <input type="submit"id="delete_ip" class="btn"value="Delete">
+                                </form>
+                              </div>
+                            </div>
+                          </td>
+                        @endif
+                      </tbody>
+                    @empty
+                      <td class="text-center" colspan="6">No data available in table</td>
+                    @endforelse
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -217,7 +268,7 @@
 
   <script>
     function submit_id() {
-      document.getElementById("submit_id").click();
+      document.geentElemtById("submit_id").click();
     }
 
     $(document).ready(function() {
@@ -235,6 +286,30 @@
       $.ajax({
         type: "post",
         url: "{{ route('backsite.distribution.form_upload') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function upload_ip(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.distribution.form_ip') }}",
         data: {
           id: id
         },

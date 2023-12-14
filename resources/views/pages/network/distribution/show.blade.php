@@ -18,6 +18,25 @@
     <th>Keterangan</th>
     <td>{{ isset($distribution->description) ? $distribution->description : 'N/A' }}</td>
   </tr>
+  <tr>
+    <th>File</th>
+    <td>
+      @if ($distribution->file)
+        <a type="button" data-fancybox data-src="{{ asset('storage/' . $distribution->file) }}"
+          class="btn btn-info btn-sm text-white ">
+          Lihat
+        </a>
+
+        <a type="button" href="{{ asset('storage/' . $distribution->file) }}" class="btn btn-warning btn-sm text-white "
+          download>Unduh</a>
+        <br>
+
+        <p class="mt-1">Latest File : {{ pathinfo($distribution->file, PATHINFO_FILENAME) }}</p>
+      @else
+        <p>File not found!</p>
+      @endif
+    </td>
+  </tr>
 </table>
 <table class="table table-bordered tampildata" style="word-break: break-all">
 </table>

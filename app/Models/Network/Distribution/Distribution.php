@@ -40,4 +40,8 @@ class Distribution extends Model
     {
         return $this->hasMany(Barang::class, 'id');
     }
+    public function ip_deployment()
+    {
+        return $this->hasMany(IpDeployment::class, 'id');
+    }
 }

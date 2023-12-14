@@ -9,7 +9,7 @@
       </tr>
     </thead>
     @foreach ($datafile as $file)
-      <tbody>
+      <tbody class="border-0">
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
           @if ($file->asset->name)
@@ -30,6 +30,46 @@
             {{ $file->asset->barcode }}
           @else
             <p style="color:red;">Barcode is Empty!</p>
+          @endif
+        </td>
+      </tbody>
+    @endforeach
+  </table>
+</div>
+<br>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered text-inputs-searching default-table activity-table" id="pp-table">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 5px;">No</th>
+        <th class="text-center" style="width: 25px;">IP</th>
+        <th class="text-center" style="width: 25px;">Akses Internet</th>
+        <th class="text-center" style="width: 25px;">Gateway</th>
+      </tr>
+    </thead>
+    @foreach ($ip_deployments as $ip)
+      <tbody class="border-0">
+        <td class="text-center">{{ $loop->iteration }}</td>
+        <td class="text-center">
+          @if ($ip->ip)
+            {{ $ip->ip }}
+          @else
+            <p style="color:red;">Ip is Empty!</p>
+          @endif
+        </td>
+        <td class="text-center">
+          @if ($ip->internet_access)
+            {{ $ip->internet_access == 1 ? 'Ada Internet' : 'Tidak ada Internet' }}
+          @else
+            <p style="color:red;">Akses Internet is Empty!</p>
+          @endif
+        </td>
+        <td class="text-center">
+          @if ($ip->gateway)
+            {{ $ip->gateway }}
+          @else
+            <p style="color:red;">Gateway is Empty!</p>
           @endif
         </td>
       </tbody>

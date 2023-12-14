@@ -112,10 +112,10 @@
                       <table id="table" class=" table col-md-12">
                         <thead>
                           <tr>
-                            <th>Asset</th>
-                            <th>Category</th>
-                            <th>Barcode</th>
-                            <th>Action</th>
+                            <th class="text-center">Asset</th>
+                            <th class="text-center">Category</th>
+                            <th class="text-center">Barcode</th>
+                            <th style="text-align:center; width:10px;">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -135,6 +135,24 @@
                             <td><button type="button" name="add" id="add"
                                 class="btn btn-success addRow">Add</button></td>
                           </tr> --}}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-md-4">
+                        <button type="button" name="add" id="add-ip" class="btn btn-success addRow mb-1">Tambah
+                          data IP</button>
+                      </div>
+                      <table id="table-ip" class=" table col-md-12">
+                        <thead>
+                          <tr>
+                            <th class="text-center">IP</th>
+                            <th class="text-center">Akses Internet</th>
+                            <th class="text-center">Gateway</th>
+                            <th style="text-align:center; width:10px;">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
                         </tbody>
                       </table>
                     </div>
@@ -385,6 +403,49 @@
     });
   </script>
 
+  <script>
+    $(document).ready(function() {
+      let i = 0;
+
+      $('#add-ip').click(function() {
+        // Increment index for unique IDs
+        i++;
+
+        // Append a new row
+        $('#table-ip tbody').append(`
+      <tr>
+        <td class="text-center"><input type="text" class="form-control" name="ip[${i}][ip]" id=""></td>
+        <td class="text-center">
+            <select class="form-control" name="ip[${i}][internet_access]" id="">
+          <option value="" disabled selected>Choose</option>
+          <option value="1">Ada Internet</option>
+          <option value="2">Tidak ada Internet</option>
+            </select>
+          </td>
+        <td class="text-center"><input type="text" class="form-control" name="ip[${i}][gateway]" id=""></td>
+        <td class="text-center"><button type="button" class="btn btn-danger remove-table-row-ip">Remove</button></td>
+      </tr>
+    `);
+      });
+
+      $(document).on('click', '.remove-table-row-ip', function() {
+        // Remove the entire row when the "Remove" button is clicked
+        $(this).closest('tr').remove();
+      });
+
+      // Validate the form when submitted
+      $('#dynamic-form').submit(function(event) {
+        // Check if the form is valid
+        if (!this.checkValidity()) {
+          event.preventDefault(); // Prevent form submission if validation fails
+        }
+
+        // Enable the disabled options before submitting the form
+        $('.form-control:disabled').prop('disabled', false);
+      });
+    });
+  </script>
+
 @endsection
 @push('after-style')
   <link rel="stylesheet" type="text/css"
@@ -392,12 +453,12 @@
 @endpush
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-  <script>
+  {{-- <script>
     $('#asset_id').on('change', function() {
       var input_value = $(this).find(':selected').data('value');;
       $('#category').val(input_value);
       var input_value = $(this).find(':selected').data('value2');;
       $('#barcode').val(input_value);
     });
-  </script>
+  </script> --}}
 @endpush

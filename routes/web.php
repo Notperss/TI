@@ -278,6 +278,10 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('distribution', DistributionController::class);
 
     Route::controller(DistributionController::class)->group(function () {
+        Route::post('/distribution/form_ip', 'form_ip')->name('distribution.form_ip');
+        Route::post('/distribution/store_ip', 'store_ip')->name('distribution.store_ip');
+        Route::delete('/distribution/{id}/delete_ip', 'delete_ip')->name('distribution.delete_ip');
+
         Route::post('/distribution/form_upload', 'form_upload')->name('distribution.form_upload');
         Route::post('/distribution/upload_file', 'upload_file')->name('distribution.upload_file');
         Route::post('/distribution/show_file', 'show_file')->name('distribution.show_file');

@@ -19,6 +19,7 @@ use App\Models\Network\Distribution\Distribution;
 use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\Network\Distribution\StoreDistributionRequest;
 use App\Http\Requests\Network\Distribution\UpdateDistributionRequest;
+use App\Models\Network\Distribution\IpDeployment;
 
 class DistributionController extends Controller
 {
@@ -122,7 +123,11 @@ class DistributionController extends Controller
         $data = $request->all();
         $rules = [
             'inputs' => 'required|array',
+            'ip' => 'required|array',
             'inputs.*.asset_id' => 'required|integer|unique:distribution_assets,asset_id',
+            'ip.*.ip' => 'required',
+            'ip.*.internet_access' => 'required',
+            'ip.*.gateway' => 'required',
             'location_room_id' => 'required',
             'user_id' => 'required',
             'description' => 'required',
@@ -131,7 +136,11 @@ class DistributionController extends Controller
         // Custom validation messages
         $messages = [
             'inputs' => 'Data asset tidak boleh kosong.',
+            'ip' => 'Data IP tidak boleh kosong.',
             'inputs.*.asset_id' => 'Nama barang tidak boleh sama',
+            'ip.*.ip' => 'IP tidak boleh kosong.',
+            'ip.*.internet_access' => 'Akses internet tidak boleh kosong.',
+            'ip.*.gateway' => 'Gateway tidak boleh kosong.',
             'location_room_id' => 'Ruangan tidak boleh kosong',
             'user_id' => 'User tidak boleh kosong',
             'description' => 'Keterangan tidak boleh kosong',
@@ -189,6 +198,15 @@ class DistributionController extends Controller
             ->where('stats', '!=', 2)
             ->update(['stats' => 2]);
 
+        foreach ($request->ip as $value) {
+            IpDeployment::create([
+                'distribution_id' => $distribution_id,
+                'ip' => $value['ip'],
+                'internet_access' => $value['internet_access'],
+                'gateway' => $value['gateway'],
+            ]);
+        }
+
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.distribution.index');
@@ -223,7 +241,8 @@ class DistributionController extends Controller
         $location_room = LocationRoom::all();
         $user = DetailUser::where('status', '1')->get();
         $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
-        return view('pages.network.distribution.edit', compact('distribution', 'location_room', 'user', 'assets'));
+        $ip_deployment = IpDeployment::where('distribution_id', $id)->orderBy('created_at', 'desc')->get();
+        return view('pages.network.distribution.edit', compact('distribution', 'location_room', 'user', 'assets', 'ip_deployment'));
     }
 
     /**
@@ -301,16 +320,19 @@ class DistributionController extends Controller
         $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
 
         if ($remainingDistributionAssets->count() === 0) {
-            // cari old photo
-            $path_file = $distributionId['file'];
-
-            // hapus file
-            if ($path_file != null || $path_file != '') {
-                Storage::delete($path_file);
-            }
+            // Retrieve the file path directly from the database
+            $path_file = Distribution::where('id', $distributionId)->value('file');
 
             // Delete the distribution
             Distribution::where('id', $distributionId)->delete();
+
+            // Delete the file if it exists
+            if ($path_file && Storage::exists($path_file)) {
+                Storage::delete($path_file);
+            }
+
+            IpDeployment::where('distribution_id', $distributionId)->delete();
+
         }
 
 
@@ -406,8 +428,10 @@ class DistributionController extends Controller
             $id = $request->id;
 
             $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
+            $ip_deployments = IpDeployment::where('distribution_id', $id)->orderBy('created_at', 'desc')->get();
             $data = [
                 'datafile' => $assets,
+                'ip_deployments' => $ip_deployments,
             ];
 
             $msg = [
@@ -447,9 +471,22 @@ class DistributionController extends Controller
         // Check if there's only one distribution asset remaining
         $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
 
+        // if ($remainingDistributionAssets->count() === 0) {
+        //     // Delete the distribution
+        //     Distribution::where('id', $distributionId)->delete();
         if ($remainingDistributionAssets->count() === 0) {
+            // Retrieve the file path directly from the database
+            $path_file = Distribution::where('id', $distributionId)->value('file');
+
             // Delete the distribution
             Distribution::where('id', $distributionId)->delete();
+
+            // Delete the file if it exists
+            if ($path_file && Storage::exists($path_file)) {
+                Storage::delete($path_file);
+            }
+
+            IpDeployment::where('distribution_id', $distributionId)->delete();
 
             alert()->success('Success', 'All data has been deleted');
             return redirect()->route('backsite.distribution.index');
@@ -459,19 +496,71 @@ class DistributionController extends Controller
         return back();
     }
 
-    public function goods($distributionId)
+
+    public function form_ip(Request $request)
     {
+        if ($request->ajax()) {
+            $id = $request->id;
+            $row = Distribution::find($id);
+            $data = [
+                'id' => $row['id'],
+            ];
 
-        $distribution = Distribution::findOfail($distributionId);
-        $goods = $distribution->goods()->select('goods.id', 'goods.name')->get();
+            $msg = [
+                'data' => view('pages.network.distribution.upload_ip', $data)->render(),
+            ];
 
-        // Mendapatkan vendor yang dipilih berdasarkan data procurement
-        $selectedGoods = $distribution->goods()->pluck('goods.id')->toArray();
+            return response()->json($msg);
+        }
+    }
 
-        return response()->json([
-            'goods' => $goods,
-            'selectedGoods' => $selectedGoods,
+    public function store_ip(Request $request)
+    {
+        // Validation rules
+        $rules = [
+            'ip' => 'required|max:255',
+            'internet_access' => 'required|max:255',
+            'gateway' => 'required|max:255',
+            // Add any other rules you need
+        ];
+
+        // Custom validation messages
+        $messages = [
+            'ip.required' => 'IP tidak boleh kosong.',
+            'internet_access.required' => 'Akses Internet tidak boleh kosong.',
+            'gateway.required' => 'Gateway tidak boleh kosong.',
+            // Add custom messages for other rules as needed
+        ];
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // Check if the validation fails
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $distribution = Distribution::find($request->id);
+        IpDeployment::create([
+            'distribution_id' => $request->id,
+            'ip' => $request->ip,
+            'internet_access' => $request->internet_access,
+            'gateway' => $request->gateway,
         ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.distribution.edit', $distribution);
+    }
+
+    public function delete_ip($id)
+    {
+        $ip = IpDeployment::find($id);
+        $ip->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
     }
 }
 
