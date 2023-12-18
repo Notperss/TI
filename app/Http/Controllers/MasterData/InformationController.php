@@ -31,7 +31,7 @@ class InformationController extends Controller {
                     <a class="dropdown-item" href="'.route('backsite.information.edit', encrypt($item->id)).'">
                         Edit
                     </a>
-                    <form action="'.route('backsite.vendor_ti.destroy', encrypt($item->id)).'" method="POST"
+                    <form action="'.route('backsite.information.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">

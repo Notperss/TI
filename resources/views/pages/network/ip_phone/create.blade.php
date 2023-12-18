@@ -25,6 +25,26 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="barcode">Barcode<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select name="barcode" id="barcode" class="form-control" required>
+                          <option value="" selected disabled>Choose</option>
+                          @foreach ($distributionAsset as $asset)
+                            @if ($asset->asset->category === 'IP PHONE')
+                              <option value="{{ $asset->id }}"
+                                data-location="{{ $asset->distribution->location_room->name }}"
+                                data-ip="{{ $asset->distribution->ip_deployment->ip }}">
+                                {{ $asset->asset->barcode ?? '' }}</option>
+                            @endif
+                          @endforeach
+                        </select>
+                        @if ($errors->has('barcode'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('barcode') }}</p>
+                        @endif
+                      </div>
+
                       <label class="col-md-2 label-control" for="caller">Caller ID<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -34,21 +54,13 @@
                             {{ $errors->first('caller') }}</p>
                         @endif
                       </div>
-
-                      <label class="col-md-2 label-control" for="ip">IP<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input name="ip" id="ip" class="form-control" value="{{ old('ip') }}" required>
-                        @if ($errors->has('ip'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('ip') }}</p>
-                        @endif
-                      </div>
                     </div>
 
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="location" id="location" class="form-control" value="{{ old('location') }}" required>
+                        <input name="location" id="location" class="form-control" value="{{ old('location') }}" readonly
+                          required>
                         @if ($errors->has('location'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('location') }}</p>
@@ -66,13 +78,13 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="barcode">Barcode<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="ip">IP<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="barcode" id="barcode" class="form-control" value="{{ old('barcode') }}" required>
-                        @if ($errors->has('barcode'))
+                        <input name="ip" id="ip" class="form-control" value="{{ old('ip') }}" readonly
+                          required>
+                        @if ($errors->has('ip'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('barcode') }}</p>
+                            {{ $errors->first('ip') }}</p>
                         @endif
                       </div>
 
@@ -149,6 +161,23 @@
       </div>
     </div>
   </div>
-
-
 @endsection
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Add an event listener to the barcode select element
+    $('#barcode').change(function() {
+      // Get the selected option
+      var selectedOption = $(this).find(':selected');
+
+      // Get the caller ID from the data attribute
+      var locationData = selectedOption.data('location');
+      var ipData = selectedOption.data('ip');
+
+      // Update the value of the caller input field
+      $('#location').val(locationData);
+      $('#ip').val(ipData);
+    });
+  });
+</script>

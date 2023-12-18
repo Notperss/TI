@@ -198,6 +198,25 @@
                         @endif
                       </div>
                     </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-4">
+                        <input type="file" name="uploaded_file" id="add-file" hidden>
+                        <label for="add-file" class="btn btn-success">Tambah
+                          data file</label>
+                      </div>
+                      <table id="table-ip" class=" table col-md-12">
+                        <thead>
+                          <tr>
+                            <th class="text-center">Nama File</th>
+                            <th style="text-align:center; width:10px;">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+
                   </div>
 
                   <div class="form-actions ">
@@ -216,8 +235,72 @@
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  {{-- <script>
+    $(document).ready(function() {
+      let i = 0;
 
+      $('#add-ip').click(function() {
+        // Increment index for unique IDs
+        i++;
 
+        // Append a new row
+        $('#table-ip tbody').append(`
+      <tr>
+        <td class="text-center"><input type="file" class="form-control" name="ip[${i}][file]"></td>
+        <td class="text-center"><button type="button" class="btn btn-danger remove-table-row-ip">Remove</button></td>
+      </tr>
+    `);
+      });
+
+      $(document).on('click', '.remove-table-row-ip', function() {
+        // Remove the entire row when the "Remove" button is clicked
+        $(this).closest('tr').remove();
+      });
+
+      // Validate the form when submitted
+      $('#dynamic-form').submit(function(event) {
+        // Check if the form is valid
+        if (!this.checkValidity()) {
+          event.preventDefault(); // Prevent form submission if validation fails
+        }
+
+        // Enable the disabled options before submitting the form
+        $('.form-control:disabled').prop('disabled', false);
+      });
+    });
+  </script> --}}
+
+  <script>
+    document.getElementById('add-file').addEventListener('change', function(event) {
+      // Get the selected file
+      var fileInput = event.target;
+      var file = fileInput.files[0];
+
+      // Check if a file is selected
+      if (file) {
+        // Create a new row in the table
+        var newRow = '<tr><td class="text-center border-0">' + file.name +
+          '</td><td><button class="removeRow btn btn-danger" onclick="removeRow(this)">Remove</button></td></tr>';
+
+        // Append the new row to the table
+        document.getElementById('table-ip').insertAdjacentHTML('beforeend', newRow);
+
+        // Optional: Clear the file input after appending
+        fileInput.value = '';
+      } else {
+        alert('Please select a file.');
+      }
+    });
+
+    function removeRow(button) {
+      // Get the reference to the button's parent row
+      var row = button.parentNode.parentNode;
+
+      // Remove the entire row
+      row.parentNode.removeChild(row);
+    }
+  </script>
 @endsection
 @push('after-style')
   <link rel="stylesheet" type="text/css"

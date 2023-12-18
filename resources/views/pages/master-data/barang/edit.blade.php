@@ -160,10 +160,11 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="1"{{ $barang->stats == 1 ? 'selected' : '' }}>
-                            Aktif</option>
-                          <option value="2"{{ $barang->stats == 2 ? 'selected' : '' }}>
-                            Tidak Aktif</option>
+                          <option value="1" {{ $barang->stats == 1 ? 'selected' : '' }}>Available</option>
+                          <option value="2" {{ $barang->stats == 2 ? 'selected' : '' }}>Dipakai</option>
+                          <option value="3" {{ $barang->stats == 3 ? 'selected' : '' }}>Perbaikan</option>
+                          <option value="4" {{ $barang->stats == 4 ? 'selected' : '' }}>Diserahkan</option>
+                          <option value="5" {{ $barang->stats == 5 ? 'selected' : '' }}>Rusak</option>
                         </select>
                         @if ($errors->has('stats'))
                           <p style="font-style: bold; color: red;">

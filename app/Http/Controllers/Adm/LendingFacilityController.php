@@ -106,7 +106,8 @@ class LendingFacilityController extends Controller
      */
     public function create(Request $request)
     {
-        $barang = Barang::where('stats', '1')->get();
+        // $barang = Barang::where('stats', '1')->get();
+        $barang = Barang::where('type_assets', 'ASET TI')->where('stats', 1)->orderBy('id', 'asc')->get();
         return view("pages.adm.lendingfacility.create", compact('barang'));
     }
 

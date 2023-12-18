@@ -18,6 +18,6 @@ class IpDeployment extends Model
 
     public function distribution()
     {
-        return $this->hasMany(Distribution::class, 'distribution_id');
+        return $this->belongsTo(Distribution::class, 'distribution_id');
     }
 }
