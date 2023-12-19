@@ -317,6 +317,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('workcat', WorkcatController::class);
 
     Route::resource('ip_phone', IpPhoneController::class);
+    Route::get('/get-ip', [IpPhoneController::class, 'getIp'])->name('getIp');
+
 
     Route::resource('cctv', CctvCctvController::class);
 

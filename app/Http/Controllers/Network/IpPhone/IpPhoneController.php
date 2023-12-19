@@ -12,6 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Network\IpPhone\StoreIpPhoneTRequest;
 use App\Http\Requests\Network\IpPhone\UpdateIpPhoneTRequest;
 use App\Models\Network\Distribution\DistributionAsset;
+use App\Models\Network\Distribution\IpDeployment;
 
 class IpPhoneController extends Controller
 {
@@ -69,8 +70,9 @@ class IpPhoneController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $distribution_id = $request->distribution_id;
 
         $distributionAsset = DistributionAsset::
             with(
@@ -79,9 +81,13 @@ class IpPhoneController extends Controller
                         // ->where('category', 'IP PHONE')
                         ->where('stats', 2);
                 },
-                    'distribution' => function ($query) {
-                        $query->with('ip_deployment');
-                    }
+                    'distribution' => function () {
+                        // IpDeployment::where('distribution_id', $request->distribution_id)->get();
+                    },
+                    'ip_deployment' => function ($query) use ($distribution_id) {
+
+                        $query->where('distribution_id', $distribution_id);
+                    },
                 ])
             // ['asset', 'distribution'])
             // ->with('distribution')
@@ -143,7 +149,19 @@ class IpPhoneController extends Controller
     {
         $decrypt_id = decrypt($id);
         $ip_phone = IpPhone::find($decrypt_id);
-        return view('pages.network.ip_phone.edit', compact('ip_phone'));
+
+        $distributionAsset = DistributionAsset::
+            with(
+                ['asset' => function ($query) {
+                    $query
+                        ->where('stats', 2);
+                },
+                    'distribution',
+                    'ip_deployment',
+                ])
+            ->orderBy('id', 'asc')->get();
+
+        return view('pages.network.ip_phone.edit', compact('ip_phone', 'distributionAsset'));
     }
 
     /**
@@ -210,5 +228,14 @@ class IpPhoneController extends Controller
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
+    }
+
+    public function getIp(Request $request)
+    {
+        // $distributionId = $request->input('distribution_id');
+        // $getIp = IpDeployment::where('distribution_id', $distributionId)->get();
+        $distributionDataId = $request->input('distribution_data_id');
+        $getIp = IpDeployment::where('distribution_id', $distributionDataId)->get();
+        return response()->json($getIp);
     }
 }

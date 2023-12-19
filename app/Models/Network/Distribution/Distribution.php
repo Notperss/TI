@@ -42,6 +42,6 @@ class Distribution extends Model
     }
     public function ip_deployment()
     {
-        return $this->belongsTo(IpDeployment::class, 'distribution_id');
+        return $this->belongsTo(IpDeployment::class, 'id');
     }
 }

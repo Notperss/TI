@@ -26,6 +26,27 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="barcode">Barcode<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select name="barcode" id="distribution_id" class="form-control" required>
+                          <option value="" selected disabled>Choose</option>
+                          @foreach ($distributionAsset as $asset)
+                            @if ($asset->asset->category === 'IP PHONE')
+                              <option value="{{ $asset->asset->barcode }}"
+                                data-location="{{ $asset->distribution->location_room->name }}"
+                                data-distribution-id="{{ $asset->distribution_id }}"
+                                {{ $asset->asset->barcode === $ip_phone->barcode ? 'selected' : '' }}>
+                                {{ $asset->asset->barcode ?? '' }}</option>
+                            @endif
+                          @endforeach
+                        </select>
+                        @if ($errors->has('barcode'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('barcode') }}</p>
+                        @endif
+                      </div>
+
                       <label class="col-md-2 label-control" for="caller">Caller ID<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -36,23 +57,13 @@
                             {{ $errors->first('caller') }}</p>
                         @endif
                       </div>
-
-                      <label class="col-md-2 label-control" for="ip">IP<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input name="ip" id="ip" class="form-control" value="{{ old('ip', $ip_phone->ip) }}"
-                          required>
-                        @if ($errors->has('ip'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('ip') }}</p>
-                        @endif
-                      </div>
                     </div>
 
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input name="location" id="location" class="form-control"
-                          value="{{ old('location', $ip_phone->location) }}" required>
+                          value="{{ old('location', $ip_phone->location) }}" readonly required>
                         @if ($errors->has('location'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('location') }}</p>
@@ -71,14 +82,18 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="barcode">Barcode<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="ip">IP
+                        <code style="color:red;">*</code></code></label>
                       <div class="col-md-4">
-                        <input name="barcode" id="barcode" class="form-control"
-                          value="{{ old('barcode', $ip_phone->barcode) }}" required>
-                        @if ($errors->has('barcode'))
+                        <select name="ip" id="ip" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                          <option value="{{ $ip_phone->ip }}" {{ $ip_phone->ip == $ip_phone->ip ? 'selected' : '' }}>
+                            {{ $ip_phone->ip }}
+                          </option>
+                        </select>
+                        @if ($errors->has('ip'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('barcode') }}</p>
+                            {{ $errors->first('ip') }}</p>
                         @endif
                       </div>
 
@@ -173,3 +188,83 @@
 
 
 @endsection
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Add an event listener to the barcode select element
+    $('#distribution_id').change(function() {
+      // Get the selected option
+      var selectedOption = $(this).find(':selected');
+
+      // Get the caller ID from the data attribute
+      var locationData = selectedOption.data('location');
+      var ipData = selectedOption.data('ip');
+
+      // Update the value of the caller input field
+      $('#location').val(locationData);
+      $('#ip').val(ipData);
+    });
+  });
+</script>
+
+@push('after-script')
+  {{-- <script>
+    $(document).ready(function() {
+      $('#distribution_id').change(function() {
+        var distributionId = $(this).val();
+        if (distributionId) {
+          $.ajax({
+            url: '{{ route('backsite.getIp') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              distribution_id: distributionId
+            },
+            success: function(data) {
+              $('#ip').empty();
+              $('#ip').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#ip').append('<option value="' + value.ip + '">' + value.ip +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#ip').empty();
+          $('#ip').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+  </script> --}}
+
+  <script>
+    $(document).ready(function() {
+      $('#distribution_id').change(function() {
+        var distributionId = $(this).val();
+        var distributionDataId = $(this).find(':selected').data('distribution-id');
+        if (distributionId) {
+          $.ajax({
+            url: '{{ route('backsite.getIp') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              distribution_data_id: distributionDataId
+            },
+            success: function(data) {
+              $('#ip').empty();
+              $('#ip').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#ip').append('<option value="' + value.ip + '">' + value.ip +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#ip').empty();
+          $('#ip').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+  </script>
+@endpush

@@ -22,5 +22,9 @@ class DistributionAsset extends Model
     {
         return $this->belongsTo(Distribution::class, 'distribution_id', 'id');
     }
+    public function ip_deployment()
+    {
+        return $this->belongsTo(IpDeployment::class, 'distribution_id');
+    }
 
 }

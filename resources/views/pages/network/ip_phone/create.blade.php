@@ -28,13 +28,13 @@
                       <label class="col-md-2 label-control" for="barcode">Barcode<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="barcode" id="barcode" class="form-control" required>
+                        <select name="barcode" id="distribution_id" class="form-control" required>
                           <option value="" selected disabled>Choose</option>
                           @foreach ($distributionAsset as $asset)
                             @if ($asset->asset->category === 'IP PHONE')
-                              <option value="{{ $asset->id }}"
+                              <option value="{{ $asset->asset->barcode }}"
                                 data-location="{{ $asset->distribution->location_room->name }}"
-                                data-ip="{{ $asset->distribution->ip_deployment->ip }}">
+                                data-distribution-id="{{ $asset->distribution_id }}">
                                 {{ $asset->asset->barcode ?? '' }}</option>
                             @endif
                           @endforeach
@@ -78,10 +78,12 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="ip">IP<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="ip">IP
+                        <code style="color:red;">*</code></code></label>
                       <div class="col-md-4">
-                        <input name="ip" id="ip" class="form-control" value="{{ old('ip') }}" readonly
-                          required>
+                        <select name="ip" id="ip" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                        </select>
                         @if ($errors->has('ip'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('ip') }}</p>
@@ -167,7 +169,7 @@
 <script>
   $(document).ready(function() {
     // Add an event listener to the barcode select element
-    $('#barcode').change(function() {
+    $('#distribution_id').change(function() {
       // Get the selected option
       var selectedOption = $(this).find(':selected');
 
@@ -181,3 +183,64 @@
     });
   });
 </script>
+
+@push('after-script')
+  {{-- <script>
+    $(document).ready(function() {
+      $('#distribution_id').change(function() {
+        var distributionId = $(this).val();
+        if (distributionId) {
+          $.ajax({
+            url: '{{ route('backsite.getIp') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              distribution_id: distributionId
+            },
+            success: function(data) {
+              $('#ip').empty();
+              $('#ip').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#ip').append('<option value="' + value.ip + '">' + value.ip +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#ip').empty();
+          $('#ip').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+  </script> --}}
+
+  <script>
+    $(document).ready(function() {
+      $('#distribution_id').change(function() {
+        var distributionId = $(this).val();
+        var distributionDataId = $(this).find(':selected').data('distribution-id');
+        if (distributionId) {
+          $.ajax({
+            url: '{{ route('backsite.getIp') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              distribution_data_id: distributionDataId
+            },
+            success: function(data) {
+              $('#ip').empty();
+              $('#ip').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#ip').append('<option value="' + value.ip + '">' + value.ip +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#ip').empty();
+          $('#ip').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+  </script>
+@endpush
