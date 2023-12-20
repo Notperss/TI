@@ -318,6 +318,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     Route::resource('ip_phone', IpPhoneController::class);
     Route::get('/get-ip', [IpPhoneController::class, 'getIp'])->name('getIp');
+    Route::put('/ip_phone/returning_update/{ip_phone}', [IpPhoneController::class, 'returning_update'])->name('ip_phone.returning_update');
+
 
 
     Route::resource('cctv', CctvCctvController::class);

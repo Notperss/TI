@@ -6,13 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\MasterData\Goods\Barang;
 use App\Models\Network\IpPhone\IpPhone;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Network\Distribution\IpDeployment;
+use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\Network\IpPhone\StoreIpPhoneTRequest;
 use App\Http\Requests\Network\IpPhone\UpdateIpPhoneTRequest;
-use App\Models\Network\Distribution\DistributionAsset;
-use App\Models\Network\Distribution\IpDeployment;
 
 class IpPhoneController extends Controller
 {
@@ -25,7 +26,7 @@ class IpPhoneController extends Controller
     {
         if (request()->ajax()) {
 
-            $ip_phone = IpPhone::orderby('created_at', 'desc');
+            $ip_phone = IpPhone::with('distribution_asset.asset', 'distribution_asset.distribution.location_room')->orderby('created_at', 'desc');
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $ip_phone = $ip_phone->whereBetween('installation_date', [$request->from_date, $request->to_date]);
@@ -34,7 +35,8 @@ class IpPhoneController extends Controller
             return DataTables::of($ip_phone)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    return '
+                    if ($item->stats == 1) {
+                        return '
             <div class="btn-group mr-1 mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
@@ -46,6 +48,13 @@ class IpPhoneController extends Controller
                     <a class="dropdown-item" href="' . route('backsite.ip_phone.edit', encrypt($item->id)) . '">
                         Edit
                                 </a>
+                    <form action="' . route('backsite.ip_phone.returning_update', $item->id) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Update?\')">
+                        ' . method_field('PUT') . csrf_field() . '
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="dropdown-item" value="Dikembalikan">
+                    </form>
                     <form action="' . route('backsite.ip_phone.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
@@ -55,6 +64,19 @@ class IpPhoneController extends Controller
                     </form>
             </div>
                 ';
+                    } else {
+                        return '
+            <div class="btn-group mr-1 mb-1">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.ip_phone.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data IP Phone" class="dropdown-item">
+                        Show
+                    </a>
+            </div>
+                ';
+                    }
                 })->editColumn('installation_date', function ($item) {
                     return Carbon::parse($item->installation_date)->translatedFormat('l, d F Y');
                 })
@@ -78,8 +100,8 @@ class IpPhoneController extends Controller
             with(
                 ['asset' => function ($query) {
                     $query
-                        // ->where('category', 'IP PHONE')
-                        ->where('stats', 2);
+                        ->where('stats', 2)
+                        ->where('category', '=', 'IP PHONE');
                 },
                     'distribution' => function () {
                         // IpDeployment::where('distribution_id', $request->distribution_id)->get();
@@ -119,7 +141,18 @@ class IpPhoneController extends Controller
             $data['file'] = $request->file('file')->storeAs('assets/file-ip_phone', $fullname);
         }
         // store to database
-        IpPhone::create($data);
+        $ipPhone = IpPhone::create($data);
+        $assetId = $ipPhone->distribution_asset->asset_id;
+
+
+        // Update 'stats' field only once for each unique 'asset_id'
+        Barang::where('id', $assetId)
+            ->where('stats', '!=', 6)
+            ->update(['stats' => 6]);
+
+
+
+
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.ip_phone.index');
@@ -153,8 +186,7 @@ class IpPhoneController extends Controller
         $distributionAsset = DistributionAsset::
             with(
                 ['asset' => function ($query) {
-                    $query
-                        ->where('stats', 2);
+                    // $query->where('stats', 2);
                 },
                     'distribution',
                     'ip_deployment',
@@ -195,7 +227,25 @@ class IpPhoneController extends Controller
             $data['file'] = $path_file;
         }
 
+        $assetStats = $ip_phone->distribution_asset->asset->stats;
 
+        if ($assetStats == 6) {
+            $assetId = $ip_phone->distributionAsset_id;
+
+            // Update 'stats' field only once for each unique 'asset_id'
+            Barang::where('id', $assetId)->where('stats', '!=', 2)->update(['stats' => 2]);
+
+            // Update 'stats' field for the current IP Phone record
+            $ip_phone->update($data);
+
+            // Update 'stats' field only once for each unique 'asset_id'
+            Barang::where('id', $assetId)->where('stats', '!=', 6)->update(['stats' => 6]);
+        } else {
+            // Update 'stats' field for the current IP Phone record
+            $ip_phone->update($data);
+        }
+
+        dd($assetId);
         // update to database
         $ip_phone->update($data);
 
@@ -237,5 +287,21 @@ class IpPhoneController extends Controller
         $distributionDataId = $request->input('distribution_data_id');
         $getIp = IpDeployment::where('distribution_id', $distributionDataId)->get();
         return response()->json($getIp);
+    }
+
+    public function returning_update(IpPhone $ipPhone)
+    {
+
+        $ipPhone->update(['stats' => 2]);
+
+        $assetId = $ipPhone->distribution_asset->asset_id;
+        // Update 'stats' field only once for each unique 'asset_id'
+        Barang::where('id', $assetId)
+            ->where('stats', '!=', 2)
+            ->update(['stats' => 2]);
+
+
+        alert()->success('Sukses', 'Data berhasil diupdate');
+        return redirect()->route('backsite.ip_phone.index');
     }
 }

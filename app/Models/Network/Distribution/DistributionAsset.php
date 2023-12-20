@@ -3,6 +3,7 @@
 namespace App\Models\Network\Distribution;
 
 use App\Models\MasterData\Goods\Barang;
+use App\Models\Network\IpPhone\IpPhone;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,5 +27,11 @@ class DistributionAsset extends Model
     {
         return $this->belongsTo(IpDeployment::class, 'distribution_id');
     }
+    public function ip_phone()
+    {
+        return $this->belongsTo(IpPhone::class, 'id', 'distributionAsset_id');
+    }
+
+
 
 }

@@ -176,8 +176,8 @@
           name: 'caller',
         },
         {
-          data: 'location',
-          name: 'location',
+          data: 'distribution_asset.distribution.location_room.name',
+          name: 'distribution_asset.distribution.location_room.name',
         },
         {
           data: 'ip',
@@ -188,8 +188,8 @@
           name: 'type',
         },
         {
-          data: 'barcode',
-          name: 'barcode',
+          data: 'distribution_asset.asset.barcode',
+          name: 'distribution_asset.asset.barcode',
         },
         {
           data: 'installation_date',

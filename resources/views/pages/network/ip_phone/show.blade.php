@@ -6,12 +6,16 @@
 
   <tr>
     <th>Lokasi</th>
-    <td>{{ isset($ip_phone->location) ? $ip_phone->location : 'N/A' }}</td>
+    <td>
+      {{ isset($ip_phone->distribution_asset->distribution->location_room->name) ? $ip_phone->distribution_asset->distribution->location_room->name : 'N/A' }}
+    </td>
   </tr>
 
   <tr>
     <th>Barcode</th>
-    <td>{{ isset($ip_phone->barcode) ? $ip_phone->barcode : 'N/A' }}</td>
+    <td>
+      {{ isset($ip_phone->distribution_asset->asset->barcode) ? $ip_phone->distribution_asset->asset->barcode : 'N/A' }}
+    </td>
   </tr>
 
   <tr>

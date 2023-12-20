@@ -2,6 +2,7 @@
 
 namespace App\Models\Network\IpPhone;
 
+use App\Models\Network\Distribution\DistributionAsset;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,7 @@ class IpPhone extends Model
     protected $fillable = [
         'caller',
         'type',
+        'distributionAsset_id',
         'location',
         'barcode',
         'ip',
@@ -20,4 +22,10 @@ class IpPhone extends Model
         'description',
         'stats',
     ];
+
+    public function distribution_asset()
+    {
+        return $this->belongsTo(DistributionAsset::class, 'distributionAsset_id', 'id');
+    }
+
 }

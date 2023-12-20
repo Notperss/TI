@@ -26,12 +26,24 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="barcode">Barcode<code
+                      <label class="col-md-2 label-control" for="distributionAsset_id">Barcode<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="barcode" id="distribution_id" class="form-control" required>
+                        <select name="distributionAsset_id" id="distribution_id" class="form-control" required>
                           <option value="" selected disabled>Choose</option>
                           @foreach ($distributionAsset as $asset)
+                            @if ($asset->asset && $asset->asset->category === 'IP PHONE' && $asset->distribution)
+                              @if ($asset->asset->stats == 2 || $asset->id == $ip_phone->distributionAsset_id)
+                                <option value="{{ $asset->id }}"
+                                  data-location="{{ $asset->distribution->location_room->name }}"
+                                  data-distribution-id="{{ $asset->distribution_id }}"
+                                  {{ $asset->id === $ip_phone->distributionAsset_id ? 'selected' : '' }}>
+                                  {{ $asset->asset->barcode ?? '' }}
+                                </option>
+                              @endif
+                            @endif
+                          @endforeach
+                          {{-- @foreach ($distributionAsset as $asset)
                             @if ($asset->asset->category === 'IP PHONE')
                               <option value="{{ $asset->asset->barcode }}"
                                 data-location="{{ $asset->distribution->location_room->name }}"
@@ -39,11 +51,11 @@
                                 {{ $asset->asset->barcode === $ip_phone->barcode ? 'selected' : '' }}>
                                 {{ $asset->asset->barcode ?? '' }}</option>
                             @endif
-                          @endforeach
+                          @endforeach --}}
                         </select>
-                        @if ($errors->has('barcode'))
+                        @if ($errors->has('distributionAsset_id'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('barcode') }}</p>
+                            {{ $errors->first('distributionAsset_id') }}</p>
                         @endif
                       </div>
 
@@ -63,7 +75,8 @@
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input name="location" id="location" class="form-control"
-                          value="{{ old('location', $ip_phone->location) }}" readonly required>
+                          value="{{ old('location', $ip_phone->distribution_asset->distribution->location_room->name) }}"
+                          readonly required>
                         @if ($errors->has('location'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('location') }}</p>
