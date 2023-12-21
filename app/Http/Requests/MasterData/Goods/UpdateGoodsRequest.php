@@ -3,6 +3,7 @@
 namespace App\Http\Requests\MasterData\Goods;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateGoodsRequest extends FormRequest
 {
@@ -25,15 +26,16 @@ class UpdateGoodsRequest extends FormRequest
     {
         return [
             'type_assets' => 'required|max:255',
-            'sku' => 'required|max:255',
+            'sku' => 'max:255',
             'category' => 'required|max:255',
             'brand' => 'required|max:255',
             'stats' => 'required|max:255',
-            'size' => 'required|max:255',
+            'size' => 'max:255',
             'year' => 'required|max:255',
-            'description' => 'required|max:255',
             'name' => 'required|max:255',
-            'barcode' => 'required|max:255',
+            'barcode' => ['max:255',
+                Rule::unique('goods', 'barcode')->ignore($this->route('barang'), 'id'),
+            ],
             'file' => 'mimes:png,jpg,jpeg',
         ];
     }

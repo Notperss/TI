@@ -74,7 +74,7 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="location" id="location" class="form-control"
+                        <input name="" id="location" class="form-control"
                           value="{{ old('location', $ip_phone->distribution_asset->distribution->location_room->name) }}"
                           readonly required>
                         @if ($errors->has('location'))

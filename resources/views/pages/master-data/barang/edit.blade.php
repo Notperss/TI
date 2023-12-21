@@ -24,6 +24,7 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
+                    <input name="stats" id="stats" class="form-control" value="1" hidden>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="name">Nama Barang<code
                           style="color:red;">*</code></label>
@@ -35,10 +36,10 @@
                             {{ $errors->first('name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="sku">SKU<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="sku">SKU</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="sku" id="sku"
-                          value="{{ old('sku', $barang->sku) }}" required>
+                          value="{{ old('sku', $barang->sku) }}">
                         @if ($errors->has('sku'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('sku') }}</p>
@@ -118,22 +119,20 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="barcode">Barcode<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="barcode">Barcode</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="barcode" id="barcode"
-                          value="{{ old('barcode', $barang->barcode) }}" required>
+                          value="{{ old('barcode', $barang->barcode) }}">
                         @if ($errors->has('barcode'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('barcode') }}</p>
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="size">Ukuran<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="size">Ukuran</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="size" id="size"
-                          value="{{ old('size', $barang->size) }}" required>
+                          value="{{ old('size', $barang->size) }}">
                         @if ($errors->has('size'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('size') }}</p>
@@ -153,7 +152,7 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="stats">Status<code
+                      {{-- <label class="col-md-2 label-control" for="stats">Status<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <select name="stats" id="stats" class="form-control select2" required>
@@ -170,10 +169,8 @@
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('stats') }}</p>
                         @endif
-                      </div>
-                    </div>
+                      </div> --}}
 
-                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="year">Tahun
                         <code style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -185,7 +182,9 @@
                             {{ $errors->first('year') }}</p>
                         @endif
                       </div>
+                    </div>
 
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="file">Gambar Barang</label>
                       <div class="col-md-4">
                         <div class="custom-file">
@@ -216,10 +215,9 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-9">
-                        <textarea rows="5" class="form-control summernote" id="description" name="description" required>{{ old('description', $barang->description) }}</textarea>
+                        <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description', $barang->description) }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>

@@ -227,27 +227,26 @@ class IpPhoneController extends Controller
             $data['file'] = $path_file;
         }
 
-        $assetStats = $ip_phone->distribution_asset->asset->stats;
+        // $stats = $ip_phone->distribution_asset->asset['stats'];
 
-        if ($assetStats == 6) {
-            $assetId = $ip_phone->distributionAsset_id;
+        // // $assetId = $stats->distribution_asset->asset_id;
 
-            // Update 'stats' field only once for each unique 'asset_id'
-            Barang::where('id', $assetId)->where('stats', '!=', 2)->update(['stats' => 2]);
+        // if ($stats == 6) {
+        //     //update stats
+        //     $goods = Barang::find($ip_phone->distribution_asset->asset->id);
+        //     $goods->update(['stats' => 2]);
+        // }
 
-            // Update 'stats' field for the current IP Phone record
-            $ip_phone->update($data);
-
-            // Update 'stats' field only once for each unique 'asset_id'
-            Barang::where('id', $assetId)->where('stats', '!=', 6)->update(['stats' => 6]);
-        } else {
-            // Update 'stats' field for the current IP Phone record
-            $ip_phone->update($data);
-        }
-
-        dd($assetId);
-        // update to database
+        // Update to database
         $ip_phone->update($data);
+
+        //update stats
+        // $goodsId = Barang::find($ip_phone->distribution_asset->asset->id);
+        // Update for new data
+        Barang::where('id', $ip_phone->distribution_asset->asset->id)->update(['stats' => 6]);
+
+        // Update for old data
+        Barang::where('id', '<>', $ip_phone->distribution_asset->asset->id)->update(['stats' => 2]);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
         return redirect()->route('backsite.ip_phone.index');
@@ -272,6 +271,10 @@ class IpPhoneController extends Controller
         if ($path_file != null || $path_file != '') {
             Storage::delete($path_file);
         }
+
+        //update stats
+        $goods = Barang::find($ip_phone->distribution_asset->asset->id);
+        $goods->update(['stats' => 2]);
 
         // hapus location
         $ip_phone->forceDelete();
