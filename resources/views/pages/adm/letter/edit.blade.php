@@ -49,6 +49,10 @@
                             Surat
                             Keluar</option>
                           <option value="MEMO"{{ $letter->type_letter == 'MEMO' ? 'selected' : '' }}>Memo</option>
+                          <option value="MEMO IN"{{ $letter->type_letter == 'MEMO IN' ? 'selected' : '' }}>Memo In
+                          </option>
+                          <option value="MEMO OUT"{{ $letter->type_letter == 'MEMO OUT' ? 'selected' : '' }}>Memo Out
+                          </option>
                           <option value="LAIN-LAIN"{{ $letter->type_letter == 'LAIN-LAIN' ? 'selected' : '' }}>Lain-lain
                           </option>
                         </select>
@@ -115,7 +119,7 @@
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-3">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file" required>
+                          <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
                           @if ($letter->file)

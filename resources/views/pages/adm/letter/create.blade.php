@@ -44,6 +44,8 @@
                           <option value="SURAT MASUK">Surat Masuk</option>
                           <option value="SURAT KELUAR">Surat Keluar</option>
                           <option value="MEMO">Memo</option>
+                          <option value="MEMO IN">Memo In</option>
+                          <option value="MEMO OUT">Memo Out</option>
                           <option value="LAIN-LAIN">Lain-lain</option>
                         </select>
                         @if ($errors->has('type_letter'))

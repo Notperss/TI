@@ -110,6 +110,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('location_detail', LocationDetailController::class);
     // division
     Route::resource('division', DivisionController::class);
+    Route::get('/get-division-data/{name}', [DivisionController::class, 'getDivisionData'])->name('getDivisionName');
     // department
     Route::resource('department', DepartmentController::class);
     // section
@@ -124,6 +125,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('work_type', WorkTypeController::class);
     // employee
     Route::resource('employee', EmployeeController::class);
+
+    // Route::get('/employee/division-employee', [EmployeeController::class, 'division-employe'])->name('division-employee');
     // work_program
     Route::resource('work_program', WorkProgramController::class);
     // daily_activity

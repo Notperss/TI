@@ -10,8 +10,12 @@
         <span>N/A</span>';
       @elseif ($letter->type_letter == 'SURAT KELUAR')
         <h5><span class="badge bg-warning">Surat Keluar</span></h5>
+      @elseif ($letter->type_letter == 'MEMO OUT')
+        <h5><span class="badge bg-warning">Memo Out</span></h5>
       @elseif ($letter->type_letter == 'SURAT MASUK')
         <h5><span class="badge bg-primary">Surat Masuk</span></h5>
+      @elseif ($letter->type_letter == 'MEMO IN')
+        <h5><span class="badge bg-primary">Memo In</span></h5>
       @elseif ($letter->type_letter == 'MEMO')
         <h5><span class="badge bg-info">Memo</span></h5>
       @elseif ($letter->type_letter == 'LAIN-LAIN')
@@ -53,9 +57,13 @@
   <tr>
     <th>File</th>
     @if ($letter->file)
-      <td> <a data-fancybox="gallery" data-src="{{ asset('storage/' . $letter->file) }}" class="badge bg-blue text-white">
-          Show
+      <td> <a data-fancybox="gallery" data-src="{{ asset('storage/' . $letter->file) }}"
+          class="btn btn-sm btn-blue text-white">
+          Lihat
         </a>
+        <br>
+
+        <p class="mt-1">Latest File : {{ pathinfo($letter->file, PATHINFO_FILENAME) }}</p>
       @else
       <td> No File!</td>
     @endif

@@ -54,8 +54,9 @@ class EmployeeController extends Controller
         // get all request from frontsite
         $data = $request->all();
 
+        dd($data);
         // store to database
-        $employee = Employee::create($data);
+        // $employee = Employee::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.employee.index');

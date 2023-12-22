@@ -177,6 +177,10 @@
               return '<h5><span class="badge bg-warning">Surat Keluar</span></h5>';
             } else if (data === 'MEMO') {
               return '<h5><span class="badge bg-info">Memo</span></h5>';
+            } else if (data === 'MEMO IN') {
+              return '<h5><span class="badge bg-primary">Memo In</span></h5>';
+            } else if (data === 'MEMO OUT') {
+              return '<h5><span class="badge  bg-warning">Memo Out</span></h5>';
             } else if (data === 'LAIN-LAIN') {
               return '<h5><span class="badge bg-secondary">Lain-lain</span></h5>';
             } else {

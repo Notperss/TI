@@ -26,10 +26,10 @@ class UpdateEmployeeRequest extends FormRequest
     {
         return [
             'nip' => [
-                'required', 'string', 'max:255',
+                'required', 'string', 'max:255', Rule::unique('employee')->ignore($this->employee),
             ],
             'name' => [
-                'required', 'string', 'max:255', Rule::unique('employee')->ignore($this->employee),
+                'required', 'string', 'max:255',
             ],
             'job_position' => [
                 'required', 'string', 'max:255',

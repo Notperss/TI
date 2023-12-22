@@ -117,4 +117,5 @@ class DivisionController extends Controller
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
+
 }
