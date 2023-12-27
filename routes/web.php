@@ -250,6 +250,11 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/pp/upload', 'upload')->name('pp.upload');
         Route::post('/pp/show_file', 'show_file')->name('pp.show_file');
         Route::delete('/pp/{id}/hapus_file', 'hapus_file')->name('pp.hapus_file');
+
+        Route::post('/pp/form_status', 'form_status')->name('pp.form_status');
+        Route::post('/pp/add_status', 'add_status')->name('pp.add_status');
+        Route::post('/pp/show_status', 'show_status')->name('pp.show_status');
+        Route::delete('/pp/{id}/delete_status', 'delete_status')->name('pp.delete_status');
     });
 
     Route::resource('license', LicenseController::class);

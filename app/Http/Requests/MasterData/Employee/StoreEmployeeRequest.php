@@ -25,25 +25,25 @@ class StoreEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'nip' => [
-            //     'required', 'string', 'max:255',
-            //     Rule::unique('employee', 'nip')->ignore($this->route('employee'), 'id'),
-            // ],
-            // 'name' => [
-            //     'required', 'string', 'max:255',
-            // ],
-            // 'job_position' => [
-            //     'required', 'string', 'max:255',
-            // ],
-            // 'division_id' => [
-            //     'required', 'string', 'max:255',
-            // ],
-            // 'department_id' => [
-            //     'required', 'string', 'max:255',
-            // ],
-            // 'section_id' => [
-            //     'required', 'string', 'max:255',
-            // ],
+            'nip' => [
+                'required', 'string', 'max:255',
+                Rule::unique('employee', 'nip')->ignore($this->route('employee'), 'id'),
+            ],
+            'name' => [
+                'required', 'string', 'max:255',
+            ],
+            'job_position' => [
+                'required', 'string', 'max:255',
+            ],
+            'division_id' => [
+                'required', 'string', 'max:255',
+            ],
+            'department_id' => [
+                'required', 'string', 'max:255',
+            ],
+            'section_id' => [
+                'required', 'string', 'max:255',
+            ],
         ];
     }
 }

@@ -46,23 +46,14 @@
                     </div>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="job_name">Nama Pekerjaan</label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" id="job_name" name="job_name"
-                          value="{{ old('job_name', $pp->job_name) }}" readonly>
+                      <div class="col-md-10">
+                        <textarea rows="3" type="text" class="form-control" id="job_name" name="job_name" readonly> {{ old('job_name', $pp->job_name) }} </textarea>
                         @if ($errors->has('job_name'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('job_name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP</label>
-                      <div class="col-md-4">
-                        <input type="text" id="rkap" name="rkap" class="form-control"
-                          value="{{ old('rkap', $pp->rkap) }}" readonly>
-                        @if ($errors->has('rkap'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('rkap') }}</p>
-                        @endif
-                      </div>
+
                     </div>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="year">Tahun
@@ -78,11 +69,50 @@
                       <label class="col-md-2 label-control" for="job_value">Nilai Pekerjaan
                       </label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="job_value" id="job_value"
-                          value="{{ old('job_value', $pp->job_value) }}" readonly>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" class="form-control" name="job_value" id="job_value"
+                            value="{{ old('job_value', $pp->job_value) }}" readonly>
+                        </div>
                         @if ($errors->has('job_value'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('job_value') }}</p>
+                        @endif
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
+                      <div class="col-md-4">
+                        <select name="type_bill" id="type_bill" class="form-control select2" disabled>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="LUMPSUM"{{ $pp->type_bill == 'LUMPSUM' ? 'selected' : '' }}>
+                            Lumpsum
+                          </option>
+                          <option value="RUTIN"{{ $pp->type_bill == 'RUTIN' ? 'selected' : '' }}>Rutin
+                          </option>
+                        </select>
+                        @if ($errors->has('type_bill'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('type_bill') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="contract_value">Nilai OP/kontrak</label>
+                      <div class="col-md-4">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" id="contract_value" name="contract_value" class="form-control"
+                            value="{{ old('contract_value', $pp->contract_value) }}" readonly>
+                        </div>
+                        @if ($errors->has('contract_value'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('contract_value') }}</p>
                         @endif
                       </div>
                     </div>
@@ -103,21 +133,19 @@
                             {{ $errors->first('stats') }}</p>
                         @endif
                       </div>
-                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
+
+                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP</label>
                       <div class="col-md-4">
-                        <select name="type_bill" id="type_bill" class="form-control select2" disabled>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="LUMPSUM"{{ $pp->type_bill == 'LUMPSUM' ? 'selected' : '' }}>
-                            Lumpsum
-                          </option>
-                          <option value="RUTIN"{{ $pp->type_bill == 'RUTIN' ? 'selected' : '' }}>Rutin
-                          </option>
-                        </select>
-                        @if ($errors->has('type_bill'))
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" id="rkap" name="rkap" class="form-control"
+                            value="{{ old('rkap', $pp->rkap) }}" readonly>
+                        </div>
+                        @if ($errors->has('rkap'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('type_bill') }}</p>
+                            {{ $errors->first('rkap') }}</p>
                         @endif
                       </div>
                     </div>

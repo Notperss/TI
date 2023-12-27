@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->date('date');
             $table->string('job_name');
             $table->string('job_value');
+            $table->string('job_value');
+            $table->string('contract_value');
             $table->string('rkap');
             $table->string('stats');
             $table->string('type_bill');

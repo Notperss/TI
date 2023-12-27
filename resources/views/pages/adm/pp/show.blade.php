@@ -10,8 +10,12 @@
     <td>{{ isset($pp->job_name) ? $pp->job_name : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Nilai Pekerjaan</th>
+    <th>Nilai PP</th>
     <td>{{ isset($pp->job_value) ? $pp->job_value : 'N/A' }}</td>
+  </tr>
+  <tr>
+    <th>Nilai OP/Kontrak</th>
+    <td>{{ isset($pp->contract_value) ? $pp->contract_value : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Nilai RKAP</th>
@@ -90,5 +94,43 @@
 
   $(document).ready(function() {
     tampilDataFile();
+  });
+</script>
+
+<table class="table table-bordered tampilstatus" style="word-break: break-all">
+</table>
+
+<script>
+  function tampilDataStatus() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    let id = $('#id').val();
+    $.ajax({
+      type: "post",
+      url: "{{ route('backsite.pp.show_status') }}",
+      data: {
+        id: id
+      },
+      dataType: "json",
+      beforeSend: function() {
+        $('.tampildata').html('<i class="bx bx-balloon bx-flasing"></i>');
+      },
+      success: function(response) {
+        if (response.data) {
+          $('.tampilstatus').html(response.data);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    tampilDataStatus();
   });
 </script>

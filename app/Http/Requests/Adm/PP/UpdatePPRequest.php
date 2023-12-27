@@ -25,10 +25,11 @@ class UpdatePPRequest extends FormRequest
     public function rules()
     {
         return [
-            "no_pp" => "required",
-            "job_name" => "required",
-            "job_value" => "required",
-            "rkap" => "required",
+            "no_pp" => "required|max:255",
+            "job_name" => "required|max:255",
+            "job_value" => "required|max:255",
+            "contract_value" => "required|max:255",
+            "rkap" => "required|max:255",
             "date" => "required",
             "year" => "required",
             "stats" => "required",

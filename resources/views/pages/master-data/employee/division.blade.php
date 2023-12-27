@@ -8,6 +8,8 @@
 
       // Set the value of the input text field to the division name
       $('#name').val(divisionName);
+      $('#job_position').val(divisionName);
+      $('#nip').val(divisionName);
     });
   });
 </script>

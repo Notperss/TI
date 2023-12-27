@@ -12,17 +12,12 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('goods', function (Blueprint $table) {
+        Schema::create('pp_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('category')->nullable();
-            $table->string('type_assets');
-            $table->string('barcode')->nullable();
-            $table->string('sku')->nullable();
-            $table->string('brand');
-            $table->string('stats');
-            $table->string('size')->nullable();
-            $table->longText('description')->nullable();
+            $table->bigInteger('pp_id');
+            $table->string('type_status');
+            $table->date('date');
+            $table->longText('description');
             $table->string('file')->nullable();
             $table->timestamps();
         });
@@ -35,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('goods');
+        Schema::dropIfExists('pp_statuses');
     }
 };

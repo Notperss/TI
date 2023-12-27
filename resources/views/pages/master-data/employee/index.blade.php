@@ -96,19 +96,32 @@
                           @forelse($employee as $key => $employee_item)
                             <tr data-entry-id="{{ $employee_item->id }}">
                               <td class="text-center">{{ $loop->iteration }}</td>
-                              <td class=" text-center h5 "> <span class="badge badge-info font-weight-bold">
+                              <td class=" text-center h5 "> <span class="btn btn-sm btn-info font-weight-bold">
                                   {{ $employee_item->nip ?? '' }}</td>
                               <td class="text-center">
                                 {{ $employee_item->name ?? '' }}</td>
                               <td class="text-center">
                                 {{ $employee_item->job_position ?? '' }}</td>
                               <td class="text-center">
-                                {{ $employee_item->division->name ?? '' }}</td>
-                              <td class="text-center">
-                                {{ $employee_item->department->name ?? '' }}
+                                @if ($employee_item->division_id)
+                                  {{ $employee_item->division->name ?? '' }}
+                                @else
+                                  <span>N/A</span>
+                                @endif
                               </td>
                               <td class="text-center">
-                                {{ $employee_item->section->name ?? '' }}
+                                @if ($employee_item->department_id)
+                                  {{ $employee_item->department->name ?? '' }}
+                                @else
+                                  <span>N/A</span>
+                                @endif
+                              </td>
+                              <td class="text-center">
+                                @if ($employee_item->section_id)
+                                  {{ $employee_item->section->name ?? '' }}
+                                @else
+                                  <span>N/A</span>
+                                @endif
                               </td>
                               <td class="text-center">
                                 @if ($employee_item->type_user == 1)

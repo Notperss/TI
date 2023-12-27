@@ -142,9 +142,13 @@
                                 Choose
                               </option>
                               @foreach ($department as $key => $department_item)
-                                <option value="{{ $department_item->id }}"
-                                  {{ $department_item->id == $employee->department_id ? 'selected' : '' }}>
-                                  {{ $department_item->name }}</option>
+                                @if ($employee->department_id == 0)
+                                  <option value="0" selected>N/A</option>
+                                @else
+                                  <option value="{{ $department_item->id }}"
+                                    {{ $department_item->id == $employee->department_id ? 'selected' : '' }}>
+                                    {{ $department_item->name }}</option>
+                                @endif
                               @endforeach
                             </select>
 
@@ -163,9 +167,13 @@
                                 Choose
                               </option>
                               @foreach ($section as $key => $section_item)
-                                <option value="{{ $section_item->id }}"
-                                  {{ $section_item->id == $employee->section_id ? 'selected' : '' }}>
-                                  {{ $section_item->name }}</option>
+                                @if ($employee->section_id == 0)
+                                  <option value="0" selected>N/A</option>
+                                @else
+                                  <option value="{{ $section_item->id }}"
+                                    {{ $section_item->id == $employee->section_id ? 'selected' : '' }}>
+                                    {{ $section_item->name }}</option>
+                                @endif
                               @endforeach
                             </select>
 

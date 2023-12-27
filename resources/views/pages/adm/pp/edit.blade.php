@@ -51,24 +51,14 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="job_name">Nama Pekerjaan<code
                           style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" class="form-control" id="job_name" name="job_name"
-                          value="{{ old('job_name', $pp->job_name) }}" required>
+                      <div class="col-md-10">
+                        <textarea rows="3" type="text" class="form-control" id="job_name" name="job_name" required>{{ old('job_name', $pp->job_name) }}</textarea>
                         @if ($errors->has('job_name'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('job_name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="text" id="rkap" name="rkap" class="form-control"
-                          value="{{ old('rkap', $pp->rkap) }}" required>
-                        @if ($errors->has('rkap'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('rkap') }}</p>
-                        @endif
-                      </div>
+
                     </div>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="year">Tahun
@@ -82,11 +72,16 @@
                             {{ $errors->first('year') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="job_value">Nilai Pekerjaan
+                      <label class="col-md-2 label-control" for="job_value">Nilai PP
                         <code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="job_value" id="job_value"
-                          value="{{ old('job_value', $pp->job_value) }}" required>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" class="form-control numberformat" name="job_value" id="job_value"
+                            value="{{ old('job_value', $pp->job_value) }}" required>
+                        </div>
                         @if ($errors->has('job_value'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('job_value') }}</p>
@@ -94,22 +89,6 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="stats" id="stats" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1"{{ $pp->stats == 1 ? 'selected' : '' }}>Aktif</option>
-                          <option value="2"{{ $pp->stats == 2 ? 'selected' : '' }}>Tidak Aktif
-                          </option>
-                        </select>
-
-                        @if ($errors->has('stats'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
-                        @endif
-                      </div>
                       <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
                       <div class="col-md-4">
                         <select name="type_bill" id="type_bill" class="form-control select2" required>
@@ -125,6 +104,59 @@
                         @if ($errors->has('type_bill'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('type_bill') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="contract_value">Nilai OP/Kontrak<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" id="contract_value" name="contract_value"
+                            class="form-control numberformat" value="{{ old('contract_value', $pp->contract_value) }}"
+                            required>
+                        </div>
+                        @if ($errors->has('contract_value'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('contract_value') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="stats">Status<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select name="stats" id="stats" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="1"{{ $pp->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="2"{{ $pp->stats == 2 ? 'selected' : '' }}>Tidak Aktif
+                          </option>
+                        </select>
+
+                        @if ($errors->has('stats'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('stats') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" id="rkap" name="rkap" class="form-control numberformat"
+                            value="{{ old('rkap', $pp->rkap) }}" required>
+                        </div>
+                        @if ($errors->has('rkap'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('rkap') }}</p>
                         @endif
                       </div>
                     </div>
@@ -147,6 +179,76 @@
                       </button>
                     </div>
                 </form>
+                <div class="form-group row">
+                  <div class="col-md-4">
+                    <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah File"
+                      onclick="add_status('{{ $pp->id }}')"><i class="bx bx-file"></i>
+                      Status</button>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
+                      aria-label="">
+                      <thead>
+                        <tr>
+                          <th class="text-center" style="width: 5%;">No</th>
+                          <th class="text-center">Tipe Status</th>
+                          <th class="text-center">Tanggal</th>
+                          <th class="text-center">Keterangan</th>
+                          <th style="text-align:center; width:10px;">Action</th>
+                        </tr>
+                      </thead>
+                      @foreach ($data as $file)
+                        <tbody>
+                          <td class="text-center">{{ $loop->iteration }}</td>
+                          <td class="text-center">
+                            @if ($file->type_status)
+                              {{ $file->type_status }}
+                            @else
+                              <p style="color:red;">Type File is Empty!</p>
+                            @endif
+                          </td>
+                          <td class="text-center">
+                            @if ($file->date)
+                              {{ Carbon\Carbon::parse($file->date)->translatedFormat('l, d F Y') }}
+                            @else
+                              <p style="color:red;">Name File is Empty!</p>
+                            @endif
+                          </td>
+                          <td class="text-center">
+                            @if ($file->description)
+                              {{ $file->description }}
+                            @else
+                              <p style="color:red;">Description is Empty!</p>
+                            @endif
+                          </td>
+                          <td class="text-center">
+                            <div class="btn-group mr-1 mb-1">
+                              <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Action</button>
+                              <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}"
+                                  class="btn text-nowrap ">
+                                  Show
+                                </a>
+                                <a type="button" href="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap"
+                                  download>Download</a>
+                                <form action="{{ route('backsite.pp.delete_status', $file->id ?? '') }}" method="POST"
+                                  onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                  <input type="hidden" name="_method" value="DELETE">
+                                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                  <input type="submit" id="delete_file" class="btn"value="Delete">
+                                </form>
+                              </div>
+                            </div>
+                          </td>
+                        </tbody>
+                      @endforeach
+                    </table>
+                  </div>
+                </div>
+
                 <div class="form-group row">
                   <div class="col-md-4">
                     <button type="button" id="button_file" class="btn btn-cyan btn-md ml-2 my-2" title="Tambah File"
@@ -261,6 +363,30 @@
       $.ajax({
         type: "post",
         url: "{{ route('backsite.pp.form_upload') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function add_status(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.pp.form_status') }}",
         data: {
           id: id
         },

@@ -88,7 +88,7 @@
                           <th>No PP</th>
                           <th>Tahun</th>
                           <th>Pekerjaan</th>
-                          <th>Nominal</th>
+                          <th>Nominal PP</th>
                           <th>Tanggal</th>
                           <th>Status</th>
                           <th>Action</th>
@@ -312,6 +312,30 @@
       $.ajax({
         type: "post",
         url: "{{ route('backsite.pp.form_upload') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function add_status(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.pp.form_status') }}",
         data: {
           id: id
         },

@@ -27,7 +27,7 @@ class EmployeeController extends Controller
         $division = Division::orderBy('name', 'asc')->get();
         $department = Department::orderBy('name', 'asc')->get();
         $section = Section::orderBy('name', 'asc')->get();
-        $employee = Employee::orderBy('name', 'asc')->get();
+        $employee = Employee::orderBy('created_at', 'desc')->get();
 
         return view('pages.master-data.employee.index', compact('division', 'department', 'section', 'employee'));
     }
@@ -54,9 +54,9 @@ class EmployeeController extends Controller
         // get all request from frontsite
         $data = $request->all();
 
-        dd($data);
+        // dd($data);
         // store to database
-        // $employee = Employee::create($data);
+        $employee = Employee::create($data);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.employee.index');

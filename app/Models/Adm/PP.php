@@ -17,6 +17,7 @@ class PP extends Model
         "date",
         "job_name",
         "job_value",
+        "contract_value",
         "description",
         "rkap",
         "stats",
