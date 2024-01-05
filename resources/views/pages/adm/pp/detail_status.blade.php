@@ -22,7 +22,7 @@
         </td>
         <td>
           @if ($file->date)
-            {{ Carbon\Carbon::parse($file->date)->translatedFormat('l, d F Y') }}
+            {{ Carbon\Carbon::parse($file->date)->translatedFormat('d M Y') }}
           @else
             <p style="color:red;">Date is Empty!</p>
           @endif

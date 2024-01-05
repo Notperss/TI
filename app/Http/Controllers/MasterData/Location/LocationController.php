@@ -13,16 +13,18 @@ use App\Models\MasterData\Location\Location;
 use App\Http\Requests\MasterData\Location\Location\StoreLocationRequest;
 use App\Http\Requests\MasterData\Location\Location\UpdateLocationRequest;
 
-class LocationController extends Controller {
+class LocationController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        if(request()->ajax()) {
+    public function index()
+    {
+        if (request()->ajax()) {
 
-            $location = Location::orderBy('name', 'asc')->get();
+            $location = Location::orderBy('created_at', 'desc')->get();
 
             return DataTables::of($location)
                 ->addIndexColumn()
@@ -32,14 +34,14 @@ class LocationController extends Controller {
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a class="dropdown-item" href="'.route('backsite.information.edit', encrypt($item->id)).'">
+                    <a class="dropdown-item" href="' . route('backsite.location.edit', encrypt($item->id)) . '">
                         Edit
                     </a>
-                    <form action="'.route('backsite.vendor_ti.destroy', encrypt($item->id)).'" method="POST"
+                    <form action="' . route('backsite.location.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        '.method_field('delete').csrf_field().'
+                        ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
@@ -57,7 +59,8 @@ class LocationController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         return view('pages.master-data.location.location.create');
     }
 
@@ -67,7 +70,8 @@ class LocationController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLocationRequest $request) {
+    public function store(StoreLocationRequest $request)
+    {
         // get all request from frontsite
         $data = $request->all();
 
@@ -84,7 +88,8 @@ class LocationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         return abort(404);
     }
 
@@ -94,7 +99,8 @@ class LocationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $location = Location::find($decrypt_id);
@@ -109,7 +115,8 @@ class LocationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLocationRequest $request, Location $location) {
+    public function update(UpdateLocationRequest $request, Location $location)
+    {
         // get all request from frontsite
         $data = $request->all();
 
@@ -126,7 +133,8 @@ class LocationController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $location = Location::find($decrypt_id);

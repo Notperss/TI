@@ -75,88 +75,20 @@
                 <div class="card-body card-dashboard">
 
                   <div class="table-responsive">
-                    <table class="table table-striped table-bordered text-inputs-searching default-table">
+                    <table class="table table-striped table-bordered text-inputs-searching default-table" id="work-table">
                       <thead>
                         <tr>
-                          <th class="text-center">No</th>
-                          <th class="text-center">Program Kerja</th>
-                          <th class="text-center">Tahun</th>
-                          <th class="text-center ">Umum</th>
-                          <th class="text-center">Teknis</th>
-                          <th class="text-center">Progress</th>
-                          <th class="text-center">Status</th>
-                          <th style="text-align:center; width:50px;">Action</th>
+                          <th>No</th>
+                          <th>Program Kerja</th>
+                          <th>Tahun</th>
+                          <th>Umum</th>
+                          <th>Teknis</th>
+                          <th>Progress</th>
+                          <th>Status</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        @forelse($work_program as $key => $work_program_item)
-                          <tr data-entry-id="{{ $work_program_item->id }}">
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td class="text-center">
-                              @if ($work_program_item->work_program == 1)
-                                <span class="badge badge-success">{{ 'Teknologi Informasi' }}</span>
-                              @elseif($work_program_item->work_program == 2)
-                                <span class="badge badge-warning">{{ 'Hardware' }}</span>
-                              @elseif($work_program_item->work_program == 3)
-                                <span class="badge badge-secondary">{{ 'Jaringan' }}</span>
-                              @elseif($work_program_item->work_program == 4)
-                                <span class="badge badge-danger">{{ 'Peralatan Tol' }}</span>
-                              @elseif($work_program_item->work_program == 5)
-                                <span class="badge badge-info">{{ 'Sistem Informasi' }}</span>
-                              @else
-                                <span>{{ 'N/A' }}</span>
-                              @endif
-                            </td>
-                            <td class="text-center">
-                              {{ $work_program_item->year ?? '' }}
-                            </td>
-                            <td class="text-center ">
-                              {{ $work_program_item->general ?? '' }}
-                            </td>
-                            <td class="text-center">
-                              {{ $work_program_item->technical ?? '' }}
-                            </td>
-                            <td class="text-center">
-                              {{ $work_program_item->progress ?? '' }}
-                            </td>
-                            <td class="text-center">
-                              @if ($work_program_item->status == 1)
-                                <span class="badge badge-success">{{ 'Aktif' }}</span>
-                              @elseif($work_program_item->status == 2)
-                                <span class="badge badge-danger">{{ 'Tidak Aktif' }}</span>
-                              @else
-                                <span>{{ 'N/A' }}</span>
-                              @endif
-                            </td>
-                            <td class="text-center">
-                              <div class="btn-group mr-1 mb-1">
-                                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
-                                  aria-haspopup="true" aria-expanded="false">Action</button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                                  <a href="#mymodal"
-                                    data-remote="{{ route('backsite.work_program.show', encrypt($work_program_item->id)) }}"
-                                    data-toggle="modal" data-target="#mymodal" data-title="Detail Program Kerja"
-                                    class="dropdown-item">
-                                    Show
-                                  </a>
-                                  <a class="dropdown-item"
-                                    href="{{ route('backsite.work_program.edit', encrypt($work_program_item->id)) }}">
-                                    Edit
-                                  </a>
-                                  <form
-                                    action="{{ route('backsite.work_program.destroy', encrypt($work_program_item->id)) }}"
-                                    method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="submit" class="dropdown-item" value="Delete">
-                                  </form>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        @empty
-                          {{-- not found --}}
-                        @endforelse
                       </tbody>
                       <tfoot hidden>
                         <tr>
@@ -189,14 +121,115 @@
 @push('after-style')
   <link rel="stylesheet" type="text/css"
     href="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+  {{-- <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet"> --}}
 @endpush
 
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+  {{-- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script> --}}
 
   <script>
+    var datatable = $('#work-table').dataTable({
+      processing: true,
+      serverSide: true,
+      ordering: false,
+      dom: 'Bfrtip',
+      buttons: [{
+          extend: 'copy',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'excel',
+          className: "btn btn-info"
+        },
+        {
+          extend: 'print',
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
+        },
+      ],
+      ajax: {
+        url: "{{ route('backsite.work_program.index') }}",
+      },
+      columns: [{
+          data: 'DT_RowIndex',
+          name: 'DT_RowIndex',
+          orderable: false,
+          searchable: false,
+
+        },
+        {
+          data: 'work_program',
+          name: 'work_program',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<span class="badge badge-success">Teknologi Informasi</span>';
+            } else if (data === '2') {
+              return '<span class="badge bg-warning">Hardware</span>';
+            } else if (data === '3') {
+              return '<span class="badge bg-secondary">Jaringan</span>';
+            } else if (data === '4') {
+              return '<span class="badge bg-danger">Peralatan Tol</span>';
+            } else if (data === '5') {
+              return '<span class="badge bg-info">Sistem Informasi</span>';
+            } else {
+              return '-';
+            }
+          }
+
+        },
+        {
+          data: 'year',
+          name: 'year',
+        },
+        {
+          data: 'general',
+          name: 'general',
+        },
+        {
+          data: 'technical',
+          name: 'technical',
+        },
+        {
+          data: 'progress',
+          name: 'progress',
+        },
+        {
+          data: 'status',
+          name: 'status',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '2') {
+              return '<span class="badge bg-danger">Tidak Aktif</span>';
+            } else if (data === '1') {
+              return '<span class="badge bg-success">Aktif</span>';
+            } else {
+              return '-';
+            }
+          }
+        },
+        {
+          data: 'action',
+          name: 'action',
+          orderable: false,
+          searchable: false,
+          width: '15%',
+          className: 'no-print'
+        },
+      ],
+      columnDefs: [{
+        className: 'text-center',
+        targets: '_all'
+      }, ],
+    });
+
+
+
     jQuery(document).ready(function($) {
       $('#mymodal').on('show.bs.modal', function(e) {
         var button = $(e.relatedTarget);
@@ -207,36 +240,16 @@
       });
     });
 
-    $('.default-table').DataTable({
-      "order": [],
-      "paging": true,
-      "lengthMenu": [
-        [5, 10, 25, 50, 100, -1],
-        [5, 10, 25, 50, 100, "All"]
-      ],
-      "pageLength": 10
+    // $('.default-table').DataTable({
+    //   "order": [],
+    //   "paging": true,
+    //   "lengthMenu": [
+    //     [5, 10, 25, 50, 100, -1],
+    //     [5, 10, 25, 50, 100, "All"]
+    //   ],
+    //   "pageLength": 10
 
-    });
-
-    // summernote
-    $('.summernote').summernote({
-      tabsize: 2,
-      height: 100,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'italic', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['fontsize', ['fontsize']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['height', ['height']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture', 'hr']],
-        ['view', ['fullscreen', 'codeview']],
-      ],
-    });
-
-    $('.summernote').summernote('fontSize', '12');
+    // });
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">

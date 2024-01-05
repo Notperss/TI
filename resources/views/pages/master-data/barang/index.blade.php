@@ -75,7 +75,8 @@
                           <th>Nama Barang</th>
                           <th>Category</th>
                           <th>Barcode</th>
-                          <th>File</th>
+                          <th>User</th>
+                          <th>Tanggal</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -86,6 +87,7 @@
                         <th>Nama Barang</th>
                         <th>Category</th>
                         <th>Barcode</th>
+                        <th>File</th>
                         <th>File</th>
                         <th>Action</th>
                       </tfoot>
@@ -149,9 +151,12 @@
           name: 'barcode',
         },
         {
-          data: 'file',
-          name: 'file',
-          className: 'no-print'
+          data: 'distribution_asset',
+          name: 'distribution_asset',
+        },
+        {
+          data: 'distribution_asset_created_at',
+          name: 'distribution_asset_created_at',
         },
         {
           data: 'action',

@@ -187,7 +187,7 @@
           name: 'id',
         },
         {
-          data: 'detail_user.user.name',
+          data: 'executor',
           name: 'executor',
         },
         {
@@ -213,9 +213,9 @@
             if (data === '0') {
               return '<span>N/A</span>';
             } else if (data === '1') {
-              return '<span class="badge bg-success">Aktif</span>';
+              return '<span class="badge bg-danger">Belum<br> Approve</span>';
             } else if (data === '2') {
-              return '<span class="badge bg-danger">Tidak Aktif</span>';
+              return '<span class="badge bg-success">Approved</span>';
             } else {
               return '-';
             }

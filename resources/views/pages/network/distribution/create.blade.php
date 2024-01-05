@@ -31,24 +31,23 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="lcoation_room_id">Ruangan<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="location_room_id" id="location_room_id" class="form-control select2">
-                          <option value="" selected disabled>Choose</option>
-                          @foreach ($location_room as $room)
-                            <option value="{{ $room->id }}">{{ $room->name }}</option>
-                          @endforeach
-                        </select>
-                        @if ($errors->has('name'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('name') }}</p>
-                        @endif
-                      </div>
-                    </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="location_id">Lokasi
+                        <code style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select id="location_id" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                          @foreach ($location_id as $loc)
+                            <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('location_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('location_id') }}</p>
+                        @endif
+                      </div>
+
                       <label class="col-md-2 label-control" for="user_id">User<code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <select class="form-control select2" name="user_id" id="user_id" required>
@@ -67,6 +66,51 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="sub_location_id">Sub Lokasi
+                        <code style="color:red;">*</code></code></label>
+                      <div class="col-md-4">
+                        <select id="sub_location_id" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                        </select>
+                        @if ($errors->has('sub_location_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('sub_location_id') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="division">Divisi <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4 ">
+                        <select name="division" id="division" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          @foreach ($division as $key => $division_item)
+                            <option value="{{ $division_item->name }}">
+                              {{ $division_item->name }}</option>
+                          @endforeach
+                        </select>
+
+                        @if ($errors->has('division'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('division') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="name">Ruangan
+                        <code style="color:red;">*</code></code></label>
+                      <div class="col-md-4">
+                        <select name="location_room_id" id="location_room_id" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                        </select>
+                        @if ($errors->has('name'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('name') }}</p>
+                        @endif
+                      </div>
+
                       <label class="col-md-2 label-control" for="date">Tanggal<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -106,7 +150,8 @@
                     </div>
                     <div class="form-group row">
                       <div class="col-md-4">
-                        <button type="button" name="add" id="add" class="btn btn-success addRow mb-1">Tambah
+                        <button type="button" name="add" id="add"
+                          class="btn btn-success addRow mb-1">Tambah
                           data asset</button>
                       </div>
                       <table id="table" class=" table col-md-12">
@@ -140,7 +185,8 @@
                     </div>
                     <div class="form-group row">
                       <div class="col-md-4">
-                        <button type="button" name="add" id="add-ip" class="btn btn-success addRow mb-1">Tambah
+                        <button type="button" name="add" id="add-ip"
+                          class="btn btn-success addRow mb-1">Tambah
                           data IP</button>
                       </div>
                       <table id="table-ip" class=" table col-md-12">
@@ -453,12 +499,59 @@
 @endpush
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-  {{-- <script>
-    $('#asset_id').on('change', function() {
-      var input_value = $(this).find(':selected').data('value');;
-      $('#category').val(input_value);
-      var input_value = $(this).find(':selected').data('value2');;
-      $('#barcode').val(input_value);
+  <script>
+    $(document).ready(function() {
+      $('#location_id').change(function() {
+        var locationId = $(this).val();
+        if (locationId) {
+          $.ajax({
+            url: '{{ route('backsite.getSubLocations') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              location_id: locationId
+            },
+            success: function(data) {
+              $('#sub_location_id').empty();
+              $('#sub_location_id').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#sub_location_id').append('<option value="' + value.id + '">' + value.name +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#sub_location_id').empty();
+          $('#sub_location_id').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
     });
-  </script> --}}
+
+    $(document).ready(function() {
+      $('#sub_location_id').change(function() {
+        var sub_locationId = $(this).val();
+        if (sub_locationId) {
+          $.ajax({
+            url: '{{ route('backsite.getLocationRooms') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              sub_location_id: sub_locationId
+            },
+            success: function(data) {
+              $('#location_room_id').empty();
+              $('#location_room_id').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#location_room_id').append('<option value="' + value.id + '">' + value.name +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#location_room_id').empty();
+          $('#location_room_id').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+  </script>
 @endpush

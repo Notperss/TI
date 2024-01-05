@@ -30,7 +30,8 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="name" id="name"
-                          value="{{ old('name', $barang->name) }}" required>
+                          value="{{ old('name', $barang->name) }}" @if ($assets->isEmpty()) @else readonly @endif
+                          required>
                         @if ($errors->has('name'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('name') }}</p>
@@ -39,7 +40,7 @@
                       <label class="col-md-2 label-control" for="sku">SKU</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="sku" id="sku"
-                          value="{{ old('sku', $barang->sku) }}">
+                          value="{{ old('sku', $barang->sku) }}" @if ($assets->isEmpty()) @else readonly @endif>
                         @if ($errors->has('sku'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('sku') }}</p>
@@ -52,7 +53,7 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <select name="category" id="category" class="form-control select21" onchange="showDiv(this)"
-                          required>
+                          @if ($assets->isEmpty()) @else disabled @endif required>
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
@@ -122,7 +123,8 @@
                       <label class="col-md-2 label-control" for="barcode">Barcode</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="barcode" id="barcode"
-                          value="{{ old('barcode', $barang->barcode) }}">
+                          value="{{ old('barcode', $barang->barcode) }}"
+                          @if ($assets->isEmpty()) @else readonly @endif>
                         @if ($errors->has('barcode'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('barcode') }}</p>
@@ -132,7 +134,8 @@
                       <label class="col-md-2 label-control" for="size">Ukuran</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="size" id="size"
-                          value="{{ old('size', $barang->size) }}">
+                          value="{{ old('size', $barang->size) }}"
+                          @if ($assets->isEmpty()) @else readonly @endif>
                         @if ($errors->has('size'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('size') }}</p>
@@ -145,7 +148,8 @@
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="brand" id="brand"
-                          value="{{ old('brand', $barang->brand) }}" required>
+                          value="{{ old('brand', $barang->brand) }}"
+                          @if ($assets->isEmpty()) @else readonly @endif required>
                         @if ($errors->has('brand'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('brand') }}</p>
@@ -175,7 +179,7 @@
                         <code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="year" id="year"
-                          data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2"
+                          @if ($assets->isEmpty()) data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2" @else @endif
                           autocomplete="off" value="{{ old('year', $barang->year) }}" readonly required>
                         @if ($errors->has('year'))
                           <p style="font-style: bold; color: red;">
@@ -217,7 +221,8 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-9">
-                        <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description', $barang->description) }}</textarea>
+                        <textarea rows="5" class="form-control summernote" id="description" name="description"
+                          @if ($assets->isEmpty()) @else readonly @endif>{{ old('description', $barang->description) }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>

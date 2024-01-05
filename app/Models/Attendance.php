@@ -15,6 +15,7 @@ class Attendance extends Model
         'start_date',
         'finish_date',
         'description',
+        'stats',
         'file',
     ];
 

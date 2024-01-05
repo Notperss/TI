@@ -20,6 +20,7 @@ use Illuminate\Console\View\Components\Confirm;
 use App\Models\MasterData\Location\LocationRoom;
 use App\Http\Requests\Data\Act_daily\StoreActDailyRequest;
 use App\Http\Requests\Data\Act_daily\UpdateActDailyRequest;
+use App\Models\ManagementAccess\DetailUser;
 
 class ActDailyController extends Controller
 {
@@ -32,7 +33,7 @@ class ActDailyController extends Controller
     {
         if (request()->ajax()) {
 
-            $actdaily = ActDaily::with('work_type', 'detail_user.user')->orderby('start_date', 'desc');
+            $actdaily = ActDaily::with('work_type', 'detail_user', 'detail_user.user')->orderby('start_date', 'desc');
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $actdaily = $actdaily->whereBetween('start_date', [$request->from_date, $request->to_date]);
@@ -41,9 +42,11 @@ class ActDailyController extends Controller
             return DataTables::of($actdaily)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    return '
-            <div class="btn-group mr-1 mb-1">
-                <button type="button" class="btn btn-cyan btn-sm mr-1" title="Tambah File" onclick="upload(' . $item->id . ')"><i
+                    if (Auth::user()->detail_user->job_position == 1) {
+                        return '
+            <div class="container">
+                 <div class="btn-group mb-1">
+                <button type="button" class="btn btn-cyan btn-sm" title="Tambah File" onclick="upload(' . $item->id . ')"><i
                         class="bx bx-file"></i></button>
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
@@ -62,23 +65,83 @@ class ActDailyController extends Controller
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
-             </div>
+                    </div>
+                    
+                    </div>
+
+                    <form action="' . route('backsite.act_daily.approve', encrypt($item->id)) . '" method="POST"
+                    onsubmit="' . ($item->status == 1 ? 'return confirm(\'Are You Sure Want to Approve?\')' : 'return confirm(\'Are You Sure Want to Cancel Approve?\')') . '">
+                        ' . method_field('PUT') . csrf_field() . '
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" title="Approve/Cancel approve" class="btn btn-sm btn-' . ($item->status == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->status == 1 ? 'Approve' : 'Cancel-Approve') . '">
+                    </form>
 
                 ';
+                    } else {
+                        if ($item->status == '1' && Auth::user()->detail_user->job_position !== 1) {
+                            return '
+            <div class="btn-group mr-1 mb-1">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.act_daily.show', $item->id) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
+                    <a class="dropdown-item" href="' . route('backsite.act_daily.edit', $item->id) . '">Edit</a>
+                    <form action="' . route('backsite.act_daily.destroy', encrypt($item->id)) . '" method="POST"
+                        onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('delete') . csrf_field() . '
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="dropdown-item" value="Delete">
+                    </form>
+                </div>
+            </div>';
+                        } else if ($item->status == '2') {
+                            return '
+            <div class="btn-group mr-2 mb-1">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.act_daily.show', $item->id) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
+                </div>
+                <span class="badge badge-sm badge-icon badge-success mx-1"><i class="la la-check"></i></span>
+            </div>';
+                        } else {
+                            return '  <form action="' . route('backsite.act_daily.destroy', encrypt($item->id)) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('delete') . csrf_field() . '
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="submit" class="btn btn-sm btn-danger" value="Delete">
+                    </form>';
+                        }
+
+                    }
                 })->editColumn('start_date', function ($item) {
                     return Carbon::parse($item->start_date)->translatedFormat('l, d F Y');
                 })->editColumn('finish_date', function ($item) {
                     return Carbon::parse($item->finish_date)->translatedFormat('l, d F Y');
+                })->editColumn('executor', function ($item) {
+                    // $detail_user = DetailUser::where($item->executor);
+                    $user_id = $item->executor; // Assuming $item->executor contains the user ID
+    
+                    $user = User::find($user_id);
+
+                    if ($user) {
+                        return $user->name;
+                    } else {
+                        return '<span>N/A</span>';
+                    }
                 })
-                ->rawColumns(['action', 'start_date', 'finish_date'])
+                ->rawColumns(['action', 'start_date', 'finish_date', 'executor'])
                 ->toJson();
         }
 
         // $actdaily = ActDaily::orderBy('start_date', 'desc')->limit(100)->get();
 
-        return view(
-            'pages.data.act_daily.index'
-        );
+        return view('pages.data.act_daily.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -310,5 +373,23 @@ class ActDailyController extends Controller
 
             return response()->json($msg);
         }
+    }
+
+    public function approve($id)
+    {
+        // deskripsi id
+        $decrypt_id = decrypt($id);
+        $act_daily = ActDaily::find($decrypt_id);
+        if ($act_daily->status == 1) {
+            $act_daily->update(['status' => 2]);
+        } elseif ($act_daily->status == 2) {
+            $act_daily->update(['status' => 1]);
+        } else {
+            alert()->error('Error', 'Data gagal di Approve');
+            return back();
+        }
+        alert()->success('Sukses', 'Data berhasil di Approve');
+        return back();
+
     }
 }

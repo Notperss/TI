@@ -41,7 +41,7 @@
                           @foreach ($distributionAsset as $asset)
                             @if ($asset->asset && $asset->asset->category === 'IP PHONE' && $asset->distribution)
                               <option value="{{ $asset->id }}"
-                                data-location="{{ $asset->distribution->location_room->name }}"
+                                data-location=" {{ $asset->distribution->location_room->location->name }} => {{ $asset->distribution->location_room->sub_location->name }} => {{ $asset->distribution->location_room->name }}"
                                 data-distribution-id="{{ $asset->distribution_id }}">
                                 {{ $asset->asset->barcode ?? '' }}
                               </option>
@@ -69,8 +69,8 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="" id="location" class="form-control" value="{{ old('location') }}" readonly
-                          required>
+                        <textarea name="" id="location" class="form-control" value="{{ old('location') }}" style="resize: none"
+                          readonly required> </textarea>
                         @if ($errors->has('location'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('location') }}</p>

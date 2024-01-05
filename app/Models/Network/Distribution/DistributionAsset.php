@@ -13,6 +13,7 @@ class DistributionAsset extends Model
     protected $fillable = [
         'distribution_id',
         'asset_id',
+        'stats',
     ];
 
     public function asset()
@@ -22,6 +23,11 @@ class DistributionAsset extends Model
     public function distribution()
     {
         return $this->belongsTo(Distribution::class, 'distribution_id', 'id');
+    }
+
+    public function user_distribution()
+    {
+        return $this->belongsTo(Distribution::class, 'distribution_id', 'asset_id');
     }
     public function ip_deployment()
     {

@@ -23,7 +23,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $division = Division::orderBy('name', 'asc')->get();
-        $department = Department::orderBy('created_at', 'asc')->get();
+        $department = Department::where('id', '!=', '0')->orderBy('created_at', 'asc')->get();
 
         return view('pages.master-data.division.department.index', compact('division', 'department'));
     }

@@ -48,6 +48,10 @@ class Barang extends Model
     }
     public function distribution_asset()
     {
+        return $this->hasMany(DistributionAsset::class, 'asset_id', 'id');
+    }
+    public function dist_asset()
+    {
         return $this->hasMany(DistributionAsset::class, 'asset_id');
     }
 

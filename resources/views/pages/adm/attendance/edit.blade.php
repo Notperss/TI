@@ -116,13 +116,34 @@
                       <label class="col-md-2 label-control" for="description">Keterangan<code
                           style="color:red;">*</code></label>
                       <div class="col-md-7" id="editor">
-                        <textarea rows="5" class="form-control summernote" id="description" name="description">{{ $attendance->description }}</textarea>
+                        <textarea rows="5" class="form-control" id="description" name="description">{{ $attendance->description }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>
                         @endif
                       </div>
                     </div>
+
+                    @if (Auth::user()->detail_user->job_position == 1)
+                      <div class="form-group row">
+                        <label class="col-md-2 label-control" for="description">Status<code
+                            style="color:red;">*</code></label>
+                        <div class="col-md-4">
+                          <select name="stats" id="stats" class="form-control">
+                            <option value="" disabled selected>Choose</option>
+                            <option value="1"{{ $attendance->stats == 1 ? 'selected' : '' }}>Approve</option>
+                            <option value="2"{{ $attendance->stats == 2 ? 'selected' : '' }}>Cancel-Approve
+                            </option>
+                          </select>
+                          @if ($errors->has('description'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('description') }}</p>
+                          @endif
+                        </div>
+                      </div>
+                    @endif
+
+
                     <div class="form-actions ">
                       <button type="submit" style="width:120px;" class="btn btn-cyan float-right mr-2"
                         onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">

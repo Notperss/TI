@@ -178,6 +178,13 @@
         {
           data: 'distribution_asset.distribution.location_room.name',
           name: 'distribution_asset.distribution.location_room.name',
+          render: function(data) {
+            if (data) {
+              return data;
+            } else {
+              return '-';
+            }
+          },
         },
         {
           data: 'ip',
@@ -190,6 +197,13 @@
         {
           data: 'distribution_asset.asset.barcode',
           name: 'distribution_asset.asset.barcode',
+          render: function(data) {
+            if (data) {
+              return data;
+            } else {
+              return '-';
+            }
+          },
         },
         {
           data: 'installation_date',

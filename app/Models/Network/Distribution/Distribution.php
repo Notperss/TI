@@ -15,6 +15,7 @@ class Distribution extends Model
     protected $fillable = [
         'location_room_id',
         'user_id',
+        'division',
         'date',
         'description',
         'file',

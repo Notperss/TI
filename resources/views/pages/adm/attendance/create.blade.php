@@ -23,6 +23,7 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
+                    <input name="stats" value="1" style="display: none">
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="nik">Nama<code style="color:red;">*</code></label>
                       <div class="col-md-4">

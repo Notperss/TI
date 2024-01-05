@@ -26,7 +26,7 @@ class UpdateDistributionRequest extends FormRequest
         return [
             'date' => 'required',
             'description' => 'required',
-            'file' => 'max:255',
+            'file' => 'mimes:png,jpg,jpeg',
         ];
     }
 }

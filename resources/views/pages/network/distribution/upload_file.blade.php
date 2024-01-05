@@ -4,8 +4,8 @@
     $('#category').val(input_value);
     var input_value = $(this).find(':selected').data('value2');;
     $('#barcode').val(input_value);
-    var imgSrc = $(this).find(':selected').data('value3');
-    $('#file').val(imgSrc);
+    var imgSrc = $(this).find(':selected').data('value4');
+    // $('#file').val(imgSrc);
     $('#img').attr('src', imgSrc);
   });
 </script>
@@ -30,7 +30,7 @@
                 <option value="" disabled selected>Choose</option>
                 @foreach ($barang as $goods)
                   <option value="{{ $goods->id }}" data-value="{{ $goods->category }}"
-                    data-value2="{{ $goods->barcode }}">
+                    data-value2="{{ $goods->barcode }}" data-value4="{{ asset('storage/' . $goods->file) }}">
                     {{ $goods->name }}</option>
                 @endforeach
               </select>
@@ -52,12 +52,12 @@
               <input type="text" class="form-control" id="barcode" disabled>
             </div>
           </div>
-          {{-- <div class="form-group row">
+          <div class="form-group row">
             <div class="col-md-4 label-control">File</div>
             <div class="col-md-8">
               <img id="img" alt="No Picture" style="width: 75%">
             </div>
-          </div> --}}
+          </div>
         </div>
         <div class="modal-footer">
           <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>

@@ -21,7 +21,7 @@ class DivisionController extends Controller
      */
     public function index()
     {
-        $division = Division::orderBy('name', 'asc')->get();
+        $division = Division::where('id', '!=', '0')->orderBy('name', 'asc')->get();
 
         return view('pages.master-data.division.division.index', compact('division'));
     }

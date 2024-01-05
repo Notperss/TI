@@ -77,10 +77,18 @@ class IpPhoneController extends Controller
             </div>
                 ';
                     }
-                })->editColumn('installation_date', function ($item) {
+                })
+                ->editColumn('installation_date', function ($item) {
                     return Carbon::parse($item->installation_date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action', 'installation_date'])
+                // ->editColumn('distribution_asset.distribution.location_room.name', function ($item) {
+                //     if ($item->distribution_asset->distribution->location_room_id) {
+                //         return $item->distribution_asset->distribution->location_room->name;
+                //     } else {
+                //         return '<span>N/A</span>';
+                //     }
+                // })
+                ->rawColumns(['action', 'installation_date', 'distribution_asset.distribution.location_room.name'])
                 ->toJson();
         }
 

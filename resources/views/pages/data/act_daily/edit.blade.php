@@ -127,28 +127,32 @@
                         @endif
                       </div>
                     </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="status">Status</label>
-                      <div class="col-md-4">
-                        <select name="status" id="status" class="form-control select2">
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1" {{ $actdaily->status == 1 ? 'selected' : '' }}>
-                            Aktif
-                          </option>
-                          <option value="2" {{ $actdaily->status == 2 ? 'selected' : '' }}>
-                            Tidak
-                            Aktif
-                          </option>
-                        </select>
 
-                        @if ($errors->has('status'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('status') }}</p>
-                        @endif
+                    @if (Auth::user()->detail_user->job_position == 1)
+                      <div class="form-group row">
+                        <label class="col-md-2 label-control" for="status">Status<code
+                            style="color:red;">*</code></label>
+                        <div class="col-md-4">
+                          <select name="status" id="status" class="form-control select2">
+                            <option value="{{ '' }}" disabled selected>
+                              Choose
+                            </option>
+                            <option value="1" {{ $actdaily->status == 1 ? 'selected' : '' }}>
+                              Cancel Approve
+                            </option>
+                            <option value="2" {{ $actdaily->status == 2 ? 'selected' : '' }}>
+                              Approved
+                            </option>
+                          </select>
+
+                          @if ($errors->has('status'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('status') }}</p>
+                          @endif
+                        </div>
                       </div>
-                    </div>
+                    @endif
+
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="activity">Kegiatan<code
                           style="color:red;">*</code></label>

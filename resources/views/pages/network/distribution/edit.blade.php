@@ -25,29 +25,28 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="lcoation_room_id">Ruangan<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="location_room_id" id="location_room_id" class="form-control select2">
-                          <option value="" selected disabled>Choose</option>
-                          @foreach ($location_room as $room)
-                            <option
-                              value="{{ $room->id }}"{{ $room->id == $distribution->location_room_id ? 'selected' : '' }}>
-                              {{ $room->name }}</option>
-                          @endforeach
-                        </select>
-                        @if ($errors->has('name'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('name') }}</p>
-                        @endif
-                      </div>
-                    </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="location_id">Lokasi
+                        <code style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select id="location_id" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                          @foreach ($location_id as $loc)
+                            <option value="{{ $loc->id }}"
+                              {{ $loc->id == $distribution->location_room->sub_location->location->id ? 'selected' : '' }}>
+                              {{ $loc->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('location_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('location_id') }}</p>
+                        @endif
+                      </div>
+
                       <label class="col-md-2 label-control" for="user_id">User<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select class="form-control select2" name="user_id" id="user_id">
+                        <select class="form-control select2" name="user_id" id="user_id" required>
                           <option value="" disabled selected>Choose</option>
                           @foreach ($user as $key => $user_item)
                             <option value="{{ $user_item->id }}"
@@ -64,6 +63,62 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="sub_location_id">Sub Lokasi
+                        <code style="color:red;">*</code></code></label>
+                      <div class="col-md-4">
+                        <select id="sub_location_id" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                          @foreach ($sub_location as $loc)
+                            <option value="{{ $loc->id }}"
+                              {{ $loc->id == $distribution->location_room->sub_location->id ? 'selected' : '' }}>
+                              {{ $loc->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('sub_location_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('sub_location_id') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="division">Divisi <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4 ">
+                        <select name="division" id="division" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          @foreach ($division as $key => $division_item)
+                            <option value="{{ $division_item->name }}"
+                              {{ $division_item->name == $distribution->division ? 'selected' : '' }}>
+                              {{ $division_item->name }}</option>
+                          @endforeach
+                        </select>
+
+                        @if ($errors->has('division'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('division') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="name">Ruangan
+                        <code style="color:red;">*</code></code></label>
+                      <div class="col-md-4">
+                        <select name="location_room_id" id="location_room_id" class="form-control select2" required>
+                          <option value=""selected disabled>Choose</option>
+                          @foreach ($location_room as $loc)
+                            <option value="{{ $loc->id }}"
+                              {{ $loc->id == $distribution->location_room->id ? 'selected' : '' }}>
+                              {{ $loc->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('name'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('name') }}</p>
+                        @endif
+                      </div>
+
                       <label class="col-md-2 label-control" for="date">Tanggal<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -82,26 +137,27 @@
                         <div class="custom-file">
                           <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
-                            File</label>
-                          @if ($distribution->file)
-                            <p class="mt-1">Latest File : {{ pathinfo($distribution->file, PATHINFO_FILENAME) }}</p>
-                            <a type="button" data-fancybox data-src="{{ asset('storage/' . $distribution->file) }}"
-                              class="btn btn-info btn-sm text-white ">
-                              Lihat
-                            </a>
-                            <a type="button" href="{{ asset('storage/' . $distribution->file) }}"
-                              class="btn btn-warning btn-sm" download>
-                              Unduh
-                            </a>
-                          @else
-                            <p class="mt-1">Latest File : File not found!</p>
-                          @endif
+                            @if ($errors->has('name_file'))
+                              <p style="font-style: bold; color: red;">
+                                {{ $errors->first('name_file') }}</p>
+                            @endif
                         </div>
-                        <p class="text-muted"><small class="text-danger">Hanya dapat
-                            mengunggah 1 file</small></p>
-                        @if ($errors->has('file'))
+                        @if ($distribution->file)
+                          <p class="mt-1">Latest File : {{ pathinfo($distribution->file, PATHINFO_FILENAME) }}</p>
+                          <a type="button" data-fancybox data-src="{{ asset('storage/' . $distribution->file) }}"
+                            class="btn btn-info btn-sm text-white ">
+                            Lihat
+                          </a>
+                          <a type="button" href="{{ asset('storage/' . $distribution->file) }}"
+                            class="btn btn-warning btn-sm" download>
+                            Unduh
+                          </a>
+                        @else
+                          <p class="mt-1">Latest File : File not found!</p>
+                        @endif
+                        @if ($errors->has('name_file'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('file') }}</p>
+                            {{ $errors->first('name_file') }}</p>
                         @endif
                       </div>
                     </div>
@@ -118,7 +174,6 @@
                       </div>
                     </div>
                   </div>
-
 
                   <div class="form-actions ">
                     <button type="submit" style="width:120px;" class="btn btn-cyan float-right mr-2"
@@ -176,18 +231,29 @@
                           </td>
 
                           <td class="text-center">
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Action</button>
-                              <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                                <form action="{{ route('backsite.distribution.delete_file', $asset->id ?? '') }}"
-                                  method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
-                                  <input type="hidden" name="_method" value="DELETE">
-                                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                  <input type="submit"id="delete_asset" class="btn"value="Delete">
-                                </form>
+                            @if ($asset->stats == 1)
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-info btn-sm dropdown-toggle"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                  <form action="{{ route('backsite.distribution.delete_file', $asset->id ?? '') }}"
+                                    method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit"id="delete_asset" class="btn"value="Delete">
+                                  </form>
+
+                                  <form action="{{ route('backsite.distribution.return', encrypt($asset->id ?? '')) }}"
+                                    method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit"id="update_asset" class="btn"value="Dikembalikan">
+                                  </form>
+                                </div>
                               </div>
-                            </div>
+                            @else
+                              <span>Dikembalikan : {{ $asset->updated_at->format('d-M-Y') }}</span>
+                            @endif
                           </td>
                         @endif
                       </tbody>
@@ -324,6 +390,65 @@
       });
     }
   </script>
+
+
+  <script>
+    $(document).ready(function() {
+      $('#location_id').change(function() {
+        var locationId = $(this).val();
+        if (locationId) {
+          $.ajax({
+            url: '{{ route('backsite.getSubLocations') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              location_id: locationId
+            },
+            success: function(data) {
+              $('#sub_location_id').empty();
+              $('#sub_location_id').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#sub_location_id').append('<option value="' + value.id + '">' + value.name +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#sub_location_id').empty();
+          $('#sub_location_id').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+
+    $(document).ready(function() {
+      $('#sub_location_id').change(function() {
+        var sub_locationId = $(this).val();
+        if (sub_locationId) {
+          $.ajax({
+            url: '{{ route('backsite.getLocationRooms') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              sub_location_id: sub_locationId
+            },
+            success: function(data) {
+              $('#location_room_id').empty();
+              $('#location_room_id').append('<option value="" selected disabled>Choose</option>');
+              $.each(data, function(key, value) {
+                $('#location_room_id').append('<option value="' + value.id + '">' + value.name +
+                  '</option>');
+              });
+            }
+          });
+        } else {
+          $('#location_room_id').empty();
+          $('#location_room_id').append('<option value="" selected disabled>Choose</option>');
+        }
+      });
+    });
+  </script>
+
+
 
   <script>
     $(document).ready(function() {

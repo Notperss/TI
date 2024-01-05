@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\ManagementAccess\DetailUser;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,9 @@ class DashboardController extends Controller
         //     ->get()
         //     ->toJson();
 
-        return view('pages.dashboard.index');
+        $attendances = Attendance::orderBy('created_at', 'desc')->limit(5)->get();
+
+        return view('pages.dashboard.index', compact('attendances'));
     }
 
     /**

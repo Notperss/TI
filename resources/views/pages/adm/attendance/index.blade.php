@@ -89,6 +89,7 @@
                           <th>Tanggal Mulai</th>
                           <th>Tanggal Selesai</th>
                           <th>Keterangan</th>
+                          <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -100,6 +101,7 @@
                         <th>Jenis Absensi</th>
                         <th>Tanggal Mulai</th>
                         <th>Tanggal Selesai</th>
+                        <th>Keterangan</th>
                         <th>Keterangan</th>
                         <th>Action</th>
                       </tfoot>
@@ -201,6 +203,21 @@
         {
           data: 'description',
           name: 'description',
+        },
+        {
+          data: 'stats',
+          name: 'stats',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<span class="badge bg-danger">Belum<br> Approve</span>';
+            } else if (data === '2') {
+              return '<span class="badge bg-success">Approved</span>';
+            } else {
+              return '-';
+            }
+          }
         },
         {
           data: 'action',

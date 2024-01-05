@@ -46,6 +46,7 @@
               </div>
 
               <input type="hidden" id="executor" name="executor" value="{{ isset($user_id) ? $user_id : '' }}">
+              <input type="hidden" id="status" name="status" value="1">
               <div class="form-group row">
                 <label class="col-md-2 label-control" for="executor">Pelaksana
                   <code style="color:red;">*</code></label>
@@ -140,7 +141,8 @@
                   @endif
                 </div>
               </div>
-              <div class="form-group row">
+
+              {{-- <div class="form-group row">
                 <label class="col-md-2 label-control" for="status">Status</label>
                 <div class="col-md-4">
                   <select name="status" id="status" class="form-control select2">
@@ -151,12 +153,12 @@
                     <option value="2">Tidak Aktif</option>
                   </select>
 
-                  @if ($errors->has('status'))
-                    <p style="font-style: bold; color: red;">
-                      {{ $errors->first('status') }}</p>
-                  @endif
-                </div>
-              </div>
+              @if ($errors->has('status'))
+                <p style="font-style: bold; color: red;">
+                  {{ $errors->first('status') }}</p>
+              @endif
+            </div>
+        </div> --}}
               <div class="form-group row">
                 <label class="col-md-2 label-control" for="activity">Kegiatan<code style="color:red;">*</code></label>
                 <div class="col-md-10">

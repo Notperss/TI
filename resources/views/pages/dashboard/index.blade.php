@@ -22,29 +22,62 @@
       <div class="content-body">
         <div class="row">
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-12">
             <div class="card pull-up ">
               <div class="card-content info ">
                 <div class="card-body">
                   <div class="media d-flex">
                     <div class="media-body text-left">
-                      <h1 class="info">5</h1>
-                      <strong>Jumlah PC</strong>
+                      <h1 class="info">{{ DB::table('attendances')->count() }}</h1>
+                      <strong>Total Absensi</strong>
                     </div>
                     <div>
-                      <i class="la la-tv font-large-2 float-right"></i>
+                      <i class="la la-book font-large-2 float-right"></i>
+                    </div>
+                  </div>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="table-responsive">
+                          <table class="table w-auto small">
+                            <thead>
+                              <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Jenis Absensi</th>
+                                <th scope="col">Tgl Mulai</th>
+                                {{-- <th scope="col">Tgl Selesai</th> --}}
+                                {{-- <th scope="col">Keterangan</th> --}}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @foreach ($attendances as $attendance)
+                                <tr>
+                                  <th scope="row">{{ $loop->iteration }}</th>
+                                  <td>{{ $attendance->detail_user->user->name }}</td>
+                                  <td>{{ $attendance->category }}</td>
+                                  <td> {{ Carbon\Carbon::parse($attendance->start_date)->translatedFormat('l, d F Y') }}
+                                  </td>
+                                  {{-- <td>{{ $attendance->finish_date }}</td> --}}
+                                  {{-- <td>{{ $attendance->description }}</td> --}}
+                                </tr>
+                              @endforeach
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-info">
-                      See More ..</a>
+                    <a href="{{ route('backsite.attendance.index') }}" class="btn btn-block btn-sm btn-info">
+                      Lihat Semua Absen</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+          <div class="col-xl-2 col-lg-6 col-md-6 col-12">
             <div class="card pull-up ">
               <div class="card-content amber darken-4">
                 <div class="card-body">

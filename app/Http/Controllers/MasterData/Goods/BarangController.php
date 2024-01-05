@@ -18,6 +18,7 @@ use App\Models\MasterData\Goods\Goodsfile;
 use App\Models\MasterData\Goods\GoodsProcessor;
 use App\Models\MasterData\Goods\GoodsRam;
 use App\Models\MasterData\Hardware\Ram;
+use App\Models\Network\Distribution\DistributionAsset;
 
 class BarangController extends Controller
 {
@@ -30,14 +31,49 @@ class BarangController extends Controller
     {
         if (request()->ajax()) {
 
-            $barang = Barang::orderby('created_at', 'desc');
+            $barang = Barang::with('distribution_asset.distribution.detail_user.user')->orderby('created_at', 'desc');
 
             return DataTables::of($barang)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    return '
+                    // Access the distribution_asset relationship
+                    $distributionAssets = $item->distribution_asset;
+
+                    // Check if distributionAssets is not empty
+                    if ($distributionAssets->isNotEmpty()) {
+                        // Initialize an array to store distribution asset creation dates
+                        $StatsValue = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($distributionAssets as $distributionAsset) {
+                            // Add the created_at value to the array
+                            $StatsValue[] = $distributionAsset->stats;
+
+                        }
+
+                        // Check if there are any created_at values in the array
+                        if (! empty($StatsValue)) {
+                            return '
             <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="' . route('backsite.barang.show', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
+                        Show
+                    </a>
+                    <a class="dropdown-item" href="' . route('backsite.barang.edit', $item->id) . '">
+                        Edit
+                    </a>
+            </div>
+                ';
+                        } else {
+                            return 'No created_at values found';
+                        }
+                    } else {
+                        return '
+            <div class="btn-group">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.barang.show', encrypt($item->id)) . '" data-toggle="modal"
@@ -56,26 +92,84 @@ class BarangController extends Controller
                     </form>
             </div>
                 ';
+                    }
+
+
+
+
+
+
+
+
                 })
-                ->editColumn('file', function ($item) {
-                    if ($item->file) {
-                        return '<a type="button" data-fancybox
-                                data-src="' . asset('storage/' . $item->file) . '"
-                                class="btn btn-info btn-sm text-white ">
-                                Lihat
-                            </a>
-                            <a type="button" href="' . asset('storage/' . $item->file) . '"
-                                    class="btn btn-primary btn-sm" download>
-                                    Unduh  
-                            </a>
-                                ';
+                ->editColumn('distribution_asset', function ($item) {
+                    // Access the distribution_asset relationship
+                    $distributionAssets = $item->distribution_asset;
+
+                    // Check if distributionAssets is not empty
+                    if ($distributionAssets->isNotEmpty()) {
+                        // Initialize an array to store user names
+                        $userNames = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($distributionAssets as $distributionAsset) {
+                            // Check if the distribution relationship exists
+                            if ($distribution = $distributionAsset->distribution) {
+                                // Check if the detail_user relationship exists
+                                if ($detailUser = $distribution->detail_user) {
+                                    // Check if the user relationship exists
+                                    if ($user = $detailUser->user) {
+                                        // Add the user's name to the array
+                                        $userNames[] = $user->name;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Check if there are any user names in the array
+                        if (! empty($userNames)) {
+                            // return implode(', ', $userNames);
+    
+                            $latestUserName = end($userNames);
+                            return ($item->stats == 1) ? 'Available' : $latestUserName;
+                        } else {
+                            return 'No user names found';
+                        }
                     } else {
-                        return '
-                            <span>File Not Found!</span>
-                                ';
+                        return 'Available';
                     }
                 })
-                ->rawColumns(['file', 'action'])
+                ->editColumn('distribution_asset_created_at', function ($item) {
+                    // Access the distribution_asset relationship
+                    $distributionAssets = $item->distribution_asset;
+
+                    // Check if distributionAssets is not empty
+                    if ($distributionAssets->isNotEmpty()) {
+                        // Initialize an array to store distribution asset creation dates
+                        $createdAtValues = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($distributionAssets as $distributionAsset) {
+                            // Add the created_at value to the array
+                            $createdAtValues[] = $distributionAsset->created_at->format('l, d F Y');
+
+                        }
+
+                        // Check if there are any created_at values in the array
+                        if (! empty($createdAtValues)) {
+                            // return implode(', ', $createdAtValues);
+                            $latestCreatedAt = end($createdAtValues);
+
+                            return ($item->stats == 1) ? 'Available' : $latestCreatedAt;
+                        } else {
+                            return 'No created_at values found';
+                        }
+                    } else {
+                        return 'Available';
+                    }
+                })
+                ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at'])
+
                 ->toJson();
         }
         return view("pages.master-data.barang.index");
@@ -145,7 +239,8 @@ class BarangController extends Controller
         $processors = GoodsProcessor::with('processor')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $rams = GoodsRam::with('ram')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $hardisks = GoodsHardisk::with('hardisk')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
-        return view('pages.master-data.barang.edit', compact('barang', 'files', 'hardisks', 'processors', 'rams'));
+        $assets = DistributionAsset::where('asset_id', $barang->id)->get();
+        return view('pages.master-data.barang.edit', compact('barang', 'files', 'hardisks', 'processors', 'rams', 'assets'));
     }
 
     /**

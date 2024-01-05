@@ -48,11 +48,16 @@ class ActDaily extends Model
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(User::class, 'users_id', 'id');
     }
+    // public function users_executor()
+    // {
+    //     // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+    //     return $this->belongsTo(User::class, 'executor', 'id');
+    // }
     // one to many
     public function detail_user()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
-        return $this->belongsTo(DetailUser::class, 'executor', 'nik');
+        return $this->belongsTo(DetailUser::class, 'executor', 'id');
     }
     // one to many
     //  public function work_category()

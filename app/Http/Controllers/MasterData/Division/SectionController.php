@@ -24,7 +24,7 @@ class SectionController extends Controller
     public function index()
     {
         $division = Division::orderBy('name', 'asc')->get();
-        $section = Section::orderBy('created_at', 'asc')->get();
+        $section = Section::where('id', '!=', '0')->orderBy('created_at', 'asc')->get();
 
         return view('pages.master-data.division.section.index', compact('division', 'section'));
     }

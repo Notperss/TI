@@ -158,4 +158,11 @@ class LocationRoomController extends Controller
         $subLocations = LocationSub::where('location_id', $locationId)->get();
         return response()->json($subLocations);
     }
+
+    public function getLocationRooms(Request $request)
+    {
+        $sub_locationId = $request->input('sub_location_id');
+        $locationRooms = LocationRoom::where('sub_location_id', $sub_locationId)->get();
+        return response()->json($locationRooms);
+    }
 }

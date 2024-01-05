@@ -105,6 +105,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     // location room
     Route::resource('location_room', LocationRoomController::class);
     Route::get('/get-sub-locations', [LocationRoomController::class, 'getSubLocations'])->name('getSubLocations');
+    Route::get('/get-location-rooms', [LocationRoomController::class, 'getLocationRooms'])->name('getLocationRooms');
 
     // location detail
     Route::resource('location_detail', LocationDetailController::class);
@@ -208,6 +209,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     });
 
     Route::resource('attendance', AttendanceController::class);
+    Route::put('/attendance/approve/{attendance}', [AttendanceController::class, 'approve'])->name('attendance.approve');
+    // Route::put('/ip_phone/returning_update/{ip_phone}', [IpPhoneController::class, 'returning_update'])->name('ip_phone.returning_update');
+
 
     Route::resource('form', FormController::class);
 
@@ -295,6 +299,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/distribution/show_file', 'show_file')->name('distribution.show_file');
         Route::delete('/distribution/{id}/delete_file', 'delete_file')->name('distribution.delete_file');
         Route::delete('/distribution/{id}/destroy_asset', 'destroy_asset')->name('distribution.destroy_asset');
+        Route::put('/distribution/return/{id}', 'return')->name('distribution.return');
     });
 
     Route::resource('application', ApplicationController::class);
@@ -320,6 +325,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/act_daily/upload', 'upload')->name('act_daily.upload');
         Route::post('/act_daily/show_file', 'show_file')->name('act_daily.show_file');
         Route::delete('/act_daily/{id}/hapus_file', 'hapus_file')->name('act_daily.hapus_file');
+        Route::put('/act_daily/approve/{id}', 'approve')->name('act_daily.approve');
+
     });
 
     Route::resource('workcat', WorkcatController::class);

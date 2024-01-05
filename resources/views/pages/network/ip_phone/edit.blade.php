@@ -35,7 +35,7 @@
                             @if ($asset->asset && $asset->asset->category === 'IP PHONE' && $asset->distribution)
                               @if ($asset->asset->stats == 2 || $asset->id == $ip_phone->distributionAsset_id)
                                 <option value="{{ $asset->id }}"
-                                  data-location="{{ $asset->distribution->location_room->name }}"
+                                  data-location=" {{ $asset->distribution->location_room->location->name }} => {{ $asset->distribution->location_room->sub_location->name }} => {{ $asset->distribution->location_room->name }}"
                                   data-distribution-id="{{ $asset->distribution_id }}"
                                   {{ $asset->id === $ip_phone->distributionAsset_id ? 'selected' : '' }}>
                                   {{ $asset->asset->barcode ?? '' }}
@@ -74,9 +74,9 @@
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="location">Lokasi<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="" id="location" class="form-control"
-                          value="{{ old('location', $ip_phone->distribution_asset->distribution->location_room->name) }}"
-                          readonly required>
+                        <textarea name="" id="location" class="form-control" style="resize: none" readonly required>
+{{ $asset->distribution->location_room->location->name }} => {{ $asset->distribution->location_room->sub_location->name }} => {{ $asset->distribution->location_room->name }}
+                        </textarea>
                         @if ($errors->has('location'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('location') }}</p>

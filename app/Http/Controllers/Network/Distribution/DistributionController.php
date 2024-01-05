@@ -13,13 +13,15 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ManagementAccess\DetailUser;
+use App\Models\MasterData\Division\Division;
 use App\Models\MasterData\Location\Location;
+use App\Models\MasterData\Location\LocationSub;
 use App\Models\MasterData\Location\LocationRoom;
 use App\Models\Network\Distribution\Distribution;
+use App\Models\Network\Distribution\IpDeployment;
 use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\Network\Distribution\StoreDistributionRequest;
 use App\Http\Requests\Network\Distribution\UpdateDistributionRequest;
-use App\Models\Network\Distribution\IpDeployment;
 
 class DistributionController extends Controller
 {
@@ -56,7 +58,7 @@ class DistributionController extends Controller
                 ->addColumn('action', function ($item) {
                     return '
             <div class="btn-group mr-1 mb-1">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                <button type="button" class="btn btn-' . ($item->stats == 2 ? 'warning' : 'info') . ' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                   <a href="#mymodal" data-remote="' . route('backsite.distribution.show', encrypt($item->distribution->id)) . '" data-toggle="modal"
@@ -71,7 +73,7 @@ class DistributionController extends Controller
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="submit" class="dropdown-item" style="display:' . ($item->stats == 2 ? 'none' : '') . '" value="Delete">
                     </form>
             </div>
                 ';
@@ -105,10 +107,18 @@ class DistributionController extends Controller
      */
     public function create()
     {
-        $location_room = LocationRoom::all();
+        $location_id = Location::orderBy('created_at', 'desc')->get();
+        $sub_location = LocationSub::orderBy('created_at', 'desc')->get();
         $user = DetailUser::where('status', '1')->get();
         $barang = Barang::where('stats', '1')->get();
-        return view('pages.network.distribution.create', compact('location_room', 'user', 'barang'));
+        $division = Division::orderBy('name', 'asc')->get();
+        return view('pages.network.distribution.create', compact(
+
+            'location_id',
+            'sub_location',
+            'user',
+            'barang',
+            'division'));
     }
 
     /**
@@ -123,8 +133,16 @@ class DistributionController extends Controller
         $data = $request->all();
         $rules = [
             'inputs' => 'required|array',
-            'ip' => 'required|array',
-            'inputs.*.asset_id' => 'required|integer|unique:distribution_assets,asset_id',
+            // 'ip' => 'required|array',
+            'inputs.*.asset_id' => [
+                'required',
+                'integer',
+                Rule::unique('distribution_assets', 'asset_id')
+                    ->where(function ($query) {
+                        // Exclude records where stats is equal to 2
+                        $query->where('stats', '!=', 2);
+                    }),
+            ],
             'ip.*.ip' => 'required',
             'ip.*.internet_access' => 'required',
             'ip.*.gateway' => 'required',
@@ -136,7 +154,7 @@ class DistributionController extends Controller
         // Custom validation messages
         $messages = [
             'inputs' => 'Data asset tidak boleh kosong.',
-            'ip' => 'Data IP tidak boleh kosong.',
+            // 'ip' => 'Data IP tidak boleh kosong.',
             'inputs.*.asset_id' => 'Nama barang tidak boleh sama',
             'ip.*.ip' => 'IP tidak boleh kosong.',
             'ip.*.internet_access' => 'Akses internet tidak boleh kosong.',
@@ -187,6 +205,7 @@ class DistributionController extends Controller
             DistributionAsset::create([
                 'distribution_id' => $distribution_id,
                 'asset_id' => $value['asset_id'],
+                'stats' => 1,
             ]);
 
             // Collect unique 'asset_id' values to update 'stats' field later
@@ -198,13 +217,24 @@ class DistributionController extends Controller
             ->where('stats', '!=', 2)
             ->update(['stats' => 2]);
 
-        foreach ($request->ip as $value) {
-            IpDeployment::create([
-                'distribution_id' => $distribution_id,
-                'ip' => $value['ip'],
-                'internet_access' => $value['internet_access'],
-                'gateway' => $value['gateway'],
-            ]);
+        // foreach ($request->ip as $value) {
+        //     IpDeployment::create([
+        //         'distribution_id' => $distribution_id,
+        //         'ip' => $value['ip'],
+        //         'internet_access' => $value['internet_access'],
+        //         'gateway' => $value['gateway'],
+        //     ]);
+        // }
+
+        if (! empty($request->ip)) {
+            foreach ($request->ip as $value) {
+                IpDeployment::create([
+                    'distribution_id' => $distribution_id,
+                    'ip' => $value['ip'],
+                    'internet_access' => $value['internet_access'],
+                    'gateway' => $value['gateway'],
+                ]);
+            }
         }
 
 
@@ -238,11 +268,32 @@ class DistributionController extends Controller
     {
 
         $distribution = Distribution::find($id);
-        $location_room = LocationRoom::all();
+        // $location_room = LocationRoom::all();
         $user = DetailUser::where('status', '1')->get();
         $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
         $ip_deployment = IpDeployment::where('distribution_id', $id)->orderBy('created_at', 'desc')->get();
-        return view('pages.network.distribution.edit', compact('distribution', 'location_room', 'user', 'assets', 'ip_deployment'));
+        $division = Division::orderBy('name', 'asc')->get();
+        // $department = Department::where('division_id', $employee->division->id)->orderBy('name', 'asc')->get();
+        // $section = Section::where('department_id', $employee->department->id)->orderBy('name', 'asc')->get();
+
+        $location_id = Location::orderBy('created_at', 'desc')->get();
+        $location_room = LocationRoom::where('sub_location_id', $distribution->location_room->sub_location->id)->orderBy('name', 'asc')->get();
+        $sub_location = LocationSub::where('location_id', $distribution->location_room->sub_location->location->id)->orderBy('name', 'asc')->get();
+        // $location_room = LocationRoom::orderBy('name', 'asc')->get();
+
+        // $stats = DB::table('distribution_asset')->find($id);
+
+        return view('pages.network.distribution.edit', compact(
+            'distribution',
+            'location_room',
+            'user',
+            'assets',
+            'ip_deployment',
+            'division',
+            'location_id',
+            'sub_location',
+            'location_room',
+        ));
     }
 
     /**
@@ -382,15 +433,24 @@ class DistributionController extends Controller
 
     public function upload_file(Request $request)
     {
-        // Validation rules
+        // // Validation rules
+        // $rules = [
+        //     'asset_id' => ['required',
+        //         Rule::unique('distribution_assets')->where(function ($query) use ($request) {
+        //             return $query->where('distribution_id', $request->id);
+        //         }),
+        //     ], // Add any other rules you need
+        // ];
         $rules = [
-            'asset_id' => ['required',
-                Rule::unique('distribution_assets')->where(function ($query) use ($request) {
-                    return $query->where('distribution_id', $request->id);
+            'asset_id' => [
+                'required',
+                Rule::unique('distribution_assets', 'asset_id')->where(function ($query) use ($request) {
+                    return $query->where('distribution_id', $request->id)
+                        ->where('stats', '!=', 2);
                 }),
-            ], // Add any other rules you need
+            ],
+            // Add any other rules you need
         ];
-
         // Custom validation messages
         $messages = [
             'asset_id.required' => 'Nama barang tidak boleh kosong.',
@@ -412,6 +472,7 @@ class DistributionController extends Controller
         DistributionAsset::create([
             'distribution_id' => $request->id,
             'asset_id' => $request->asset_id,
+            'stats' => 1,
         ]);
 
         $goods = Barang::find($request->asset_id);
@@ -562,5 +623,62 @@ class DistributionController extends Controller
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
+
+    public function return ($id)
+    {
+        $distributionAssetId = decrypt($id);
+
+        // Find the distribution asset
+        $distributionAsset = DistributionAsset::find($distributionAssetId);
+
+        if (! $distributionAsset) {
+            // Handle the case where the distribution asset is not found
+            // ...
+            alert()->error('Error', 'Distribution Asset not found.');
+            return redirect()->route('backsite.distribution.index');
+        }
+
+        if ($distributionAsset->stats) {
+            $distributionAsset->update(['stats' => 2]);
+        } else {
+            alert()->error('Error', 'Data gagal di Approve');
+            return back();
+        }
+
+        // Get the distribution ID
+        // $distributionId = $distributionAsset->distribution_id;
+        $assetId = $distributionAsset->asset_id;
+
+        //update stats
+        $goods = Barang::find($assetId);
+        $goods->update(['stats' => 1]);
+
+
+
+        // // Check if there's only one distribution asset remaining
+        // $remainingDistributionAssets = DistributionAsset::where('distribution_id', $distributionId)->get();
+
+        // if ($remainingDistributionAssets->count() === 0) {
+        //     // Retrieve the file path directly from the database
+        //     $path_file = Distribution::where('id', $distributionId)->value('file');
+
+        //     // Delete the distribution
+        //     Distribution::where('id', $distributionId)->delete();
+
+        //     // Delete the file if it exists
+        //     if ($path_file && Storage::exists($path_file)) {
+        //         Storage::delete($path_file);
+        //     }
+
+        //     IpDeployment::where('distribution_id', $distributionId)->delete();
+
+        // }
+
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+
 }
 

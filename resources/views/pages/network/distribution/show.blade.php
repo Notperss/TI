@@ -1,12 +1,28 @@
 <table class="table table-bordered">
   <input type="hidden" name="id" id="id" value="{{ $distribution->id }}">
   <tr>
+    <th>Lokasi</th>
+    <td>
+      {{ isset($distribution->location_room->sub_location->location->name) ? $distribution->location_room->sub_location->location->name : 'N/A' }}
+    </td>
+  </tr>
+  <tr>
+    <th>Sub Lokasi</th>
+    <td>
+      {{ isset($distribution->location_room->sub_location->name) ? $distribution->location_room->sub_location->name : 'N/A' }}
+    </td>
+  </tr>
+  <tr>
     <th>Ruangan</th>
     <td>{{ isset($distribution->location_room->name) ? $distribution->location_room->name : 'N/A' }}</td>
   </tr>
   <tr>
     <th>User</th>
     <td>{{ isset($distribution->detail_user->user->name) ? $distribution->detail_user->user->name : 'N/A' }}</td>
+  </tr>
+  <tr>
+    <th>Divisi</th>
+    <td>{{ isset($distribution->division) ? $distribution->division : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Tanggal</th>
