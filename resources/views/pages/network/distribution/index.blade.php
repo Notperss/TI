@@ -45,7 +45,7 @@
         <section id="add-home">
           <div class="row">
             <div class="col-12">
-              <a href="{{ route('backsite.distribution.create') }}" class="btn btn-success col-2 mb-2">
+              <a href="{{ route('backsite.distribution.create') }}" class="btn btn-success col-3 mb-2">
                 Tambah Data Aset Deployment</a>
             </div>
           </div>

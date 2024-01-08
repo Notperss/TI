@@ -26,13 +26,39 @@
             <div class="card pull-up ">
               <div class="card-content info ">
                 <div class="card-body">
-                  <div class="media d-flex">
+                  <div class="media d-flex mb-1">
                     <div class="media-body text-left">
-                      <h1 class="info">{{ DB::table('attendances')->count() }}</h1>
-                      <strong>Total Absensi</strong>
+                      <h1>
+                        {{ DB::table('attendances')->where('category', 'Sakit')->whereYear('created_at', now()->year)->count() }}
+                      </h1>
+                      <strong class="warning">Total Sakit</strong>
+                    </div>
+                    <div class="media-body text-left">
+                      <h1>
+                        {{ DB::table('attendances')->where('category', 'Tukar Tugas')->whereYear('created_at', now()->year)->count() }}
+                      </h1>
+                      <strong class="info">Total T/T</strong>
+                    </div>
+                    <div class="media-body text-left">
+                      <h1>
+                        {{ DB::table('attendances')->where('category', 'IDT')->whereYear('created_at', now()->year)->count() }}
+                      </h1>
+                      <strong class="primary">Total IDT</strong>
+                    </div>
+                    <div class="media-body text-left">
+                      <h1>
+                        {{ DB::table('attendances')->where('category', 'IPC')->whereYear('created_at', now()->year)->count() }}
+                      </h1>
+                      <strong class="secondary">Total IPC</strong>
+                    </div>
+                    <div class="media-body text-left">
+                      <h1>
+                        {{ DB::table('attendances')->where('category', 'Absen')->whereYear('created_at', now()->year)->count() }}
+                      </h1>
+                      <strong class="danger">Total Absen</strong>
                     </div>
                     <div>
-                      <i class="la la-book font-large-2 float-right"></i>
+                      <i class="la la-book font-large-2 float-right info"></i>
                     </div>
                   </div>
                   <div class="container">

@@ -206,6 +206,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/barang/upload', 'upload_file')->name('barang.upload_file');
         Route::post('/barang/show_file', 'show_file')->name('barang.show_file');
         Route::delete('/barang/{id}/delete_file', 'delete_file')->name('barang.delete_file');
+
+        Route::get('/barang/{id}/history_index', 'history_index')->name('barang.history_index');
+
     });
 
     Route::resource('attendance', AttendanceController::class);

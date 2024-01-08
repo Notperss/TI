@@ -113,7 +113,6 @@ class DistributionController extends Controller
         $barang = Barang::where('stats', '1')->get();
         $division = Division::orderBy('name', 'asc')->get();
         return view('pages.network.distribution.create', compact(
-
             'location_id',
             'sub_location',
             'user',

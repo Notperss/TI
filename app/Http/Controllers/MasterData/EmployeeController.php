@@ -27,8 +27,15 @@ class EmployeeController extends Controller
         $division = Division::orderBy('name', 'asc')->get();
         $department = Department::orderBy('name', 'asc')->get();
         $section = Section::orderBy('name', 'asc')->get();
-        $employee = Employee::orderBy('created_at', 'desc')->get();
-
+        $employee = Employee::leftJoin('division', 'employee.division_id', '=', 'division.id')
+            ->leftJoin('department', 'employee.department_id', '=', 'department.id')
+            ->leftJoin('section', 'employee.section_id', '=', 'section.id')
+            ->select('employee.*')
+            ->orderBy('division.name')
+            ->orderBy('department.name')
+            ->orderBy('section.name')
+            ->orderBy('employee.created_at', 'desc')
+            ->get();
         return view('pages.master-data.employee.index', compact('division', 'department', 'section', 'employee'));
     }
 

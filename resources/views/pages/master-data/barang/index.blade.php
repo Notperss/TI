@@ -67,7 +67,7 @@
                 <div class="card-body card-dashboard">
 
                   <div class="table-responsive">
-                    <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
+                    <table class="table table-striped table-bordered text-inputs-searching default-table activity-table "
                       id="barang-table">
                       <thead>
                         <tr>
@@ -76,7 +76,7 @@
                           <th>Category</th>
                           <th>Barcode</th>
                           <th>User</th>
-                          <th>Tanggal</th>
+                          <th>Tanggal Pinjam</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -153,10 +153,14 @@
         {
           data: 'distribution_asset',
           name: 'distribution_asset',
+          searchable: false,
+
         },
         {
           data: 'distribution_asset_created_at',
           name: 'distribution_asset_created_at',
+          searchable: false,
+
         },
         {
           data: 'action',

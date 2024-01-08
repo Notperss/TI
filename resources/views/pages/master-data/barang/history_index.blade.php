@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'DRCMonitoring')
+@section('title', 'History Barang ' . $barang->name . '')
 
 @section('content')
 
@@ -28,12 +28,12 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">DRCMonitoring</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Barang</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">DRCMonitoring</li>
+                <li class="breadcrumb-item active">Barang</li>
               </ol>
             </div>
           </div>
@@ -41,19 +41,17 @@
       </div>
 
       {{-- add card --}}
-      <div class="content-body">
+      {{-- <div class="content-body">
         <section id="add-home">
           <div class="row">
             <div class="col-12">
 
-              <a href="#mymodal" data-remote="{{ route('backsite.drc-monitoring.create') }}" data-toggle="modal"
-                data-target="#mymodal" data-title="Tambah Data" class="btn btn-success col-2 mb-2">
-                Tambah Data
-              </a>
+              <a href="{{ route('backsite.barang.create') }}" class="btn btn-success col-2 mb-2">
+                Tambah Data Barang</a>
             </div>
           </div>
         </section>
-      </div>
+      </div> --}}
 
       {{-- table card --}}
       <div class="content-body">
@@ -62,35 +60,39 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <div class="card-header">
-                  <h4 class="card-title">List DRC</h4>
-                  <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                <div class="card-header mt-0">
+                  <h4 class="card-title">History Barang {{ $barang->name }}</h4>
                 </div>
                 <div class="card-body card-dashboard">
-
-                  <div class="col col-5 mb-1">
-                    <div id="daterange-container" class="float-end" style="display: none;">
-                      <div id="daterange"
-                        style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; text-align:center">
-                        <i class="la la-calendar"></i>&nbsp;
-                        <span></span>
-                        <i class="la la-caret-down"></i>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-2">
+                        <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal</button>
+                      </div>
+                      <div class="col-5 mb-1">
+                        <div id="daterange-container" class="float-end" style="display: none;">
+                          <div id="daterange"
+                            style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; text-align:center">
+                            <i class="la la-calendar"></i>&nbsp;
+                            <span></span>
+                            <i class="la la-caret-down"></i>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal</button>
 
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                      id="drc_monitoring-table">
+                      id="barang-table">
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Nama Item</th>
-                          <th>Category Item</th>
-                          <th>Jam backup</th>
-                          <th>Tanggal</th>
-                          <th>Catatan</th>
+                          <th>Nama Barang</th>
+                          <th>Barcode</th>
+                          <th>User</th>
+                          <th>Tanggal Dipinjam</th>
+                          <th>Tanggal Dikembalikan</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -98,11 +100,11 @@
                       </tbody>
                       <tfoot hidden>
                         <th>No</th>
-                        <th>Nama Item</th>
-                        <th>Category Item</th>
-                        <th>Jam backup</th>
-                        <th>Tanggal</th>
-                        <th>Catatan</th>
+                        <th>Nama Barang</th>
+                        <th>Category</th>
+                        <th>Barcode</th>
+                        <th>File</th>
+                        <th>File</th>
                         <th>Action</th>
                       </tfoot>
                     </table>
@@ -130,7 +132,7 @@
   <script>
     var dateFilterActive = false; // Variable to track whether date filter is active
 
-    var table = $('#drc_monitoring-table').DataTable({
+    var table = $('#barang-table').DataTable({
       processing: true,
       serverSide: true,
       ordering: false,
@@ -160,7 +162,7 @@
         },
       ],
       ajax: {
-        url: "{{ route('backsite.drc-monitoring.index') }}",
+        url: "{{ route('backsite.barang.history_index', $barang->id) }}",
         data: function(data) {
           if (dateFilterActive) {
             data.from_date = $('#daterange').data('daterangepicker').startDate.format('YYYY-MM-DD 00.00.01');
@@ -168,31 +170,34 @@
           }
         }
       },
+
+
       columns: [{
           data: 'DT_RowIndex',
           name: 'DT_RowIndex',
           orderable: false,
           searchable: false,
+          width: '3%',
         },
         {
-          data: 'drc_monitoring.name',
-          name: 'drc_monitoring.name',
+          data: 'asset.name',
+          name: 'asset.name',
         },
         {
-          data: 'drc_monitoring.category',
-          name: 'drc_monitoring.category',
+          data: 'asset.barcode',
+          name: 'asset.barcode',
         },
         {
-          data: 'drc_monitoring.backup_time',
-          name: 'drc_monitoring.backup_time',
+          data: 'distribution.detail_user.user.name',
+          name: 'distribution.detail_user.user.name',
         },
         {
-          data: 'drc_monitoring.created_at',
-          name: 'drc_monitoring.created_at',
+          data: 'created_at',
+          name: 'created_at',
         },
         {
-          data: 'drc_monitoring.description',
-          name: 'drc_monitoring.description',
+          data: 'updated_at',
+          name: 'updated_at',
         },
         {
           data: 'action',
@@ -200,9 +205,10 @@
           orderable: false,
           searchable: false,
           width: '15%',
-          className: 'no-print'
+          className: 'no-print text-center'
         },
       ],
+
       columnDefs: [{
         className: 'text-center',
         targets: '_all'
@@ -265,6 +271,31 @@
         modal.find('.modal-title').html(button.data("title"));
       });
     });
+
+
+    function upload(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.pp.form_upload') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
