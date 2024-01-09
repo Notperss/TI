@@ -198,10 +198,10 @@
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';
-            } else if (data === '1') {
-              return '<span class="badge bg-success">Aktif</span>';
             } else if (data === '2') {
-              return '<span class="badge bg-danger">Tidak Aktif</span>';
+              return '<span class="badge bg-success">Approve</span>';
+            } else if (data === '1') {
+              return '<span class="badge bg-danger">Belum Diapprove</span>';
             } else {
               return '-';
             }

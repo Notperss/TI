@@ -10,7 +10,8 @@
   }
 </script>
 
-<div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="upload" tabindex="-1" style="z-index: 1600; aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -116,7 +117,7 @@
       display: inline-block;
       text-align: left;
       vertical-align: middle;
-      width: 600px;
+      width: 800px;
       margin: 30px auto;
     }
   }

@@ -26,14 +26,10 @@ class PPController extends Controller
     {
         if (request()->ajax()) {
 
-            // // Get the current user's job ID
-            // $userJobId = auth()->user()->detail_user->job_position; // Adjust this based on your user model
 
-            // // Query data based on the job ID
-            // $pp = PP::where('user_id', $userJobId)->orderBy('created_at', 'desc');
 
             $user = auth()->user()->detail_user;
-            $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3;
+            $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
 
             $ppQuery = $isManagerOrViceManager ? PP::orderBy('created_at', 'desc') : PP::where('user_id', $user->job_position)->orderBy('created_at', 'desc');
 
@@ -47,16 +43,22 @@ class PPController extends Controller
             return DataTables::of($pp)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    return '
-            <div class="btn-group mr-1 mb-1">
+                    $action = '
+        <div class="container">
+            <div class="btn-group mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
                         Show
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.pp.edit', encrypt($item->id)) . '">
+                    </a>';
+
+                    $user = auth()->user()->detail_user;
+                    $Access = $user->job_position === 1 || $user->nik === 'M0203002';
+
+                    if ($item->stats == 1 || $Access) {
+                        $action .= '<a class="dropdown-item" href="' . route('backsite.pp.edit', encrypt($item->id)) . '">
                         Edit
                     </a>
                     <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
@@ -70,7 +72,19 @@ class PPController extends Controller
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
-                ';
+        </div>';
+                    }
+                    if ($Access) {
+                        $action .= '<form action="' . route('backsite.pp.approve', encrypt($item->id)) . '" method="POST"
+                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                        ' . method_field('PUT') . csrf_field() . '
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                     <input type="submit" 
+                        title="Approve/Cancel approve" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Approve' : 'Cancel-Approve') . '">
+                    </form>';
+                    }
+                    return $action;
                 })->editColumn('date', function ($item) {
                     return Carbon::parse($item->date)->translatedFormat('l, d F Y');
                 })
@@ -352,6 +366,24 @@ class PPController extends Controller
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
+    }
+
+    public function approve($id)
+    {
+        // deskripsi id
+        $decrypt_id = decrypt($id);
+        $pp = PP::find($decrypt_id);
+        if ($pp->stats == 1) {
+            $pp->update(['stats' => 2]);
+        } elseif ($pp->stats == 2) {
+            $pp->update(['stats' => 1]);
+        } else {
+            alert()->error('Error', 'Data gagal di Approve');
+            return back();
+        }
+        alert()->success('Sukses', 'Data berhasil di Approve');
+        return back();
+
     }
 
 }

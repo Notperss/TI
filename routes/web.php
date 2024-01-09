@@ -262,6 +262,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/pp/add_status', 'add_status')->name('pp.add_status');
         Route::post('/pp/show_status', 'show_status')->name('pp.show_status');
         Route::delete('/pp/{id}/delete_status', 'delete_status')->name('pp.delete_status');
+
+        Route::put('/pp/approve/{id}', 'approve')->name('pp.approve');
+
     });
 
     Route::resource('license', LicenseController::class);

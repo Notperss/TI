@@ -59,7 +59,21 @@
     <td>{!! isset($pp->description) ? $pp->description : 'N/A' !!}</td>
   </tr>
 </table>
+<div class="col-md-4">
+  <button type="button" id="button_file" class="btn btn-cyan btn-sm ml-1 my-1" title="Tambah File"
+    onclick="upload('{{ $pp->id }}')"><i class="bx bx-file"></i>
+    Tambah File</button>
+</div>
+
 <table class="table table-bordered tampildata" style="word-break: break-all">
+</table>
+
+<div class="col-md-4">
+  <button type="button" id="button_file" class="btn btn-cyan btn-sm ml-1 my-1" title="Tambah File"
+    onclick="add_status('{{ $pp->id }}')"><i class="bx bx-file"></i>
+    Tambah Status</button>
+</div>
+<table class="table table-bordered tampilstatus" style="word-break: break-all">
 </table>
 
 <script>
@@ -95,12 +109,7 @@
   $(document).ready(function() {
     tampilDataFile();
   });
-</script>
 
-<table class="table table-bordered tampilstatus" style="word-break: break-all">
-</table>
-
-<script>
   function tampilDataStatus() {
     $.ajaxSetup({
       headers: {

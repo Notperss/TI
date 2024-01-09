@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Adm\PP;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePPRequest extends FormRequest
@@ -25,7 +26,9 @@ class StorePPRequest extends FormRequest
     {
         return [
             "user_id" => "required",
-            "no_pp" => "required|max:255",
+            "no_pp" => ['required', 'max:255',
+                Rule::unique('pps', 'no_pp')->ignore($this->route('pp'), 'id'),
+            ],
             "job_name" => "required|max:255",
             "job_value" => "required|max:255",
             "contract_value" => "required|max:255",

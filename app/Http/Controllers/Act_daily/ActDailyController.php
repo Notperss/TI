@@ -42,10 +42,10 @@ class ActDailyController extends Controller
             return DataTables::of($actdaily)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    if (Auth::user()->detail_user->job_position == 1) {
-                        return '
+                    if (Auth::user()->detail_user->job_position == 1 || Auth::user()->id == $item->executor) {
+                        $actionAdmin = '
             <div class="container">
-                 <div class="btn-group mb-1">
+                <div class="btn-group mb-1">
                 <button type="button" class="btn btn-cyan btn-sm" title="Tambah File" onclick="upload(' . $item->id . ')"><i
                         class="bx bx-file"></i></button>
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -54,10 +54,10 @@ class ActDailyController extends Controller
                     <a href="#mymodal" data-remote="' . route('backsite.act_daily.show', $item->id) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Aktivitas Harian" class="dropdown-item">
                         Show
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.act_daily.edit', $item->id) . '">
-                        Edit
-                                </a>
+                    </a>';
+                        if ($item->status == '1' || Auth::user()->detail_user->job_position == 1) {
+                            $actionAdmin .= '<a class="dropdown-item" href="' . route('backsite.act_daily.edit', $item->id) . '">
+                        Edit </a>
                     <form action="' . route('backsite.act_daily.destroy', $item->id) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         ' . method_field('delete') . csrf_field() . '
@@ -66,7 +66,6 @@ class ActDailyController extends Controller
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
                     </div>
-                    
                     </div>
 
                     <form action="' . route('backsite.act_daily.approve', encrypt($item->id)) . '" method="POST"
@@ -74,10 +73,13 @@ class ActDailyController extends Controller
                         ' . method_field('PUT') . csrf_field() . '
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" title="Approve/Cancel approve" class="btn btn-sm btn-' . ($item->status == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->status == 1 ? 'Approve' : 'Cancel-Approve') . '">
+                        <input type="submit" 
+                        title="Approve/Cancel approve" class="btn btn-sm btn-' . ($item->status == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->status == 1 ? 'Approve' : 'Cancel-Approve') . '">
                     </form>
 
                 ';
+                        }
+                        return $actionAdmin;
                     } else {
                         if ($item->status == '1' && Auth::user()->detail_user->job_position !== 1) {
                             return '
@@ -87,15 +89,6 @@ class ActDailyController extends Controller
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a href="#mymodal" data-remote="' . route('backsite.act_daily.show', $item->id) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
-                    <a class="dropdown-item" href="' . route('backsite.act_daily.edit', $item->id) . '">Edit</a>
-                    <form action="' . route('backsite.act_daily.destroy', encrypt($item->id)) . '" method="POST"
-                        onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
-                    </form>
-                </div>
             </div>';
                         } else if ($item->status == '2') {
                             return '
@@ -106,7 +99,6 @@ class ActDailyController extends Controller
                     <a href="#mymodal" data-remote="' . route('backsite.act_daily.show', $item->id) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
                 </div>
-                <span class="badge badge-sm badge-icon badge-success mx-1"><i class="la la-check"></i></span>
             </div>';
                         } else {
                             return '  <form action="' . route('backsite.act_daily.destroy', encrypt($item->id)) . '" method="POST"

@@ -24,6 +24,7 @@
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
                     <input type="hidden" id="user_id" name="user_id" value="{{ isset($user_id) ? $user_id : '' }}">
+                    <input type="hidden" id="stats" name="stats" value="1">
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
                       <div class="col-md-4">
@@ -35,17 +36,7 @@
                             {{ $errors->first('no_pp') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="date">Tanggal PP<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <input type="date" class="form-control" id="date" name="date"
-                          value="{{ old('date') }}" required>
-                        </select>
-                        @if ($errors->has('date'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('date') }}</p>
-                        @endif
-                      </div>
+
                     </div>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="job_name">Nama Pekerjaan<code
@@ -57,8 +48,37 @@
                             {{ $errors->first('job_name') }}</p>
                         @endif
                       </div>
-
                     </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="date">Tanggal PP<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <input type="date" class="form-control" id="date" name="date"
+                          value="{{ old('date') }}" required>
+                        </select>
+                        @if ($errors->has('date'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('date') }}</p>
+                        @endif
+                      </div>
+                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                          </div>
+                          <input type="text" id="rkap" name="rkap" class="form-control numberformat mask"
+                            value="{{ old('rkap') }}" required>
+                        </div>
+                        @if ($errors->has('rkap'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('rkap') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="year">Tahun
                         <code style="color:red;">*</code></label>
@@ -119,39 +139,6 @@
                         @if ($errors->has('contract_value'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('contract_value') }}</p>
-                        @endif
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="stats" id="stats" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1">Aktif</option>
-                          <option value="2">Tidak Aktif</option>
-                        </select>
-                        @if ($errors->has('stats'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
-                        @endif
-                      </div>
-
-                      <label class="col-md-2 label-control" for="rkap">Nilai RKAP<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Rp.</span>
-                          </div>
-                          <input type="text" id="rkap" name="rkap" class="form-control numberformat mask"
-                            value="{{ old('rkap') }}" required>
-                        </div>
-                        @if ($errors->has('rkap'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('rkap') }}</p>
                         @endif
                       </div>
                     </div>

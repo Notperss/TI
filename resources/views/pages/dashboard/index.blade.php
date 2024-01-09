@@ -31,31 +31,31 @@
                       <h1>
                         {{ DB::table('attendances')->where('category', 'Sakit')->whereYear('created_at', now()->year)->count() }}
                       </h1>
-                      <strong class="warning">Total Sakit</strong>
+                      <strong class="warning">S</strong>
                     </div>
                     <div class="media-body text-left">
                       <h1>
                         {{ DB::table('attendances')->where('category', 'Tukar Tugas')->whereYear('created_at', now()->year)->count() }}
                       </h1>
-                      <strong class="info">Total T/T</strong>
+                      <strong class="info">T/T</strong>
                     </div>
                     <div class="media-body text-left">
                       <h1>
                         {{ DB::table('attendances')->where('category', 'IDT')->whereYear('created_at', now()->year)->count() }}
                       </h1>
-                      <strong class="primary">Total IDT</strong>
+                      <strong class="primary">IDT</strong>
                     </div>
                     <div class="media-body text-left">
                       <h1>
                         {{ DB::table('attendances')->where('category', 'IPC')->whereYear('created_at', now()->year)->count() }}
                       </h1>
-                      <strong class="secondary">Total IPC</strong>
+                      <strong class="secondary">IPC</strong>
                     </div>
                     <div class="media-body text-left">
                       <h1>
                         {{ DB::table('attendances')->where('category', 'Absen')->whereYear('created_at', now()->year)->count() }}
                       </h1>
-                      <strong class="danger">Total Absen</strong>
+                      <strong class="danger"> A</strong>
                     </div>
                     <div>
                       <i class="la la-book font-large-2 float-right info"></i>
@@ -71,7 +71,7 @@
                                 <th scope="col">No.</th>
                                 <th scope="col">Nama</th>
                                 <th scope="col">Jenis Absensi</th>
-                                <th scope="col">Tgl Mulai</th>
+                                <th scope="col">Tgl</th>
                                 {{-- <th scope="col">Tgl Selesai</th> --}}
                                 {{-- <th scope="col">Keterangan</th> --}}
                               </tr>
