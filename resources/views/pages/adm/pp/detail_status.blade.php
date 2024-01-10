@@ -14,8 +14,32 @@
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
-          @if ($file->type_status)
-            {{ $file->type_status }}
+          @if ($file->type_file == 1)
+            'Kirim Dokumen PP ke Divisi SIMA'
+          @elseif ($file->type_file == 2)
+            'Ambil Dokumen PP dari Divisi SIMA'
+          @elseif ($file->type_file == 3)
+            'Kirim Dokumen ke Divisi Teknik'
+          @elseif ($file->type_file == 4)
+            'Undangan Awal Jijing'
+          @elseif ($file->type_file == 5)
+            'Undangan Rapat Negosiasi'
+          @elseif ($file->type_file == 6)
+            'Penginformasian Pemenang OP/KONTRAK'
+          @elseif ($file->type_file == 7)
+            'Mulai Pekerjaan (SPMK)'
+          @elseif ($file->type_file == 8)
+            'Akhir Pekerjaan (BA)'
+          @elseif ($file->type_file == 9)
+            'Penerimaan Barang'
+          @elseif ($file->type_file == 10)
+            'Tagihan'
+          @elseif ($file->type_file == 11)
+            'Dikembalikan ke User'
+          @elseif ($file->type_file == 12)
+            'Dibatalkan (Closed)'
+          @elseif ($file->type_file == 13)
+            'Pembuatan'
           @else
             <p style="color:red;">Type Status File is Empty!</p>
           @endif
@@ -39,11 +63,11 @@
             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Action</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap ">
+              {{-- <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap ">
                 Show
               </a>
               <a type="button" href="{{ asset('storage/' . $file->file) }}" class="btn text-nowrap"
-                download>Download</a>
+                download>Download</a> --}}
               {{-- <a class="dropdown-item" href="{{ route('backsite.pp.edit', encrypt($file->id)) }}">
                 Edit
               </a> --}}

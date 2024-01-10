@@ -85,6 +85,9 @@
                       <thead>
                         <tr>
                           <th>No</th>
+                          <th
+                            style="display: {{ in_array(Auth::user()->detail_user->job_position, [1, 3]) || Auth::user()->detail_user->nik == 'M0203002' ? '' : 'none' }}">
+                            User</th>
                           <th>No PP</th>
                           <th>Tahun</th>
                           <th>Pekerjaan</th>
@@ -98,6 +101,7 @@
                       </tbody>
                       <tfoot hidden>
                         <th>no</th>
+                        <th style="display: none">No PP</th>
                         <th>No PP</th>
                         <th>Tahun</th>
                         <th>Pekerjaan</th>
@@ -122,9 +126,11 @@
   <!-- END: Content-->
 @endsection
 @push('after-style')
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 @push('after-script')
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -173,6 +179,12 @@
           width: '3%',
         },
         {
+          name: 'username',
+          data: 'username',
+          visible: false,
+
+        },
+        {
           data: 'no_pp',
           name: 'no_pp',
         },
@@ -187,6 +199,9 @@
         {
           data: 'job_value',
           name: 'job_value',
+          render: function(data) {
+            return 'Rp. ' + data + ' ';
+          }
         },
         {
           data: 'date',
@@ -217,6 +232,11 @@
 
         },
       ],
+      createdRow: function(row, data, dataIndex) {
+        if (data.detail_user && data.detail_user.job_position === 1) {
+          table.column('username:name').visible(true);
+        }
+      },
       columnDefs: [{
         className: 'text-center',
         targets: '_all'
@@ -349,6 +369,10 @@
         }
       });
     }
+
+    $(document).ready(function() {
+      $('.select2').select2();
+    });
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">

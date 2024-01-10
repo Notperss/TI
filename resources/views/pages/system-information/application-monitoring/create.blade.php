@@ -13,7 +13,7 @@
   @csrf
   <div class="modal-body">
     <div class="form-group row">
-      <label class="col-md-4 label-control" for="application_id">Nama Barang<code style="color:red;">*</code></label>
+      <label class="col-md-4 label-control" for="application_id">Nama Aplikasi<code style="color:red;">*</code></label>
       <div class="col-md-8">
         <select name="application_id" id="application_id" class="form-control select2" style="width: 100%" required>
           <option value="" disabled selected>Choose</option>

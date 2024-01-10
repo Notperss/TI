@@ -2,8 +2,9 @@
 
 namespace App\Models\Adm;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ManagementAccess\DetailUser;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PP extends Model
 {
@@ -31,6 +32,11 @@ class PP extends Model
     public function bill()
     {
         return $this->hasMany(Bill::class, "pp_id", "id");
+    }
+    public function detail_user()
+    {
+        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+        return $this->belongsTo(DetailUser::class, 'user_id', 'id');
     }
 
 

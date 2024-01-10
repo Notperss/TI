@@ -31,7 +31,8 @@ class PPController extends Controller
             $user = auth()->user()->detail_user;
             $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
 
-            $ppQuery = $isManagerOrViceManager ? PP::orderBy('created_at', 'desc') : PP::where('user_id', $user->job_position)->orderBy('created_at', 'desc');
+            $ppQuery = $isManagerOrViceManager ? PP::with('detail_user.user')->orderBy('created_at', 'desc')
+                : PP::where('user_id', $user->id)->orderBy('created_at', 'desc');
 
             $pp = $ppQuery->get();
 
@@ -80,7 +81,7 @@ class PPController extends Controller
                         ' . method_field('PUT') . csrf_field() . '
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-                     <input type="submit" 
+                     <input type="submit"
                         title="Approve/Cancel approve" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Approve' : 'Cancel-Approve') . '">
                     </form>';
                     }
@@ -88,7 +89,14 @@ class PPController extends Controller
                 })->editColumn('date', function ($item) {
                     return Carbon::parse($item->date)->translatedFormat('l, d F Y');
                 })
-                ->rawColumns(['action', 'date'])
+                ->addColumn('username', function ($item) {
+                    $user = auth()->user()->detail_user;
+                    $access = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
+
+                    return $access ? $item->detail_user->user->name : null;
+                })
+
+                ->rawColumns(['action', 'date', 'username'])
                 ->toJson();
         }
         return view("pages.adm.pp.index");
@@ -101,7 +109,7 @@ class PPController extends Controller
      */
     public function create()
     {
-        $user_id = Auth::user()->detail_user->job_position;
+        $user_id = Auth::user()->id;
         return view("pages.adm.pp.create", compact('user_id'));
     }
 
@@ -308,24 +316,30 @@ class PPController extends Controller
     {
         $pp = PP::find($request->id);
 
-        // save to file test material
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $image) {
-                $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
-                $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
-                $file = $image->storeAs('assets/file-pp', $fullname);
-                Pp_status::create([
-                    'pp_id' => $request->id,
-                    'type_status' => $request->type_status,
-                    'date' => $request->date,
-                    'description' => $request->description,
-                    'file' => $file,
-                ]);
-            }
-        }
-
+        // // save to file test material
+        // if ($request->hasFile('file')) {
+        //     foreach ($request->file('file') as $image) {
+        //         $file = $image->getClientOriginalName();
+        //         $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+        //         $ext = $image->getClientOriginalExtension();
+        //         $fullname = $basename . '.' . $ext;
+        //         $file = $image->storeAs('assets/file-pp', $fullname);
+        //         Pp_status::create([
+        //             'pp_id' => $request->id,
+        //             'type_status' => $request->type_status,
+        //             'date' => $request->date,
+        //             'description' => $request->description,
+        //             'file' => $file,
+        //         ]);
+        //     }
+        // }
+        Pp_status::create([
+            'pp_id' => $request->id,
+            'type_status' => $request->type_status,
+            'date' => $request->date,
+            'description' => $request->description,
+        ]);
+        // dd($request->all());
         alert()->success('Sukses', 'Data berhasil disimpan');
         return back();
     }
@@ -378,10 +392,10 @@ class PPController extends Controller
         } elseif ($pp->stats == 2) {
             $pp->update(['stats' => 1]);
         } else {
-            alert()->error('Error', 'Data gagal di Approve');
+            alert()->error('Error', 'Data gagal dirubah');
             return back();
         }
-        alert()->success('Sukses', 'Data berhasil di Approve');
+        alert()->success('Sukses', 'Data berhasil dirubah');
         return back();
 
     }

@@ -82,7 +82,7 @@
                                   <th scope="row">{{ $loop->iteration }}</th>
                                   <td>{{ $attendance->detail_user->user->name }}</td>
                                   <td>{{ $attendance->category }}</td>
-                                  <td> {{ Carbon\Carbon::parse($attendance->start_date)->translatedFormat('l, d F Y') }}
+                                  <td> {{ Carbon\Carbon::parse($attendance->start_date)->translatedFormat('d-m-Y') }}
                                   </td>
                                   {{-- <td>{{ $attendance->finish_date }}</td> --}}
                                   {{-- <td>{{ $attendance->description }}</td> --}}

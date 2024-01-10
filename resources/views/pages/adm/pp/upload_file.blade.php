@@ -10,15 +10,24 @@
   }
 </script>
 
-<div class="modal fade" id="upload" tabindex="-1" style="z-index: 1600;" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="upload" tabindex="-1" style="z-index: 1051;" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload File PP</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Upload File Peminjaman</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        @if ($errors->any())
+          <div class="alert alert-danger">
+            <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
       </div>
       <form class="form" action="{{ route('backsite.pp.upload') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -27,14 +36,23 @@
           <div class="form-group row">
             <label class="col-md-4 label-control" for="type_file">Tipe File<code style="color:red;">*</code></label>
             <div class="col-md-8">
-              <select name="type_file" id="type_file" class="form-control select2" required>
+              <select name="type_file" id="type_file" class="form-control select2" style="width: 100%" required>
                 <option value="{{ '' }}" disabled selected>
                   Choose
                 </option>
-                <option value="MEMO">Memo</option>
-                <option value="PENAWARAN KONTRAK">Penawaran Kontrak</option>
-                <option value="ADDENDUM">Addendum</option>
-                <option value="LAIN-LAIN">Lain-lain</option>
+                <option value="1">KAK</option>
+                <option value="2">Engineering Estimate</option>
+                <option value="3">Form PP</option>
+                <option value="4">Form Cashmen</option>
+                <option value="5">Memo PL</option>
+                <option value="6">Memo</option>
+                <option value="7">Penawaran</option>
+                <option value="8">Risalah Rapat</option>
+                <option value="9">OP (Offering Price)</option>
+                <option value="10">Kontrak</option>
+                <option value="11">Addendum</option>
+                <option value="12">BA Terima Barang</option>
+                <option value="13">Lain-lain (Others)</option>
               </select>
 
               @if ($errors->has('type_file'))
@@ -94,10 +112,19 @@
           </button>
         </div>
       </form>
+
     </div>
   </div>
 </div>
 
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.select2').select2();
+  });
+</script>
 <style>
   @media (min-width: 768px) {
 
@@ -118,8 +145,8 @@
       display: inline-block;
       text-align: left;
       vertical-align: middle;
-      width: 800px;
-      margin: 40px auto;
+      width: 600px;
+      margin: 30px auto;
     }
   }
 </style>

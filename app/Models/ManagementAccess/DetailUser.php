@@ -3,6 +3,7 @@
 namespace App\Models\ManagementAccess;
 
 use App\Models\Act_daily\ActDaily;
+use App\Models\Adm\PP;
 use App\Models\Attendance;
 use App\Models\Network\Distribution\Distribution;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -61,6 +62,11 @@ class DetailUser extends Model
     {
         // 2 parameter (path model, field foreign key)
         return $this->hasOne(ActDaily::class, 'executor');
+    }
+    public function pp()
+    {
+        // 2 parameter (path model, field foreign key)
+        return $this->hasOne(PP::class, 'user_id');
     }
     public function attendance()
     {

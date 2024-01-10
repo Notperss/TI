@@ -14,8 +14,30 @@
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
-          @if ($file->type_file)
-            {{ $file->type_file }}
+          @if ($file->type_file == 1)
+            'KAK'
+          @elseif ($file->type_file == 2)
+            'Engineering Estimate'
+          @elseif ($file->type_file == 3)
+            'Form PP'
+          @elseif ($file->type_file == 4)
+            'Form Cashmen'
+          @elseif ($file->type_file == 5)
+            'Memo PL'
+          @elseif ($file->type_file == 6)
+            'Memo'
+          @elseif ($file->type_file == 7)
+            'Penawaran'
+          @elseif ($file->type_file == 8)
+            'Risalah Rapat'
+          @elseif ($file->type_file == 9)
+            'OP (Offering Price)'
+          @elseif ($file->type_file == 10)
+            'Kontrak'
+          @elseif ($file->type_file == 11)
+            'BA Terima Barang'
+          @elseif ($file->type_file == 12)
+            'Lain-lain (Others)'
           @else
             <p style="color:red;">Type File is Empty!</p>
           @endif

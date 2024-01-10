@@ -26,10 +26,10 @@
                     <input type="hidden" id="user_id" name="user_id" value="{{ isset($user_id) ? $user_id : '' }}">
                     <input type="hidden" id="stats" name="stats" value="1">
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="no_pp">No PP</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" id="no_pp" name="no_pp"
-                          value="{{ old('no_pp') }}" required>
+                          value="{{ old('no_pp') }}">
                         </select>
                         @if ($errors->has('no_pp'))
                           <p style="font-style: bold; color: red;">
@@ -109,7 +109,8 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan</label>
+                      <label for="type_bill" class="col-md-2 label-control">Tipe Tagihan<code
+                          style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <select name="type_bill" id="type_bill" class="form-control select2" required>
                           <option value="{{ '' }}" disabled selected>
@@ -126,15 +127,14 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="contract_value">Nilai OP/Kontrak
-                        <code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="contract_value">Nilai OP/Kontrak</label>
                       <div class="col-md-4">
                         <div class="input-group">
                           <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Rp.</span>
+                            <span class="input-group-text" id="contract_value">Rp.</span>
                           </div>
                           <input type="text" class="form-control numberformat" name="contract_value"
-                            id="contract_value" value="{{ old('contract_value') }}" required>
+                            id="contract_value" value="{{ old('contract_value') }}">
                         </div>
                         @if ($errors->has('contract_value'))
                           <p style="font-style: bold; color: red;">
@@ -145,10 +145,9 @@
 
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-10">
-                        <textarea rows="5" class="form-control mb-3" id="description" name="description" required>{{ old('description') }}</textarea>
+                        <textarea rows="5" class="form-control mb-3" id="description" name="description">{{ old('description') }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>

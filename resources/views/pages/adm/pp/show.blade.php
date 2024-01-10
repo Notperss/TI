@@ -11,15 +11,15 @@
   </tr>
   <tr>
     <th>Nilai PP</th>
-    <td>{{ isset($pp->job_value) ? $pp->job_value : 'N/A' }}</td>
+    <td>Rp. {{ isset($pp->job_value) ? $pp->job_value : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Nilai OP/Kontrak</th>
-    <td>{{ isset($pp->contract_value) ? $pp->contract_value : 'N/A' }}</td>
+    <td>Rp. {{ isset($pp->contract_value) ? $pp->contract_value : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Nilai RKAP</th>
-    <td>{{ isset($pp->rkap) ? $pp->rkap : 'N/A' }}</td>
+    <td>Rp. {{ isset($pp->rkap) ? $pp->rkap : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Tanggal</th>
