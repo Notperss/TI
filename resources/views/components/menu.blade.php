@@ -133,13 +133,13 @@
               </li>
               {{-- @endcan --}}
 
-              {{-- @can('location_room') --}}
+              {{-- @can('location_room')
               <li
                 class="{{ request()->is('backsite/monitor') || request()->is('backsite/monitor/*') || request()->is('backsite/*/monitor') || request()->is('backsite/*/monitor/*') ? 'active' : '' }} ">
                 <a class="menu-item" href="{{ route('backsite.monitor.index') }}">
                   <i></i><span>Monitor</span>
                 </a>
-              </li>
+              </li> --}}
               {{-- @endcan --}}
             </ul>
 
@@ -152,7 +152,7 @@
               <li
                 class="{{ request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') ? 'active' : '' }} ">
                 <a class="menu-item" href="{{ route('backsite.location.index') }}">
-                  <i></i><span>Lokasi</span>
+                  <i></i><span>Lokasi Utama</span>
                 </a>
               </li>
               {{-- @endcan --}}
@@ -170,7 +170,7 @@
               <li
                 class="{{ request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'active' : '' }} ">
                 <a class="menu-item" href="{{ route('backsite.location_room.index') }}">
-                  <i></i><span>Ruangan</span>
+                  <i></i><span>Lokasi</span>
                 </a>
               </li>
               {{-- @endcan --}}

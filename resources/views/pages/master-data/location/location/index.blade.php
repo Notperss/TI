@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Lokasi')
+@section('title', 'Lokasi Utama')
 
 @section('content')
 
@@ -28,19 +28,19 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">Lokasi</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Lokasi Utama</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">Lokasi</li>
+                <li class="breadcrumb-item active">Lokasi Utama</li>
               </ol>
             </div>
           </div>
         </div>
       </div>
 
-      <a href="{{ route('backsite.location.create') }}" class="btn btn-success col-2 mb-1">Tambah Lokasi</a>
+      <a href="{{ route('backsite.location.create') }}" class="btn btn-success col-3 mb-1">Tambah Lokasi Utama</a>
       <div class="card">
 
         {{-- table card --}}
@@ -51,7 +51,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4 class="card-title">List Lokasi</h4>
+                    <h4 class="card-title">List Lokasi Utama</h4>
                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                     <div class="heading-elements">
                       <ul class="list-inline mb-0">
@@ -71,7 +71,7 @@
                           <thead>
                             <tr>
                               <th style="text-align:center; width:5px;">No</th>
-                              <th class="text-center">Lokasi</th>
+                              <th class="text-center">Lokasi Utama</th>
                               <th style="text-align:center; width:10px;">Action</th>
                             </tr>
                           </thead>

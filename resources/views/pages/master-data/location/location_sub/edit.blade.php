@@ -72,7 +72,7 @@
                       <div class="form-body">
 
                         <div class="form-group row">
-                          <label class="col-md-2 label-control" for="location_id">Lokasi
+                          <label class="col-md-2 label-control" for="location_id">Lokasi Utama
                             <code style="color:red;">*</code></label>
                           <div class="col-md-9">
                             <select name="location_id" id="location_id" class="form-control select2" required>

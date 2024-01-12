@@ -69,7 +69,7 @@
                           <thead>
                             <tr>
                               <th>No</th>
-                              <th>Lokasi</th>
+                              <th>Lokasi Utama</th>
                               <th>Sub Lokasi</th>
                               <th>Action</th>
                             </tr>

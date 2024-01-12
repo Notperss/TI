@@ -157,9 +157,10 @@
                       <table id="table" class=" table col-md-12">
                         <thead>
                           <tr>
+                            <th class="text-center" style="width: 5%">No</th>
+                            <th class="text-center" style="width: 30%">Barcode</th>
+                            <th class="text-center" style="width: 25%">Category</th>
                             <th class="text-center">Asset</th>
-                            <th class="text-center">Category</th>
-                            <th class="text-center">Barcode</th>
                             <th style="text-align:center; width:10px;">Action</th>
                           </tr>
                         </thead>
@@ -377,16 +378,17 @@
         // Append a new row
         $('#table').append(`
       <tr>
+        <td class="text-center">${i+1}</td>
         <td>
-          <select name="inputs[${i}][asset_id]" class="form-control select2 select21">
+          <select name="inputs[${i}][asset_id]" class="form-control select2 select21" style="width :100%">
             <option value="" disabled selected>Choose</option>
             @foreach ($barang as $goods)
-              <option value="{{ $goods->id }}" data-value="{{ $goods->category }}" data-value2="{{ $goods->barcode }}" data-name="{{ $goods->name }}">{{ $goods->name }}</option>
+              <option value="{{ $goods->id }}" data-value="{{ $goods->category }}" data-value2="{{ $goods->barcode }}" data-name="{{ $goods->name }}">{{ $goods->barcode }}</option>
             @endforeach
           </select>
         </td>
         <td><input type="text" class="form-control category" disabled></td>
-        <td><input type="text" class="form-control barcode" disabled></td>
+        <td><input type="text" class="form-control name" disabled></td>
         <td><button type="button" class="btn btn-danger remove-table-row">Remove</button></td>
       </tr>
     `);
@@ -408,6 +410,7 @@
           var $row = $(this).closest('tr');
           $row.find('.category').val(categoryValue);
           $row.find('.barcode').val(barcodeValue);
+          $row.find('.name').val(nameValue);
 
           // Disable the selected option for both parent and child
           disableOptionWithName(nameValue, this);

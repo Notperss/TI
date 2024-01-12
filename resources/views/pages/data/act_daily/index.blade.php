@@ -81,7 +81,7 @@
                         <thead>
                           <tr>
                             <th>No</th>
-                            <th>No.Aktvts</th>
+                            {{-- <th>No.Aktvts</th> --}}
                             <th>Pelaksana</th>
                             <th>Tgl Mulai</th>
                             <th>Jenis Pekerjaan</th>
@@ -95,7 +95,7 @@
                         </tbody>
                         <tfoot hidden>
                           <th>No</th>
-                          <th>No.Aktvts</th>
+                          {{-- <th>No.Aktvts</th> --}}
                           <th>Pelaksana</th>
                           <th>Tgl Mulai</th>
                           <th>Jenis Pekerjaan</th>
@@ -182,10 +182,10 @@
           orderable: false,
           searchable: false,
         },
-        {
-          data: 'id',
-          name: 'id',
-        },
+        // {
+        //   data: 'id',
+        //   name: 'id',
+        // },
         {
           data: 'executor',
           name: 'executor',

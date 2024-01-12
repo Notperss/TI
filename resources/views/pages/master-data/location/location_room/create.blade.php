@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Ruangan')
+@section('title', 'Lokasi')
 @section('content')
   <div class="app-content content">
     <div class="content-overlay"></div>
@@ -14,7 +14,7 @@
               <div class="card">
 
                 <div class="card-header bg-success text-white my-1">
-                  <h4 class="card-title text-white">Tambah Ruangan</h4>
+                  <h4 class="card-title text-white">Tambah Lokasi</h4>
                 </div>
 
 
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="location_id">Lokasi
+                      <label class="col-md-2 label-control" for="location_id">Lokasi Utama
                         <code style="color:red;">*</code></label>
                       <div class="col-md-9">
                         <select name="location_id" id="location_id" class="form-control select2" required>
@@ -58,10 +58,10 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="name">Ruangan
+                      <label class="col-md-2 label-control" for="name">Lokasi
                         <code style="color:red;">*</code></code></label>
                       <div class="col-md-9">
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Ruangan"
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Lokasi"
                           value="{{ old('name') }}" autocomplete="off" required>
                         @if ($errors->has('name'))
                           <p style="font-style: bold; color: red;">
@@ -88,8 +88,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-7">
                         <textarea rows="5" class="form-control summernote" id="description" name="description"></textarea>
                         @if ($errors->has('description'))

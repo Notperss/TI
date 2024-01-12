@@ -26,7 +26,6 @@ class UpdateGoodsRequest extends FormRequest
     {
         return [
             'type_assets' => 'required|max:255',
-            'sku' => 'max:255',
             'category' => 'required|max:255',
             'brand' => 'required|max:255',
             'stats' => 'required|max:255',
@@ -35,6 +34,9 @@ class UpdateGoodsRequest extends FormRequest
             'name' => 'required|max:255',
             'barcode' => ['max:255',
                 Rule::unique('goods', 'barcode')->ignore($this->route('barang'), 'id'),
+            ],
+            'sku' => ['max:255',
+                Rule::unique('goods', 'sku')->ignore($this->route('barang'), 'id'),
             ],
             'file' => 'mimes:png,jpg,jpeg',
         ];

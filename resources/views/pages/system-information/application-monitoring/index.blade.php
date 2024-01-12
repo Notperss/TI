@@ -190,9 +190,9 @@
           render: function(data) {
             if (data === '') {
               return '<span>N/A</span>';
-            } else if (data === '1') {
+            } else if (data === 'AKTIF') {
               return '<h5><span class="badge bg-info">Aktif</span></h5>';
-            } else if (data === '2') {
+            } else if (data === 'TIDAK AKTIF') {
               return '<h5><span class="badge bg-danger">Tidak Aktif</span></h5>';
             } else {
               return '-';

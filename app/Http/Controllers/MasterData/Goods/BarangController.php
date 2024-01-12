@@ -707,4 +707,17 @@ class BarangController extends Controller
         return view("pages.master-data.barang.history_index", compact('barang'));
     }
 
+    public function generateBarcode()
+    {
+        // Fetch the next barcode value from the database.
+        // Assuming your table has an auto-incremented ID field for the barcode.
+
+        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->latest()->first();
+        $nextBarcode = $lastRecord ? (int) str_replace('TI-', '', $lastRecord->barcode) + 1 : 1;
+        $finalBarcode = 'TI-' . $nextBarcode;
+
+        return response()->json(['finalBarcode' => $finalBarcode]);
+
+
+    }
 }

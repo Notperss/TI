@@ -35,7 +35,7 @@
                             {{ $errors->first('name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="sku">SKU</label>
+                      <label class="col-md-2 label-control" for="sku">SKU/SN</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="sku" id="sku"
                           value="{{ old('sku') }}">
@@ -110,6 +110,8 @@
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="barcode" id="barcode"
                           value="{{ old('barcode') }}">
+                        <span type="button" class="btn btn-sm btn-info" onclick="generateBarcode()">Klik jika tidak ada
+                          Barcode</span>
                         @if ($errors->has('barcode'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('barcode') }}</p>
@@ -179,9 +181,9 @@
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih Gambar</label>
                           <p class="text-muted"><small class="text-danger">Hanya dapat
                               mengunggah 1 file</small></p>
-                          @if ($errors->has('name_file'))
+                          @if ($errors->has('file'))
                             <p style="font-style: bold; color: red;">
-                              {{ $errors->first('name_file') }}</p>
+                              {{ $errors->first('file') }}</p>
                           @endif
                         </div>
                       </div>
@@ -298,6 +300,22 @@
 
       // Remove the entire row
       row.parentNode.removeChild(row);
+    }
+  </script>
+  <script>
+    function generateBarcode() {
+      // Perform an AJAX request to get the next barcode from the server
+      $.ajax({
+        url: '{{ route('backsite.barang.generateBarcode') }}', // Adjust the URL if needed
+        method: 'GET',
+        success: function(data) {
+          // Fill the barcode input with the generated value
+          $('#barcode').val(data.finalBarcode);
+        },
+        error: function() {
+          console.log('Error generating barcode');
+        }
+      });
     }
   </script>
 @endsection

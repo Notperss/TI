@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'Edit - Ruangan')
+@section('title', 'Edit - Lokasi')
 
 @section('content')
   <!-- BEGIN: Content-->
@@ -27,12 +27,12 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">Edit Ruangan</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">Edit Lokasi</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item">Ruangan</li>
+                <li class="breadcrumb-item">Lokasi</li>
                 <li class="breadcrumb-item active">Edit</li>
               </ol>
             </div>
@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="form-group row">
-                          <label class="col-md-2 label-control" for="location_id">Lokasi
+                          <label class="col-md-2 label-control" for="location_id">Lokasi Utama
                             <code style="color:red;">*</code></label>
                           <div class="col-md-9">
                             <select name="location_id" id="location_id" class="form-control select2" required>
@@ -99,10 +99,10 @@
                         </div>
 
                         <div class="form-group row">
-                          <label class="col-md-2 label-control" for="name">Ruangan
+                          <label class="col-md-2 label-control" for="name">Lokasi
                             <code style="color:red;">*</code></code></label>
                           <div class="col-md-9">
-                            <input type="text" id="name" name="name" class="form-control" placeholder="Ruangan"
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Lokasi"
                               value="{{ old('name', $location_room->name) }}" autocomplete="off" required>
                             @if ($errors->has('name'))
                               <p style="font-style: bold; color: red;">
@@ -132,8 +132,7 @@
                         </div>
 
                         <div class="form-group row">
-                          <label class="col-md-2 label-control" for="description">Keterangan<code
-                              style="color:red;">*</code></label>
+                          <label class="col-md-2 label-control" for="description">Keterangan</label>
                           <div class="col-md-7">
                             <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description', $location_room->description) }}</textarea>
                             @if ($errors->has('description'))

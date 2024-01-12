@@ -214,6 +214,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::delete('/barang/{id}/delete_file', 'delete_file')->name('barang.delete_file');
 
         Route::get('/barang/{id}/history_index', 'history_index')->name('barang.history_index');
+        Route::get('/generate-barcode', 'generateBarcode')->name('barang.generateBarcode');
 
     });
 

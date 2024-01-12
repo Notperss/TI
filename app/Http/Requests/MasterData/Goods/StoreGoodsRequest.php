@@ -26,7 +26,9 @@ class StoreGoodsRequest extends FormRequest
     {
         return [
             'type_assets' => 'required|max:255',
-            'sku' => 'max:255',
+            'sku' => ['max:255',
+                Rule::unique('goods', 'sku')->ignore($this->route('goods'), 'id'),
+            ],
             'barcode' => ['max:255',
                 Rule::unique('goods', 'barcode')->ignore($this->route('goods'), 'id'),
             ],
