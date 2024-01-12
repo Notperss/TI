@@ -130,6 +130,12 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     // Route::get('/employee/division-employee', [EmployeeController::class, 'division-employe'])->name('division-employee');
     // work_program
     Route::resource('work_program', WorkProgramController::class);
+    Route::controller(WorkProgramController::class)->group(function () {
+        Route::post('/work_program/form_upload', 'form_upload')->name('work_program.form_upload');
+        Route::post('/work_program/upload', 'upload')->name('work_program.upload');
+        Route::post('/work_program/show_file', 'show_file')->name('work_program.show_file');
+        Route::delete('/work_program/{id}/delete_file', 'delete_file')->name('work_program.delete_file');
+    });
     // daily_activity
     Route::controller(DailyActivityController::class)->group(function () {
         Route::post('/daily_activity/form_upload', 'form_upload')->name('daily_activity.form_upload');

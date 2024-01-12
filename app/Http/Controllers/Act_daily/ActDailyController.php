@@ -349,23 +349,23 @@ class ActDailyController extends Controller
         return back();
     }
 
-    public function action_activity(Request $request)
-    {
-        if ($request->ajax()) {
-            $id = $request->id;
+    // public function action_activity(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $id = $request->id;
 
-            $row = ActDaily::find($id);
-            $data = [
-                'id' => $row['id'],
-            ];
+    //         $row = ActDaily::find($id);
+    //         $data = [
+    //             'id' => $row['id'],
+    //         ];
 
-            $msg = [
-                'data' => view('pages.data.act_daily.action_activity', $data)->render(),
-            ];
+    //         $msg = [
+    //             'data' => view('pages.data.act_daily.action_activity', $data)->render(),
+    //         ];
 
-            return response()->json($msg);
-        }
-    }
+    //         return response()->json($msg);
+    //     }
+    // }
 
     public function approve($id)
     {

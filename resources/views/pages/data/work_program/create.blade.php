@@ -68,7 +68,7 @@
                   <code style="color:red;">*</code></label>
                 <div class="col-md-4">
                   <input type="text" class="form-control" name="year" id="year" data-provide="datepicker"
-                    data-date-format="yyyy" data-date-min-view-mode="2" autocomplete="off" required>
+                    data-date-format="yyyy" data-date-min-view-mode="2" autocomplete="off" readonly required>
 
                   @if ($errors->has('year'))
                     <p style="font-style: bold; color: red;">
@@ -132,8 +132,6 @@
                 <label class="col-md-2 label-control" for="description">Keterangan</label>
                 <div class="col-md-10">
                   <textarea rows="5" class="form-control summernote" id="description" name="description"></textarea>
-                  <p class="text-muted"><small class="text-danger">Gunakan Shift
-                      + Enter jika ingin pindah baris</small></p>
                 </div>
               </div>
 

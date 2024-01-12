@@ -261,7 +261,7 @@ class PPController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $pp_file = Pp_file::where('pp_id', $id)->get();
+            $pp_file = Pp_file::where('pp_id', $id)->orderBy('created_at', 'desc')->get();
             $data = [
                 'datafile' => $pp_file,
             ];
@@ -350,7 +350,7 @@ class PPController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $pp_status = Pp_status::where('pp_id', $id)->get();
+            $pp_status = Pp_status::where('pp_id', $id)->orderBy('created_at', 'desc')->get();
             $data = [
                 'datafile' => $pp_status,
             ];

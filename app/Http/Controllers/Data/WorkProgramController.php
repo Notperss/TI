@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Data;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Data\WorkProgram;
 
 // request
+use App\Models\Data\WorkProgram;
 use Yajra\DataTables\DataTables;
-use App\Http\Controllers\Controller;
 
 // use mode here
+use App\Http\Controllers\Controller;
+use App\Models\Data\WorkProgramFile;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Data\WorkProgram\StoreWorkProgramRequest;
 use App\Http\Requests\Data\WorkProgram\UpdateWorkProgramRequest;
 
@@ -116,8 +119,9 @@ class WorkProgramController extends Controller
         // deskripsi id
         $decrypt_id = decrypt($id);
         $work_program = WorkProgram::find($decrypt_id);
+        $files = WorkProgramFile::where('work_program_id', $work_program->id)->orderBy('created_at', 'desc')->get();
 
-        return view('pages.data.work_program.edit', compact('work_program'));
+        return view('pages.data.work_program.edit', compact('work_program', 'files'));
     }
 
     /**
@@ -153,6 +157,87 @@ class WorkProgramController extends Controller
 
         // hapus work_program
         $work_program->forceDelete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+
+    public function form_upload(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $row = WorkProgram::find($id);
+            $data = [
+                'id' => $row['id'],
+            ];
+
+            $msg = [
+                'data' => view('pages.data.work_program.upload_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+    public function upload(Request $request)
+    {
+        $work_program_id = WorkProgram::find($request->id);
+        // save to file test material
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $image) {
+                $file = $image->getClientOriginalName();
+                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $ext = $image->getClientOriginalExtension();
+                $fullname = $basename . '.' . $ext;
+                $file = $image->storeAs('assets/file-work-program', $fullname);
+
+                WorkProgramFile::create([
+                    'work_program_id' => $request->id,
+                    'uraian' => $request->uraian,
+                    'date' => $request->date,
+                    'description' => $request->description,
+                    'file' => $file,
+                ]);
+            }
+        }
+
+        alert()->success('Sukses', 'File Berhasil diupload');
+        return back();
+    }
+
+    // get show_file software
+    public function show_file(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $pp_file = WorkProgramFile::where('work_program_id', $id)->orderBy('created_at', 'desc')->get();
+            $data = [
+                'datafile' => $pp_file,
+            ];
+
+            $msg = [
+                'data' => view('pages.data.work_program.detail_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+    // hapus file dailiy activity
+    public function delete_file($id)
+    {
+        $work_program_file = WorkProgramFile::find($id);
+
+        // cari old photo
+        $path_file = $work_program_file['file'];
+
+        // hapus file
+        if ($path_file != null || $path_file != '') {
+            Storage::delete($path_file);
+        }
+
+        $work_program_file->forceDelete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

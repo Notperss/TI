@@ -102,7 +102,8 @@
                           <div class="col-md-4">
                             <input type="text" class="form-control" name="year" id="year"
                               data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2"
-                              value="{{ isset($work_program->year) ? $work_program->year : '' }}" autocomplete="off">
+                              value="{{ isset($work_program->year) ? $work_program->year : '' }}" autocomplete="off"
+                              readonly required>
 
                             @if ($errors->has('year'))
                               <p style="font-style: bold; color: red;">
@@ -183,8 +184,6 @@
                               style="color:red;"></code></label>
                           <div class="col-md-10">
                             <textarea rows="5" class="form-control summernote" id="description" name="description">{{ isset($work_program->description) ? $work_program->description : '' }}</textarea>
-                            <p class="text-muted"><small class="text-danger">Gunakan Shift
-                                + Enter jika ingin pindah baris</small></p>
                           </div>
                         </div>
 
@@ -192,9 +191,9 @@
 
                       <div class="form-actions text-right">
                         <a href="{{ route('backsite.work_program.index') }}" style="width:120px;"
-                          class="btn bg-blue-grey text-white mr-1"
+                          class="btn btn-warning text-white mr-1"
                           onclick="return confirm('Yakin ingin menutup halaman ini? , Setiap perubahan yang Anda buat tidak akan disimpan.')">
-                          <i class="ft-x"></i> Cancel
+                          <i class="ft-x"></i> Kembali
                         </a>
                         <button type="submit" style="width:120px;" class="btn btn-cyan"
                           onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
@@ -202,6 +201,63 @@
                         </button>
                       </div>
                     </form>
+
+                    <hr class="rounded">
+                    {{-- File --}}
+                    <div class="form-group row">
+                      <div class="col-md-4">
+                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1"
+                          title="Tambah file" onclick="upload({{ $work_program->id }})"><i class="bx bx-file"></i>
+                          Tambah File</button>
+                      </div>
+                    </div>
+                    <div class="table-responsive col-md-12">
+                      <table class="table table-striped table-bordered default-table activity-table mb-4"
+                        aria-label="">
+                        <thead>
+                          <tr>
+                            <th class="text-center" style="width: 5%;">No</th>
+                            <th class="text-center">Uraian</th>
+                            <th class="text-center">Tanggal</th>
+                            <th class="text-center">Keterangan</th>
+                            <th class="text-center">File</th>
+                            <th style="text-align:center; width:10px;">Action</th>
+                          </tr>
+                        </thead>
+                        @forelse ($files as $file)
+                          <tbody>
+                            <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $file->uraian }}</td>
+                            <td class="text-center">
+                              {{ Carbon\Carbon::parse($file->date)->translatedFormat('l, d F Y') }}</td>
+                            <td class="text-center">{{ $file->description ? $file->description : 'N/A' }}</td>
+                            <td class="text-center">
+                              <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->file) }}"
+                                class="btn btn-info btn-sm text-white ">
+                                Lihat
+                              </a> <a type="button" href="{{ asset('storage/' . $file->file) }}"
+                                class="btn btn-warning btn-sm text-white" download>Unduh</a>
+                            </td>
+                            <td class="text-center">
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-info btn-sm dropdown-toggle"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                  <form action="{{ route('backsite.work_program.delete_file', $file->id ?? '') }}"
+                                    method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit"id="delete_file" class="btn"value="Delete">
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </tbody>
+                        @empty
+                          <td class="text-center" colspan="6">No data available in table</td>
+                        @endforelse
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -212,6 +268,8 @@
 
     </div>
   </div>
+  <div class="viewmodal" style="display: none;"></div>
+
   <!-- END: Content-->
 
 @endsection
@@ -219,32 +277,33 @@
 @push('after-style')
   <link rel="stylesheet" type="text/css"
     href="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
-  {{-- <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet"> --}}
 @endpush
 
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-  {{-- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script> --}}
-  {{-- 
   <script>
-    // summernote
-    $('.summernote').summernote({
-      tabsize: 2,
-      height: 100,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'italic', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['fontsize', ['fontsize']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['height', ['height']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture', 'hr']],
-        ['view', ['fullscreen', 'codeview']],
-      ],
-    });
+    function upload(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
 
-    $('.summernote').summernote('fontSize', '12');
-  </script> --}}
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.work_program.form_upload') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+  </script>
 @endpush

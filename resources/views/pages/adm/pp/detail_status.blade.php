@@ -14,31 +14,31 @@
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
-          @if ($file->type_file == 1)
+          @if ($file->type_status == 1)
             'Kirim Dokumen PP ke Divisi SIMA'
-          @elseif ($file->type_file == 2)
+          @elseif ($file->type_status == 2)
             'Ambil Dokumen PP dari Divisi SIMA'
-          @elseif ($file->type_file == 3)
+          @elseif ($file->type_status == 3)
             'Kirim Dokumen ke Divisi Teknik'
-          @elseif ($file->type_file == 4)
+          @elseif ($file->type_status == 4)
             'Undangan Awal Jijing'
-          @elseif ($file->type_file == 5)
+          @elseif ($file->type_status == 5)
             'Undangan Rapat Negosiasi'
-          @elseif ($file->type_file == 6)
+          @elseif ($file->type_status == 6)
             'Penginformasian Pemenang OP/KONTRAK'
-          @elseif ($file->type_file == 7)
+          @elseif ($file->type_status == 7)
             'Mulai Pekerjaan (SPMK)'
-          @elseif ($file->type_file == 8)
+          @elseif ($file->type_status == 8)
             'Akhir Pekerjaan (BA)'
-          @elseif ($file->type_file == 9)
+          @elseif ($file->type_status == 9)
             'Penerimaan Barang'
-          @elseif ($file->type_file == 10)
+          @elseif ($file->type_status == 10)
             'Tagihan'
-          @elseif ($file->type_file == 11)
+          @elseif ($file->type_status == 11)
             'Dikembalikan ke User'
-          @elseif ($file->type_file == 12)
+          @elseif ($file->type_status == 12)
             'Dibatalkan (Closed)'
-          @elseif ($file->type_file == 13)
+          @elseif ($file->type_status == 13)
             'Pembuatan'
           @else
             <p style="color:red;">Type Status File is Empty!</p>

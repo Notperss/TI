@@ -114,6 +114,8 @@
 
   </div>
   </div>
+  <div class="viewmodal" style="display: none;"></div>
+
   <!-- END: Content-->
 
 @endsection
