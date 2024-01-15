@@ -20,6 +20,8 @@ use App\Models\MasterData\Goods\GoodsProcessor;
 use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
 use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
+use BaconQrCode\Encoder\QrCode;
+use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
 
 class BarangController extends Controller
 {
@@ -92,6 +94,10 @@ class BarangController extends Controller
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
+              <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data" class=" btn list-group-item-success">
+                        Print
+                    </a>
                 ';
                     }
                 })
@@ -194,11 +200,73 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreGoodsRequest $request)
-    {
-        // get all request from frontsite
+    {  // Validation rules
+
+        $rules = [
+            'barcode' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    // Check if the barcode starts with "TI-"
+                    if (strpos($value, 'TI-') !== 0) {
+                        return; // Ignore validation if the barcode doesn't start with "TI-"
+                    }
+
+                    // Check if the barcode follows the pattern "TI-" followed by a numeric part and at most one letter
+                    if (preg_match('/^TI-(\d+)([A-Z])?$/', $value, $matches)) {
+                        // Ensure that the array key exists
+                        $numericPart = isset($matches[1]) ? $matches[1] : null;
+                        $letterPart = isset($matches[2]) ? $matches[2] : null;
+
+                        // Check if there is more than one letter following "TI-(number)"
+                        if ($letterPart !== null && strlen($letterPart) > 1) {
+                            $fail("$attribute must have at most one letter following the numeric part.");
+                            return;
+                        }
+
+                        // Check if the numeric part already exists
+                        if (Barang::where('barcode', 'like', "TI-$numericPart%")->exists()) {
+                            return; // Ignore validation if barcode with the numeric part already exists
+                        }
+
+                        // Validate sequential order
+                        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->orderBy('barcode', 'desc')->first();
+                        $expectedNextBarcode = $lastRecord ? getNextSequentialBarcode($lastRecord->barcode) : 'TI-1';
+
+                        if ($numericPart !== null && is_numeric($numericPart) && $value !== $expectedNextBarcode) {
+                            $fail("$attribute must be the next sequential barcode ($expectedNextBarcode).");
+                        }
+                    } else {
+                        $fail("$attribute must follow the format TI-(number)(optional letter).");
+                    }
+                },
+            ],
+        ];
+        function getNextSequentialBarcode($barcode)
+        {
+            $prefix = 'TI-';
+            preg_match('/^' . preg_quote($prefix) . '(\d+)$/', $barcode, $matches);
+
+            $numberPart = isset($matches[1]) ? $matches[1] : null;
+            return $prefix . ($numberPart + 1);
+        }
+        // Custom validation messages
+        $messages = [
+            'barcode.custom' => 'The barcode must be the next sequential barcode.',
+        ];
+
+        // Validate the request data
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // If validation passes, proceed with the upload and database storage
         $data = $request->all();
 
-        // upload process here
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
@@ -207,10 +275,12 @@ class BarangController extends Controller
             $fullname = $basename . '.' . $extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-goods', $fullname);
         }
-        // store to database
+
+        // Store to database
         $barang = Barang::create($data);
         $id = $barang->id;
-        alert()->success('Sukses', 'Data berhasil ditambahkan');
+
+        alert()->success('Success', 'Data added successfully');
         return redirect()->route('backsite.barang.edit', $id);
     }
 
@@ -711,13 +781,22 @@ class BarangController extends Controller
     {
         // Fetch the next barcode value from the database.
         // Assuming your table has an auto-incremented ID field for the barcode.
+        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->orderBy('barcode', 'desc')->first();
 
-        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->latest()->first();
         $nextBarcode = $lastRecord ? (int) str_replace('TI-', '', $lastRecord->barcode) + 1 : 1;
         $finalBarcode = 'TI-' . $nextBarcode;
 
         return response()->json(['finalBarcode' => $finalBarcode]);
-
-
     }
+
+    public function showBarcode($id)
+    {
+
+        $decrypt_id = decrypt($id);
+        $barang = Barang::find($decrypt_id);
+        $qr = FacadesQrCode::size(170)->generate(route('backsite.barang.show', $id));
+        return view('pages.master-data.barang.show-barcode', compact('barang', 'qr'));
+    }
+
+
 }
