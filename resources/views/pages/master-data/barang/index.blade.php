@@ -72,9 +72,9 @@
                       <thead>
                         <tr>
                           <th>No</th>
+                          <th>Barcode</th>
                           <th>Nama Barang</th>
                           <th>Category</th>
-                          <th>Barcode</th>
                           <th>User</th>
                           <th>Tanggal Pinjam</th>
                           <th>Action</th>
@@ -112,13 +112,20 @@
       serverSide: true,
       ordering: false,
       dom: 'Bfrtip',
+      lengthMenu: [10, 25, 50, 75, 100, 250],
       buttons: [{
           extend: 'copy',
-          className: "btn btn-info"
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
         },
         {
           extend: 'excel',
-          className: "btn btn-info"
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
         },
         {
           extend: 'print',
@@ -126,6 +133,10 @@
           exportOptions: {
             columns: ':not(.no-print)' // Exclude elements with class 'no-print'
           }
+        },
+        {
+          extend: 'pageLength',
+          className: "btn btn-info",
         },
       ],
       ajax: {
@@ -139,16 +150,16 @@
 
         },
         {
+          data: 'barcode',
+          name: 'barcode',
+        },
+        {
           data: 'name',
           name: 'name',
         },
         {
           data: 'category',
           name: 'category',
-        },
-        {
-          data: 'barcode',
-          name: 'barcode',
         },
         {
           data: 'distribution_asset',

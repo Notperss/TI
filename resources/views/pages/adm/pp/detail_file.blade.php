@@ -15,45 +15,45 @@
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
           @if ($file->type_file == 1)
-            'KAK'
+            KAK
           @elseif ($file->type_file == 2)
-            'Engineering Estimate'
+            Engineering Estimate
           @elseif ($file->type_file == 3)
-            'Form PP'
+            Form PP
           @elseif ($file->type_file == 4)
-            'Form Cashmen'
+            Form Cashmen
           @elseif ($file->type_file == 5)
-            'Memo PL'
+            Memo PL
           @elseif ($file->type_file == 6)
-            'Memo'
+            Memo
           @elseif ($file->type_file == 7)
-            'Penawaran'
+            Penawaran
           @elseif ($file->type_file == 8)
-            'Risalah Rapat'
+            Risalah Rapat
           @elseif ($file->type_file == 9)
-            'OP (Offering Price)'
+            OP (Offering Price)
           @elseif ($file->type_file == 10)
-            'Kontrak'
+            Kontrak
           @elseif ($file->type_file == 11)
-            'BA Terima Barang'
+            BA Terima Barang
           @elseif ($file->type_file == 12)
-            'Lain-lain (Others)'
+            Lain-lain (Others)
           @else
-            <p style="color:red;">Type File is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($file->name_file)
             {{ $file->name_file }}
           @else
-            <p style="color:red;">Name File is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($file->description_file)
             {{ $file->description_file }}
           @else
-            <p style="color:red;">Description is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">

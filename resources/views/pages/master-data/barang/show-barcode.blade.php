@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container" id='DivIdToPrint'>
   <div class="row justify-content-center">
     {{ $qr }}
     <div class="col-md-6 text-center">
       <table class="table table-bordered text-center">
         <tr>
-          <th>No Barcode</th>
+          <th>Barcode</th>
           <td>{{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</td>
         </tr>
         <tr>
@@ -22,7 +22,26 @@
       </table>
     </div>
   </div>
-  <div class="row justify-content-center">
-    <button class="btn btn-info text-center" onclick="window.print()">Print</button>
-  </div>
 </div>
+<div class="row justify-content-center">
+  <button class="btn btn-info text-center" value='Print' onclick='printDiv();'>Print</button>
+</div>
+<script>
+  function printDiv() {
+
+    var divToPrint = document.getElementById('DivIdToPrint');
+
+    var newWin = window.open('', 'Print-Window');
+
+    newWin.document.open();
+
+    newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+    newWin.document.close();
+
+    setTimeout(function() {
+      newWin.close();
+    }, 10);
+
+  }
+</script>

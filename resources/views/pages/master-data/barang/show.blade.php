@@ -1,12 +1,17 @@
 <table class="table table-bordered">
   <input type="hidden" name="id" id="id" value="{{ $barang->id }}">
   <tr>
+  <tr>
+    <th>Barcode</th>
+    <td>{{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</td>
+  </tr>
+  <tr>
     <th>Nama Barang</th>
     <td>{{ isset($barang->name) ? $barang->name : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Barcode</th>
-    <td>{{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</td>
+    <th>Kategori</th>
+    <td>{{ isset($barang->category) ? $barang->category : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Merk</th>

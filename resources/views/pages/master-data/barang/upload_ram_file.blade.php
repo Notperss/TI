@@ -13,14 +13,14 @@
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="file">ram
+            <label class="col-md-4 label-control" for="file">Ram
               <code style="color:red;">*</code></label>
             <div class="col-md-8">
               <div class="custom-file">
                 <select name="ram_id" id="ram_id" class="form-control select2" style="width: 100%">
                   <option value="" selected disabled>Choose</option>
                   @foreach ($rams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->name }}</option>
+                    <option value="{{ $ram->id }}" data-value="{{ $ram->size }}">{{ $ram->name }}</option>
                   @endforeach
                 </select>
               </div>
@@ -30,17 +30,25 @@
               @endif
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
-            <i class="la la-close"></i> Cancel
-          </a>
+          <div class="form-group row">
+            <label class="col-md-4 label-control" for="file">Ukuran
+              <code style="color:red;">*</code></label>
+            <div class="col-md-8">
+              <div class="custom-file">
+                <input type="text" class="form-control" id="ukuran" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="{{ url()->previous() }}" style="width:120px;" class="btn btn-warning mr-5" href>
+              <i class="la la-close"></i> Cancel
+            </a>
 
-          <button type="submit" style="width:120px;" class="btn btn-cyan"
-            onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-            <i class="la la-check-square-o"></i> Upload
-          </button>
-        </div>
+            <button type="submit" style="width:120px;" class="btn btn-cyan"
+              onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
+              <i class="la la-check-square-o"></i> Simpan
+            </button>
+          </div>
       </form>
     </div>
   </div>
@@ -51,5 +59,11 @@
 <script>
   $(document).ready(function() {
     $('.select2').select2();
+  });
+</script>
+<script>
+  $('#ram_id').on('change', function() {
+    var input_value = $(this).find(':selected').data('value');;
+    $('#ukuran').val(input_value);
   });
 </script>

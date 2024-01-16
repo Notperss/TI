@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MasterData\Goods;
 
+use App\Models\MasterData\Hardware\Motherboard;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ use App\Models\MasterData\Goods\GoodsProcessor;
 use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\MasterData\Goods\StoreGoodsRequest;
 use App\Http\Requests\MasterData\Goods\UpdateGoodsRequest;
+use App\Models\MasterData\Goods\GoodsMotherboard;
 use BaconQrCode\Encoder\QrCode;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
 
@@ -69,6 +71,10 @@ class BarangController extends Controller
                         Edit
                     </a>
             </div>
+            <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
+                        Print
+                    </a>
                 ';
                         } else {
                             return 'No created_at values found';
@@ -94,21 +100,15 @@ class BarangController extends Controller
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
-              <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data" class=" btn list-group-item-success">
-                        Print
-                    </a>
+              
                 ';
                     }
                 })
-                ->editColumn('name', function ($item) {
-
+                ->editColumn('barcode', function ($item) {
                     return '
-                    <a  style="text-decoration: none; color: white; display:"  title="Lihat semua data history ' . $item->name . '" class="btn btn-sm btn-info"
-                        href="' . route('backsite.barang.history_index', $item->id) . '" >' . $item->name . '</a>
+                    <a  style="text-decoration: none; color: white; display:"  title="Lihat semua data history ' . $item->barcode . '" class="btn btn-sm btn-info"
+                        href="' . route('backsite.barang.history_index', $item->id) . '" >' . $item->barcode . '</a>
                     ';
-
-
                 })
                 ->editColumn('distribution_asset', function ($item) {
                     // Access the distribution_asset relationship
@@ -176,7 +176,7 @@ class BarangController extends Controller
                         return 'Available';
                     }
                 })
-                ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at', 'name'])
+                ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at', 'barcode'])
 
                 ->toJson();
         }
@@ -235,7 +235,7 @@ class BarangController extends Controller
                         $expectedNextBarcode = $lastRecord ? getNextSequentialBarcode($lastRecord->barcode) : 'TI-1';
 
                         if ($numericPart !== null && is_numeric($numericPart) && $value !== $expectedNextBarcode) {
-                            $fail("$attribute must be the next sequential barcode ($expectedNextBarcode).");
+                            $fail("$attribute harus berurutan ($expectedNextBarcode).");
                         }
                     } else {
                         $fail("$attribute must follow the format TI-(number)(optional letter).");
@@ -310,9 +310,10 @@ class BarangController extends Controller
         $files = Goodsfile::where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $processors = GoodsProcessor::with('processor')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $rams = GoodsRam::with('ram')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
+        $motherboards = GoodsMotherboard::with('motherboard')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $hardisks = GoodsHardisk::with('hardisk')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $assets = DistributionAsset::where('asset_id', $barang->id)->get();
-        return view('pages.master-data.barang.edit', compact('barang', 'files', 'hardisks', 'processors', 'rams', 'assets'));
+        return view('pages.master-data.barang.edit', compact('barang', 'files', 'hardisks', 'processors', 'rams', 'assets', 'motherboards'));
     }
 
     /**
@@ -324,6 +325,68 @@ class BarangController extends Controller
      */
     public function update(UpdateGoodsRequest $request, Barang $barang)
     {
+
+        $rules = [
+            'barcode' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    // Check if the barcode starts with "TI-"
+                    if (strpos($value, 'TI-') !== 0) {
+                        return; // Ignore validation if the barcode doesn't start with "TI-"
+                    }
+
+                    // Check if the barcode follows the pattern "TI-" followed by a numeric part and at most one letter
+                    if (preg_match('/^TI-(\d+)([A-Z])?$/', $value, $matches)) {
+                        // Ensure that the array key exists
+                        $numericPart = isset($matches[1]) ? $matches[1] : null;
+                        $letterPart = isset($matches[2]) ? $matches[2] : null;
+
+                        // Check if there is more than one letter following "TI-(number)"
+                        if ($letterPart !== null && strlen($letterPart) > 1) {
+                            $fail("$attribute must have at most one letter following the numeric part.");
+                            return;
+                        }
+
+                        // Check if the numeric part already exists
+                        if (Barang::where('barcode', 'like', "TI-$numericPart%")->exists()) {
+                            return; // Ignore validation if barcode with the numeric part already exists
+                        }
+
+                        // Validate sequential order
+                        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->orderBy('barcode', 'desc')->first();
+                        $expectedNextBarcode = $lastRecord ? getNextSequentialBarcodeEdit($lastRecord->barcode) : 'TI-1';
+
+                        if ($numericPart !== null && is_numeric($numericPart) && $value !== $expectedNextBarcode) {
+                            $fail("$attribute harus berurutan ($expectedNextBarcode).");
+                        }
+                    } else {
+                        $fail("$attribute must follow the format TI-(number)(optional letter).");
+                    }
+                },
+            ],
+        ];
+        function getNextSequentialBarcodeEdit($barcode)
+        {
+            $prefix = 'TI-';
+            preg_match('/^' . preg_quote($prefix) . '(\d+)$/', $barcode, $matches);
+
+            $numberPart = isset($matches[1]) ? $matches[1] : null;
+            return $prefix . ($numberPart + 1);
+        }
+        // Custom validation messages
+        $messages = [
+            'barcode.custom' => 'The barcode must be the next sequential barcode.',
+        ];
+
+        // Validate the request data
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         // get all request from frontsite
         $data = $request->all();
 
@@ -557,6 +620,47 @@ class BarangController extends Controller
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
+    public function form_motherboard(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $row = Barang::find($id);
+            $motherboard = Motherboard::orderBy('created_at', 'desc')->get();
+
+            $data = [
+                'id' => $row['id'],
+                'motherboards' => $motherboard,
+            ];
+
+            $msg = [
+                'data' => view('pages.master-data.barang.upload_motherboard_file', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function upload_motherboard(Request $request)
+    {
+        $barang = Barang::find($request->id);
+        GoodsMotherboard::create([
+            'goods_id' => $request->id,
+            'motherboard_id' => $request->motherboard_id,
+        ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.barang.edit', $barang);
+    }
+
+    public function delete_motherboard($id)
+    {
+        $motherboard = GoodsMotherboard::find($id);
+        $motherboard->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
 
     public function show_file(Request $request)
     {
@@ -566,10 +670,12 @@ class BarangController extends Controller
             $barang = Barang::find($id);
             $file = Goodsfile::where('goods_id', $id)->get();
             $processor = GoodsProcessor::where('goods_id', $id)->get();
+            $motherboard = GoodsMotherboard::where('goods_id', $id)->get();
             $ram = GoodsRam::where('goods_id', $id)->get();
             $hardisk = GoodsHardisk::where('goods_id', $id)->get();
             $data = [
                 'datafile' => $file,
+                'motherboard' => $motherboard,
                 'processor' => $processor,
                 'ram' => $ram,
                 'hardisk' => $hardisk,

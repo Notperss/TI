@@ -20,7 +20,8 @@
                 <select name="hardisk_id" id="hardisk_id" class="form-control select2" style="width: 100%">
                   <option value="" selected disabled>Choose</option>
                   @foreach ($hardisks as $hardisk)
-                    <option value="{{ $hardisk->id }}">{{ $hardisk->name }}</option>
+                    <option value="{{ $hardisk->id }}" data-value="{{ $hardisk->size }}">{{ $hardisk->name }}
+                    </option>
                   @endforeach
                 </select>
               </div>
@@ -28,6 +29,15 @@
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('file') }}</p>
               @endif
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 label-control" for="file">Ukuran
+              <code style="color:red;">*</code></label>
+            <div class="col-md-8">
+              <div class="custom-file">
+                <input type="text" class="form-control" id="ukuran" readonly>
+              </div>
             </div>
           </div>
         </div>
@@ -38,7 +48,7 @@
 
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-            <i class="la la-check-square-o"></i> Upload
+            <i class="la la-check-square-o"></i> Simpan
           </button>
         </div>
       </form>
@@ -51,5 +61,11 @@
 <script>
   $(document).ready(function() {
     $('.select2').select2();
+  });
+</script>
+<script>
+  $('#hardisk_id').on('change', function() {
+    var input_value = $(this).find(':selected').data('value');;
+    $('#ukuran').val(input_value);
   });
 </script>

@@ -92,6 +92,20 @@
                           <option value="PART NETWORK"{{ $barang->category == 'PART NETWORK' ? 'selected' : '' }}>Part
                             Network</option>
                           <option value="TOOLS"{{ $barang->category == 'TOOLS' ? 'selected' : '' }}>Tools</option>
+                          <option value="MR"{{ $barang->category == 'MR' ? 'selected' : '' }}>Mobile Reader</option>
+                          <option value="PDB"{{ $barang->category == 'PDB' ? 'selected' : '' }}>Panel Distribution Box
+                          </option>
+                          <option value="CDP"{{ $barang->category == 'CDP' ? 'selected' : '' }}>Customer Display Panel
+                          </option>
+                          <option value="ALB"{{ $barang->category == 'ALB' ? 'selected' : '' }}>Automatic Lane Barrier
+                          </option>
+                          <option value="LPR"{{ $barang->category == 'LPR' ? 'selected' : '' }}>Thermal Printer
+                          </option>
+                          <option value="TCT"{{ $barang->category == 'TCT' ? 'selected' : '' }}>Toll Collection
+                            Terminal</option>
+                          <option value="OBS"{{ $barang->category == 'OBS' ? 'selected' : '' }}>Optical Beam Sensor
+                          </option>
+                          <option value="LTS"{{ $barang->category == 'LTS' ? 'selected' : '' }}>LTS</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -144,8 +158,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="brand">Merk<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="brand">Merk</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="brand" id="brand"
                           value="{{ old('brand', $barang->brand) }}"
@@ -175,8 +188,7 @@
                         @endif
                       </div> --}}
 
-                      <label class="col-md-2 label-control" for="year">Tahun
-                        <code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="year">Tahun</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="year" id="year"
                           @if ($assets->isEmpty()) data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2" @else @endif
@@ -363,6 +375,66 @@
                 <div id="hidden_div" class="hardware-section">
                   @if (in_array($barang->category, ['PC', 'PC AIO', 'SERVER', 'LAPTOP', 'NAS']))
                     {{-- tambahin disini --}}
+
+                    {{-- motherboard --}}
+                    <div class="form-group row">
+                      <div class="col-md-4">
+                        <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1"
+                          title="Tambah file" onclick="upload_motherboard({{ $barang->id }})"><i
+                            class="bx bx-file"></i>
+                          Tambah Motherboard</button>
+                        @if ($errors->any())
+                          <div class="alert alert-danger">
+                            <ul>
+                              @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                              @endforeach
+                            </ul>
+                          </div>
+                        @endif
+                      </div>
+                    </div>
+                    <div class="table-responsive col-md-12">
+                      <table class="table table-striped table-bordered default-table activity-table mb-4"
+                        aria-label="">
+                        <thead>
+                          <tr>
+                            <th class="text-center" style="width: 5%;">No</th>
+                            <th class="text-center">Nama Motherboard</th>
+                            <th class="text-center">description</th>
+                            <th style="text-align:center; width:10px;">Action</th>
+                          </tr>
+                        </thead>
+                        @forelse ($motherboards as $motherboard)
+                          <tbody>
+                            <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $motherboard->motherboard->name }}</td>
+                            <td class="text-center">
+                              {{ $motherboard->motherboard->description }}
+                            </td>
+                            <td class="text-center">
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-info btn-sm dropdown-toggle"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                  <form
+                                    action="{{ route('backsite.barang.delete_motherboard', $motherboard->id ?? '') }}"
+                                    method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit"id="delete_motherboard" class="btn"value="Delete">
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </tbody>
+                        @empty
+                          <td class="text-center" colspan="6">No data available in table</td>
+                        @endforelse
+                      </table>
+                    </div>
+                    {{-- tambahin disini --}}
+
                     {{-- Processor --}}
                     <div class="form-group row">
                       <div class="col-md-4">
@@ -539,6 +611,7 @@
                       </table>
                     </div>
                     {{-- tambahin disini --}}
+
                   @endif
                 </div>
               </div>
@@ -676,6 +749,30 @@
       $.ajax({
         type: "post",
         url: "{{ route('backsite.barang.form_hardisk') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function upload_motherboard(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.barang.form_motherboard') }}",
         data: {
           id: id
         },

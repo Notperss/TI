@@ -81,6 +81,14 @@
                           <option value="PART SERVER">Part Server</option>
                           <option value="PART NETWORK">Part Network</option>
                           <option value="TOOLS">Tools</option>
+                          <option value="MR">Mobile Reader</option>
+                          <option value="PDB">Panel Distribution Box</option>
+                          <option value="CDP">Customer Display Panel</option>
+                          <option value="ALB">Automatic Lane Barrier</option>
+                          <option value="LPR">Thermal Printer</option>
+                          <option value="TCT">Toll Collection Terminal</option>
+                          <option value="OBS">Optical Beam Sensor</option>
+                          <option value="LTS">LTS</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -110,7 +118,8 @@
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="barcode" id="barcode"
                           value="{{ old('barcode') }}">
-                        <span type="button" class="btn btn-sm btn-info" onclick="generateBarcode()">Klik jika tidak ada
+                        <span type="button" class="btn btn-sm btn-info" onclick="generateBarcode()">Klik jika tidak
+                          ada
                           Barcode</span>
                         @if ($errors->has('barcode'))
                           <p style="font-style: bold; color: red;">
@@ -130,8 +139,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="brand">Merk<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="brand">Merk</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="brand" id="brand"
                           value="{{ old('brand') }}" required>
@@ -160,8 +168,7 @@
                         @endif
                       </div>
                     </div> --}}
-                      <label class="col-md-2 label-control" for="year">Tahun
-                        <code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="year">Tahun</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="year" id="year"
                           data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2"

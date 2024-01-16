@@ -15,47 +15,47 @@
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
           @if ($file->type_status == 1)
-            'Kirim Dokumen PP ke Divisi SIMA'
+            Kirim Dokumen PP ke Divisi SIMA
           @elseif ($file->type_status == 2)
-            'Ambil Dokumen PP dari Divisi SIMA'
+            Ambil Dokumen PP dari Divisi SIMA
           @elseif ($file->type_status == 3)
-            'Kirim Dokumen ke Divisi Teknik'
+            Kirim Dokumen ke Divisi Teknik
           @elseif ($file->type_status == 4)
-            'Undangan Awal Jijing'
+            Undangan Awal Jijing
           @elseif ($file->type_status == 5)
-            'Undangan Rapat Negosiasi'
+            Undangan Rapat Negosiasi
           @elseif ($file->type_status == 6)
-            'Penginformasian Pemenang OP/KONTRAK'
+            Penginformasian Pemenang OP/KONTRAK
           @elseif ($file->type_status == 7)
-            'Mulai Pekerjaan (SPMK)'
+            Mulai Pekerjaan (SPMK)
           @elseif ($file->type_status == 8)
-            'Akhir Pekerjaan (BA)'
+            Akhir Pekerjaan (BA)
           @elseif ($file->type_status == 9)
-            'Penerimaan Barang'
+            Penerimaan Barang
           @elseif ($file->type_status == 10)
-            'Tagihan'
+            Tagihan
           @elseif ($file->type_status == 11)
-            'Dikembalikan ke User'
+            Dikembalikan ke User
           @elseif ($file->type_status == 12)
-            'Dibatalkan (Closed)'
+            Dibatalkan (Closed)
           @elseif ($file->type_status == 13)
-            'Pembuatan'
+            Pembuatan
           @else
-            <p style="color:red;">Type Status File is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td>
           @if ($file->date)
             {{ Carbon\Carbon::parse($file->date)->translatedFormat('d M Y') }}
           @else
-            <p style="color:red;">Date is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($file->description)
             {{ $file->description }}
           @else
-            <p style="color:red;">Description is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">

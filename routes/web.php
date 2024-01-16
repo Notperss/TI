@@ -208,6 +208,11 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/barang/show_hardisk', 'show_hardisk')->name('barang.show_hardisk');
         Route::delete('/barang/{id}/delete_hardisk', 'delete_hardisk')->name('barang.delete_hardisk');
 
+        Route::post('/barang/form_motherboard', 'form_motherboard')->name('barang.form_motherboard');
+        Route::post('/barang/upload_motherboard', 'upload_motherboard')->name('barang.upload_motherboard');
+        Route::post('/barang/show_motherboard', 'show_motherboard')->name('barang.show_motherboard');
+        Route::delete('/barang/{id}/delete_motherboard', 'delete_motherboard')->name('barang.delete_motherboard');
+
         Route::post('/barang/form_upload', 'form_upload_file')->name('barang.form_upload_file');
         Route::post('/barang/upload', 'upload_file')->name('barang.upload_file');
         Route::post('/barang/show_file', 'show_file')->name('barang.show_file');

@@ -26,6 +26,8 @@ class StoreGoodsRequest extends FormRequest
     {
         return [
             'type_assets' => 'required|max:255',
+            'stats' => 'required|max:255',
+            'name' => 'required|max:255',
             'sku' => ['max:255',
                 Rule::unique('goods', 'sku')->ignore($this->route('goods'), 'id'),
             ],
@@ -33,10 +35,8 @@ class StoreGoodsRequest extends FormRequest
                 Rule::unique('goods', 'barcode')->ignore($this->route('goods'), 'id'),
             ],
             'size' => 'max:255',
-            'brand' => 'required|max:255',
-            'stats' => 'required|max:255',
-            'year' => 'required|max:255',
-            'name' => 'required|max:255',
+            'brand' => 'max:255',
+            'year' => 'max:255',
             'file' => 'mimes:png,jpg,jpeg',
         ];
     }

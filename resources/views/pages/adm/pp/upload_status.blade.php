@@ -106,7 +106,7 @@
           </a>
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-            <i class="la la-check-square-o"></i> Upload
+            <i class="la la-check-square-o"></i> Simpan
           </button>
         </div>
       </form>
