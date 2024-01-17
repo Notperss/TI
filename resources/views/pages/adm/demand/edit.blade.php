@@ -43,7 +43,7 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="PETYCASH"{{ $demand->type_demand == 'PETYCASH' ? 'selected' : '' }}>Petycash
+                          <option value="PU"{{ $demand->type_demand == 'PU' ? 'selected' : '' }}>PU
                           </option>
                           <option value="REIMBURSE"{{ $demand->type_demand == 'REIMBURSE' ? 'selected' : '' }}>Reimburse
                           </option>

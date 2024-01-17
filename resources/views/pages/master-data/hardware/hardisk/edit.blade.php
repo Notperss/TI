@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="form-group row">
-                          <label class="col-md-3 label-control" for="name">Merk<code
+                          <label class="col-md-3 label-control" for="name">Merk/Tipe<code
                               style="color:red;">*</code></label>
                           <div class="mx-auto col-md-9">
                             <input type="text" id="name" name="name" class="form-control"

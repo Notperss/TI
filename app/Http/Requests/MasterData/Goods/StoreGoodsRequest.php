@@ -29,7 +29,20 @@ class StoreGoodsRequest extends FormRequest
             'stats' => 'required|max:255',
             'name' => 'required|max:255',
             'sku' => ['max:255',
-                Rule::unique('goods', 'sku')->ignore($this->route('goods'), 'id'),
+                function ($attribute, $value, $fail) {
+                    // Add your condition to skip validation here
+                    if ($value === '-' || $value == null) {
+                        return; // Skip validation if SKU is "-"
+                    }
+
+                    // If SKU is not "-", perform the unique validation
+                    $rule = Rule::unique('goods', 'sku')->ignore($this->route('barang'), 'id');
+                    $validator = validator([$attribute => $value], [$attribute => $rule]);
+
+                    if ($validator->fails()) {
+                        $fail($validator->errors()->first($attribute));
+                    }
+                },
             ],
             'barcode' => ['max:255',
                 Rule::unique('goods', 'barcode')->ignore($this->route('goods'), 'id'),

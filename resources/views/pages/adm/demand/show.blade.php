@@ -8,8 +8,8 @@
     <td>
       @if ($demand->type_demand == '')
         <span>N/A</span>';
-      @elseif ($demand->type_demand == 'PETYCASH')
-        <h5><span class="badge bg-primary">Petycash</span></h5>
+      @elseif ($demand->type_demand == 'PU')
+        <h5><span class="badge bg-primary">PU</span></h5>
       @elseif ($demand->type_demand == 'REIMBURSE')
         <h5><span class="badge bg-info">Reimburse</span></h5>
       @else

@@ -160,7 +160,7 @@
                             <th class="text-center" style="width: 5%">No</th>
                             <th class="text-center" style="width: 30%">Barcode</th>
                             <th class="text-center" style="width: 25%">Category</th>
-                            <th class="text-center">Asset</th>
+                            <th class="text-center">Nama Barang</th>
                             <th style="text-align:center; width:10px;">Action</th>
                           </tr>
                         </thead>

@@ -142,7 +142,7 @@
                       <label class="col-md-2 label-control" for="brand">Merk</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="brand" id="brand"
-                          value="{{ old('brand') }}" required>
+                          value="{{ old('brand') }}">
                         @if ($errors->has('brand'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('brand') }}</p>
@@ -172,7 +172,7 @@
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="year" id="year"
                           data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2"
-                          autocomplete="off" value="{{ old('year') }}" readonly required>
+                          autocomplete="off" value="{{ old('year') }}" readonly>
                         @if ($errors->has('year'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('year') }}</p>

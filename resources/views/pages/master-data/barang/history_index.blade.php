@@ -91,8 +91,8 @@
                           <th>Nama Barang</th>
                           <th>Barcode</th>
                           <th>User</th>
-                          <th>Tanggal Dipinjam</th>
-                          <th>Tanggal Dikembalikan</th>
+                          <th>Tgl Pendistribusian Aset</th>
+                          <th>Tgl Pengembalian Aset</th>
                           <th>Action</th>
                         </tr>
                       </thead>

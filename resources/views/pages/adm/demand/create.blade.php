@@ -42,7 +42,7 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="PETYCASH">Petycash</option>
+                          <option value="PU">PU</option>
                           <option value="REIMBURSE">Reimburse</option>
                         </select>
                         @if ($errors->has('type_demand'))

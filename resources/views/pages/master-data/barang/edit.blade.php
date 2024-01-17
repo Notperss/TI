@@ -162,7 +162,7 @@
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="brand" id="brand"
                           value="{{ old('brand', $barang->brand) }}"
-                          @if ($assets->isEmpty()) @else readonly @endif required>
+                          @if ($assets->isEmpty()) @else readonly @endif>
                         @if ($errors->has('brand'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('brand') }}</p>
@@ -192,7 +192,7 @@
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="year" id="year"
                           @if ($assets->isEmpty()) data-provide="datepicker" data-date-format="yyyy" data-date-min-view-mode="2" @else @endif
-                          autocomplete="off" value="{{ old('year', $barang->year) }}" readonly required>
+                          autocomplete="off" value="{{ old('year', $barang->year) }}" readonly>
                         @if ($errors->has('year'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('year') }}</p>

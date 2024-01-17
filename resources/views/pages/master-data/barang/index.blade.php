@@ -76,7 +76,7 @@
                           <th>Nama Barang</th>
                           <th>Category</th>
                           <th>User</th>
-                          <th>Tanggal Pinjam</th>
+                          <th>Tanggal</th>
                           <th>Action</th>
                         </tr>
                       </thead>

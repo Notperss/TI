@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\MasterData\Goods;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\MasterData\Goods\Barang;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateGoodsRequest extends FormRequest
 {
@@ -36,7 +37,20 @@ class UpdateGoodsRequest extends FormRequest
                 Rule::unique('goods', 'barcode')->ignore($this->route('barang'), 'id'),
             ],
             'sku' => ['max:255',
-                Rule::unique('goods', 'sku')->ignore($this->route('barang'), 'id'),
+                function ($attribute, $value, $fail) {
+                    // Add your condition to skip validation here
+                    if ($value === '-' || $value == null) {
+                        return; // Skip validation if SKU is "-"
+                    }
+
+                    // If SKU is not "-", perform the unique validation
+                    $rule = Rule::unique('goods', 'sku')->ignore($this->route('barang'), 'id');
+                    $validator = validator([$attribute => $value], [$attribute => $rule]);
+
+                    if ($validator->fails()) {
+                        $fail($validator->errors()->first($attribute));
+                    }
+                },
             ],
             'file' => 'mimes:png,jpg,jpeg',
         ];

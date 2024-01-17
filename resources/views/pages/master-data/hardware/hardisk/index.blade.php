@@ -69,7 +69,7 @@
                         <thead>
                           <tr>
                             <th style="text-align:center; width:100px;">No</th>
-                            <th style="text-align:center;">Merk</th>
+                            <th style="text-align:center;">Merk/Tipe</th>
                             <th style="text-align:center;">Ukuran/Kapasitas</th>
                             <th style="text-align:center;">Keterangan</th>
                             <th style="text-align:center;">Status</th>

@@ -71,7 +71,7 @@
                       <div class="form-body">
 
                         <div class="form-group row">
-                          <label class="col-md-3 label-control" for="nip">Nip <code
+                          <label class="col-md-3 label-control" for="nip">Nik <code
                               style="color:red;">*</code></label>
                           <div class="col-md-9 mx-auto">
                             <input type="text" id="nip" name="nip" class="form-control"

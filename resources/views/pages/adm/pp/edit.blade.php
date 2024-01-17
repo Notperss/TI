@@ -204,47 +204,47 @@
                           <td class="text-center">{{ $loop->iteration }}</td>
                           <td class="text-center">
                             @if ($file->type_status == 1)
-                              'Kirim Dokumen PP ke Divisi SIMA'
+                              Pembuatan
                             @elseif ($file->type_status == 2)
-                              'Ambil Dokumen PP dari Divisi SIMA'
+                              Kirim Dokumen PP ke Divisi SIMA
                             @elseif ($file->type_status == 3)
-                              'Kirim Dokumen ke Divisi Teknik'
+                              Ambil Dokumen PP dari Divisi SIMA
                             @elseif ($file->type_status == 4)
-                              'Undangan Awal Jijing'
+                              Kirim Dokumen ke Divisi Teknik
                             @elseif ($file->type_status == 5)
-                              'Undangan Rapat Negosiasi'
+                              Undangan aawijing
                             @elseif ($file->type_status == 6)
-                              'Penginformasian Pemenang OP/KONTRAK'
+                              Undangan Rapat Negosiasi
                             @elseif ($file->type_status == 7)
-                              'Mulai Pekerjaan (SPMK)'
+                              Penginformasian Pemenang OP/KONTRAK
                             @elseif ($file->type_status == 8)
-                              'Akhir Pekerjaan (BA)'
+                              Mulai Pekerjaan (SPMK)
                             @elseif ($file->type_status == 9)
-                              'Penerimaan Barang'
+                              Akhir Pekerjaan (BA)
                             @elseif ($file->type_status == 10)
-                              'Tagihan'
+                              Penerimaan Barang
                             @elseif ($file->type_status == 11)
-                              'Dikembalikan ke User'
+                              Tagihan
                             @elseif ($file->type_status == 12)
-                              'Dibatalkan (Closed)'
+                              Dikembalikan ke User
                             @elseif ($file->type_status == 13)
-                              'Pembuatan'
+                              Dibatalkan (Closed)
                             @else
-                              <p style="color:red;">Type File is Empty!</p>
+                              <p style="color:red;">N/A</p>
                             @endif
                           </td>
                           <td class="text-center">
                             @if ($file->date)
                               {{ Carbon\Carbon::parse($file->date)->translatedFormat('l, d F Y') }}
                             @else
-                              <p style="color:red;">Name File is Empty!</p>
+                              <p style="color:red;">N/A</p>
                             @endif
                           </td>
                           <td class="text-center">
                             @if ($file->description)
                               {{ $file->description }}
                             @else
-                              <p style="color:red;">Description is Empty!</p>
+                              <p style="color:red;">N/A</p>
                             @endif
                           </td>
                           <td class="text-center">
@@ -298,45 +298,45 @@
                           <td class="text-center">{{ $loop->iteration }}</td>
                           <td class="text-center">
                             @if ($file->type_file == 1)
-                              'KAK'
+                              KAK
                             @elseif ($file->type_file == 2)
-                              'Engineering Estimate'
+                              Engineering Estimate
                             @elseif ($file->type_file == 3)
-                              'Form PP'
+                              Form PP
                             @elseif ($file->type_file == 4)
-                              'Form Cashmen'
+                              Form Cashmen
                             @elseif ($file->type_file == 5)
-                              'Memo PL'
+                              Memo PL
                             @elseif ($file->type_file == 6)
-                              'Memo'
+                              Memo
                             @elseif ($file->type_file == 7)
-                              'Penawaran'
+                              Penawaran
                             @elseif ($file->type_file == 8)
-                              'Risalah Rapat'
+                              Risalah Rapat
                             @elseif ($file->type_file == 9)
-                              'OP (Offering Price)'
+                              OP (Offering Price)
                             @elseif ($file->type_file == 10)
-                              'Kontrak'
+                              Kontrak
                             @elseif ($file->type_file == 11)
-                              'BA Terima Barang'
+                              BA Terima Barang
                             @elseif ($file->type_file == 12)
-                              'Lain-lain (Others)'
+                              Lain-lain (Others)
                             @else
-                              <p style="color:red;">Type File is Empty!</p>
+                              <p style="color:red;">N/A</p>
                             @endif
                           </td>
                           <td class="text-center">
                             @if ($file->name_file)
                               {{ $file->name_file }}
                             @else
-                              <p style="color:red;">Name File is Empty!</p>
+                              <p style="color:red;">N/A</p>
                             @endif
                           </td>
                           <td class="text-center">
                             @if ($file->description_file)
                               {{ $file->description_file }}
                             @else
-                              <p style="color:red;">Description is Empty!</p>
+                              <p style="color:red;">N/A</p>
                             @endif
                           </td>
                           <td class="text-center">

@@ -58,9 +58,11 @@
     <td>{{ isset($barang->description) ? $barang->description : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>File</th>
+    <th>Gambar</th>
     @if ($barang->file)
-      <td> <a type="button" data-fancybox data-src="{{ asset('storage/' . $barang->file) }}"
+      <td>
+        <img src="{{ asset('storage/' . $barang->file) }}" class="block mb-1" style="width: 35%" alt="">
+        <a type="button" data-fancybox data-src="{{ asset('storage/' . $barang->file) }}"
           class="btn btn-info btn-sm text-white">
           Lihat
         </a>
@@ -71,7 +73,7 @@
         <br>
         <p class="mt-1">Latest File : {{ pathinfo($barang->file, PATHINFO_FILENAME) }}</p>
       @else
-      <td> No File!</td>
+      <td> N/A</td>
     @endif
     </td>
     </td>

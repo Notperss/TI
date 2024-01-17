@@ -175,8 +175,8 @@
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';
-            } else if (data === 'PETYCASH') {
-              return '<h5><span class="badge bg-primary">Petycash</span></h5>';
+            } else if (data === 'PU') {
+              return '<h5><span class="badge bg-primary">PU</span></h5>';
             } else if (data === 'REIMBURSE') {
               return '<h5><span class="badge bg-info">Reimburse</span></h5>';
             } else {

@@ -74,7 +74,7 @@ class BarangController extends Controller
             <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
                         Print
-                    </a>
+            </a>
                 ';
                         } else {
                             return 'No created_at values found';
@@ -100,7 +100,10 @@ class BarangController extends Controller
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
-              
+              <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
+                        Print
+            </a>
                 ';
                     }
                 })
@@ -231,14 +234,16 @@ class BarangController extends Controller
                         }
 
                         // Validate sequential order
-                        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->orderBy('barcode', 'desc')->first();
+                        $lastRecord = Barang::where('barcode', 'like', 'TI-%')
+                            ->orderByRaw('CAST(SUBSTRING(barcode, 4) AS SIGNED) DESC')
+                            ->first();
                         $expectedNextBarcode = $lastRecord ? getNextSequentialBarcode($lastRecord->barcode) : 'TI-1';
 
                         if ($numericPart !== null && is_numeric($numericPart) && $value !== $expectedNextBarcode) {
                             $fail("$attribute harus berurutan ($expectedNextBarcode).");
                         }
                     } else {
-                        $fail("$attribute must follow the format TI-(number)(optional letter).");
+                        $fail("$attribute must follow the format TI-(number)(1 optional letter).");
                     }
                 },
             ],

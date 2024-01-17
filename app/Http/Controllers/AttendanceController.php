@@ -27,7 +27,7 @@ class AttendanceController extends Controller
     {
         if (request()->ajax()) {
 
-            $attendance = Attendance::with('detail_user.user')->orderby('created_at', 'desc');
+            $attendance = Attendance::with('detail_user.user')->orderby('start_date', 'desc');
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $attendance = $attendance->whereBetween('start_date', [$request->from_date, $request->to_date]);
@@ -181,10 +181,10 @@ class AttendanceController extends Controller
                     }
                 })
                 ->editColumn('start_date', function ($item) {
-                    return Carbon::parse($item->start_date)->translatedFormat('l, d F Y');
+                    return Carbon::parse($item->start_date)->translatedFormat('d-m-Y');
                 })
                 ->editColumn('finish_date', function ($item) {
-                    return Carbon::parse($item->finish_date)->translatedFormat('l, d F Y');
+                    return Carbon::parse($item->finish_date)->translatedFormat('d-m-Y');
                 })
                 ->rawColumns(['action',])
                 ->toJson();

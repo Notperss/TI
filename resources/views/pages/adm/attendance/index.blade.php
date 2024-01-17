@@ -135,15 +135,21 @@
       serverSide: true,
       ordering: false,
       lengthChange: false,
-      "pageLength": 15,
       dom: 'Bfrtip',
+      lengthMenu: [10, 25, 50, 75, 100, 250],
       buttons: [{
           extend: 'copy',
-          className: "btn btn-info"
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
         },
         {
           extend: 'excel',
-          className: "btn btn-info"
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
         },
         {
           extend: 'print',
@@ -151,6 +157,10 @@
           exportOptions: {
             columns: ':not(.no-print)' // Exclude elements with class 'no-print'
           }
+        },
+        {
+          extend: 'pageLength',
+          className: "btn btn-info",
         },
       ],
       ajax: {
@@ -195,6 +205,10 @@
         {
           data: 'start_date',
           name: 'start_date',
+          // render: function(data) {
+          //   var formattedDate = moment(data).format('D M YYYY');
+          //   return formattedDate;
+          // }
         },
         {
           data: 'finish_date',
