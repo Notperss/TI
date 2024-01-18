@@ -2,9 +2,10 @@
 
 namespace App\Models\MasterData;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Network\Distribution\Distribution;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
@@ -54,5 +55,10 @@ class Employee extends Model
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo('App\Models\MasterData\Division\Section', 'section_id', 'id');
+    }
+
+    public function distribution()
+    {
+        return $this->hasMany(Distribution::class, 'user_id', 'id');
     }
 }

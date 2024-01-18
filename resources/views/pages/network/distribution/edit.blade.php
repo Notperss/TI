@@ -51,7 +51,7 @@
                           @foreach ($user as $key => $user_item)
                             <option value="{{ $user_item->id }}"
                               {{ $user_item->id == $distribution->user_id ? 'selected' : '' }}>
-                              {{ $user_item->user->name }}</option>
+                              {{ $user_item->name }}</option>
                           @endforeach
                           </option>
                         </select>
@@ -313,6 +313,57 @@
                     @endforelse
                   </table>
                 </div>
+
+
+                <hr class="rounded">
+                {{-- File --}}
+                <div class="form-group row">
+                  <div class="col-md-4">
+                    <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1" title="Tambah file"
+                      onclick="upload_app({{ $distribution->id }})"><i class="bx bx-file"></i>
+                      Tambah data Aplikasi</button>
+                  </div>
+                </div>
+                <div class="table-responsive col-md-12">
+                  <table class="table table-striped table-bordered default-table activity-table mb-4" aria-label="">
+                    <thead>
+                      <tr>
+                        <th class="text-center" style="width: 5%;">No</th>
+                        <th class="text-center">Nama Aplikasi</th>
+                        <th class="text-center">Versi</th>
+                        <th class="text-center">Product</th>
+                        <th style="text-align:center; width:10px;">Action</th>
+                      </tr>
+                    </thead>
+                    @forelse ($apps as $app)
+                      <tbody class="border-0">
+                        @if ($app->distribution_id)
+                          <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                          <td class="text-center">{{ $app->app->name_app ?? '' }}</td>
+                          <td class="text-center">{{ $app->app->version ?? '' }}</td>
+                          <td class="text-center">{{ $app->app->product ?? '' }}</td>
+
+                          <td class="text-center">
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Action</button>
+                              <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                <form action="{{ route('backsite.distribution.delete_app', $app->id ?? '') }}"
+                                  method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                  <input type="hidden" name="_method" value="DELETE">
+                                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                  <input type="submit"id="delete_app" class="btn"value="Delete">
+                                </form>
+                              </div>
+                            </div>
+                          </td>
+                        @endif
+                      </tbody>
+                    @empty
+                      <td class="text-center" colspan="6">No data available in table</td>
+                    @endforelse
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -376,6 +427,30 @@
       $.ajax({
         type: "post",
         url: "{{ route('backsite.distribution.form_ip') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function upload_app(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.distribution.form_app') }}",
         data: {
           id: id
         },

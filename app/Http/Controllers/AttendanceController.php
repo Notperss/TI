@@ -202,7 +202,7 @@ class AttendanceController extends Controller
     {
         // $user = User::where(['name', '!=', 'Administrator'],[DetailUser::where('status','1')])->orderBy('name', 'asc')->get();
         $user = DetailUser::where('status', '1')->get();
-        $forms = Form::where('category', 'ABSEN')->orderby("created_at", "desc")->get();
+        $forms = Form::where('category', 'ABSENSI')->orderby("created_at", "desc")->get();
 
         return view('pages.adm.attendance.create', compact('user', 'forms'));
     }

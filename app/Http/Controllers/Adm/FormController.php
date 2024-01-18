@@ -47,19 +47,24 @@ class FormController extends Controller
                 })
                 ->editColumn('file', function ($item) {
                     if ($item->file) {
-                        return '<a type="button" data-fancybox
-                                data-src="' . asset('storage/' . $item->file) . '"
-                                class="btn btn-info btn-sm text-white ">
-                                Lihat
+                        return '
+                        <div class="text-center">
+                            <a type="button" data-fancybox
+                                    data-src="' . asset('storage/' . $item->file) . '"
+                                    class="btn btn-info btn-sm text-white ">
+                                    Lihat
+                                </a>
+                                <a type="button" href="' . asset('storage/' . $item->file) . '"
+                                        class="btn btn-warning btn-sm" download>
+                                        Unduh
                             </a>
-                            <a type="button" href="' . asset('storage/' . $item->file) . '"
-                                    class="btn btn-warning btn-sm" download>
-                                    Unduh  
-                            </a>
+                        </div>
                                 ';
                     } else {
                         return '
-                            <span>File not found</span>
+                            <div class="text-center">
+                                <span>N/A</span>
+                            </div>
                                 ';
                     }
                 })

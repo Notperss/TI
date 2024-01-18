@@ -905,7 +905,7 @@ class BarangController extends Controller
 
         $decrypt_id = decrypt($id);
         $barang = Barang::find($decrypt_id);
-        $qr = FacadesQrCode::size(170)->generate(route('backsite.barang.show', $id));
+        $qr = FacadesQrCode::size(170)->generate(route('detailBarang', $id));
         return view('pages.master-data.barang.show-barcode', compact('barang', 'qr'));
     }
 

@@ -12,11 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('distribution_assets', function (Blueprint $table) {
+        Schema::create('distribution_apps', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('distribution_id');
-            $table->bigInteger('asset_id');
-            $table->bigInteger('stats');
+            $table->bigInteger('license_id');
+            // $table->bigInteger('stats');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('distribution_assets');
+        Schema::dropIfExists('distribution_apps');
     }
 };

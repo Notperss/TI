@@ -3,6 +3,7 @@
 namespace App\Models\Network\Distribution;
 
 use App\Models\ManagementAccess\DetailUser;
+use App\Models\MasterData\Employee;
 use App\Models\MasterData\Goods\Barang;
 use App\Models\MasterData\Location\LocationRoom;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,5 +45,15 @@ class Distribution extends Model
     public function ip_deployment()
     {
         return $this->belongsTo(IpDeployment::class, 'id');
+    }
+    public function app()
+    {
+        return $this->hasMany(DistributionApp::class, 'id');
+    }
+
+    public function employee()
+    {
+        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+        return $this->belongsTo(Employee::class, 'user_id');
     }
 }

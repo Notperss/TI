@@ -52,6 +52,7 @@ use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
+use App\Http\Controllers\Maintenance\MaintenanceController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
@@ -78,6 +79,10 @@ use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringCont
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Route::resource('monitor', MonitorController::class)->only(['create'])->middleware('guest');
+Route::get('/maintenance/{id}/detailBarang', [MaintenanceController::class, 'detailBarang'])
+    ->name('detailBarang')
+    ->middleware('guest');
 
 Route::get('/', function () {
     // cek apakah sudah login atau belum
@@ -314,11 +319,16 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/distribution/store_ip', 'store_ip')->name('distribution.store_ip');
         Route::delete('/distribution/{id}/delete_ip', 'delete_ip')->name('distribution.delete_ip');
 
+        Route::post('/distribution/form_app', 'form_app')->name('distribution.form_app');
+        Route::post('/distribution/store_app', 'store_app')->name('distribution.store_app');
+        Route::delete('/distribution/{id}/delete_app', 'delete_app')->name('distribution.delete_app');
+
         Route::post('/distribution/form_upload', 'form_upload')->name('distribution.form_upload');
         Route::post('/distribution/upload_file', 'upload_file')->name('distribution.upload_file');
         Route::post('/distribution/show_file', 'show_file')->name('distribution.show_file');
         Route::delete('/distribution/{id}/delete_file', 'delete_file')->name('distribution.delete_file');
         Route::delete('/distribution/{id}/destroy_asset', 'destroy_asset')->name('distribution.destroy_asset');
+
         Route::put('/distribution/return/{id}', 'return')->name('distribution.return');
     });
 
@@ -355,9 +365,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::get('/get-ip', [IpPhoneController::class, 'getIp'])->name('getIp');
     Route::put('/ip_phone/returning_update/{ip_phone}', [IpPhoneController::class, 'returning_update'])->name('ip_phone.returning_update');
 
-
-
     Route::resource('cctv', CctvCctvController::class);
-
-
+    Route::resource('maintenance', MaintenanceController::class);
+    Route::controller(MaintenanceController::class)->group(function () {
+        // Route::get('/maintenance/{id}/detailBarang', 'detailBarang')->name('detailBarang');
+    });
 });

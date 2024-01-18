@@ -54,7 +54,7 @@
                           <option value="" disabled selected>Choose</option>
                           @foreach ($user as $key => $user_item)
                             <option value="{{ $user_item->id }}">
-                              {{ $user_item->user->name }}</option>
+                              {{ $user_item->name }}</option>
                           @endforeach
                           </option>
                         </select>
@@ -196,6 +196,26 @@
                             <th class="text-center">IP</th>
                             <th class="text-center">Akses Internet</th>
                             <th class="text-center">Gateway</th>
+                            <th style="text-align:center; width:10px;">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-md-4">
+                        <button type="button" name="add-app" id="add-app"
+                          class="btn btn-success addRow mb-1">Tambah
+                          data Aplikasi</button>
+                      </div>
+                      <table id="table-app" class=" table col-md-12">
+                        <thead>
+                          <tr>
+                            <th class="text-center" style="width: 5%">No</th>
+                            <th class="text-center" style="width: 30%">Nama Aplikasi</th>
+                            <th class="text-center" style="width: 25%">Version</th>
+                            <th class="text-center">Product</th>
                             <th style="text-align:center; width:10px;">Action</th>
                           </tr>
                         </thead>
@@ -451,6 +471,200 @@
       }
     });
   </script>
+
+  {{-- <script>
+    $(document).ready(function() {
+      // Initialize Select2 for existing elements with class select21
+      $('.select21').select2();
+
+      // Set to store selected names
+      var selectedNames = new Set();
+
+      $('#add-app').click(function() {
+        // Increment index for unique IDs
+        var i = $('.select21').length + 0;
+
+        // Append a new row
+        $('#table-app').append(`
+      <tr>
+        <td class="text-center">${i+1}</td>
+        <td>
+          <select name="inputs[${i}][license_id]" class="form-control select2 select21" style="width :100%">
+            <option value="" disabled selected>Choose</option>
+             @foreach ($apps as $app)
+                  <option value="{{ $app->id }}" data-value="{{ $app->version }}"
+                    data-value2="{{ $app->product }}">
+                    {{ $app->name_app }}</option>
+                @endforeach
+          </select>
+        </td>
+        <td><input type="text" class="form-control version" disabled></td>
+        <td><input type="text" class="form-control product" disabled></td>
+        <td><button type="button" class="btn btn-danger remove-table-row">Remove</button></td>
+      </tr>
+    `);
+
+        // Initialize Select2 for the newly added select element
+        $(`.select21:last`).select2();
+      });
+
+      $(document).on('change', '.select21', function() {
+        // Get the values from the selected option
+        var selectedOption = $(this).find(':selected');
+        var versionValue = selectedOption.data('value') || '';
+        var productValue = selectedOption.data('value2') || '';
+        var nameValue = selectedOption.data('name') || '';
+
+        // Check if the name value is unique among selected names
+        if (!selectedNames.has(nameValue)) {
+          // Update corresponding input fields based on the selected option
+          var $row = $(this).closest('tr');
+          $row.find('.version').val(versionValue);
+          $row.find('.product').val(productValue);
+          $row.find('.name').val(nameValue);
+
+          // Disable the selected option for both parent and child
+          disableOptionWithName(nameValue, this);
+
+          // Add the name to the set of selected names
+          selectedNames.add(nameValue);
+        } else {
+          // Reset the select or take other actions for validation error
+          $(this).val('').trigger('change');
+          alert('Name value must be unique. Please choose a valid option.');
+        }
+      });
+
+      $(document).on('click', '.remove-table-row', function() {
+        // Enable the disabled options before removing the row
+        var removedName = $(this).closest('tr').find('.select21 :selected').data('name') || '';
+        enableOptionWithName(removedName);
+
+        // Remove the name from the set of selected names
+        selectedNames.delete(removedName);
+
+        // Remove the entire row when the "Remove" button is clicked
+        $(this).closest('tr').remove();
+      });
+
+      // Function to disable options with a specific name value
+      function disableOptionWithName(nameValue, currentSelect) {
+        $('.select21').not(currentSelect).each(function() {
+          var optionToDisable = $(this).find(`option[data-name="${nameValue}"]`);
+
+          // Check if the option is not already disabled
+          if (!optionToDisable.prop('disabled')) {
+            optionToDisable.prop('disabled', true);
+          }
+        });
+      }
+
+      // Function to enable options with a specific name value
+      function enableOptionWithName(nameValue) {
+        $('.select21').each(function() {
+          $(this).find(`option[data-name="${nameValue}"]`).prop('disabled', false);
+        });
+      }
+    });
+  </script> --}}
+
+  {{-- masih error coy --}}
+  <script>
+    $(document).ready(function() {
+      // Initialize Select2 for existing elements with class select21
+      $('.select21').select2();
+
+      // Set to store selected names
+      var selectApps = new Set();
+
+      $('#add-app').click(function() {
+        // Increment index for unique IDs
+        var a = $('.select21').length + 0;
+
+        // Append a new row
+        $('#table-app').append(`
+        <tr>
+          <td class="text-center">${a+1}</td>
+          <td>
+            <select name="inputs[${a}][license_id]" class="form-control select2 select21" style="width:100%">
+              <option value="" disabled selected>Choose</option>
+              @foreach ($apps as $app)
+                <option value="{{ $app->id }}" data-value="{{ $app->version }}"
+                  data-value2="{{ $app->product }}" data-name="{{ $app->name_app }}">
+                  {{ $app->name_app }}</option>
+              @endforeach
+            </select>
+          </td>
+          <td><input type="text" class="form-control version" disabled></td>
+          <td><input type="text" class="form-control product" disabled></td>
+          <td><button type="button" class="btn btn-danger remove-table-row">Remove</button></td>
+        </tr>
+      `);
+
+        // Initialize Select2 for the newly added select element
+        $(`.select21:last`).select2();
+      });
+
+      $(document).on('change', '.select21', function() {
+        // Get the values from the selected option
+        var selectedOption = $(this).find(':selected');
+        var versionValue = selectedOption.data('value') || '';
+        var productValue = selectedOption.data('value2') || '';
+        var nameAppValue = selectedOption.data('name') || '';
+
+        // Check if the name value is unique among selected names
+        if (!selectApps.has(nameAppValue)) {
+          // Update corresponding input fields based on the selected option
+          var $row = $(this).closest('tr');
+          $row.find('.version').val(versionValue);
+          $row.find('.product').val(productValue);
+          $row.find('.name').val(nameAppValue);
+
+          // Disable the selected option for both parent and child
+          disableOptionWithName(nameAppValue, this);
+
+          // Add the name to the set of selected names
+          selectApps.add(nameAppValue);
+        } else {
+          // Reset the select or take other actions for validation error
+          $(this).val('').trigger('change');
+          alert('Name value must be unique. Please choose a valid option.');
+        }
+      });
+
+      $(document).on('click', '.remove-table-row', function() {
+        // Enable the disabled options before removing the row
+        var removedName = $(this).closest('tr').find('.select21 :selected').data('name') || '';
+        enableOptionWithName(removedName);
+
+        // Remove the name from the set of selected names
+        selectApps.delete(removedName);
+
+        // Remove the entire row when the "Remove" button is clicked
+        $(this).closest('tr').remove();
+      });
+
+      // Function to disable options with a specific name value
+      function disableOptionWithName(nameAppValue, currentSelect) {
+        $('.select21').not(currentSelect).each(function() {
+          var optionToDisable = $(this).find(`option[data-name="${nameAppValue}"]`);
+
+          // Check if the option is not already disabled
+          if (!optionToDisable.prop('disabled')) {
+            optionToDisable.prop('disabled', true);
+          }
+        });
+      }
+
+      // Function to enable options with a specific name value
+      function enableOptionWithName(nameAppValue) {
+        $('.select21').each(function() {
+          $(this).find(`option[data-name="${nameAppValue}"]`).prop('disabled', false);
+        });
+      }
+    });
+  </script>
+
 
   <script>
     $(document).ready(function() {

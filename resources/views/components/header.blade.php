@@ -27,38 +27,40 @@
                 class="ficon ft-maximize"></i></a></li>
         </ul>
 
-        <ul class="float-right nav navbar-nav">
-          <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
-              href="#" data-toggle="dropdown"><span
-                class="mr-1 user-name text-bold-700">{{ Auth::user()->name }}</span> <i
-                class="la la-bars font-large-1 float-right"></i><span class="avatar avatar-online">
-                @if (Auth::user()->icon)
-                  <img src="{{ asset('storage/' . Auth::user()->icon) }}" alt="avatar">
-                @else
-                  <img src="{{ asset('/assets/app-assets/images/portrait/small/pic.jpeg') }}" alt="avatar">
-                @endif
-                {{-- <img src="{{ asset('storage/' . Auth::user()->icon) }}" alt="avatar"> --}}
-                {{-- @if (File::exists(public_path('assets/file-user/' . $detail_user->icon)))
+        @if (Auth::user() != null)
+          <ul class="float-right nav navbar-nav">
+            <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
+                href="#" data-toggle="dropdown"><span
+                  class="mr-1 user-name text-bold-700">{{ Auth::user()->name }}</span> <i
+                  class="la la-bars font-large-1 float-right"></i><span class="avatar avatar-online">
+                  @if (Auth::user()->icon)
+                    <img src="{{ asset('storage/' . Auth::user()->icon) }}" alt="avatar">
+                  @else
+                    <img src="{{ asset('/assets/app-assets/images/portrait/small/pic.jpeg') }}" alt="avatar">
+                  @endif
+                  {{-- <img src="{{ asset('storage/' . Auth::user()->icon) }}" alt="avatar"> --}}
+                  {{-- @if (File::exists(public_path('assets/file-user/' . $detail_user->icon)))
                                     <img src="{{ asset('storage/' . $detail_user->icon) }}" alt="avatar">
                                 @else
                                     <img src="{{ asset('/assets/app-assets/images/portrait/small/avatar-s-19.png') }}"
                                         alt="avatar">
                                 @endif --}}
-                <i></i>
-              </span></a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="{{ route('backsite.profile.index') }}">
-                <i class="la la-user"></i> Profile
-              </a>
-              <a class="dropdown-item" href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="ft-power"></i> Logout
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  @csrf
-                </form>
-              </a>
-            </div>
-          </li>
+                  <i></i>
+                </span></a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="{{ route('backsite.profile.index') }}">
+                  <i class="la la-user"></i> Profile
+                </a>
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="ft-power"></i> Logout
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                  </form>
+                </a>
+              </div>
+        @endif
+        </li>
         </ul>
       </div>
     </div>

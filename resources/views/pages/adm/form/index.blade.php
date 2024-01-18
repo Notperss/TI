@@ -73,6 +73,7 @@
                         <tr>
                           <th>No</th>
                           <th>Nama Form</th>
+                          <th>Category</th>
                           <th>Keterangan</th>
                           <th>File</th>
                           <th>Action</th>
@@ -82,6 +83,7 @@
                       </tbody>
                       <tfoot hidden>
                         <th>No</th>
+                        <th>Nama Form</th>
                         <th>Nama Form</th>
                         <th>Keterangan</th>
                         <th>File</th>
@@ -137,6 +139,10 @@
         {
           data: 'name_form',
           name: 'name_form',
+        },
+        {
+          data: 'category',
+          name: 'category',
         },
         {
           data: 'description',

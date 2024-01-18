@@ -43,9 +43,14 @@
                       <div class="col-md-7">
                         <select name="category" id="category" class="form-control select2" required>
                           <option value="" disabled selected>Choose</option>
-                          <option value="PPFTI"{{ $form->category == 'PPFTI' ? 'selected' : '' }}>PPFTI</option>
-                          <option value="LK"{{ $form->category == 'LK' ? 'selected' : '' }}>LK</option>
-                          <option value="ABSEN"{{ $form->category == 'ABSEN' ? 'selected' : '' }}>Absen</option>
+                          <option value="ABSENSI"{{ $form->category == 'ABSENSI' ? 'selected' : '' }}>ABSENSI</option>
+                          <option value="INFORMASI"{{ $form->category == 'INFORMASI' ? 'selected' : '' }}>INFORMASI
+                          </option>
+                          <option value="DOKUMENTASI"{{ $form->category == 'DOKUMENTASI' ? 'selected' : '' }}>DOKUMENTASI
+                          </option>
+                          <option value="SOP"{{ $form->category == 'SOP' ? 'selected' : '' }}>SOP</option>
+                          <option value="LAIN-LAIN"{{ $form->category == 'LAIN-LAIN' ? 'selected' : '' }}>LAIN-LAIN
+                          </option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">

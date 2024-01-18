@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\MasterData\Employee;
 use App\Http\Controllers\Controller;
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
@@ -19,9 +20,11 @@ use App\Models\MasterData\Location\LocationSub;
 use App\Models\MasterData\Location\LocationRoom;
 use App\Models\Network\Distribution\Distribution;
 use App\Models\Network\Distribution\IpDeployment;
+use App\Models\Network\Distribution\DistributionApp;
 use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\Network\Distribution\StoreDistributionRequest;
 use App\Http\Requests\Network\Distribution\UpdateDistributionRequest;
+use App\Models\SystemInformation\License\License;
 
 class DistributionController extends Controller
 {
@@ -36,7 +39,7 @@ class DistributionController extends Controller
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
             $distribution = DistributionAsset::
-                with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution')
+                with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution', 'distribution.employee')
                 ->orderby('created_at', 'desc');
 
             // if($request->filled('from_date') && $request->filled('to_date')) {
@@ -109,12 +112,15 @@ class DistributionController extends Controller
     {
         $location_id = Location::orderBy('created_at', 'desc')->get();
         $sub_location = LocationSub::orderBy('created_at', 'desc')->get();
-        $user = DetailUser::where('status', '1')->get();
+        $user = Employee::where('status', '1')->orderBy('name', 'asc')->get();
+        // $user = DetailUser::where('status', '1')->get();
         $barang = Barang::where('stats', '1')->get();
+        $apps = License::all();
         $division = Division::orderBy('name', 'asc')->get();
         return view('pages.network.distribution.create', compact(
             'location_id',
             'sub_location',
+            'apps',
             'user',
             'barang',
             'division'));
@@ -268,9 +274,11 @@ class DistributionController extends Controller
 
         $distribution = Distribution::find($id);
         // $location_room = LocationRoom::all();
-        $user = DetailUser::where('status', '1')->get();
+        // $user = DetailUser::where('status', '1')->get();
+        $user = Employee::where('status', '1')->orderBy('name', 'asc')->get();
         $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
         $ip_deployment = IpDeployment::where('distribution_id', $id)->orderBy('created_at', 'desc')->get();
+        $apps = DistributionApp::where('distribution_id', $id)->with('app')->orderBy('created_at', 'desc')->get();
         $division = Division::orderBy('name', 'asc')->get();
         // $department = Department::where('division_id', $employee->division->id)->orderBy('name', 'asc')->get();
         // $section = Section::where('department_id', $employee->department->id)->orderBy('name', 'asc')->get();
@@ -286,6 +294,7 @@ class DistributionController extends Controller
             'distribution',
             'location_room',
             'user',
+            'apps',
             'assets',
             'ip_deployment',
             'division',
@@ -623,6 +632,72 @@ class DistributionController extends Controller
         return back();
     }
 
+    public function form_app(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+            $apps = License::all();
+            $row = Distribution::find($id);
+            $data = [
+                'id' => $row['id'],
+                'apps' => $apps,
+            ];
+
+            $msg = [
+                'data' => view('pages.network.distribution.upload_app', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
+    public function store_app(Request $request)
+    {
+        // // Validation rules
+        // $rules = [
+        //     'ip' => 'required|max:255',
+        //     'internet_access' => 'required|max:255',
+        //     'gateway' => 'required|max:255',
+        //     // Add any other rules you need
+        // ];
+
+        // // Custom validation messages
+        // $messages = [
+        //     'ip.required' => 'IP tidak boleh kosong.',
+        //     'internet_access.required' => 'Akses Internet tidak boleh kosong.',
+        //     'gateway.required' => 'Gateway tidak boleh kosong.',
+        //     // Add custom messages for other rules as needed
+        // ];
+
+        // // Validate the request
+        // $validator = Validator::make($request->all(), $rules, $messages);
+
+        // // Check if the validation fails
+        // if ($validator->fails()) {
+        //     return redirect()->back()
+        //         ->withErrors($validator)
+        //         ->withInput();
+        // }
+
+        $distribution = Distribution::find($request->id);
+        DistributionApp::create([
+            'distribution_id' => $request->id,
+            'license_id' => $request->license_id,
+        ]);
+
+        alert()->success('Success', 'File successfully uploaded');
+        return redirect()->route('backsite.distribution.edit', $distribution);
+    }
+
+    public function delete_app($id)
+    {
+        $app = DistributionApp::find($id);
+        $app->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
     public function return ($id)
     {
         $distributionAssetId = decrypt($id);
@@ -677,7 +752,5 @@ class DistributionController extends Controller
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
-
-
 }
 

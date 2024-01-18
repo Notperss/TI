@@ -42,9 +42,12 @@
                       <div class="col-md-7">
                         <select name="category" id="category" class="form-control select2" required>
                           <option value="" disabled selected>Choose</option>
-                          <option value="PPFTI">PPFTI</option>
-                          <option value="LK">LK</option>
-                          <option value="ABSEN">Absen</option>
+                          <option value="ABSENSI">ABSENSI</option>
+                          <option value="INFORMASI">INFORMASI</option>
+                          <option value="DOKUMENTASI">DOKUMENTASI</option>
+                          <option value="SOP">SOP</option>
+                          <option value="LAIN-LAIN">LAIN-LAIN</option>
+
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
