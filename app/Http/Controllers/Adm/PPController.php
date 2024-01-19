@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Adm\PP\StorePPRequest;
 use App\Http\Requests\Adm\PP\UpdatePPRequest;
+use App\Models\Adm\Bill;
 use App\Models\Adm\Pp_status;
 
 class PPController extends Controller
@@ -31,7 +32,7 @@ class PPController extends Controller
             $user = auth()->user()->detail_user;
             $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
 
-            $ppQuery = $isManagerOrViceManager ? PP::with('detail_user.user')->orderBy('created_at', 'desc')
+            $ppQuery = $isManagerOrViceManager ? PP::with('detail_user.user', 'pp_status')->orderBy('created_at', 'desc')
                 : PP::where('user_id', $user->id)->orderBy('created_at', 'desc');
 
             $pp = $ppQuery->get();
@@ -77,17 +78,74 @@ class PPController extends Controller
                     }
                     if ($Access) {
                         $action .= '<form action="' . route('backsite.pp.approve', encrypt($item->id)) . '" method="POST"
-                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                    onsubmit="return confirm(\'' . ($item->stats == 1 ? 'Apakah yakin ingin membuka kembali?' : 'Jika di Closed anda tidak akan bisa meng-Edit kembali!') . '\')">
                         ' . method_field('PUT') . csrf_field() . '
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
                      <input type="submit"
-                        title="Approve/Cancel approve" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Approve' : 'Cancel-Approve') . '">
+                        title= Open/Closed" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Open' : 'Closed') . '">
                     </form>';
                     }
                     return $action;
                 })->editColumn('date', function ($item) {
-                    return Carbon::parse($item->date)->translatedFormat('l, d F Y');
+                    return Carbon::parse($item->date)->translatedFormat('d-m-Y');
+                })->editColumn('dokumentasiStats', function ($item) {
+                    // Access the distribution_asset relationship
+                    $dokumentasiStats = $item->pp_status;
+
+                    // Check if dokumentasiStats is not empty
+                    if ($dokumentasiStats->isNotEmpty()) {
+                        // Initialize an array to store distribution asset creation dates
+                        $type_status = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($dokumentasiStats as $dokumentasiStat) {
+                            // Add the created_at value to the array
+                            $type_status[] = $dokumentasiStat->type_status;
+                        }
+
+                        // Check if there are any created_at values in the array
+                        if (! empty($type_status)) {
+                            // return implode(', ', $type_status);
+                            $latestStatus = end($type_status);
+                            // return $latestStatus;
+                            if ($latestStatus == 1) {
+                                return 'Pembuatan';
+                            } elseif ($latestStatus == 2) {
+                                return 'Input SHP direktorat';
+                            } elseif ($latestStatus == 3) {
+                                return 'Kirim Dokumen PP ke Divisi SIMA';
+                            } elseif ($latestStatus == 4) {
+                                return 'Ambil Dokumen PP dari Divisi SIMA';
+                            } elseif ($latestStatus == 5) {
+                                return 'Kirim Dokumen ke Divisi Teknik';
+                            } elseif ($latestStatus == 6) {
+                                return 'Undangan aawijing';
+                            } elseif ($latestStatus == 7) {
+                                return 'Undangan Rapat Negosiasi';
+                            } elseif ($latestStatus == 8) {
+                                return 'Penginformasian Pemenang OP/KONTRAK';
+                            } elseif ($latestStatus == 9) {
+                                return 'Mulai Pekerjaan (SPMK)';
+                            } elseif ($latestStatus == 10) {
+                                return 'Akhir Pekerjaan (BA)';
+                            } elseif ($latestStatus == 11) {
+                                return 'Penerimaan Barang';
+                            } elseif ($latestStatus == 12) {
+                                return 'Tagihan';
+                            } elseif ($latestStatus == 13) {
+                                return 'Dikembalikan ke User';
+                            } elseif ($latestStatus == 14) {
+                                return 'Dibatalkan (Closed)';
+                            } else {
+                                return '<p style="color:red;">N/A</p>';
+                            }
+                        } else {
+                            return 'N/A';
+                        }
+                    } else {
+                        return 'N/A';
+                    }
                 })
                 ->addColumn('username', function ($item) {
                     $user = auth()->user()->detail_user;
@@ -96,7 +154,7 @@ class PPController extends Controller
                     return $access ? $item->detail_user->user->name : null;
                 })
 
-                ->rawColumns(['action', 'date', 'username'])
+                ->rawColumns(['action', 'date', 'username', 'dokumentasiStats'])
                 ->toJson();
         }
         return view("pages.adm.pp.index");
@@ -190,24 +248,41 @@ class PPController extends Controller
      */
     public function destroy($id)
     {
-        // deskripsi id
+        // Decrypt the $id
         $decrypt_id = decrypt($id);
+        // Find the PP record with the decrypted $id
         $pp = PP::find($decrypt_id);
-
-        $pp->forceDelete();
-
-        $pp_file = Pp_file::where('pp_id', $decrypt_id)->get();
-        // hapus file
-        foreach ($pp_file as $file) {
-            if ($file->file != null || $file->file != '') {
-                Storage::delete($file->file);
-            }
-
+        // Check if there are records in the 'Bill' table with 'pp_id' equal to $id
+        if (Bill::where('pp_id', $decrypt_id)->exists()) {
+            // Display error message if there are related records in the 'Bill' table
+            alert()->error('Error', 'Data Tidak dapat dihapus karena ada record Tagihan');
+            return back();
         }
-        $pp_file = Pp_file::where('pp_id', $decrypt_id)->forceDelete();
+        // Check if the PP record exists before deleting
+        if ($pp) {
+            // Force delete the PP record
+            $pp->forceDelete();
+            // Retrieve all associated PP files with the decrypted $id
+            $pp_file = Pp_file::where('pp_id', $decrypt_id)->get();
+            // Delete associated files
+            foreach ($pp_file as $file) {
+                if ($file->file != null || $file->file != '') {
+                    Storage::delete($file->file);
+                }
+            }
+            // Force delete the PP files
+            Pp_file::where('pp_id', $decrypt_id)->forceDelete();
+            Pp_status::where('pp_id', $decrypt_id)->forceDelete();
 
-        alert()->success('Sukses', 'Data berhasil dihapus');
-        return back();
+            // Display success message
+            alert()->success('Sukses', 'Data berhasil dihapus');
+            return back();
+        } else {
+            // Display error message if the PP record does not exist
+            alert()->error('Gagal', 'Data PP tidak ditemukan');
+            return back();
+        }
+
     }
 
     // get form upload daily activity

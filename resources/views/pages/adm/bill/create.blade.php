@@ -69,11 +69,16 @@
                             @endif
                           </div>
 
-                          <label class="col-md-2 label-control" for="bill_value">Nilai Tagihan<code
-                              style="color:red;">*</code></label>
+                          <label class="col-md-2 label-control" for="bill_value">Nilai Tagihan
+                            <code style="color:red;">*</code></label>
                           <div class="col-md-4">
-                            <input type="text" id="bill_value" name="bill_value" class="form-control"
-                              value="{{ old('bill_value') }}" required>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Rp.</span>
+                              </div>
+                              <input type="text" class="form-control numberformat" name="bill_value" id="bill_value"
+                                value="{{ old('bill_value') }}" required>
+                            </div>
                             @if ($errors->has('bill_value'))
                               <p style="font-style: bold; color: red;">
                                 {{ $errors->first('bill_value') }}</p>

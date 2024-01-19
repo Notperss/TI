@@ -173,7 +173,7 @@
         },
         {
           data: 'pp.no_pp',
-          name: 'pp_id',
+          name: 'pp.no_pp',
         },
         {
           data: 'bill_to',

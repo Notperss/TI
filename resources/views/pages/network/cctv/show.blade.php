@@ -16,8 +16,8 @@
     <td>{{ isset($cctv->maintainer) ? $cctv->maintainer : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Barcode</th>
-    <td>{{ isset($cctv->barcode) ? $cctv->barcode : 'N/A' }}</td>
+    <th>Tipe Lokasi</th>
+    <td>{{ isset($cctv->type_loc) ? $cctv->type_loc : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Category</th>

@@ -8,32 +8,34 @@
         <th class="text-center" style="width: 25px;">Barcode</th>
       </tr>
     </thead>
-    @foreach ($datafile as $file)
+    @forelse ($datafile as $file)
       <tbody class="border-0">
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
           @if ($file->asset->name)
             {{ $file->asset->name }}
           @else
-            <p style="color:red;">Name File is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($file->asset->category)
             {{ $file->asset->category }}
           @else
-            <p style="color:red;">Category is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($file->asset->barcode)
             {{ $file->asset->barcode }}
           @else
-            <p style="color:red;">Barcode is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
       </tbody>
-    @endforeach
+    @empty
+      <td class="text-center" colspan="4" style="color:red;">No data available in table</td>
+    @endforelse
   </table>
 </div>
 <br>
@@ -48,31 +50,33 @@
         <th class="text-center" style="width: 25px;">Gateway</th>
       </tr>
     </thead>
-    @foreach ($ip_deployments as $ip)
+    @forelse ($ip_deployments as $ip)
       <tbody class="border-0">
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
           @if ($ip->ip)
             {{ $ip->ip }}
           @else
-            <p style="color:red;">Ip is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($ip->internet_access)
             {{ $ip->internet_access == 1 ? 'Ada Internet' : 'Tidak ada Internet' }}
           @else
-            <p style="color:red;">Akses Internet is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
           @if ($ip->gateway)
             {{ $ip->gateway }}
           @else
-            <p style="color:red;">Gateway is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
       </tbody>
-    @endforeach
+    @empty
+      <td class="text-center" colspan="4" style="color:red;">No data available in table</td>
+    @endforelse
   </table>
 </div>

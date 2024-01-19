@@ -16,4 +16,9 @@ class Pp_status extends Model
         'description',
         'file',
     ];
+
+    public function pp()
+    {
+        return $this->belongsTo(PP::class, "id");
+    }
 }

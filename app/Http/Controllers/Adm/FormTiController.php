@@ -52,8 +52,8 @@ class FormTiController extends Controller
             </div>
                 ';
                 })->editColumn('date_form', function ($item) {
-                return Carbon::parse($item->date_form)->translatedFormat('l, d F Y');
-            })
+                    return Carbon::parse($item->date_form)->translatedFormat('l, d F Y');
+                })
                 ->editColumn('file', function ($item) {
                     if ($item->file) {
                         return '<a type="button" data-fancybox
@@ -83,7 +83,7 @@ class FormTiController extends Controller
      */
     public function create(Request $request)
     {
-        $forms = Form::where('category', '!=', 'ABSEN')->orderby("created_at", "desc")->get();
+        $forms = Form::where('category', '!=', 'ABSENSI')->orderby("created_at", "desc")->get();
         return view("pages.adm.form_ti.create", compact("forms"));
     }
 
@@ -139,7 +139,7 @@ class FormTiController extends Controller
     public function edit($id)
     {
         $form_ti = FormTi::find($id);
-        $forms = Form::where('category', '!=', 'ABSEN')->orderBy('created_at', 'desc')->get();
+        $forms = Form::where('category', '!=', 'ABSENSI')->orderBy('created_at', 'desc')->get();
         return view('pages.adm.form_ti.edit', compact('form_ti', 'forms'));
     }
 

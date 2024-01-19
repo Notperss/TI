@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('brand');
             $table->string('location');
             $table->string('maintainer');
-            $table->string('barcode');
+            $table->string('type_loc')->nullable();
             $table->string('category');
             $table->string('type_cctv');
             $table->string('ip');

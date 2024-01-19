@@ -206,7 +206,7 @@
                             @if ($file->type_status == 1)
                               Pembuatan
                             @elseif ($file->type_status == 2)
-                              Kirim Dokumen PP ke Divisi SIMA
+                              Input SHP direktorat
                             @elseif ($file->type_status == 3)
                               Ambil Dokumen PP dari Divisi SIMA
                             @elseif ($file->type_status == 4)

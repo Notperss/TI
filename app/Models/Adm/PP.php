@@ -29,6 +29,10 @@ class PP extends Model
     {
         return $this->hasMany(Pp_file::class, "pp_id", "id");
     }
+    public function pp_status()
+    {
+        return $this->hasMany(Pp_status::class, "pp_id", "id");
+    }
     public function bill()
     {
         return $this->hasMany(Bill::class, "pp_id", "id");

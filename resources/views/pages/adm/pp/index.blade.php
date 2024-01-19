@@ -93,6 +93,7 @@
                           <th>Pekerjaan</th>
                           <th>Nominal PP</th>
                           <th>Tanggal</th>
+                          <th>Dokumentasi Status</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -107,6 +108,7 @@
                         <th>Pekerjaan</th>
                         <th>tanggal</th>
                         <th>Nominal</th>
+                        <th>Status</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tfoot>
@@ -218,15 +220,19 @@
           name: 'date',
         },
         {
+          data: 'dokumentasiStats',
+          name: 'dokumentasiStats',
+        },
+        {
           data: 'stats',
           name: 'stats',
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';
             } else if (data === '2') {
-              return '<span class="badge bg-success">Approve</span>';
+              return '<span class="badge bg-success">Open</span>';
             } else if (data === '1') {
-              return '<span class="badge bg-danger">Belum Diapprove</span>';
+              return '<span class="badge bg-danger">Closed</span>';
             } else {
               return '-';
             }

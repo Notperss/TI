@@ -13,7 +13,7 @@ class Cctv extends Model
         'brand',
         'location',
         'maintainer',
-        'barcode',
+        'type_loc',
         'category',
         'type_cctv',
         'ip',

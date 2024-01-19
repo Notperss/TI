@@ -115,7 +115,7 @@ class DistributionController extends Controller
         $user = Employee::where('status', '1')->orderBy('name', 'asc')->get();
         // $user = DetailUser::where('status', '1')->get();
         $barang = Barang::where('stats', '1')->get();
-        $apps = License::all();
+        $apps = License::orderBy('created_at', 'desc')->get();
         $division = Division::orderBy('name', 'asc')->get();
         return view('pages.network.distribution.create', compact(
             'location_id',
@@ -238,6 +238,15 @@ class DistributionController extends Controller
                     'ip' => $value['ip'],
                     'internet_access' => $value['internet_access'],
                     'gateway' => $value['gateway'],
+                ]);
+            }
+        }
+
+        if (! empty($request->app)) {
+            foreach ($request->app as $value) {
+                DistributionApp::create([
+                    'distribution_id' => $distribution_id,
+                    'license_id' => $value['license_id'],
                 ]);
             }
         }

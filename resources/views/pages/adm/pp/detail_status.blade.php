@@ -9,39 +9,41 @@
         <th style="text-align:center; width:10px;">Action</th>
       </tr>
     </thead>
-    @foreach ($datafile as $file)
+    @forelse ($datafile as $file)
       <tbody>
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
           @if ($file->type_status == 1)
-            Kirim Dokumen PP ke Divisi SIMA
-          @elseif ($file->type_status == 2)
-            Ambil Dokumen PP dari Divisi SIMA
-          @elseif ($file->type_status == 3)
-            Kirim Dokumen ke Divisi Teknik
-          @elseif ($file->type_status == 4)
-            Undangan Awal Jijing
-          @elseif ($file->type_status == 5)
-            Undangan Rapat Negosiasi
-          @elseif ($file->type_status == 6)
-            Penginformasian Pemenang OP/KONTRAK
-          @elseif ($file->type_status == 7)
-            Mulai Pekerjaan (SPMK)
-          @elseif ($file->type_status == 8)
-            Akhir Pekerjaan (BA)
-          @elseif ($file->type_status == 9)
-            Penerimaan Barang
-          @elseif ($file->type_status == 10)
-            Tagihan
-          @elseif ($file->type_status == 11)
-            Dikembalikan ke User
-          @elseif ($file->type_status == 12)
-            Dibatalkan (Closed)
-          @elseif ($file->type_status == 13)
             Pembuatan
+          @elseif ($file->type_status == 2)
+            Input SHP Direktorat
+          @elseif ($file->type_status == 3)
+            Kirim Dokumen PP ke Divisi SIMA
+          @elseif ($file->type_status == 4)
+            Ambil Dokumen PP dari Divisi SIMA
+          @elseif ($file->type_status == 5)
+            Kirim Dokumen ke Divisi Teknik
+          @elseif ($file->type_status == 6)
+            Undangan aawijing
+          @elseif ($file->type_status == 7)
+            Undangan Rapat Negosiasi
+          @elseif ($file->type_status == 8)
+            Penginformasian Pemenang OP/KONTRAK
+          @elseif ($file->type_status == 9)
+            Mulai Pekerjaan (SPMK)
+          @elseif ($file->type_status == 10)
+            Akhir Pekerjaan (BA)
+          @elseif ($file->type_status == 11)
+            Penerimaan Barang
+          @elseif ($file->type_status == 12)
+            Tagihan
+          @elseif ($file->type_status == 13)
+            Dikembalikan ke User
+          @elseif ($file->type_status == 14)
+            Dibatalkan (Closed)
           @else
-            <p style="color:red;">N/A</p>
+            <p style="color:red;">N/A</p>';
           @endif
         </td>
         <td>
@@ -81,6 +83,8 @@
           </div>
         </td>
       </tbody>
-    @endforeach
+    @empty
+      <td class="text-center" colspan="5" style="color:red;">No data available in table</td>
+    @endforelse
   </table>
 </div>

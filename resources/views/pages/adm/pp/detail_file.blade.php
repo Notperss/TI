@@ -9,7 +9,7 @@
         <th style="text-align:center; width:10px;">Action</th>
       </tr>
     </thead>
-    @foreach ($datafile as $file)
+    @forelse ($datafile as $file)
       <tbody>
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
@@ -79,6 +79,8 @@
           </div>
         </td>
       </tbody>
-    @endforeach
+    @empty
+      <td class="text-center" colspan="5" style="color:red;">No data available in table</td>
+    @endforelse
   </table>
 </div>

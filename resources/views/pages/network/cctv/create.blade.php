@@ -113,15 +113,22 @@
                       </div>
                     </div>
 
-
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="barcode">Barcode<code
+                      <label class="col-md-2 label-control" for="type_loc">Tipe Lokasi<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="barcode" id="barcode" class="form-control" required>
-                        @if ($errors->has('barcode'))
+                        <select name="type_loc" id="type_loc" class="form-control select2">
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="JALUR">JALUR</option>
+                          <option value="JALUR GERBANG">JALUR GERBANG</option>
+                          <option value="GERBANG">GERBANG</option>
+                          <option value="GARDU">GARDU</option>
+                        </select>
+                        @if ($errors->has('type_loc'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('barcode') }}</p>
+                            {{ $errors->first('type_loc') }}</p>
                         @endif
                       </div>
 

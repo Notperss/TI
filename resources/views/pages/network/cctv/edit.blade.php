@@ -93,20 +93,22 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="maintainer">Maintainer<code
+                      <label class="col-md-2 label-control" for="type_loc">Tipe Lokasi<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="maintainer" id="maintainer" class="form-control select2" required>
+                        <select name="type_loc" id="type_loc" class="form-control select2">
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
-                          <option value="SWAKELOLA"{{ $cctv->maintainer == 'SWAKELOLA' ? 'selected' : '' }}>Swakelola
-                          </option>
-                          <option value="VENDOR"{{ $cctv->maintainer == 'VENDOR' ? 'selected' : '' }}>Vendor</option>
+                          <option value="JALUR"{{ $cctv->type_loc == 'JALUR' ? 'selected' : '' }}>JALUR</option>
+                          <option value="JALUR GERBANG"{{ $cctv->type_loc == 'JALUR GERBANG' ? 'selected' : '' }}>JALUR
+                            GERBANG</option>
+                          <option value="GERBANG"{{ $cctv->type_loc == 'GERBANG' ? 'selected' : '' }}>GERBANG</option>
+                          <option value="GARDU"{{ $cctv->type_loc == 'GARDU' ? 'selected' : '' }}>GARDU</option>
                         </select>
-                        @if ($errors->has('maintainer'))
+                        @if ($errors->has('type_loc'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('maintainer') }}</p>
+                            {{ $errors->first('type_loc') }}</p>
                         @endif
                       </div>
 
@@ -124,14 +126,20 @@
 
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="barcode">Barcode<code
+                      <label class="col-md-2 label-control" for="maintainer">Maintainer<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input name="barcode" id="barcode" class="form-control"
-                          value="{{ old('barcode', $cctv->barcode) }}" required>
-                        @if ($errors->has('barcode'))
+                        <select name="maintainer" id="maintainer" class="form-control select2" required>
+                          <option value="{{ '' }}" disabled selected>
+                            Choose
+                          </option>
+                          <option value="SWAKELOLA"{{ $cctv->maintainer == 'SWAKELOLA' ? 'selected' : '' }}>Swakelola
+                          </option>
+                          <option value="VENDOR"{{ $cctv->maintainer == 'VENDOR' ? 'selected' : '' }}>Vendor</option>
+                        </select>
+                        @if ($errors->has('maintainer'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('barcode') }}</p>
+                            {{ $errors->first('maintainer') }}</p>
                         @endif
                       </div>
 

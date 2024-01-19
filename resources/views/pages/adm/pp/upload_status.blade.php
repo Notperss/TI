@@ -40,19 +40,19 @@
                   Choose
                 </option>
                 <option value="1">Pembuatan</option>
-                <option value="2">Kirim Dokumen PP ke Divisi SIMA</option>
-                <option value="3">Ambil Dokumen PP dari Divisi SIMA</option>
-                <option value="4">Kirim Dokumen ke Divisi Teknik</option>
-                <option value="5">Undangan aawijing</option>
-                <option value="6">Undangan Rapat Negosiasi</option>
-                <option value="7">Penginformasian Pemenang OP/KONTRAK</option>
-                <option value="8">Mulai Pekerjaan (SPMK)</option>
-                <option value="9">Akhir Pekerjaan (BA)</option>
-                <option value="10">Penerimaan Barang</option>
-                <option value="11">Tagihan</option>
-                <option value="12">Dikembalikan ke User</option>
-                <option value="13">Dibatalkan (Closed)</option>
-
+                <option value="2">Input SHP direktorat</option>
+                <option value="3">Kirim Dokumen PP ke Divisi SIMA</option>
+                <option value="4">Ambil Dokumen PP dari Divisi SIMA</option>
+                <option value="5">Kirim Dokumen ke Divisi Teknik</option>
+                <option value="6">Undangan aawijing</option>
+                <option value="7">Undangan Rapat Negosiasi</option>
+                <option value="8">Penginformasian Pemenang OP/KONTRAK</option>
+                <option value="9">Mulai Pekerjaan (SPMK)</option>
+                <option value="10">Akhir Pekerjaan (BA)</option>
+                <option value="11">Penerimaan Barang</option>
+                <option value="12">Tagihan</option>
+                <option value="13">Dikembalikan ke User</option>
+                <option value="14">Dibatalkan (Closed)</option>
               </select>
 
               @if ($errors->has('type_status'))

@@ -8,12 +8,26 @@
     }
     output.innerHTML = '<ul>' + children + '</ul>';
   }
+
+  //number format
+  $('input.numberformat').keyup(function(event) {
+
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    $(this).val(function(index, value) {
+      return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    });
+  });
 </script>
 <div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload File PP</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Tagihan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -47,11 +61,16 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="bill_value">Nilai Tagihan<code
-                style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="bill_value">Nilai Tagihan
+              <code style="color:red;">*</code></label>
             <div class="col-md-8">
-              <input type="text" id="bill_value" name="bill_value" class="form-control"
-                value="{{ old('bill_value') }}" required>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">Rp.</span>
+                </div>
+                <input type="text" class="form-control numberformat" name="bill_value" id="bill_value"
+                  value="{{ old('bill_value') }}" required>
+              </div>
               @if ($errors->has('bill_value'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('bill_value') }}</p>
@@ -94,7 +113,7 @@
 
           <button type="submit" style="width:120px;" class="btn btn-cyan"
             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
-            <i class="la la-check-square-o"></i> Upload
+            <i class="la la-check-square-o"></i> Submit
           </button>
         </div>
       </form>
