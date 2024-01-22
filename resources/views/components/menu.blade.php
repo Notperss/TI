@@ -581,7 +581,7 @@
         {{-- END Link Aplikasi --}}
 
         {{-- Maintenance --}}
-        <li class=" nav-item"><a href="{{ route('backsite.maintenance.index') }}"><i
+        <li class=" nav-item"><a href="{{ route('backsite.maintenance.index') }}" hidden><i
               class="{{ request()->is('backsite/mainbacksite.maintenance.index') || request()->is('backsite/mainbacksite.maintenance.index/*') || request()->is('backsite/*/mainbacksite.maintenance.index') || request()->is('backsite/*/mainbacksite.maintenance.index/*') ? 'la la-wrench bx-flashing' : 'la la-wrench' }}"></i><span
               class="menu-title purple bg-darken-4"
               data-i18n="mainbacksite.maintenance.index"><strong>Maintenance</strong></span></a>

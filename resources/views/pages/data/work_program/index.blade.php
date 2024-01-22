@@ -134,7 +134,7 @@
     var datatable = $('#work-table').dataTable({
       processing: true,
       serverSide: true,
-      ordering: false,
+      ordering: true,
       dom: 'Bfrtip',
       buttons: [{
           extend: 'copy',

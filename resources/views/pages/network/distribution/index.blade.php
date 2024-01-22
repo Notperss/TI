@@ -87,7 +87,7 @@
                           <th>Aset</th>
                           <th>Ruangan</th>
                           <th>User</th>
-                          <th>Tgl Pinjam</th>
+                          <th>Tgl Deploy </th>
                           <th>Action</th>
                         </tr>
                       </thead>

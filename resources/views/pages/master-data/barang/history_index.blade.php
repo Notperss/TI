@@ -188,8 +188,8 @@
           name: 'asset.barcode',
         },
         {
-          data: 'distribution.detail_user.user.name',
-          name: 'distribution.detail_user.user.name',
+          data: 'distribution.employee.name',
+          name: 'distribution.employee.name',
         },
         {
           data: 'created_at',

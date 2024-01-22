@@ -86,8 +86,9 @@
                           <th>No</th>
                           <th>Tipe Surat</th>
                           <th>No Surat</th>
-                          <th>Tanggal Terima/Kirim</th>
-                          <th>File</th>
+                          <th>Tanggal</th>
+                          <th>Pengirim</th>
+                          <th>Keterangan</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -97,7 +98,8 @@
                         <th>No</th>
                         <th>Tipe Surat</th>
                         <th>No Surat</th>
-                        <th>Tanggal Terima/Kirim</th>
+                        <th>Tagl/th>
+                        <th>File</th>
                         <th>File</th>
                         <th>Action</th>
                       </tfoot>
@@ -164,29 +166,12 @@
           name: 'DT_RowIndex',
           orderable: false,
           searchable: false,
+          width: '5%',
         },
         {
           data: 'type_letter',
           name: 'type_letter',
-          render: function(data) {
-            if (data === '0') {
-              return '<span>N/A</span>';
-            } else if (data === 'SURAT MASUK') {
-              return '<h5><span class="badge bg-primary">Surat Masuk</span></h5>';
-            } else if (data === 'SURAT KELUAR') {
-              return '<h5><span class="badge bg-warning">Surat Keluar</span></h5>';
-            } else if (data === 'MEMO') {
-              return '<h5><span class="badge bg-info">Memo</span></h5>';
-            } else if (data === 'MEMO IN') {
-              return '<h5><span class="badge bg-primary">Memo In</span></h5>';
-            } else if (data === 'MEMO OUT') {
-              return '<h5><span class="badge  bg-warning">Memo Out</span></h5>';
-            } else if (data === 'LAIN-LAIN') {
-              return '<h5><span class="badge bg-secondary">Lain-lain</span></h5>';
-            } else {
-              return '-';
-            }
-          },
+          width: '10%',
         },
         {
           data: 'no_letter',
@@ -195,19 +180,23 @@
         {
           data: 'date_letter',
           name: 'date_letter',
+          width: '10%',
         },
         {
-          data: 'file',
-          name: 'file',
-          className: 'no-print' // Add this class to exclude the column from printing
-
+          data: 'sender',
+          name: 'sender',
+          width: '10%',
+        },
+        {
+          data: 'description',
+          name: 'description',
         },
         {
           data: 'action',
           name: 'action',
           orderable: false,
           searchable: false,
-          width: '15%',
+          width: '10%',
           className: 'no-print' // Add this class to exclude the column from printing
 
         },

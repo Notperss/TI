@@ -36,7 +36,7 @@ class BarangController extends Controller
     {
         if (request()->ajax()) {
 
-            $barang = Barang::with('distribution_asset.distribution.detail_user.user')->orderby('created_at', 'desc');
+            $barang = Barang::with('distribution_asset.distribution.employee')->orderby('created_at', 'desc');
 
             return DataTables::of($barang)
                 ->addIndexColumn()
@@ -127,12 +127,13 @@ class BarangController extends Controller
                             // Check if the distribution relationship exists
                             if ($distribution = $distributionAsset->distribution) {
                                 // Check if the detail_user relationship exists
-                                if ($detailUser = $distribution->detail_user) {
+                                if ($employee = $distribution->employee) {
                                     // Check if the user relationship exists
-                                    if ($user = $detailUser->user) {
-                                        // Add the user's name to the array
-                                        $userNames[] = $user->name;
-                                    }
+                                    // if ($user = $employee->user) {
+                                    //     // Add the user's name to the array
+                                    //     $userNames[] = $user->name;
+                                    // }
+                                    $userNames[] = $employee->name;
                                 }
                             }
                         }
@@ -150,6 +151,7 @@ class BarangController extends Controller
                         return 'Available';
                     }
                 })
+
                 ->editColumn('distribution_asset_created_at', function ($item) {
                     // Access the distribution_asset relationship
                     $distributionAssets = $item->distribution_asset;
@@ -842,7 +844,7 @@ class BarangController extends Controller
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
             $distribution = DistributionAsset::
-                with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution')
+                with('distribution.employee', 'asset', 'distribution.location_room', 'distribution')
                 ->where('asset_id', $barang->id)
                 ->orderby('created_at', 'desc');
 
@@ -905,7 +907,7 @@ class BarangController extends Controller
 
         $decrypt_id = decrypt($id);
         $barang = Barang::find($decrypt_id);
-        $qr = FacadesQrCode::size(170)->generate(route('detailBarang', $id));
+        $qr = FacadesQrCode::size(90)->generate(route('detailBarang', $id));
         return view('pages.master-data.barang.show-barcode', compact('barang', 'qr'));
     }
 

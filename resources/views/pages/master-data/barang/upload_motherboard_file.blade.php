@@ -13,14 +13,15 @@
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="file">Motherboard
+            <label class="col-md-3 label-control" for="motherboard_id">Motherboard
               <code style="color:red;">*</code></label>
-            <div class="col-md-8">
+            <div class="col-md-9">
               <div class="custom-file">
                 <select name="motherboard_id" id="motherboard_id" class="form-control select2" style="width: 100%">
                   <option value="" selected disabled>Choose</option>
                   @foreach ($motherboards as $motherboard)
-                    <option value="{{ $motherboard->id }}">{{ $motherboard->name }}</option>
+                    <option value="{{ $motherboard->id }}" data-value="{{ $motherboard->name }}">
+                      {{ $motherboard->description }}</option>
                   @endforeach
                 </select>
               </div>
@@ -28,6 +29,15 @@
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('file') }}</p>
               @endif
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="merk">Merk
+              <code style="color:red;">*</code></label>
+            <div class="col-md-9">
+              <div class="custom-file">
+                <input type="text" class="form-control" id="merk" readonly>
+              </div>
             </div>
           </div>
         </div>
@@ -51,5 +61,11 @@
 <script>
   $(document).ready(function() {
     $('.select2').select2();
+  });
+</script>
+<script>
+  $('#motherboard_id').on('change', function() {
+    var input_value = $(this).find(':selected').data('value');;
+    $('#merk').val(input_value);
   });
 </script>

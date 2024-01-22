@@ -35,8 +35,10 @@
           @elseif ($file->type_file == 10)
             Kontrak
           @elseif ($file->type_file == 11)
-            BA Terima Barang
+            Addendum
           @elseif ($file->type_file == 12)
+            BA Terima Barang
+          @elseif ($file->type_file == 13)
             Lain-lain (Others)
           @else
             <p style="color:red;">N/A</p>

@@ -20,7 +20,8 @@
                 <select name="hardisk_id" id="hardisk_id" class="form-control select2" style="width: 100%">
                   <option value="" selected disabled>Choose</option>
                   @foreach ($hardisks as $hardisk)
-                    <option value="{{ $hardisk->id }}" data-value="{{ $hardisk->size }}">{{ $hardisk->name }}
+                    <option value="{{ $hardisk->id }}" data-value="{{ $hardisk->size }}"
+                      data-value1="{{ $hardisk->description }}">{{ $hardisk->name }}
                     </option>
                   @endforeach
                 </select>
@@ -37,6 +38,15 @@
             <div class="col-md-8">
               <div class="custom-file">
                 <input type="text" class="form-control" id="ukuran" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 label-control" for="keterangan">Keterangan
+              <code style="color:red;">*</code></label>
+            <div class="col-md-8">
+              <div class="custom-file">
+                <textarea type="text" class="form-control" id="keterangan" readonly></textarea>
               </div>
             </div>
           </div>
@@ -65,7 +75,9 @@
 </script>
 <script>
   $('#hardisk_id').on('change', function() {
-    var input_value = $(this).find(':selected').data('value');;
+    var input_value = $(this).find(':selected').data('value');
     $('#ukuran').val(input_value);
+    var input_value = $(this).find(':selected').data('value1');
+    $('#keterangan').val(input_value);
   });
 </script>

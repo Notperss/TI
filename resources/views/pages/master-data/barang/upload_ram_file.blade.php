@@ -20,7 +20,8 @@
                 <select name="ram_id" id="ram_id" class="form-control select2" style="width: 100%">
                   <option value="" selected disabled>Choose</option>
                   @foreach ($rams as $ram)
-                    <option value="{{ $ram->id }}" data-value="{{ $ram->size }}">{{ $ram->name }}</option>
+                    <option value="{{ $ram->id }}" data-value="{{ $ram->size }}"
+                      data-value1="{{ $ram->description }}">{{ $ram->name }}</option>
                   @endforeach
                 </select>
               </div>
@@ -31,11 +32,20 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="file">Ukuran
+            <label class="col-md-4 label-control" for="ukuran">Ukuran
               <code style="color:red;">*</code></label>
             <div class="col-md-8">
               <div class="custom-file">
                 <input type="text" class="form-control" id="ukuran" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 label-control" for="keterangan">Keterangan
+              <code style="color:red;">*</code></label>
+            <div class="col-md-8">
+              <div class="custom-file">
+                <textarea type="text" class="form-control" id="keterangan" readonly></textarea>
               </div>
             </div>
           </div>
@@ -63,7 +73,9 @@
 </script>
 <script>
   $('#ram_id').on('change', function() {
-    var input_value = $(this).find(':selected').data('value');;
+    var input_value = $(this).find(':selected').data('value');
     $('#ukuran').val(input_value);
+    var input_value = $(this).find(':selected').data('value1');
+    $('#keterangan').val(input_value);
   });
 </script>

@@ -208,26 +208,28 @@
                             @elseif ($file->type_status == 2)
                               Input SHP direktorat
                             @elseif ($file->type_status == 3)
-                              Ambil Dokumen PP dari Divisi SIMA
+                              Kirim Dokumen PP ke Divisi SIMA
                             @elseif ($file->type_status == 4)
-                              Kirim Dokumen ke Divisi Teknik
+                              Ambil Dokumen PP dari Divisi SIMA
                             @elseif ($file->type_status == 5)
-                              Undangan aawijing
+                              Kirim Dokumen ke Divisi Teknik
                             @elseif ($file->type_status == 6)
-                              Undangan Rapat Negosiasi
+                              Undangan aawijing
                             @elseif ($file->type_status == 7)
-                              Penginformasian Pemenang OP/KONTRAK
+                              Undangan Rapat Negosiasi
                             @elseif ($file->type_status == 8)
-                              Mulai Pekerjaan (SPMK)
+                              Penginformasian Pemenang OP/KONTRAK
                             @elseif ($file->type_status == 9)
-                              Akhir Pekerjaan (BA)
+                              Mulai Pekerjaan (SPMK)
                             @elseif ($file->type_status == 10)
-                              Penerimaan Barang
+                              Akhir Pekerjaan (BA)
                             @elseif ($file->type_status == 11)
-                              Tagihan
+                              Penerimaan Barang
                             @elseif ($file->type_status == 12)
-                              Dikembalikan ke User
+                              Tagihan
                             @elseif ($file->type_status == 13)
+                              Dikembalikan ke User
+                            @elseif ($file->type_status == 14)
                               Dibatalkan (Closed)
                             @else
                               <p style="color:red;">N/A</p>
@@ -318,8 +320,10 @@
                             @elseif ($file->type_file == 10)
                               Kontrak
                             @elseif ($file->type_file == 11)
-                              BA Terima Barang
+                              Addendum
                             @elseif ($file->type_file == 12)
+                              BA Terima Barang
+                            @elseif ($file->type_file == 13)
                               Lain-lain (Others)
                             @else
                               <p style="color:red;">N/A</p>

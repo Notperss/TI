@@ -27,7 +27,10 @@ class WorkProgramController extends Controller
     {
 
         if (request()->ajax()) {
-            $work_program = WorkProgram::orderBy('created_at', 'desc')->get();
+            $work_program = WorkProgram::orderBy('work_program', 'desc')
+                ->orderBy('year', 'desc')
+                ->orderBy('status', 'asc')
+                ->get();
 
             // if ($request->filled('from_date') && $request->filled('to_date')) {
             //     $work_program = $work_program->whereBetween('start_date', [$request->from_date, $request->to_date]);

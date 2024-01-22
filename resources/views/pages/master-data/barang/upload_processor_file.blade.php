@@ -1,14 +1,3 @@
-<script>
-  updateList = function() {
-    var input = document.getElementById('file');
-    var output = document.getElementById('fileList');
-    var children = "";
-    for (var i = 0; i < input.files.length; ++i) {
-      children += '<li>' + input.files.item(i).name + '</li>';
-    }
-    output.innerHTML = '<ul>' + children + '</ul>';
-  }
-</script>
 <div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -31,7 +20,8 @@
                 <select name="processor_id" id="processor_id" class="form-control select2" style="width: 100%">
                   <option value="" selected disabled>Choose</option>
                   @foreach ($processors as $processor)
-                    <option value="{{ $processor->id }}">{{ $processor->name }}</option>
+                    <option value="{{ $processor->id }}" data-value="{{ $processor->name }}">
+                      {{ $processor->description }}</option>
                   @endforeach
                 </select>
               </div>
@@ -39,6 +29,15 @@
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('file') }}</p>
               @endif
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 label-control" for="merk">Merk
+              <code style="color:red;">*</code></label>
+            <div class="col-md-8">
+              <div class="custom-file">
+                <input type="text" class="form-control" id="merk" readonly>
+              </div>
             </div>
           </div>
         </div>
@@ -62,5 +61,11 @@
 <script>
   $(document).ready(function() {
     $('.select2').select2();
+  });
+</script>
+<script>
+  $('#processor_id').on('change', function() {
+    var input_value = $(this).find(':selected').data('value');;
+    $('#merk').val(input_value);
   });
 </script>

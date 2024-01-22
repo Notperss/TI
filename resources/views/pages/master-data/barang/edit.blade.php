@@ -400,7 +400,7 @@
                         <thead>
                           <tr>
                             <th class="text-center" style="width: 5%;">No</th>
-                            <th class="text-center">Nama Motherboard</th>
+                            <th class="text-center">Merk</th>
                             <th class="text-center">description</th>
                             <th style="text-align:center; width:10px;">Action</th>
                           </tr>
@@ -459,7 +459,7 @@
                         <thead>
                           <tr>
                             <th class="text-center" style="width: 5%;">No</th>
-                            <th class="text-center">Nama File</th>
+                            <th class="text-center">Merk</th>
                             <th class="text-center">description</th>
                             <th style="text-align:center; width:10px;">Action</th>
                           </tr>
@@ -517,7 +517,7 @@
                         <thead>
                           <tr>
                             <th class="text-center" style="width: 5%;">No</th>
-                            <th class="text-center">Nama File</th>
+                            <th class="text-center">Merk/Tipe</th>
                             <th class="text-center">Size</th>
                             <th class="text-center">description</th>
                             <th style="text-align:center; width:10px;">Action</th>
@@ -576,7 +576,7 @@
                         <thead>
                           <tr>
                             <th class="text-center" style="width: 5%;">No</th>
-                            <th class="text-center">Nama File</th>
+                            <th class="text-center">Merk/Tipe</th>
                             <th class="text-center">Size</th>
                             <th class="text-center">description</th>
                             <th style="text-align:center; width:10px;">Action</th>

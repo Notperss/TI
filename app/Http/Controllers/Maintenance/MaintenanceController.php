@@ -18,7 +18,7 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-
+        abort(403);
     }
 
     /**
@@ -28,7 +28,7 @@ class MaintenanceController extends Controller
      */
     public function create()
     {
-        //
+        abort(403);
     }
 
     /**
@@ -39,7 +39,7 @@ class MaintenanceController extends Controller
      */
     public function store(StoreMaintenanceRequest $request)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -50,7 +50,7 @@ class MaintenanceController extends Controller
      */
     public function show(Maintenance $maintenance)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -61,7 +61,7 @@ class MaintenanceController extends Controller
      */
     public function edit(Maintenance $maintenance)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -73,7 +73,7 @@ class MaintenanceController extends Controller
      */
     public function update(UpdateMaintenanceRequest $request, Maintenance $maintenance)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -84,7 +84,7 @@ class MaintenanceController extends Controller
      */
     public function destroy(Maintenance $maintenance)
     {
-        //
+        abort(403);
     }
 
     public function detailBarang(Request $request)
