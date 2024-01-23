@@ -87,11 +87,12 @@ class MaintenanceController extends Controller
         abort(403);
     }
 
-    public function detailBarang(Request $request)
+    public function detailBarang($id)
     {
-        $id = $request->id;
-        $decrypt_id = decrypt($id);
-        $barang = Barang::find($decrypt_id);
+        // $id = $request->id;
+        // $decrypt_id = decrypt($id);
+        // $barang = Barang::find($decrypt_id);
+        $barang = Barang::findOrFail($id);
         return view('pages.maintenance.maintenance.detail-barang', compact('barang'));
     }
 }

@@ -21,7 +21,7 @@
                   <option value="" selected disabled>Choose</option>
                   @foreach ($rams as $ram)
                     <option value="{{ $ram->id }}" data-value="{{ $ram->size }}"
-                      data-value1="{{ $ram->description }}">{{ $ram->name }}</option>
+                      data-value1="{{ $ram->description }}">{{ $ram->name }} => {{ $ram->size }}</option>
                   @endforeach
                 </select>
               </div>

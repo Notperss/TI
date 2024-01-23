@@ -71,7 +71,7 @@ class BarangController extends Controller
                         Edit
                     </a>
             </div>
-            <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
+            <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', $item->id) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
                         Print
             </a>
@@ -100,8 +100,8 @@ class BarangController extends Controller
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
-              <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
+              <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', $item->id) . '" data-toggle="modal"
+                        data-target="#mymodal" data-title="QR-Code" class=" btn btn-sm list-group-item-info">
                         Print
             </a>
                 ';
@@ -905,9 +905,10 @@ class BarangController extends Controller
     public function showBarcode($id)
     {
 
-        $decrypt_id = decrypt($id);
-        $barang = Barang::find($decrypt_id);
-        $qr = FacadesQrCode::size(90)->generate(route('detailBarang', $id));
+        // $decrypt_id = decrypt($id);
+        // $barang = Barang::find($decrypt_id);
+        $barang = Barang::find($id);
+        $qr = FacadesQrCode::size(170)->style('round')->generate(route('detailBarang', $id));
         return view('pages.master-data.barang.show-barcode', compact('barang', 'qr'));
     }
 

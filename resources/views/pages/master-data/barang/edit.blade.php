@@ -408,9 +408,9 @@
                         @forelse ($motherboards as $motherboard)
                           <tbody>
                             <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $motherboard->motherboard->name }}</td>
+                            <td class="text-center">{{ $motherboard->motherboard->name ?? 'N/A' }}</td>
                             <td class="text-center">
-                              {{ $motherboard->motherboard->description }}
+                              {{ $motherboard->motherboard->description ?? 'N/A' }}
                             </td>
                             <td class="text-center">
                               <div class="btn-group">
@@ -467,10 +467,10 @@
                         @forelse ($processors as $processor)
                           <tbody>
                             <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $processor->processor->name }}
+                            <td class="text-center">{{ $processor->processor->name ?? 'N/A' }}
                             </td>
                             <td class="text-center">
-                              {{ $processor->processor->description }}
+                              {{ $processor->processor->description ?? 'N/A' }}
                             </td>
                             <td class="text-center">
                               <div class="btn-group">
@@ -526,10 +526,10 @@
                         @forelse ($rams as $ram)
                           <tbody>
                             <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $ram->ram->name }}</td>
-                            <td class="text-center">{{ $ram->ram->size }}</td>
+                            <td class="text-center">{{ $ram->ram->name ?? 'N/A' }}</td>
+                            <td class="text-center">{{ $ram->ram->size ?? 'N/A' }}</td>
                             <td class="text-center">
-                              {{ $ram->ram->description }}
+                              {{ $ram->ram->description ?? 'N/A' }}
                             </td>
                             <td class="text-center">
                               <div class="btn-group">
@@ -585,10 +585,10 @@
                         @forelse ($hardisks as $hardisk)
                           <tbody>
                             <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $hardisk->hardisk->name }}</td>
-                            <td class="text-center">{{ $hardisk->hardisk->size }}</td>
+                            <td class="text-center">{{ $hardisk->hardisk->name ?? 'N/A' }}</td>
+                            <td class="text-center">{{ $hardisk->hardisk->size ?? 'N/A' }}</td>
                             <td class="text-center">
-                              {{ $hardisk->hardisk->description }}
+                              {{ $hardisk->hardisk->description ?? 'N/A' }}
                             </td>
                             <td class="text-center">
                               <div class="btn-group">

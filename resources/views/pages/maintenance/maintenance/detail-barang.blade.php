@@ -18,7 +18,7 @@
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">{{ $barang->name }}</li>
+                {{-- <li class="breadcrumb-item active">{{ $barang->name }}</li> --}}
               </ol>
             </div>
           </div>

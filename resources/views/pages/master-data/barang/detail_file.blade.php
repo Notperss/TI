@@ -16,7 +16,7 @@
           @if ($file->file)
             {{ pathinfo($file->file, PATHINFO_FILENAME) }}
           @else
-            <p style="color:red;">Note is Empty!</p>
+            <p style="color:red;">N/A</p>
           @endif
         </td>
         <td class="text-center">
@@ -76,14 +76,14 @@
             @if ($file->motherboard->name)
               {{ $file->motherboard->name }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
           <td class="text-center">
             @if ($file->motherboard->description)
               {{ $file->motherboard->description }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
 
@@ -132,14 +132,14 @@
             @if ($file->processor->name)
               {{ $file->processor->name }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
           <td class="text-center">
             @if ($file->processor->description)
               {{ $file->processor->description }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
 
@@ -189,14 +189,14 @@
             @if ($file->hardisk->name)
               {{ $file->hardisk->name }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
           <td class="text-center">
             @if ($file->hardisk->description)
               {{ $file->hardisk->description }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
 
@@ -244,16 +244,16 @@
           <td class="text-center">{{ $loop->iteration }}</td>
           <td class="text-center">
             @if ($file->ram->name)
-              {{ $file->ram->name }}
+              {{ $file->ram->name }} => {{ $file->ram->size }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
           <td class="text-center">
             @if ($file->ram->description)
               {{ $file->ram->description }}
             @else
-              <p style="color:red;">Note is Empty!</p>
+              <p style="color:red;">N/A</p>
             @endif
           </td>
 

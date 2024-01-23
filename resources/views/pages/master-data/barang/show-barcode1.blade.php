@@ -1,11 +1,25 @@
 <div class="container" id='DivIdToPrint'>
   <div class="row justify-content-center">
     {{-- {{ $qr }} --}}
-    <div class="col-md-12 text-left">
+    <div class="col-md-12 text-center">
+      {{-- <table class="table table-bordered text-center">
+        <tr>
+          <td style="font-weight: 900; font-size: 150%;">{{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>{{ isset($barang->name) ? $barang->name : 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>{{ isset($barang->category) ? $barang->category : 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>{{ isset($barang->year) ? $barang->year : 'N/A' }}</td>
+        </tr>
+      </table> --}}
 
       <table class="table table-bordered ">
         <tr>
-          <th rowspan="5" class="text-center" style="margin-bottom: -10%">{{ $qr }}</th>
+          <th rowspan="5" class="text-center">{{ $qr }}</th>
         </tr>
         <tr>
           <td class="" style="font-size: 150%"> {{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</td>
@@ -18,11 +32,9 @@
           </td>
         </tr>
         <tr>
-          {{-- <th>Tahun</th> --}}
           <td class="" style="font-size: 150%"> {{ isset($barang->year) ? $barang->year : 'N/A' }}</td>
         </tr>
       </table>
-
     </div>
   </div>
 </div>

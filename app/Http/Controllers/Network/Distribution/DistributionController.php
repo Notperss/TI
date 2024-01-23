@@ -25,6 +25,7 @@ use App\Models\Network\Distribution\DistributionAsset;
 use App\Http\Requests\Network\Distribution\StoreDistributionRequest;
 use App\Http\Requests\Network\Distribution\UpdateDistributionRequest;
 use App\Models\SystemInformation\License\License;
+use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
 
 class DistributionController extends Controller
 {
@@ -64,7 +65,7 @@ class DistributionController extends Controller
                 <button type="button" class="btn btn-' . ($item->stats == 2 ? 'warning' : 'info') . ' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                  <a href="#mymodal" data-remote="' . route('backsite.distribution.show', encrypt($item->distribution->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="' . route('backsite.distribution.show', $item->distribution->id) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
@@ -265,9 +266,9 @@ class DistributionController extends Controller
      */
     public function show($id)
     {
-        $decrypt_id = decrypt($id);
-
-        $distribution = Distribution::find($decrypt_id);
+        // $decrypt_id = decrypt($id);
+        // $distribution = Distribution::find($decrypt_id);
+        $distribution = Distribution::find($id);
 
         return view('pages.network.distribution.show', compact('distribution'));
     }
@@ -507,9 +508,11 @@ class DistributionController extends Controller
 
             $assets = DistributionAsset::where('distribution_id', $id)->with('asset')->orderBy('created_at', 'desc')->get();
             $ip_deployments = IpDeployment::where('distribution_id', $id)->orderBy('created_at', 'desc')->get();
+            $applications = DistributionApp::where('distribution_id', $id)->orderBy('created_at', 'desc')->get();
             $data = [
                 'datafile' => $assets,
                 'ip_deployments' => $ip_deployments,
+                'apps' => $applications,
             ];
 
             $msg = [
@@ -760,6 +763,28 @@ class DistributionController extends Controller
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
+    }
+
+    public function showBarcode(Request $request)
+    {
+
+        if ($request->ajax()) {
+
+            $id = $request->id;
+            $decrypt_id = decrypt($id);
+            $barang = Barang::find($decrypt_id);
+            $qr = FacadesQrCode::size(90)->generate(route('detailBarang', $decrypt_id));
+            $data = [
+                'barang' => $barang,
+                'qr' => $qr,
+            ];
+
+            $msg = [
+                'data' => view('pages.network.distribution.show-barcode', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
     }
 }
 

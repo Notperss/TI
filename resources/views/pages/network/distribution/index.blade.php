@@ -369,10 +369,35 @@
         modal.find('.modal-title').html(button.data("title"));
       });
     });
+    jQuery(document).ready(function($) {
+      $('#mymodalshow').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget);
+        var modal = $(this);
+
+        modal.find('.modal-body').load(button.data("remote"));
+        modal.find('.modal-title').html(button.data("title"));
+      });
+    });
   </script>
 
-  <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" style="width:90%" role="document">
+  <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" style="z-index: 1400;">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="width:90%" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button class="btn close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <i class="fa fa-spinner fa spin"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="mymodalshow" tabindex="-1" role="dialog" style="z-index: 1600;">
+    <div class="modal-dialog modal-lg" style="width:70%" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title"></h5>

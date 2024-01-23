@@ -80,7 +80,7 @@ use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringCont
 |
 */
 // Route::resource('monitor', MonitorController::class)->only(['create'])->middleware('guest');
-Route::get('/maintenance/{id}/detailBarang', [MaintenanceController::class, 'detailBarang'])
+Route::get('/{id}/detail', [MaintenanceController::class, 'detailBarang'])
     ->name('detailBarang')
     ->middleware('guest');
 
@@ -330,6 +330,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::delete('/distribution/{id}/destroy_asset', 'destroy_asset')->name('distribution.destroy_asset');
 
         Route::put('/distribution/return/{id}', 'return')->name('distribution.return');
+
+        Route::get('/distribution/show-barcode', 'showBarcode')->name('distribution.showBarcode');
     });
 
     Route::resource('application', ApplicationController::class);
