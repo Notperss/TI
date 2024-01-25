@@ -1,32 +1,34 @@
 <div class="container" id='DivIdToPrint'>
-  <div class="row justify-content-center">
-    {{-- {{ $qr }} --}}
-    <div class="col-md-12 text-left">
+  <div class="col-md-12">
+    <style>
+      .table-no-gap {
+        border-collapse: collapse;
+        margin-bottom: 0;
+      }
 
-      <table class="table table-bordered ">
-        <tr>
-          <th rowspan="5" class="text-center" style="margin-bottom: -10%">{{ $qr }}</th>
-        </tr>
-        <tr>
-          <td class="" style="font-size: 150%"> {{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</td>
-        </tr>
-        <tr>
-          <td class="" style="font-size: 150%"> {{ isset($barang->name) ? $barang->name : 'N/A' }}</td>
-        </tr>
-        <tr>
-          <td class="" style="font-size: 150%"> {{ isset($barang->category) ? $barang->category : 'N/A' }}
-          </td>
-        </tr>
-        <tr>
-          {{-- <th>Tahun</th> --}}
-          <td class="" style="font-size: 150%"> {{ isset($barang->year) ? $barang->year : 'N/A' }}</td>
-        </tr>
-      </table>
+      .table-no-gap th {
+        padding: 0.0rem;
+        /* Adjust the padding as needed */
+      }
+    </style>
+    <table class="table table-bordered text-left table-no-gap ">
+      <tr>
+        <th class="text-center">{{ $qr }}</th>
+      </tr>
+      <tr>
+        <th class="text-center" style="font-size: 130%;">{{ isset($barang->barcode) ? $barang->barcode : 'N/A' }}</th>
+      </tr>
+      <tr>
+        <th class="text-center">{{ isset($barang->category) ? $barang->category : 'N/A' }}</th>
+      </tr>
+      <tr>
+        <th class="text-center">{{ isset($barang->name) ? $barang->name : 'N/A' }}</th>
+      </tr>
+    </table>
 
-    </div>
   </div>
 </div>
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-1">
   <button class="btn btn-info text-center" value='Print' onclick='printDiv();'>Print</button>
 </div>
 <script>

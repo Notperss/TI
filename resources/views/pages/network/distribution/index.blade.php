@@ -76,6 +76,10 @@
                     </div>
                   </div>
                   <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal</button>
+                  <button href="#mymodal" data-remote="{{ route('backsite.distribution.filter_barcode') }}"
+                    data-toggle="modal" data-target="#mymodal" data-title="QR" class="btn btn btn-primary mb-1">
+                    QR
+                  </button>
 
                   <div class="table-responsive">
                     <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
@@ -119,9 +123,11 @@
 @endsection
 @push('after-style')
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @push('after-script')
   <script></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   {{-- <script>
@@ -243,17 +249,24 @@
     var table = $('#aset-deployment-table').DataTable({
       processing: true,
       serverSide: true,
+      bDestroy: true,
       ordering: false,
       lengthChange: false,
-      "pageLength": 15,
       dom: 'Bfrtip',
+      lengthMenu: [10, 25, 50, 75, 100, 250],
       buttons: [{
           extend: 'copy',
-          className: "btn btn-info"
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
         },
         {
           extend: 'excel',
-          className: "btn btn-info"
+          className: "btn btn-info",
+          exportOptions: {
+            columns: ':not(.no-print)' // Exclude elements with class 'no-print'
+          }
         },
         {
           extend: 'print',
@@ -261,6 +274,10 @@
           exportOptions: {
             columns: ':not(.no-print)' // Exclude elements with class 'no-print'
           }
+        },
+        {
+          extend: 'pageLength',
+          className: "btn btn-info",
         },
       ],
       ajax: {
@@ -381,7 +398,7 @@
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" style="z-index: 1400;">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="width:90%" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="width:100%" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title"></h5>
@@ -411,4 +428,13 @@
       </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      // Listen for the modal's hidden event
+      $('#mymodal').on('hidden.bs.modal', function() {
+        // Reload the page
+        location.reload();
+      });
+    });
+  </script>
 @endpush

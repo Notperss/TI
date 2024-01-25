@@ -331,7 +331,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
         Route::put('/distribution/return/{id}', 'return')->name('distribution.return');
 
-        Route::get('/distribution/show-barcode', 'showBarcode')->name('distribution.showBarcode');
+        Route::get('/filter-barcode', 'filter_barcode')->name('distribution.filter_barcode');
     });
 
     Route::resource('application', ApplicationController::class);

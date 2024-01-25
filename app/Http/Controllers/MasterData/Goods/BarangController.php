@@ -859,7 +859,7 @@ class BarangController extends Controller
                 <button type="button" class="btn btn-' . ($item->stats == 2 ? 'warning' : 'info') . ' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                  <a href="#mymodal" data-remote="' . route('backsite.distribution.show', encrypt($item->distribution->id)) . '" data-toggle="modal"
+                  <a href="#mymodal" data-remote="' . route('backsite.distribution.show', $item->distribution->id) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>

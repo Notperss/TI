@@ -39,9 +39,9 @@ class DistributionController extends Controller
         if (request()->ajax()) {
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
-            $distribution = DistributionAsset::
-                with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution', 'distribution.employee')
-                ->orderby('created_at', 'desc');
+            $distribution = DistributionAsset::with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution', 'distribution.employee')
+                ->orderBy('stats', 'asc')
+                ->orderBy('created_at', 'desc');
 
             // if($request->filled('from_date') && $request->filled('to_date')) {
             //     $distribution = $distribution->whereBetween('created_at', [$request->from_date, $request->to_date]);
@@ -765,26 +765,69 @@ class DistributionController extends Controller
         return back();
     }
 
-    public function showBarcode(Request $request)
+    public function filter_barcode(Request $request)
     {
+        $id = $request->id;
+        $assets = DistributionAsset::with('asset')->get();
+        $employee = Employee::orderBy('name', 'asc')->get();
+        $locations = LocationRoom::orderBy('name', 'asc')->get();
+        // Retrieve filter parameters
+        $name = $request->input('name');
+        $category = $request->input('category');
+        $location = $request->input('location');
 
-        if ($request->ajax()) {
+        // Query to retrieve filtered assets
+        $query = DistributionAsset::with('asset', 'distribution.location_room', 'distribution', 'distribution.employee')->where('stats', 1);
+        $barang = Barang::all();
 
-            $id = $request->id;
-            $decrypt_id = decrypt($id);
-            $barang = Barang::find($decrypt_id);
-            $qr = FacadesQrCode::size(90)->generate(route('detailBarang', $decrypt_id));
-            $data = [
-                'barang' => $barang,
-                'qr' => $qr,
-            ];
-
-            $msg = [
-                'data' => view('pages.network.distribution.show-barcode', $data)->render(),
-            ];
-
-            return response()->json($msg);
+        // Apply filters
+        if ($name) {
+            $query->whereHas('distribution.employee', function ($q) use ($name) {
+                $q->where('name', 'like', '%' . $name . '%');
+            });
         }
+
+        if ($category) {
+            $query->whereHas('asset', function ($q) use ($category) {
+                $q->where('category', 'like', '%' . $category . '%');
+            });
+        }
+
+        if ($location) {
+            $query->whereHas('distribution.location_room', function ($q) use ($location) {
+                $q->where('name', 'like', '%' . $location . '%');
+            });
+        }
+
+        $assets = $query->get();
+
+        // Filter barang based on asset conditions
+
+        // $barangQuery = Barang::with('distribution_asset.distribution.employee', 'distribution.employee', 'distribution_asset.distribution.location_room', );
+
+        // if ($name) {
+        //     // Filter based on exact match of the employee name
+        //     $barangQuery->whereHas('distribution.employee', function ($q) use ($name) {
+        //         $q->where('name', '=', $name);
+        //     });
+        // }
+
+        // if ($category) {
+        //     $barangQuery->where('category', '=', $category);
+        // }
+
+        // if ($location) {
+        //     // Filter based on exact match of the employee location
+        //     $barangQuery->whereHas('distribution_asset.distribution.location_room', function ($q) use ($location) {
+        //         $q->where('name', '=', $location)->latest();
+        //     });
+        // }
+
+        // $barang = $barangQuery->with('distribution_asset.distribution.employee')->get();
+
+        // Pass the filtered assets to a partial view
+        return view('pages.network.distribution.filter-barcode', compact('assets', 'id', 'barang', 'employee', 'locations'));
     }
 }
+
 
