@@ -397,7 +397,7 @@
     });
   </script>
 
-  <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" style="z-index: 1400;">
+  <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" style="width:100%" role="document">
       <div class="modal-content">
         <div class="modal-header">

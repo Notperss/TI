@@ -789,7 +789,7 @@ class DistributionController extends Controller
 
         if ($category) {
             $query->whereHas('asset', function ($q) use ($category) {
-                $q->where('category', 'like', '%' . $category . '%');
+                $q->where('category', '=', $category);
             });
         }
 
