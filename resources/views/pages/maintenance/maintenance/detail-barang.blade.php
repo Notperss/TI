@@ -57,6 +57,22 @@
                   </div>
                 </div>
 
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <div class="text-bold-600 font-medium-2">
+                      Search Barcode
+                    </div>
+                    <select id="assetSelected" class="select2 form-control">
+                      <option value="" disabled selected>Choose</option>
+                      @foreach ($assets as $asset)
+                        <option value="{{ $asset->id }}">{{ $asset->barcode }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+
+
+
                 <div class="card-content collapse show">
                   <div class="card-body card-dashboard">
                     <table class="table table-bordered">
@@ -141,7 +157,8 @@
                         </td>
                       </tr>
                     </table>
-                    {{-- <button>oisjapjf</button> --}}
+                    <button type="button" class="btn btn-warning btn-min-width mr-1 my-1">Warning</button>
+                    <button type="button" class="btn btn-danger btn-min-width mr-1 my-1">Danger</button>
                   </div>
                 </div>
 
@@ -158,7 +175,7 @@
 @endsection
 
 @push('after-script')
-  <script>
+  {{-- <script>
     // Wait for the document to be ready
     $(document).ready(function() {
       // Add a click event handler to the expandLink element
@@ -172,7 +189,28 @@
       // Trigger the click event programmatically to auto-expand the page on load
       $('#expandLink').trigger('click');
     });
+  </script> --}}
+
+  <script>
+    $(document).ready(function() {
+      // Initialize select2
+      $('#assetSelected').select2();
+
+      // Handle change event
+      $('#assetSelected').on('change', function() {
+        var selectedAssetId = $(this).val();
+
+        // Redirect to the new page using the selected ID
+        if (selectedAssetId) {
+          window.location.href = '{{ url('detail') }}/' + selectedAssetId;
+        }
+      });
+    });
   </script>
+
+
+
+
   <script>
     jQuery(document).ready(function($) {
       $('#mymodal').on('show.bs.modal', function(e) {
@@ -217,3 +255,13 @@
     </div>
   </div>
 @endpush
+
+{{-- @push('after-style')
+  <style>
+    /* Add a style block or include this in your CSS file */
+    .select2-container {
+      z-index: 2001 !important;
+      /* Adjust the value as needed */
+    }
+  </style>
+@endpush --}}

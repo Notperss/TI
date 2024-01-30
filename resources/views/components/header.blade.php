@@ -59,9 +59,23 @@
                   </form>
                 </a>
               </div>
+            </li>
+          </ul>
+        @else
+          <ul class="float-right nav navbar-nav">
+            <li class="dropdown dropdown-user nav-item">
+              <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                <span class="mr-1 user-name text-bold-700">Hai!</span>
+                <i class="la la-bars font-large-1 float-right"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="{{ route('login') }}">
+                  <i class="ft-log-in"></i> Login
+                </a>
+              </div>
+            </li>
+          </ul>
         @endif
-        </li>
-        </ul>
       </div>
     </div>
   </div>

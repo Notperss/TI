@@ -892,14 +892,21 @@ class BarangController extends Controller
 
     public function generateBarcode()
     {
-        // Fetch the next barcode value from the database.
-        // Assuming your table has an auto-incremented ID field for the barcode.
-        $lastRecord = Barang::where('barcode', 'like', 'TI-%')->orderBy('barcode', 'desc')->first();
+        $lastRecord = Barang::where('barcode', 'like', 'TI-%')
+            ->orderByRaw('CAST(SUBSTRING(barcode, 4) AS SIGNED) DESC')
+            ->first();
 
-        $nextBarcode = $lastRecord ? (int) str_replace('TI-', '', $lastRecord->barcode) + 1 : 1;
+
+        // Extract numeric part and increment
+        $nextBarcode = $lastRecord ? (int) substr($lastRecord->barcode, 3) + 1 : 1;
+
+        // Format the final barcode
         $finalBarcode = 'TI-' . $nextBarcode;
 
         return response()->json(['finalBarcode' => $finalBarcode]);
+
+
+
     }
 
     public function showBarcode($id)

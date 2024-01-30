@@ -11,7 +11,7 @@
         /* Adjust the padding as needed */
       }
     </style>
-    <table class="table table-bordered text-left table-no-gap ">
+    <table class="table table-borderless text-left table-no-gap ">
       <tr>
         <th class="text-center">{{ $qr }}</th>
       </tr>
@@ -25,7 +25,7 @@
         <th class="text-center">{{ isset($barang->name) ? $barang->name : 'N/A' }}</th>
       </tr>
     </table>
-
+    <a href="{{ route('detailBarang', $barang->id) }}">.</a>
   </div>
 </div>
 <div class="row justify-content-center mt-1">

@@ -18,7 +18,7 @@
   </tr>
   <tr>
     <th>User</th>
-    <td>{{ isset($distribution->detail_user->user->name) ? $distribution->detail_user->user->name : 'N/A' }}</td>
+    <td>{{ isset($distribution->employee->name) ? $distribution->employee->name : 'N/A' }}</td>
   </tr>
   <tr>
     <th>Divisi</th>

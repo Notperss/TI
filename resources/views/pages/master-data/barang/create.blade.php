@@ -184,7 +184,8 @@
                       <label class="col-md-2 label-control" for="file">Gambar Barang</label>
                       <div class="col-md-4">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file">
+                          <input type="file" accept="image/*" capture="camera" class="custom-file-input"
+                            id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih Gambar</label>
                           <p class="text-muted"><small class="text-danger">Hanya dapat
                               mengunggah 1 file</small></p>

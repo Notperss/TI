@@ -80,9 +80,10 @@ use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringCont
 |
 */
 // Route::resource('monitor', MonitorController::class)->only(['create'])->middleware('guest');
-Route::get('/{id}/detail', [MaintenanceController::class, 'detailBarang'])
-    ->name('detailBarang')
-    ->middleware('guest');
+Route::get('/detail/{id}', [MaintenanceController::class, 'detailBarang'])
+    ->name('detailBarang');
+// Route::get('/{id}/detail', [MaintenanceController::class, 'detailBarang'])
+//     ->name('detailBarang');
 
 Route::get('/', function () {
     // cek apakah sudah login atau belum
@@ -368,8 +369,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::put('/ip_phone/returning_update/{ip_phone}', [IpPhoneController::class, 'returning_update'])->name('ip_phone.returning_update');
 
     Route::resource('cctv', CctvCctvController::class);
+
     Route::resource('maintenance', MaintenanceController::class);
     Route::controller(MaintenanceController::class)->group(function () {
-        // Route::get('/maintenance/{id}/detailBarang', 'detailBarang')->name('detailBarang');
+        Route::get('/detail/{id}', 'detailBarang')->name('detailBarang');
     });
 });

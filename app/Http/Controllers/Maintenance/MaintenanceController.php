@@ -91,8 +91,31 @@ class MaintenanceController extends Controller
     {
         // $id = $request->id;
         // $decrypt_id = decrypt($id);
-        // $barang = Barang::find($decrypt_id);
         $barang = Barang::findOrFail($id);
-        return view('pages.maintenance.maintenance.detail-barang', compact('barang'));
+        // if ($barang) {
+        //     // Perform actions based on the selected asset, such as refreshing the page
+        //     // For demonstration purposes, let's assume you want to display the selected asset's details
+        //    return response()->json(['redirectUrl' => route('detailBarang', ['id' => $barang->id])]); // Adjust with your desired route
+        // } else {
+        //     // Handle the case where the asset with the provided ID is not found
+        //     abort(404);
+        // }
+        $assets = Barang::orderBy('created_at', 'asc')->get();
+        return view('pages.maintenance.maintenance.detail-barang', compact('barang', 'assets'));
+    }
+
+    public function updatePage($assetId)
+    {
+        // Retrieve the asset based on the provided ID
+        $selectedAsset = Barang::find($assetId);
+
+        if ($selectedAsset) {
+            // Perform actions based on the selected asset, such as refreshing the page
+            // For demonstration purposes, let's assume you want to display the selected asset's details
+            return view('de', compact('selectedAsset'));
+        } else {
+            // Handle the case where the asset with the provided ID is not found
+            abort(404);
+        }
     }
 }

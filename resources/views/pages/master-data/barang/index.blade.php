@@ -46,7 +46,7 @@
           <div class="row">
             <div class="col-12">
 
-              <a href="{{ route('backsite.barang.create') }}" class="btn btn-success col-2 mb-2">
+              <a href="{{ route('backsite.barang.create') }}" class="btn btn-success col-6 col-md-3 col-sm-12 mb-2">
                 Tambah Data Barang</a>
             </div>
           </div>
