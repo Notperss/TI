@@ -12,10 +12,15 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-
                 <div class="card-header bg-success">
                   <h4 class="card-title text-white">Tambah Data Cctv</h4>
                 </div>
+
+                <a href="#mymodalCCTV" data-remote="{{ route('backsite.showAll') }}" data-toggle="modal"
+                  data-target="#mymodalCCTV" data-title="Data CCTV" class="btn btn-primary btn-min-width col-3 ml-1 my-1">
+                  Lihat Semua Data CCTV
+                </a>
+
                 <form class="form" action="{{ route('backsite.cctv.store') }}" method="POST"
                   enctype="multipart/form-data">
                   @csrf
@@ -257,3 +262,79 @@
 
 
 @endsection
+
+@push('after-script')
+  <script>
+    jQuery(document).ready(function($) {
+      $('#mymodalCCTV').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget);
+        var modal = $(this);
+
+        modal.find('.modal-body').load(button.data("remote"));
+        modal.find('.modal-title').html(button.data("title"));
+      });
+
+    });
+
+    $('.default-table').DataTable({
+      "order": [],
+      "paging": true,
+      "lengthMenu": [
+        [5, 10, 25, 50, 100, -1],
+        [5, 10, 25, 50, 100, "All"]
+      ],
+      "pageLength": 10
+    });
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+  </script>
+
+  <div class="modal fade" id="mymodalCCTV" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button class="btn close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <i class="fa fa-spinner fa spin"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+@endpush
+@push('after-script')
+  <script>
+    jQuery(document).ready(function($) {
+      $('#mymodal').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget);
+        var modal = $(this);
+
+        modal.find('.modal-body').load(button.data("remote"));
+        modal.find('.modal-title').html(button.data("title"));
+      });
+
+    });
+  </script>
+
+  <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button class="btn close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <i class="fa fa-spinner fa spin"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+@endpush

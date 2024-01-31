@@ -123,23 +123,24 @@
                       </div>
                     </div>
 
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="stats" id="stats" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1"{{ $ip_phone->stats == 1 ? 'selected' : '' }}>Aktif</option>
-                          <option value="2"{{ $ip_phone->stats == 2 ? 'selected' : '' }}>TIdak Aktif
-                          </option>
-                        </select>
-                        @if ($errors->has('stats'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
+                    <input id="stats" name="stats" class="form-control" value="1" hidden>
+                    {{-- <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
+                    <div class="col-md-4">
+                      <select name="stats" id="stats" class="form-control select2" required>
+                        <option value="{{ '' }}" disabled selected>
+                          Choose
+                        </option>
+                        <option value="1"{{ $ip_phone->stats == 1 ? 'selected' : '' }}>Aktif</option>
+                        <option value="2"{{ $ip_phone->stats == 2 ? 'selected' : '' }}>TIdak Aktif
+                        </option>
+                      </select>
+                      @if ($errors->has('stats'))
+                      <p style="font-style: bold; color: red;">
+                        {{ $errors->first('stats') }}</p>
                         @endif
-                      </div>
+                      </div> --}}
 
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
                         <div class="custom-file">
@@ -170,8 +171,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-9">
                         <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description', $ip_phone->description) }}</textarea>
                         @if ($errors->has('description'))

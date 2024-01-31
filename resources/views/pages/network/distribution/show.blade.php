@@ -1,7 +1,7 @@
 <table class="table table-bordered">
   <input type="hidden" name="id" id="id" value="{{ $distribution->id }}">
   <tr>
-    <th>Lokasi</th>
+    <th>Lokasi Utama</th>
     <td>
       {{ isset($distribution->location_room->sub_location->location->name) ? $distribution->location_room->sub_location->location->name : 'N/A' }}
     </td>
@@ -13,7 +13,7 @@
     </td>
   </tr>
   <tr>
-    <th>Ruangan</th>
+    <th>Lokasi</th>
     <td>{{ isset($distribution->location_room->name) ? $distribution->location_room->name : 'N/A' }}</td>
   </tr>
   <tr>

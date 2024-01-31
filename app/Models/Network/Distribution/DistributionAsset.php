@@ -35,7 +35,7 @@ class DistributionAsset extends Model
     }
     public function ip_phone()
     {
-        return $this->belongsTo(IpPhone::class, 'id', 'distributionAsset_id');
+        return $this->belongsTo(IpPhone::class, 'distributionAsset_id');
     }
 
 

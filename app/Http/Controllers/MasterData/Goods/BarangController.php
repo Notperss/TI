@@ -699,7 +699,6 @@ class BarangController extends Controller
 
     public function history_index(Request $request)
     {
-        // $decrypt_id = decrypt($id);
         $id = $request->id;
         $barang = Barang::find($id);
 

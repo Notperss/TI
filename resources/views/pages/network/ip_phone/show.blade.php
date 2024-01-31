@@ -62,7 +62,7 @@
         </a>
         <p class="mt-1">Latest File : {{ pathinfo($ip_phone->file, PATHINFO_FILENAME) }}</p>
       @else
-      <td> No File!</td>
+      <td> N/A</td>
     @endif
     </td>
     </td>

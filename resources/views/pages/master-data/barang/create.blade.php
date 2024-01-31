@@ -334,3 +334,8 @@
 @push('after-script')
   <script src="{{ asset('/assets/app-assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 @endpush
+{{-- 1 = Available
+2 = Dipakai
+3 = Perbaikan
+4 = Diserahkan
+5 = Rusak --}}

@@ -369,6 +369,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::put('/ip_phone/returning_update/{ip_phone}', [IpPhoneController::class, 'returning_update'])->name('ip_phone.returning_update');
 
     Route::resource('cctv', CctvCctvController::class);
+    Route::controller(CctvCctvController::class)->group(function () {
+        Route::get('/showAll', 'showAll')->name('showAll');
+    });
 
     Route::resource('maintenance', MaintenanceController::class);
     Route::controller(MaintenanceController::class)->group(function () {

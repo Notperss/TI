@@ -91,9 +91,7 @@
                       <label class="col-md-2 label-control" for="ip">IP
                         <code style="color:red;">*</code></code></label>
                       <div class="col-md-4">
-                        <select name="ip" id="ip" class="form-control select2" required>
-                          <option value=""selected disabled>Choose</option>
-                        </select>
+                        <input name="ip" id="ip" class="form-control" value="{{ old('ip') }}" required>
                         @if ($errors->has('ip'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('ip') }}</p>
@@ -112,22 +110,24 @@
                       </div>
                     </div>
 
-                    <div class="form-group row">
+                    <input id="stats" name="stats" value="1" class="form-control" hidden>
+                    {{-- <select name="stats" id="stats" class="form-control select2" required>
                       <label class="col-md-2 label-control" for="stats">Status<code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="stats" id="stats" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="1">Aktif</option>
-                          <option value="2">TIdak Aktif</option>
-                        </select>
-                        @if ($errors->has('stats'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
+                        <option value="{{ '' }}" disabled selected>
+                          Choose
+                        </option>
+                        <option value="1">Aktif</option>
+                        <option value="2">TIdak Aktif</option>
+                      </select>
+                      @if ($errors->has('stats'))
+                      <p style="font-style: bold; color: red;">
+                        {{ $errors->first('stats') }}</p>
                         @endif
-                      </div>
+                      </div> --}}
 
+
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
                         <div class="custom-file">
@@ -145,10 +145,9 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-9">
-                        <textarea rows="5" class="form-control summernote" id="description" name="description" required>{{ old('description') }}</textarea>
+                        <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description') }}</textarea>
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>
@@ -224,7 +223,7 @@
     });
   </script> --}}
 
-  <script>
+  {{-- <script>
     $(document).ready(function() {
       $('#distribution_id').change(function() {
         var distributionId = $(this).val();
@@ -252,5 +251,5 @@
         }
       });
     });
-  </script>
+  </script> --}}
 @endpush

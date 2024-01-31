@@ -32,7 +32,7 @@ class StoreIpPhoneTRequest extends FormRequest
             'ip' => 'required|max:255',
             'installation_date' => 'required|max:255',
             'file' => 'max:255',
-            'description' => 'required|max:255',
+            // 'description' => 'required|max:255',
             'stats' => 'required|max:255',
         ];
     }
