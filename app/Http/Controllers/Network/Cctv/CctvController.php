@@ -198,8 +198,6 @@ class CctvController extends Controller
     public function ShowAll(Request $request)
     {
         // $assetCCTV = Barang::with('distribution')->where('category', '=', 'CCTV')->get();
-
-
         $assetCCTV = DistributionAsset::with([
             'asset' => function ($query) {
                 $query->where('category', '=', 'CCTV');
@@ -211,9 +209,6 @@ class CctvController extends Controller
             })
             ->orderBy('id', 'asc')
             ->get();
-
-
-
         return view('pages.network.cctv.show-all', compact('assetCCTV'));
     }
 }

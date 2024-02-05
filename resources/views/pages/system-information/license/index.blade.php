@@ -270,7 +270,7 @@
 
       $.ajax({
         type: "post",
-        url: "{{ route('backsite.pp.form_upload') }}",
+        url: "{{ route('backsite.license.form_upload') }}",
         data: {
           id: id
         },

@@ -21,7 +21,7 @@
       {{-- Card --}}
       <div class="content-body">
         <div class="row">
-
+          {{-- Jumlah Absensi --}}
           <div class="col-xl-6 col-lg-6 col-md-6 col-12">
             <div class="card pull-up ">
               <div class="card-content info ">
@@ -103,238 +103,398 @@
             </div>
           </div>
 
-          <div class="col-xl-2 col-lg-6 col-md-6 col-12">
+          {{-- jumlah Asset --}}
+          <div class="col-xl-6 col-lg-6 col-md-6 col-12">
             <div class="card pull-up ">
-              <div class="card-content amber darken-4">
+              <div class="card-content warning ">
                 <div class="card-body">
-                  <div class="media d-flex">
+                  <div class="media d-flex mb-1">
                     <div class="media-body text-left">
-                      <h1 class="amber darken-4">600</h1>
-                      <strong>Jumlah Server Fisik</strong>
+                      <h1>
+                        <strong class="warning">Jumlah Asset</strong>
+                      </h1>
                     </div>
                     <div>
-                      <i class="la la-server  font-large-2 float-right"></i>
+                      <i class="la la-desktop font-large-2 float-right warning"></i>
+                    </div>
+                  </div>
+                  <div class="container">
+                    <div class="row">
+
+                      <div class="col-6">
+                        <ul class="list-group">
+                          <li class="list-group-item bg-grey">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where(function ($query) {
+                                      $query->where('category', 'PC')->orWhere('category', 'PC AIO');
+                                  })->count() }}
+                            </span>
+                            PC/AIO
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where('category', 'LAPTOP')->count() }}
+                            </span>
+                            Laptop
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where('category', 'SERVER')->count() }}
+                            </span>
+                            Server
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where('category', 'HARDDISK EXTERNAL')->count() }}
+                            </span>
+                            Hardisk External
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="col-6">
+                        <ul class="list-group">
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where('category', 'PRINTER')->count() }}
+                            </span>
+                            Printer
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where('category', 'CCTV')->count() }}
+                            </span>
+                            CCTV
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where(function ($query) {
+                                      $query->where('category', 'WIFI')->orWhere('category', 'ROUTER');
+                                  })->count() }}
+                            </span>
+                            Wifi Router
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('goods')->where('category', 'SWITCH')->count() }}
+                            </span>
+                            Switch
+                          </li>
+                        </ul>
+                        {{-- <div class="row">
+                          <div class="col-4">
+                            <div class="card bg-light mb-1" style="max-width: 18rem;">
+                              <div class="card-body">
+                                <h6 class="card-title">PC/AIO</h6>
+                                <p class="card-text">
+                                <h1 class="warning">
+                                  <strong>
+                                    {{ DB::table('goods')->where('category', 'PC')->where('category', 'PC AIO')->count() }}
+                                  </strong>
+                                </h1>
+                                <p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="card bg-light mb-1" style="max-width: 18rem;">
+                              <div class="card-body">
+                                <h6 class="card-title">CCTV</h6>
+                                <p class="card-text">
+                                <h1 class="warning">
+                                  <strong>
+                                    {{ DB::table('goods')->where('category', 'CCTV')->count() }}
+                                  </strong>
+                                </h1>
+                                <p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="card bg-light mb-1" style="max-width: 18rem;">
+                              <div class="card-body">
+                                <h6 class="card-title">Laptop</h6>
+                                <p class="card-text">
+                                <h1 class="warning">
+                                  <strong>
+                                    {{ DB::table('goods')->where('category', 'LAPTOP')->count() }}
+                                  </strong>
+                                </h1>
+                                <p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-4 ">
+                            <div class="card bg-light mb-1" style="max-width: 18rem;">
+                              <div class="card-body">
+                                <h6 class="card-title">Server</h6>
+                                <p class="card-text">
+                                <h1 class="warning">
+                                  <strong>
+                                    {{ DB::table('goods')->where('category', 'SERVER')->count() }}
+                                  </strong>
+                                </h1>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="card bg-light mb-1" style="max-width: 18rem;">
+                              <div class="card-body">
+                                <h6 class="card-title">Printer</h6>
+                                <p class="card-text">
+                                <h1 class="warning">
+                                  <strong>
+                                    {{ DB::table('goods')->where('category', 'PRINTER')->count() }}
+                                  </strong>
+                                </h1>
+                                <p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="card bg-light mb-1" style="max-width: 18rem;">
+                              <div class="card-body">
+                                <h6 class="card-title">Wifi Router</h6>
+                                <p class="card-text">
+                                <h1 class="warning">
+                                  <strong>
+                                    {{ DB::table('goods')->where('category', 'ROUTER')->where('category', 'WIFI')->count() }}
+                                  </strong>
+                                </h1>
+                                <p>
+                              </div>
+                            </div>
+                          </div>
+                        </div> --}}
+                      </div>
+
                     </div>
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-amber btn-darken-4">
-                      See More ..</a>
+                    <a href="{{ route('backsite.barang.index') }}" class="btn btn-block btn-sm btn-warning">
+                      Lihat Semua Asset</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12 ">
-            <div class="card pull-up ">
-              <div class="card-content teal">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <i class="la la-credit-card font-large-2 float-right"></i>
-                      <h1 class="teal">600</h1>
-                      <strong>Jumlah Laporan Kerusakan Bulan Ini</strong>
+          <div class="container" hidden>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12 ">
+              <div class="card pull-up ">
+                <div class="card-content teal">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <i class="la la-credit-card font-large-2 float-right"></i>
+                        <h1 class="teal">600</h1>
+                        <strong>Jumlah Laporan Kerusakan Bulan Ini</strong>
+                      </div>
                     </div>
-                  </div>
-                  <div class="mt-1 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-teal">
-                      See More ..</a>
+                    <div class="mt-1 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-teal">
+                        See More ..</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up bg">
-              <div class="card-content  danger">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <i class="la la-file font-large-2 float-right "></i>
-                      <h1 class="danger">600</h1>
-                      <strong>Jumlah Laporan kerusakan Belum Selesai</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up bg">
+                <div class="card-content  danger">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <i class="la la-file font-large-2 float-right "></i>
+                        <h1 class="danger">600</h1>
+                        <strong>Jumlah Laporan kerusakan Belum Selesai</strong>
+                      </div>
                     </div>
-                  </div>
-                  <div class="mt-1 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-danger">
-                      See More ..</a>
+                    <div class="mt-1 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-danger">
+                        See More ..</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up bg">
-              <div class="card-content  primary">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="primary">5</h1>
-                      <strong>5</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up bg">
+                <div class="card-content  primary">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="primary">5</h1>
+                        <strong>5</strong>
+                      </div>
+                      <div>
+                        <i class="la la-terminal font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-terminal font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-primary">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-primary">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up bg">
-              <div class="card-content info">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="info">6</h1>
-                      <strong>6</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up bg">
+                <div class="card-content info">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="info">6</h1>
+                        <strong>6</strong>
+                      </div>
+                      <div>
+                        <i class="la la-edit  font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-edit  font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-info">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-info">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up ">
-              <div class="card-content  warning">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="warning">7</h1>
-                      <strong>7</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up ">
+                <div class="card-content  warning">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="warning">7</h1>
+                        <strong>7</strong>
+                      </div>
+                      <div>
+                        <i class="la la-comment font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-comment font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-warning">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-warning">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up ">
-              <div class="card-content success">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="success">8</h1>
-                      <strong>8</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up ">
+                <div class="card-content success">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="success">8</h1>
+                        <strong>8</strong>
+                      </div>
+                      <div>
+                        <i class="la la-book font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-book font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-success">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-success">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up ">
-              <div class="card-content primary">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="primary">9</h1>
-                      <strong>9</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up ">
+                <div class="card-content primary">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="primary">9</h1>
+                        <strong>9</strong>
+                      </div>
+                      <div>
+                        <i class="la la-terminal font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-terminal font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-primary">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-primary">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up ">
-              <div class="card-content info">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="info">10</h1>
-                      <strong>10</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up ">
+                <div class="card-content info">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="info">10</h1>
+                        <strong>10</strong>
+                      </div>
+                      <div>
+                        <i class="la la-edit font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-edit font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-info">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-info">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up ">
-              <div class="card-content warning">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="warning">11</h1>
-                      <strong>11</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up ">
+                <div class="card-content warning">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="warning">11</h1>
+                        <strong>11</strong>
+                      </div>
+                      <div>
+                        <i class="la la-comment font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-comment font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-warning">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-warning">
-                      See More ..</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-xl-2 col-lg-3 col-md-6 col-12">
-            <div class="card pull-up ">
-              <div class="card-content success">
-                <div class="card-body">
-                  <div class="media d-flex">
-                    <div class="media-body text-left">
-                      <h1 class="success">12</h1>
-                      <strong>12</strong>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-12">
+              <div class="card pull-up ">
+                <div class="card-content success">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h1 class="success">12</h1>
+                        <strong>12</strong>
+                      </div>
+                      <div>
+                        <i class="la la-book font-large-2 float-right"></i>
+                      </div>
                     </div>
-                    <div>
-                      <i class="la la-book font-large-2 float-right"></i>
+                    <div class="mt-3 mb-0 box-shadow-2">
+                      <a href="#" class="btn btn-block btn-sm btn-success">
+                        See More ..</a>
                     </div>
-                  </div>
-                  <div class="mt-3 mb-0 box-shadow-2">
-                    <a href="#" class="btn btn-block btn-sm btn-success">
-                      See More ..</a>
                   </div>
                 </div>
               </div>

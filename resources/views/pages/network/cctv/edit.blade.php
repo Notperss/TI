@@ -143,11 +143,10 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="lon_lat">Lon & Lat<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="lon_lat">Lon & Lat</label>
                       <div class="col-md-4">
                         <input name="lon_lat" id="lon_lat" class="form-control"
-                          value="{{ old('lon_lat', $cctv->lon_lat) }}" required>
+                          value="{{ old('lon_lat', $cctv->lon_lat) }}">
                         @if ($errors->has('lon_lat'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('lon_lat') }}</p>
@@ -256,8 +255,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="description">Keterangan<code
-                          style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="description">Keterangan</label>
                       <div class="col-md-7">
                         <textarea rows="5" class="form-control summernote" id="description" name="description">{{ old('description', $cctv->description) }}</textarea>
                         @if ($errors->has('description'))

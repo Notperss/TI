@@ -140,15 +140,23 @@ class DistributionController extends Controller
         $rules = [
             'inputs' => 'required|array',
             // 'ip' => 'required|array',
+            'app' => 'array',
             'inputs.*.asset_id' => [
                 'required',
                 'integer',
-                Rule::unique('distribution_assets', 'asset_id')
-                    ->where(function ($query) {
-                        // Exclude records where stats is equal to 2
-                        $query->where('stats', '!=', 2);
-                    }),
+                function ($attribute, $value, $fail) use ($data) {
+                    $found = collect($data['inputs'])->where('asset_id', $value)->count();
+
+                    if ($found > 1) {
+                        $fail("Duplicate asset_id found in inputs array.");
+                    }
+                },
+                // ->where(function ($query) {
+                //     // Add a condition to check for the specific array
+                //     $query->where('distribution_type', 'inputs');
+                // }),
             ],
+            'app.*.license_id' => 'required',
             'ip.*.ip' => 'required',
             'ip.*.internet_access' => 'required',
             'ip.*.gateway' => 'required',
@@ -161,7 +169,9 @@ class DistributionController extends Controller
         $messages = [
             'inputs' => 'Data asset tidak boleh kosong.',
             // 'ip' => 'Data IP tidak boleh kosong.',
-            'inputs.*.asset_id' => 'Nama barang tidak boleh sama',
+            'inputs.*.asset_id.unique' => 'Data asset tidak boleh sama',
+            'inputs.*.asset_id.required' => 'Data asset tidak boleh kosong',
+            'app.*.license_id' => 'Aplikasi tidak boleh kosong.',
             'ip.*.ip' => 'IP tidak boleh kosong.',
             'ip.*.internet_access' => 'Akses internet tidak boleh kosong.',
             'ip.*.gateway' => 'Gateway tidak boleh kosong.',

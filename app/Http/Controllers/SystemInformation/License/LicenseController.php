@@ -14,18 +14,20 @@ use App\Models\SystemInformation\License\LicenseFile;
 use App\Http\Requests\SystemInformation\License\StoreLicenseRequest;
 use App\Http\Requests\SystemInformation\License\UpdateLicenseRequest;
 
-class LicenseController extends Controller {
+class LicenseController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
-        if(request()->ajax()) {
+    public function index(Request $request)
+    {
+        if (request()->ajax()) {
 
             $license = License::orderby('created_at', 'desc');
 
-            if($request->filled('from_date') && $request->filled('to_date')) {
+            if ($request->filled('from_date') && $request->filled('to_date')) {
                 $license = $license->whereBetween('date_finish', [$request->from_date, $request->to_date]);
             }
 
@@ -33,22 +35,24 @@ class LicenseController extends Controller {
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
+                    <button type="button" class="btn btn-cyan btn-sm" title="Tambah File" onclick="upload(' . $item->id . ')"><i
+                        class="bx bx-file"></i></button>
             <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="'.route('backsite.license.show', encrypt($item->id)).'" data-toggle="modal"
+                    <a href="#mymodal" data-remote="' . route('backsite.license.show', encrypt($item->id)) . '" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Lisensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="'.route('backsite.license.edit', $item->id).'">
+                    <a class="dropdown-item" href="' . route('backsite.license.edit', $item->id) . '">
                         Edit
                     </a>
-                    <form action="'.route('backsite.license.destroy', encrypt($item->id)).'" method="POST"
+                    <form action="' . route('backsite.license.destroy', encrypt($item->id)) . '" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        '.method_field('delete').csrf_field().'
+                        ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
@@ -66,7 +70,8 @@ class LicenseController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
 
         return view("pages.system-information.license.create");
     }
@@ -77,16 +82,18 @@ class LicenseController extends Controller {
      * @param  \App\Http\Requests\SystemInformation\License\StoreLicenseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLicenseRequest $request) {
+    public function store(StoreLicenseRequest $request)
+    {
         // get all request from frontsite
         $data = $request->all();
 
         // store to database
         $license = License::create($data);
-        $license_id = $license->id;
+        // $license_id = $license->id;
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.license.edit', $license_id);
+        // return redirect()->route('backsite.license.edit', $license_id);
+        return redirect()->route('backsite.license.index');
 
 
     }
@@ -97,7 +104,8 @@ class LicenseController extends Controller {
      * @param  \App\Models\SystemInformation\License\License  $license
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         $decrypt_id = decrypt($id);
         $license = License::find($decrypt_id);
 
@@ -110,7 +118,8 @@ class LicenseController extends Controller {
      * @param  \App\Models\SystemInformation\License\License  $license
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $license = License::find($id);
         $files = LicenseFile::where('license_id', $id)->orderBy('created_at', 'desc')->get();
         return view('pages.system-information.license.edit', compact('license', 'files'));
@@ -123,7 +132,8 @@ class LicenseController extends Controller {
      * @param  \App\Models\SystemInformation\License\License  $license
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLicenseRequest $request, License $license) {
+    public function update(UpdateLicenseRequest $request, License $license)
+    {
         // get all request from frontsite
         $data = $request->all();
 
@@ -140,7 +150,8 @@ class LicenseController extends Controller {
      * @param  \App\Models\SystemInformation\License\License  $license
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $license = License::find($decrypt_id);
@@ -149,8 +160,8 @@ class LicenseController extends Controller {
 
         $note = LicenseFile::where('license_id', $decrypt_id)->get();
         // hapus file
-        foreach($note as $file) {
-            if($file->file != null || $file->file != '') {
+        foreach ($note as $file) {
+            if ($file->file != null || $file->file != '') {
                 Storage::delete($file->file);
             }
         }
@@ -162,8 +173,9 @@ class LicenseController extends Controller {
     }
 
     // get form upload note
-    public function form_upload(Request $request) {
-        if($request->ajax()) {
+    public function form_upload(Request $request)
+    {
+        if ($request->ajax()) {
             $id = $request->id;
 
             $row = License::find($id);
@@ -179,7 +191,8 @@ class LicenseController extends Controller {
         }
     }
 
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
         // Validation rules
         $rules = [
             'note' => ['required'], // Add any other rules you need
@@ -197,7 +210,7 @@ class LicenseController extends Controller {
         $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if the validation fails
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -205,12 +218,12 @@ class LicenseController extends Controller {
 
         // If validation passes, proceed with your original logic
         $license = License::find($request->id);
-        if($request->hasFile('file')) {
-            foreach($request->file('file') as $image) {
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename.'.'.$ext;
+                $fullname = $basename . '.' . $ext;
                 $file = $image->storeAs('assets/file-license-file', $fullname);
             }
         }
@@ -226,8 +239,9 @@ class LicenseController extends Controller {
     }
 
     // get show_file software
-    public function show_file(Request $request) {
-        if($request->ajax()) {
+    public function show_file(Request $request)
+    {
+        if ($request->ajax()) {
             $id = $request->id;
 
             $licensefile = LicenseFile::where('license_id', $id)->get();
@@ -244,7 +258,8 @@ class LicenseController extends Controller {
     }
 
     // hapus file note
-    public function delete_file($id) {
+    public function delete_file($id)
+    {
         $licenseFile = LicenseFile::find($id);
         $licenseFile->delete();
 

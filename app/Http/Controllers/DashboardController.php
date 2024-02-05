@@ -36,7 +36,7 @@ class DashboardController extends Controller
         //     ->get()
         //     ->toJson();
 
-        $attendances = Attendance::orderBy('created_at', 'desc')->limit(5)->get();
+        $attendances = Attendance::orderBy('start_date', 'desc')->limit(5)->get();
 
         return view('pages.dashboard.index', compact('attendances'));
     }
