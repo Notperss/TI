@@ -261,7 +261,7 @@ class AttendanceController extends Controller
         $attendance = Attendance::find($decrypt_id);
         // $users = User::where(['name', '!=', 'Administrator'], ['status', '1'])->orderBy('name', 'asc')->get();
         $users = DetailUser::where('status', '1')->get();
-        $forms = Form::where('category', 'ABSEN')->orderby("created_at", "desc")->get();
+        $forms = Form::where('category', 'ABSENSI')->orderby("created_at", "desc")->get();
 
         return view('pages.adm.attendance.edit', compact('attendance', 'users', 'forms'));
     }

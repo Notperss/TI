@@ -43,6 +43,11 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
+                          <option value="PPFTI" {{ $letter->type_letter == 'PPFTI' ? 'selected' : '' }}>PPFTI</option>
+                          <option value="LK" {{ $letter->type_letter == 'LK' ? 'selected' : '' }}>LK (Laporan
+                            Kerusakan)</option>
+                          <option value="BA" {{ $letter->type_letter == 'BA' ? 'selected' : '' }}>BA (Berita Acara)
+                          </option>
                           <option value="SURAT MASUK"{{ $letter->type_letter == 'SURAT MASUK' ? 'selected' : '' }}>Surat
                             Masuk</option>
                           <option value="SURAT KELUAR" {{ $letter->type_letter == 'SURAT KELUAR' ? 'selected' : '' }}>

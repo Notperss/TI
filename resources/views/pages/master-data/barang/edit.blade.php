@@ -106,6 +106,7 @@
                           <option value="OBS"{{ $barang->category == 'OBS' ? 'selected' : '' }}>Optical Beam Sensor
                           </option>
                           <option value="LTS"{{ $barang->category == 'LTS' ? 'selected' : '' }}>LTS</option>
+                          <option value="DVR/NVR"{{ $barang->category == 'DVR/NVR' ? 'selected' : '' }}>DVR/NVR</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">

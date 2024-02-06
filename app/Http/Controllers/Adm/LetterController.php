@@ -68,6 +68,15 @@ class LetterController extends Controller
                     } elseif ($item->type_letter == 'SURAT MASUK') {
                         return '<h5><span type="button" class="badge bg-primary" data-fancybox  title="Lihat File"
                                 data-src="' . $filePath . '">Surat Masuk</span></h5>';
+                    } elseif ($item->type_letter == 'BA') {
+                        return '<h5><span type="button" class="badge bg-info" data-fancybox  title="Lihat File"
+                                data-src="' . $filePath . '">Berita Acara</span></h5>';
+                    } elseif ($item->type_letter == 'PPFTI') {
+                        return '<h5><span type="button" class="badge bg-success" data-fancybox  title="Lihat File"
+                                data-src="' . $filePath . '">PPFTI</span></h5>';
+                    } elseif ($item->type_letter == 'LK') {
+                        return '<h5><span type="button" class="badge bg-danger" data-fancybox  title="Lihat File"
+                                data-src="' . $filePath . '">Laporan Kerusakan</span></h5>';
                     } elseif ($item->type_letter == 'SURAT KELUAR') {
                         return '<h5><span type="button" class="badge bg-warning" data-fancybox  title="Lihat File"
                                 data-src="' . $filePath . '">Surat Keluar</span></h5>';

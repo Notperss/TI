@@ -41,6 +41,9 @@
                           <option value="{{ '' }}" disabled selected>
                             Choose
                           </option>
+                          <option value="PPFTI">PPFTI</option>
+                          <option value="LK">LK (Laporan Kerusakan)</option>
+                          <option value="BA">BA (Berita Acara)</option>
                           <option value="SURAT MASUK">Surat Masuk</option>
                           <option value="SURAT KELUAR">Surat Keluar</option>
                           <option value="MEMO">Memo</option>

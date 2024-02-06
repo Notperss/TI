@@ -152,35 +152,35 @@ class BarangController extends Controller
                     }
                 })
 
-                ->editColumn('distribution_asset_created_at', function ($item) {
-                    // Access the distribution_asset relationship
-                    $distributionAssets = $item->distribution_asset;
+                // ->editColumn('distribution_asset_created_at', function ($item) {
+                //     // Access the distribution_asset relationship
+                //     $distributionAssets = $item->distribution_asset;
 
-                    // Check if distributionAssets is not empty
-                    if ($distributionAssets->isNotEmpty()) {
-                        // Initialize an array to store distribution asset creation dates
-                        $createdAtValues = [];
+                //     // Check if distributionAssets is not empty
+                //     if ($distributionAssets->isNotEmpty()) {
+                //         // Initialize an array to store distribution asset creation dates
+                //         $createdAtValues = [];
 
-                        // Loop through each distributionAsset
-                        foreach ($distributionAssets as $distributionAsset) {
-                            // Add the created_at value to the array
-                            $createdAtValues[] = $distributionAsset->created_at->format('l, d F Y');
+                //         // Loop through each distributionAsset
+                //         foreach ($distributionAssets as $distributionAsset) {
+                //             // Add the created_at value to the array
+                //             $createdAtValues[] = $distributionAsset->created_at->format('l, d F Y');
 
-                        }
+                //         }
 
-                        // Check if there are any created_at values in the array
-                        if (! empty($createdAtValues)) {
-                            // return implode(', ', $createdAtValues);
-                            $latestCreatedAt = end($createdAtValues);
+                //         // Check if there are any created_at values in the array
+                //         if (! empty($createdAtValues)) {
+                //             // return implode(', ', $createdAtValues);
+                //             $latestCreatedAt = end($createdAtValues);
 
-                            return ($item->stats == 1) ? 'Available' : $latestCreatedAt;
-                        } else {
-                            return 'No created_at values found';
-                        }
-                    } else {
-                        return 'Available';
-                    }
-                })
+                //             return ($item->stats == 1) ? 'Available' : $latestCreatedAt;
+                //         } else {
+                //             return 'No created_at values found';
+                //         }
+                //     } else {
+                //         return 'Available';
+                //     }
+                // })
                 ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at', 'barcode'])
 
                 ->toJson();

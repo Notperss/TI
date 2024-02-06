@@ -376,5 +376,11 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('maintenance', MaintenanceController::class);
     Route::controller(MaintenanceController::class)->group(function () {
         Route::get('/detail/{id}', 'detailBarang')->name('detailBarang');
+        Route::get('/getAsset', 'getAsset')->name('getAsset');
+
+        Route::post('/maintenance/form_status', 'form_update_status')->name('maintenance.form_update_status');
+        Route::post('/maintenance/add_status', 'add_status')->name('maintenance.add_status');
+        Route::post('/maintenance/show_status', 'show_status')->name('maintenance.show_status');
+        Route::delete('/maintenance/{id}/delete_status', 'delete_status')->name('maintenance.delete_status');
     });
 });

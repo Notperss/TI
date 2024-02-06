@@ -89,6 +89,7 @@
                           <option value="TCT">Toll Collection Terminal</option>
                           <option value="OBS">Optical Beam Sensor</option>
                           <option value="LTS">LTS</option>
+                          <option value="DVR/NVR">DVR/NVR</option>
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -339,3 +340,12 @@
 3 = Perbaikan
 4 = Diserahkan
 5 = Rusak --}}
+
+{{-- update status hardware
+1. tersedia
+2. baik berfungsi
+3. kurangbaik berfungsi
+4. rusak
+5. diserahkan
+6. ip Phone terpakai
+--}}

@@ -76,7 +76,7 @@
                           <th>Nama Barang</th>
                           <th>Category</th>
                           <th>User</th>
-                          <th>Tanggal</th>
+                          <th>Status Asset</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -168,9 +168,24 @@
 
         },
         {
-          data: 'distribution_asset_created_at',
-          name: 'distribution_asset_created_at',
-          searchable: false,
+          data: 'stats',
+          name: 'stats',
+          // searchable: false,
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (['1', '2', '6'].includes(data)) {
+              return '<span class="badge bg-success">Baik Berfungsi</span>';
+            } else if (data === '3') {
+              return '<span class="badge bg-secondary">Kurang Baik Berfungsi</span>';
+            } else if (data === '4') {
+              return '<span class="badge bg-danger">Rusak</span>';
+            } else if (data === '5') {
+              return '<span class="badge bg-warning">Diserahkan</span>';
+            } else {
+              return '-';
+            }
+          },
 
         },
         {
