@@ -83,6 +83,23 @@
                     </div>
 
                     <div class="form-group row col-11">
+                      <label class="col-md-2 label-control" for="employee_id">Pelapor</label>
+                      <div class="col-md-4">
+                        <select type="text" id="employee_id" name="employee_id" class="form-control select2"
+                          style="width: 100%">
+                          <option value="" disabled selected>Choose</option>
+                          @foreach ($employees as $employee)
+                            <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('employee_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('employee_id') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row col-11">
                       {{-- <label class="col-md-2 label-control" for="goods_id">Asset User</label>
                       <div class="col-md-4 mx-auto">
                         <select type="text" id="goods_id" name="goods_id" class="form-control select2">
@@ -94,10 +111,10 @@
                         @endif
                       </div> --}}
 
-                      <label class="col-md-2 label-control" for="date">Tanggal Lapor <code
+                      <label class="col-md-2 label-control" for="date">Tanggal Laporan <code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <input type="date" id="date" name="date" class="form-control" placeholder=""
+                        <input type="datetime-local" id="date" name="date" class="form-control" placeholder=""
                           value="{{ old('date') }}" autocomplete="off" autofocus required>
                         @if ($errors->has('date'))
                           <p style="font-style: bold; color: red;">
@@ -106,8 +123,8 @@
                       </div>
                     </div>
 
-                    <div class="form-group row col-11">
-                      {{-- <label class="col-md-2 label-control" for="type_malfunction">Tipe Gangguan</label>
+                    {{-- <div class="form-group row col-11">
+                      <label class="col-md-2 label-control" for="type_malfunction">Tipe Gangguan</label>
                       <div class="col-md-4 mx-auto">
                         <select type="text" id="type_malfunction" name="type_malfunction" class="form-control">
                           <option value="" selected disabled>Choose</option>
@@ -120,7 +137,7 @@
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('type_malfunction') }}</p>
                         @endif
-                      </div> --}}
+                      </div>
 
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
@@ -131,13 +148,12 @@
                         </div>
                         <p class="text-muted"><small class="text-danger">Hanya dapat
                             mengunggah 1 file</small></p>
-                        {{-- <img class="img-preview img-fluid mb-1 col-md-6"> --}}
                         @if ($errors->has('file'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
                         @endif
                       </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-group row col-11">
                       <label class="col-md-2 label-control" for="description">Keterangan <code

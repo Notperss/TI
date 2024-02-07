@@ -23,4 +23,11 @@ class MaintenanceStatus extends Model
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(User::class, 'users_id');
     }
+    public function maintenance()
+    {
+        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+        return $this->belongsTo(Maintenance::class, 'maintenance_id');
+    }
+
+
 }

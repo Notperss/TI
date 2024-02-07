@@ -41,26 +41,6 @@
                             {{ $errors->first('report_number') }}</p>
                         @endif
                       </div>
-                    </div>
-
-                    <div class="form-group row col-11">
-                      <label class="col-md-2 label-control" for="reporter">Yang menerima<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4 ">
-                        <select type="text" id="reporter" name="reporter" class="form-control select2"
-                          style="width: 100%" required>
-                          <option value="" disabled selected>Choose</option>
-                          @foreach ($users as $user)
-                            <option value="{{ $user->name }}"
-                              {{ $user->name == $maintenance->reporter ? 'selected' : '' }}>
-                              {{ $user->name }}</option>
-                          @endforeach
-                        </select>
-                        @if ($errors->has('reporter'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('reporter') }}</p>
-                        @endif
-                      </div>
 
                       <label class="col-md-2 label-control" for="type_malfunction">Tipe Gangguan<code
                           style="color:red;">*</code></label>
@@ -85,20 +65,45 @@
                     </div>
 
                     <div class="form-group row col-11">
-                      <label class="col-md-2 label-control" for="date">Tanggal Laporan <code
+                      <label class="col-md-2 label-control" for="reporter">Yang menerima<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4 ">
-                        <input type="date" id="date" name="date" class="form-control" placeholder=""
-                          value="{{ old('date', $maintenance->date) }}" autocomplete="off" autofocus required>
-                        @if ($errors->has('date'))
+                        <select type="text" id="reporter" name="reporter" class="form-control select2"
+                          style="width: 100%" required>
+                          <option value="" disabled selected>Choose</option>
+                          @foreach ($users as $user)
+                            <option value="{{ $user->name }}"
+                              {{ $user->name == $maintenance->reporter ? 'selected' : '' }}>
+                              {{ $user->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('reporter'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('date') }}</p>
+                            {{ $errors->first('reporter') }}</p>
                         @endif
                       </div>
-
-                      <label class="col-md-2 label-control second-part" for="employee_id">Pelapor<code
+                      <label class="col-md-2 label-control second-part" for="barcode">Asset User<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4 second-part">
+                        <select type="text" id="barcode" name="barcode" class="form-control select2" required>
+                          <option value="" selected disabled>Choose</option>
+                          @foreach ($barang as $asset)
+                            <option value="{{ $asset->barcode }}"
+                              data-value="{{ $asset->name }}"{{ $asset->barcode == $maintenance->barcode ? 'selected' : '' }}>
+                              {{ $asset->barcode }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('barcode'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('barcode') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row col-11">
+                      <label class="col-md-2 label-control" for="employee_id">Pelapor<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
                         <select type="text" id="employee_id" name="employee_id" class="form-control select2"
                           style="width: 100%" required>
                           <option value="" disabled selected>Choose</option>
@@ -113,15 +118,59 @@
                             {{ $errors->first('employee_id') }}</p>
                         @endif
                       </div>
+
+                      <label class="col-md-2 label-control" for="file">Nama Asset</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="nama_asset" name="file" readonly>
+                        @if ($errors->has('file'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('file') }}</p>
+                        @endif
+                      </div>
                     </div>
 
                     <div class="form-group row col-11">
+                      <label class="col-md-2 label-control" for="date">Tanggal Laporan <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4 ">
+                        <input type="datetime-local" id="date" name="date" class="form-control" placeholder=""
+                          value="{{ old('date', $maintenance->date) }}" autocomplete="off" autofocus required>
+                        @if ($errors->has('date'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('date') }}</p>
+                        @endif
+                      </div>
+
+                      {{-- <label class="col-md-2 label-control" for="file">user</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="nama_asset" name="file" readonly>
+                        @if ($errors->has('file'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('file') }}</p>
+                        @endif
+                      </div> --}}
+                      {{-- </div>
+
+                    <div class="form-group row col-11"> --}}
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-4">
                         <div class="custom-file">
                           <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
+                          @if ($maintenance->file)
+                            <p class="mt-1">Latest File : {{ pathinfo($maintenance->file, PATHINFO_FILENAME) }}</p>
+                            <a type="button" data-fancybox data-src="{{ asset('storage/' . $maintenance->file) }}"
+                              class="btn btn-info btn-sm text-white ">
+                              Lihat
+                            </a>
+                            <a type="button" href="{{ asset('storage/' . $maintenance->file) }}"
+                              class="btn btn-warning btn-sm" download>
+                              Unduh
+                            </a>
+                          @else
+                            <p class="mt-1">Latest File : File not found!</p>
+                          @endif
                         </div>
                         <p class="text-muted"><small class="text-danger">Hanya dapat
                             mengunggah 1 file</small></p>
@@ -129,23 +178,6 @@
                         @if ($errors->has('file'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
-                        @endif
-                      </div>
-
-                      <label class="col-md-2 label-control second-part" for="goods_id">Asset User<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4 second-part">
-                        <select type="text" id="goods_id" name="goods_id" class="form-control select2" required>
-                          <option value="" selected disabled>Choose</option>
-                          @foreach ($barang as $asset)
-                            <option
-                              value="{{ $asset->id }}"{{ $asset->id == $maintenance->goods_id ? 'selected' : '' }}>
-                              {{ $asset->barcode }}</option>
-                          @endforeach
-                        </select>
-                        @if ($errors->has('goods_id'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('goods_id') }}</p>
                         @endif
                       </div>
                     </div>
@@ -178,8 +210,8 @@
                 {{-- File --}}
                 <div class="form-group row">
                   <div class="col-md-4">
-                    <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1" title="Tambah file"
-                      onclick="status({{ $maintenance->id }})"><i class="bx bx-file"></i>
+                    <button type="button" id="button_file" class="btn btn-cyan btn-md ml-1 my-1"
+                      title="Tambah Status" onclick="status({{ $maintenance->id }})"><i class="bx bx-file"></i>
                       Tambah Status</button>
                     @if ($errors->any())
                       <div class="alert alert-danger">
@@ -193,8 +225,8 @@
                   </div>
                 </div>
                 <div class="table-responsive col-md-12">
-                  <table class="table table-striped table-bordered default-table activity-table mb-4" aria-label="">
-                    <thead>
+                  <table class="table table-bordered default-table mb-4" aria-label="">
+                    <thead class="bg-info">
                       <tr>
                         <th class="text-center" style="width: 5%;">No</th>
                         <th class="text-center">Status Laporan</th>
@@ -205,62 +237,68 @@
                         <th style="text-align:center; width:10px;">Action</th>
                       </tr>
                     </thead>
-                    @forelse ($statusReport as $status)
-                      <tbody>
-                        <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
-                        <td class="text-center">
-                          @if ($status->report_status == 1)
-                            <p>Open</p>
-                          @elseif($status->report_status == 2)
-                            <p>Penanganan</p>
-                          @elseif($status->report_status == 3)
-                            <p>Penanganan Lanjutan</p>
-                          @elseif($status->report_status == 4)
-                            <p>Form LK</p>
-                          @elseif($status->report_status == 5)
-                            <p>Perbaikan Vendor</p>
-                          @elseif($status->report_status == 6)
-                            <p>Menyerahkan Barang ke Vendor</p>
-                          @elseif($status->report_status == 7)
-                            <p>Menerima Barang dari Vendor</p>
-                          @elseif($status->report_status == 8)
-                            <p>Status hardware update: Rusak</p>
-                          @elseif($status->report_status == 9)
-                            <p>Selesai</p>
-                          @elseif($status->report_status == 10)
-                            <p>Tidak Selesai - Rusak</p>
-                          @else
-                            <!-- Handle other options if needed -->
-                          @endif
-                        </td>
-                        <td class="text-center">{{ $status->user->name }}</td>
-                        <td class="text-center">{{ $status->date }}</td>
-                        <td class="text-center">{{ $status->description }}</td>
-                        <td class="text-center">
-                          <a type="button" data-fancybox data-src="{{ asset('storage/' . $status->file) }}"
-                            class="btn btn-info btn-sm text-white ">
-                            Lihat
-                          </a> <a type="button" href="{{ asset('storage/' . $status->file) }}"
-                            class="btn btn-warning btn-sm text-white" download>Unduh</a>
-                        </td>
-                        <td class="text-center">
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
-                              aria-haspopup="true" aria-expanded="false">Action</button>
-                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                              <form action="{{ route('backsite.maintenance.delete_status', $status->id ?? '') }}"
-                                method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="submit"id="delete_file" class="btn"value="Delete">
-                              </form>
+                    <tbody class="bg-blue bg-lighten-3">
+                      @forelse ($statusReport as $status)
+                        <tr>
+                          <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
+                          <td class="text-center">
+                            @if ($status->report_status == 1)
+                              <p>Open</p>
+                            @elseif($status->report_status == 2)
+                              <p>Penanganan</p>
+                            @elseif($status->report_status == 3)
+                              <p>Penanganan Lanjutan</p>
+                            @elseif($status->report_status == 4)
+                              <p>Form LK</p>
+                            @elseif($status->report_status == 5)
+                              <p>Perbaikan Vendor</p>
+                            @elseif($status->report_status == 6)
+                              <p>Menyerahkan Barang ke Vendor</p>
+                            @elseif($status->report_status == 7)
+                              <p>Menerima Barang dari Vendor</p>
+                            @elseif($status->report_status == 8)
+                              <p>BA</p>
+                            @elseif($status->report_status == 9)
+                              <p>Selesai</p>
+                            @elseif($status->report_status == 10)
+                              <p>Tidak Selesai - Rusak</p>
+                            @else
+                              <!-- Handle other options if needed -->
+                            @endif
+                          </td>
+                          <td class="text-center">{{ $status->user->name }}</td>
+                          <td class="text-center">{{ $status->date }}</td>
+                          <td class="text-center">{{ $status->description }}</td>
+                          <td class="text-center">
+                            <a data-fancybox data-src="{{ asset('storage/' . $status->file) }}"
+                              class="btn btn-info btn-sm text-white btn-block">
+                              Lihat
+                            </a>
+                            <a href="{{ asset('storage/' . $status->file) }}"
+                              class="btn btn-warning btn-sm text-white btn-block" download>
+                              Unduh
+                            </a>
+                          </td>
+
+                          <td class="text-center">
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Action</button>
+                              <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                <form action="{{ route('backsite.maintenance.delete_status', $status->id ?? '') }}"
+                                  method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                  <input type="hidden" name="_method" value="DELETE">
+                                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                  <input type="submit"id="delete_file" class="dropdown-item"value="Delete">
+                                </form>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                      </tbody>
-                    @empty
-                      <td class="text-center" colspan="7">No data available in table</td>
-                    @endforelse
+                          </td>
+                        </tr>
+                      @empty
+                        <td class="text-center" colspan="7">No data available in table</td>
+                      @endforelse
+                    </tbody>
                   </table>
                 </div>
 
@@ -274,7 +312,7 @@
   <div class="viewmodal" style="display: none;"></div>
 @endsection
 @push('after-script')
-  <script>
+  {{-- <script>
     $(document).ready(function() {
       // Initially check the value and show/hide the second part accordingly
       checkTypeMalfunction();
@@ -297,68 +335,7 @@
       }
     }
   </script>
-  <script>
-    $(document).ready(function() {
-      $('html,body').animate({
-        scrollTop: document.body.scrollHeight
-      }, "slow");
-    })
-  </script>
-
-  <script>
-    function status(id) {
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
-
-      $.ajax({
-        type: "post",
-        url: "{{ route('backsite.maintenance.form_update_status') }}",
-        data: {
-          id: id
-        },
-        dataType: "json",
-        success: function(response) {
-          $('.viewmodal').html(response.data).show();
-          $('#upload').modal('show');
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-        }
-      });
-    }
-  </script>
-  {{-- <script>
-    $(document).ready(function() {
-      $('#distribution_id').change(function() {
-        var distributionId = $(this).val();
-        if (distributionId) {
-          $.ajax({
-            url: '{{ route('backsite.getIp') }}',
-            type: 'GET',
-            dataType: 'json',
-            data: {
-              distribution_id: distributionId
-            },
-            success: function(data) {
-              $('#ip').empty();
-              $('#ip').append('<option value="" selected disabled>Choose</option>');
-              $.each(data, function(key, value) {
-                $('#ip').append('<option value="' + value.ip + '">' + value.ip +
-                  '</option>');
-              });
-            }
-          });
-        } else {
-          $('#ip').empty();
-          $('#ip').append('<option value="" selected disabled>Choose</option>');
-        }
-      });
-    });
-  </script> --}}
-
+  
   <script>
     $(document).ready(function() {
       $('#employee_id').change(function() {
@@ -408,7 +385,65 @@
         modal.find('.modal-title').html(button.data("title"));
       });
     });
+  </script> --}}
+
+  <script>
+    $(document).ready(function() {
+      // Set initial value on page load
+      var initialSelectedValue = $('#barcode :selected').data('value');
+      $('#nama_asset').val(initialSelectedValue);
+
+      // Handle change event
+      $('#barcode').on('change', function() {
+        var input_value = $(this).find(':selected').data('value');
+        $('#nama_asset').val(input_value);
+      });
+    });
   </script>
+  <script>
+    $(document).ready(function() {
+      $('html,body').animate({
+        scrollTop: document.body.scrollHeight
+      }, "slow");
+    })
+  </script>
+
+  <script>
+    function status(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.maintenance.form_update_status') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    jQuery(document).ready(function($) {
+      $('#mymodal').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget);
+        var modal = $(this);
+
+        modal.find('.modal-body').load(button.data("remote"));
+        modal.find('.modal-title').html(button.data("title"));
+      });
+    });
+  </script>
+
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">

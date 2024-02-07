@@ -107,9 +107,15 @@
       </div>
     </div>
   </div>
+  <div class="viewmodal" style="display: none;"></div>
+
   <!-- END: Content-->
 @endsection
+@push('after-style')
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+@endpush
 @push('after-script')
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script>
     var datatable = $('#information-table').dataTable({
       processing: true,
@@ -138,6 +144,7 @@
       columns: [{
           data: 'DT_RowIndex',
           name: 'DT_RowIndex',
+          width: '5%',
           orderable: false,
           searchable: false,
         },
@@ -145,6 +152,7 @@
         {
           data: 'report_number',
           name: 'report_number',
+          width: '10%',
         },
         {
           data: 'employee_id',
@@ -161,6 +169,7 @@
         {
           data: 'stats',
           name: 'stats',
+          width: '5%',
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';
@@ -197,6 +206,110 @@
         modal.find('.modal-title').html(button.data("title"));
       });
     });
+  </script>
+  <script>
+    function update(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.maintenance.form_update_status') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function analysis(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        type: "post",
+        url: "{{ route('backsite.maintenance.form_analysis') }}",
+        data: {
+          id: id
+        },
+        dataType: "json",
+        success: function(response) {
+          $('.viewmodal').html(response.data).show();
+          $('#upload').modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+        }
+      });
+    }
+
+    function fixing(id) {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+          type: "post",
+          url: "{{ route('backsite.maintenance.fixing') }}",
+          data: {
+            id: id
+          },
+          dataType: "json"
+        })
+        .done(function(response) {
+          handleSuccess(response);
+        })
+        .fail(function(xhr, status, error) {
+          handleAjaxError(xhr.responseText);
+        });
+    }
+
+    // Function to handle success response
+    function handleSuccess(response) {
+      // Update UI or perform other actions based on the response
+      console.log(response);
+
+      // Check if the response indicates success
+      if (response.success) {
+        // Display success message using SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Sukses',
+          text: response.message
+        }).then((result) => {
+          // Reload the page or go back in history after the user dismisses the alert
+          if (result.isConfirmed || result.isDismissed) {
+            window.location.reload(); // Reload the page
+            // OR
+            // window.history.back(); // Go back in history
+          }
+        });
+        // Additional logic if needed
+      } else {
+        // Display an error message using SweetAlert
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response.message
+        });
+        // Additional error handling logic if needed
+      }
+    }
   </script>
 
   <div class="modal fade" id="mymodal" tabindex="-1" role="dialog">

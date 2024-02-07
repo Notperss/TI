@@ -12,8 +12,8 @@
     <tr>
       <th>User Asset</th>
       <td>
-        ({{ isset($maintenance->asset->barcode) ? $maintenance->asset->barcode : 'N/A' }})
-        {{ isset($maintenance->asset->name) ? $maintenance->asset->name : 'N/A' }}
+        ({{ isset($maintenance->barcode) ? $maintenance->barcode : 'N/A' }})
+        {{ isset($maintenance->asset_name) ? $maintenance->asset_name : 'N/A' }}
       </td>
     </tr>
     <tr>
@@ -70,7 +70,7 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-bordered tampildata my-1" style="word-break: break-all;">
+  <table class="table table-bordered tampildata">
   </table>
 </div>
 <script>

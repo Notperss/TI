@@ -1,10 +1,10 @@
 <div class="table-responsive">
-  <table class="table table-striped table-bordered text-inputs-searching default-table activity-table" id="pp-table">
+  <table class="table table-bordered">
     <thead>
       <tr>
-        <th>No</th>
-        <th>Status Laporan</th>
-        <th>Yang Menangani</th>
+        <th style="width: 1px;">#</th>
+        <th>Status</th>
+        <th>Petugas</th>
         <th>Tanggal</th>
         <th>Keterangan</th>
         {{-- <th>File</th> --}}
@@ -14,7 +14,7 @@
     <tbody>
       @forelse ($datafile as $status)
         <tr>
-          <td style="width: 2%;">{{ $loop->iteration }}</td>
+          <td>{{ $loop->iteration }}</td>
           <td>
             @if ($status->report_status == 1)
               <p>Open</p>
@@ -31,7 +31,7 @@
             @elseif($status->report_status == 7)
               <p>Menerima Barang dari Vendor</p>
             @elseif($status->report_status == 8)
-              <p>Status hardware update: Rusak</p>
+              <p>BA</p>
             @elseif($status->report_status == 9)
               <p>Selesai</p>
             @elseif($status->report_status == 10)
@@ -55,17 +55,20 @@
               <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">Action</button>
               <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                @if ($status->file)
+                  <a type="button" data-fancybox data-src="{{ asset('storage/' . $status->file) }}"
+                    class="dropdown-item">
+                    Lihat File
+                  </a> <a type="button" href="{{ asset('storage/' . $status->file) }}" class="dropdown-item"
+                    download>Unduh File</a>
+                @endif
                 <form action="{{ route('backsite.maintenance.delete_status', $status->id ?? '') }}" method="POST"
                   onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
                   <input type="hidden" name="_method" value="DELETE">
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <input type="submit"id="delete_file" class="dropdown-item"value="Delete">
                 </form>
-                <a type="button" data-fancybox data-src="{{ asset('storage/' . $status->file) }}"
-                  class="dropdown-item">
-                  Lihat File
-                </a> <a type="button" href="{{ asset('storage/' . $status->file) }}" class="dropdown-item"
-                  download>Unduh File</a>
+
               </div>
             </div>
           </td>

@@ -11,10 +11,11 @@ use App\Models\Maintenance\Maintenance;
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\ManagementAccess\DetailUser;
+use App\Models\Maintenance\MaintenanceStatus;
 use App\Models\Network\Distribution\Distribution;
 use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
-use App\Models\Maintenance\MaintenanceStatus;
 
 class MaintenanceController extends Controller
 {
@@ -37,7 +38,7 @@ class MaintenanceController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
-                        <div class="container">
+        <div class="container">
             <div class="btn-group mr-1 mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
@@ -46,7 +47,7 @@ class MaintenanceController extends Controller
                         data-target="#mymodal" data-title="Detail Data Laporan" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.maintenance.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="' . route('backsite.maintenance.edit', encrypt($item->id)) . '" ' . ($item->stats == 2 ? 'hidden' : '') . '>
                         Edit
                                 </a>
                     <form action="' . route('backsite.maintenance.destroy', encrypt($item->id)) . '" method="POST"
@@ -54,26 +55,25 @@ class MaintenanceController extends Controller
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="submit" class="dropdown-item" value="Delete" ' . ($item->stats == 2 ? 'hidden' : '') . '>
                     </form>
             </div>
             </div>
-                    <form action="' . route('backsite.maintenance.edit', encrypt($item->id)) . '" method="POST"
-                    onsubmit="
-                    ' . ($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Approve?\')' : 'return confirm(\'Are You Sure Want to Cancel Approve?\')') . '
-                    ">
-                        ' . method_field('PUT') . csrf_field() . '
-                        <input type="hidden" name="_method" value="PUT">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Approve' : 'Cancel-Approve') . '">
-                    </form>
-
+             <div class="btn-group mr-1 mb-1">
+                   <button type="button" class="btn btn-success btn-sm" title="Fixing" onclick="fixing(' . $item->id . ')" ' . (MaintenanceStatus::where('maintenance_id', $item->id)->exists() ? 'hidden' : '') . '>
+                    Fixing</button>
+                   <button type="button" class="btn btn-warning btn-sm" title="Fixing" onclick="analysis(' . $item->id . ')" ' . ($item->stats == 2 || $item->barcode ? 'hidden' : '') . '>
+                   Analisa</button>
+                    <button type="button" class="btn btn-cyan btn-sm" title="Update" onclick="update(' . $item->id . ')" ' . ($item->stats == 2 ? 'hidden' : '') . '>
+                    Update</button>
+            </div>
+        </div>
                 ';
 
                 })->editColumn('employee_id', function ($item) {
-                    return $item->employee->name;
+                    return $item->employee_id ? $item->employee->name : 'N/A';
                 })
-                ->rawColumns(['action',])
+                ->rawColumns(['action', 'employee_id'])
                 ->toJson();
         }
 
@@ -88,7 +88,13 @@ class MaintenanceController extends Controller
     public function create()
     {
         $employees = Employee::orderBy('name', 'asc')->get();
-        $users = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
+        $users = User::where('name', '!=', 'Administrator')
+            ->whereHas('detail_user', function ($query) {
+                $query->where('status', '=', '1');
+            })
+            ->orderBy('name', 'asc')
+            ->get();
+        // $users = User::where(['name', '!=', 'Administrator'], [DetailUser::where('status', '=', '1')])->orderBy('name', 'asc')->get();
         return view('pages.maintenance.maintenance.create', compact('employees', 'users'));
     }
 
@@ -110,7 +116,7 @@ class MaintenanceController extends Controller
             $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
             $fullname = $basename . '.' . $extension;
-            $data['file'] = $request->file('file')->storeAs('assets/file-laporan-gangguan', $fullname);
+            $data['file'] = $request->file('file')->storeAs('assets/file-laporan-maintenance', $fullname);
         }
         // store to database
         Maintenance::create($data);
@@ -145,10 +151,14 @@ class MaintenanceController extends Controller
         $maintenance = Maintenance::with('employee.distribution.distribution_asset')->find($decrypt_id);
         $employees = Employee::orderBy('name', 'asc')->get();
 
-        // $users = User::where(['name', '!=', 'Administrator'], ['status', '1'])->orderBy('name', 'asc')->get();
-        $barang = Barang::where('id', $maintenance->goods_id)->orderBy('barcode', 'asc')->get();
-        $users = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
-
+        // $barang = Barang::where('id', $maintenance->goods_id)->orderBy('barcode', 'asc')->get();
+        $barang = Barang::orderBy('barcode', 'asc')->get();
+        $users = User::where('name', '!=', 'Administrator')
+            ->whereHas('detail_user', function ($query) {
+                $query->where('status', '=', '1');
+            })
+            ->orderBy('name', 'asc')
+            ->get();
         $statusReport = MaintenanceStatus::where('maintenance_id', $maintenance->id)->orderBy('created_at', 'desc')->get();
         return view('pages.maintenance.maintenance.edit', compact('employees', 'users', 'maintenance', 'barang', 'statusReport'));
     }
@@ -174,7 +184,7 @@ class MaintenanceController extends Controller
             $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
             $extension = $files->getClientOriginalExtension();
             $fullname = $basename . '.' . $extension;
-            $data['file'] = $request->file('file')->storeAs('assets/file-laporan-gangguan', $fullname);
+            $data['file'] = $request->file('file')->storeAs('assets/file-laporan-maintenance', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
                 Storage::delete($path_file);
@@ -301,12 +311,45 @@ class MaintenanceController extends Controller
         return response()->json($result);
     }
 
+    public function form_analysis(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+            // $barang = Barang::where('id', $maintenance->goods_id)->orderBy('barcode', 'asc')->get();
+            $barang = Barang::orderBy('barcode', 'asc')->get();
+            $users = User::where('name', '!=', 'Administrator')
+                ->whereHas('detail_user', function ($query) {
+                    $query->where('status', '=', '1');
+                })
+                ->orderBy('name', 'asc')
+                ->get();
+
+            $row = Maintenance::find($id);
+            $data = [
+                'id' => $row['id'],
+                'users' => $users,
+                'barang' => $barang,
+                'maintenance' => $row,
+            ];
+
+            $msg = [
+                'data' => view('pages.maintenance.maintenance.form_analysis', $data)->render(),
+            ];
+
+            return response()->json($msg);
+        }
+    }
+
     public function form_update_status(Request $request)
     {
         if ($request->ajax()) {
             $id = $request->id;
-
-            $users = User::where('name', '!=', 'Administrator')->orderBy('name', 'asc')->get();
+            $users = User::where('name', '!=', 'Administrator')
+                ->whereHas('detail_user', function ($query) {
+                    $query->where('status', '=', '1');
+                })
+                ->orderBy('name', 'asc')
+                ->get();
             $row = Maintenance::find($id);
             $data = [
                 'id' => $row['id'],
@@ -332,7 +375,7 @@ class MaintenanceController extends Controller
                 $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
                 $ext = $image->getClientOriginalExtension();
                 $fullname = $basename . '.' . $ext;
-                $file = $image->storeAs('assets/file-maintenance-status', $fullname);
+                $file = $image->storeAs('assets/file-laporan-status', $fullname);
 
                 MaintenanceStatus::create([
                     'maintenance_id' => $request->id,
@@ -343,6 +386,10 @@ class MaintenanceController extends Controller
                     'description' => $request->description,
                 ]);
             }
+        }
+
+        if ($request->report_status == 9 || $request->report_status == 10) {
+            $maintenance->update(['stats' => 2]);
         }
 
         // dd($request->all());
@@ -376,5 +423,36 @@ class MaintenanceController extends Controller
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
+    }
+
+    public function fixing(Request $request)
+    {
+        $maintenance = Maintenance::find($request->id);
+
+        if ($maintenance) {
+            MaintenanceStatus::create([
+                'maintenance_id' => $request->id,
+                'users_id' => auth()->id(),
+                'report_status' => '2',
+                'date' => now()->format('Y-m-d H:i:s'),
+                'description' => 'penanganan',
+            ]);
+
+            // Retrieve the corresponding Maintenance model after creating MaintenanceStatus
+            // $maintenanceWithStatus = Maintenance::with('maintenanceStatus')->find($request->id);
+
+            $success = true; // Replace with your actual success condition
+            $message = 'Data berhasil di Update'; // Replace with your actual success message
+
+            return response()->json(['success' => $success, 'message' => $message]);
+            // alert()->success('Sukses', 'Data berhasil di Update');
+            // return back();
+        }
+        // return back()->with(['maintenance' => $maintenanceWithStatus]);
+        // } else {
+        //     // Return a 404 response if the maintenance record is not found
+        //     return response()->json(['message' => 'Maintenance record not found'], 404);
+        // }
+
     }
 }

@@ -21,6 +21,9 @@ class Maintenance extends Model
         'file',
         'stats',
         'description',
+
+        'asset_name',
+        'barcode',
     ];
 
     public function employee()
@@ -32,5 +35,10 @@ class Maintenance extends Model
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(Barang::class, 'goods_id');
+    }
+    public function maintenanceStatus()
+    {
+        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+        return $this->hasMany(MaintenanceStatus::class, 'id', 'maintenance_id');
     }
 }
