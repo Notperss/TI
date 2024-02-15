@@ -90,11 +90,11 @@
 
             <div class="form-group row">
               <label class="col-md-4 label-control" for="file">File
-                <code style="color:red;">*</code></label>
+              </label>
               <div class="col-md-8">
                 <div class="custom-file">
                   <input type="file" class="custom-file-input" id="inputGroupFile02" name="file[]"
-                    onchange="updateList()" required>
+                    onchange="updateList()">
                   <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                     File</label>
                 </div>

@@ -92,7 +92,7 @@
 
           <div class="form-group row">
             <label class="col-md-4 label-control" for="file">File
-              <code style="color:red;">*</code></label>
+            </label>
             <div class="col-md-8">
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="file" name="file" onchange="updateList()">
@@ -117,9 +117,9 @@
           </div>
 
           <div class="form-group row ">
-            <label class="col-md-4 label-control" for="description">Keterangan <code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="description">Keterangan</label>
             <div class="col-md-8">
-              <textarea class="form-control" id="description" name="description" rows="5" required>{{ $maintenance->description }}</textarea>
+              <textarea class="form-control" id="description" name="description" rows="5" readonly>{{ $maintenance->description }}</textarea>
               @if ($errors->has('description'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('description') }}</p>

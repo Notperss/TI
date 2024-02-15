@@ -73,11 +73,13 @@
                           <thead>
                             <tr>
                               <th style="text-align:center; width:100px;">No</th>
-                              <th class="text-center">Nomor Laporan</th>
-                              <th class="text-center">User PC</th>
+                              <th class="text-center">No.Laporan</th>
+                              <th class="text-center">Pelapor</th>
                               <th class="text-center">Tgl Laporan</th>
                               <th class="text-center">Keterangan</th>
+                              <th class="text-center">Penerima</th>
                               <th class="text-center">Status</th>
+                              <th class="text-center">Ket.Status</th>
                               <th style="text-align:center; width:150px;">Action</th>
                             </tr>
                           </thead>
@@ -89,6 +91,8 @@
                               <th>Laporan Gangguan</th>
                               <th>Keterangan</th>
                               <th>Status</th>
+                              <th>Action</th>
+                              <th>Action</th>
                               <th>Action</th>
                               <th>Action</th>
                               <th>Action</th>
@@ -150,8 +154,8 @@
         },
 
         {
-          data: 'report_number',
-          name: 'report_number',
+          data: 'numberAndStatus',
+          name: 'numberAndStatus',
           width: '10%',
         },
         {
@@ -167,20 +171,16 @@
           name: 'description',
         },
         {
-          data: 'stats',
-          name: 'stats',
-          width: '5%',
-          render: function(data) {
-            if (data === '0') {
-              return '<span>N/A</span>';
-            } else if (data === '1') {
-              return '<span class="badge bg-info">Open</span>';
-            } else if (data === '2') {
-              return '<span class="badge bg-danger">Closed</span>';
-            } else {
-              return '-';
-            }
-          }
+          data: 'recipient',
+          name: 'recipient',
+        },
+        {
+          data: 'LastStats',
+          name: 'LastStats',
+        },
+        {
+          data: 'LastDesc',
+          name: 'LastDesc',
         },
         {
           data: 'action',

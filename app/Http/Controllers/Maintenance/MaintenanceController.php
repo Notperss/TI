@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class MaintenanceController extends Controller
     {
         if (request()->ajax()) {
 
-            $maintenance = Maintenance::orderby('created_at', 'desc');
+            $maintenance = Maintenance::with('maintenanceStatus')->orderby('created_at', 'desc');
 
             // if ($request->filled('from_date') && $request->filled('to_date')) {
             //     $maintenance = $maintenance->whereBetween('created_at', [$request->from_date, $request->to_date]);
@@ -37,6 +38,8 @@ class MaintenanceController extends Controller
             return DataTables::of($maintenance)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
+                    $user = auth()->user()->detail_user;
+                    $isAdmin = $user->type_user_id === 1;
                     return '
         <div class="container">
             <div class="btn-group mr-1 mb-1">
@@ -47,7 +50,7 @@ class MaintenanceController extends Controller
                         data-target="#mymodal" data-title="Detail Data Laporan" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.maintenance.edit', encrypt($item->id)) . '" ' . ($item->stats == 2 ? 'hidden' : '') . '>
+                    <a class="dropdown-item" href="' . route('backsite.maintenance.edit', encrypt($item->id)) . '" ' . ($isAdmin || $item->stats == 1 ? '' : 'hidden') . '>
                         Edit
                                 </a>
                     <form action="' . route('backsite.maintenance.destroy', encrypt($item->id)) . '" method="POST"
@@ -55,7 +58,7 @@ class MaintenanceController extends Controller
                         ' . method_field('delete') . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete" ' . ($item->stats == 2 ? 'hidden' : '') . '>
+                        <input type="submit" class="dropdown-item" value="Delete" ' . ($isAdmin || $item->stats == 1 ? '' : 'hidden') . '>
                     </form>
             </div>
             </div>
@@ -70,10 +73,144 @@ class MaintenanceController extends Controller
         </div>
                 ';
 
+                })->editColumn('numberAndStatus', function ($item) {
+                    if ($item->stats == 1) {
+                        return ' ' . $item->report_number . '<br><span class="badge bg-danger">Open</span>';
+                    } elseif ($item->stats == 2) {
+                        return '  ' . $item->report_number . '<br><span class="badge bg-info">Closed</span>';
+                    }
+                })->editColumn('recipient', function ($item) {
+                    // Access the distribution_asset relationship
+                    $maintenanceStatuses = $item->maintenanceStatus;
+
+                    // Check if maintenanceStatus is not empty
+                    if ($maintenanceStatuses->isNotEmpty()) {
+                        // Initialize an array to store user names
+                        $userNames = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($maintenanceStatuses as $maintenanceStatus) {
+                            // Check if the distribution relationship exists
+                            if ($user = $maintenanceStatus->user) {
+                                // Check if the detail_user relationship exists
+                                $userNames[] = $user->name;
+                            }
+                        }
+
+                        // Check if there are any user names in the array
+                        if (! empty($userNames)) {
+                            // return implode(', ', $userNames);
+    
+                            $latestUserName = end($userNames);
+                            return $latestUserName;
+                        } else {
+                            return 'N/A';
+                        }
+                    } else {
+                        return 'N/A';
+                    }
+                })->editColumn('LastDesc', function ($item) {
+                    // Access the distribution_asset relationship
+                    $maintenanceStatuses = $item->maintenanceStatus;
+
+                    // Check if maintenanceStatus is not empty
+                    if ($maintenanceStatuses->isNotEmpty()) {
+                        // Initialize an array to store user names
+                        $descriptions = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($maintenanceStatuses as $maintenanceStatus) {
+                            // Check if the distribution relationship exists
+                            if ($description = $maintenanceStatus->description) {
+                                // Check if the detail_user relationship exists
+                                $descriptions[] = $description;
+                            }
+                        }
+
+                        // Check if there are any user names in the array
+                        if (! empty($descriptions)) {
+                            // return implode(', ', $descriptions);
+    
+                            $latestDesc = end($descriptions);
+                            return $latestDesc;
+                        } else {
+                            return 'N/A';
+                        }
+                    } else {
+                        return 'N/A';
+                    }
+                })->editColumn('LastStats', function ($item) {
+                    // Access the distribution_asset relationship
+                    $maintenanceStatuses = $item->maintenanceStatus;
+
+                    // Check if maintenanceStatus is not empty
+                    if ($maintenanceStatuses->isNotEmpty()) {
+                        // Initialize an array to store user names
+                        $statuses = [];
+                        $dates = [];
+
+                        // Loop through each distributionAsset
+                        foreach ($maintenanceStatuses as $maintenanceStatus) {
+                            // Check if the distribution relationship exists
+                            if ($status = $maintenanceStatus->report_status) {
+                                // Check if the detail_user relationship exists
+                                $statuses[] = $status;
+                            }
+                            if ($date = $maintenanceStatus->date) {
+                                // Check if the detail_user relationship exists
+                                $dates[] = $date;
+                            }
+                        }
+
+                        // Check if there are any user names in the array
+                        if (! empty($statuses)) {
+                            // return implode(', ', $userNames);
+    
+                            $latestDate = end($dates);
+                            $lateststatus = end($statuses);
+
+                            $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $latestDate);
+                            $formattedDate = $carbonDate->translatedFormat('d-m-Y, H:i');
+
+                            if ($lateststatus == 1) {
+                                return '<span class="badge bg-info">Open</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 2) {
+                                return '<span class="badge bg-warning">Penanganan</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 3) {
+                                return '<span class="badge bg-warning">Penanganan Lanjutan</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 4) {
+                                return '<span class="badge bg-warning">Form LK</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 5) {
+                                return '<span class="badge bg-warning">Perbaikan Vendor</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 6) {
+                                return '<span class="badge bg-warning">Menyerahkan Barang ke Vendor</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 7) {
+                                return '<span class="badge bg-warning">Menerima Barang dari Vendor</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 8) {
+                                return '<span class="badge bg-warning">BA</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 9) {
+                                return '<span class="badge bg-success">Selesai</span><br>' . $formattedDate . '';
+                            } elseif ($lateststatus == 10) {
+                                return '<span class="badge bg-danger">Tidak Selesai - Rusak</span><br>' . $formattedDate . '';
+                            }
+
+                            // return $lateststatus;
+                        } else {
+                            return 'N/A';
+                        }
+                    } else {
+                        return 'N/A';
+                    }
                 })->editColumn('employee_id', function ($item) {
                     return $item->employee_id ? $item->employee->name : 'N/A';
+                })->editColumn('date', function ($item) {
+                    // Assuming $item->date is a string in 'Y-m-d H:i:s' format
+                    $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $item->date);
+
+                    // Return the formatted date for display in the DataTable
+                    return $carbonDate->translatedFormat('d-m-Y, H:i');
                 })
-                ->rawColumns(['action', 'employee_id'])
+                ->rawColumns(['action', 'employee_id', 'numberAndStatus', 'recipient', 'LastStats'])
                 ->toJson();
         }
 
@@ -386,7 +523,18 @@ class MaintenanceController extends Controller
                     'description' => $request->description,
                 ]);
             }
+        } else {
+            // File is not present, save other data without file
+            MaintenanceStatus::create([
+                'maintenance_id' => $request->id,
+                'users_id' => $request->users_id,
+                'report_status' => $request->report_status,
+                'date' => $request->date,
+                'description' => $request->description,
+                // Assuming 'file' column in the database is nullable, it will be set to null by default
+            ]);
         }
+        // dd($request->all());
 
         if ($request->report_status == 9 || $request->report_status == 10) {
             $maintenance->update(['stats' => 2]);
@@ -395,7 +543,8 @@ class MaintenanceController extends Controller
         // dd($request->all());
 
         alert()->success('Success', 'Status successfully added');
-        return redirect()->route('backsite.maintenance.edit', encrypt($maintenance->id));
+        // return redirect()->route('backsite.maintenance.edit', encrypt($maintenance->id));
+        return redirect()->route('backsite.maintenance.index');
     }
 
     public function show_status(Request $request)
@@ -403,9 +552,13 @@ class MaintenanceController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
+            $user = auth()->user()->detail_user;
+            $isAdmin = $user->type_user_id === 1;
+
             $maintenanceStatus = MaintenanceStatus::where('maintenance_id', $id)->orderBy('created_at', 'desc')->get();
             $data = [
                 'datafile' => $maintenanceStatus,
+                'isAdmin' => $isAdmin,
             ];
 
             $msg = [
@@ -420,6 +573,12 @@ class MaintenanceController extends Controller
     {
         $file = MaintenanceStatus::find($id);
         $file->delete();
+
+        // $maintenance = Maintenance::all();
+
+        if ($file->maintenance->stats == 2) {
+            $file->maintenance->update(['stats' => 1]);
+        }
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

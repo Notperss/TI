@@ -66,7 +66,8 @@
                   onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
                   <input type="hidden" name="_method" value="DELETE">
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                  <input type="submit"id="delete_file" class="dropdown-item"value="Delete">
+                  <input type="submit"id="delete_file" class="dropdown-item" value="Delete"
+                    {{ $isAdmin || $status->maintenance->stats == 1 ? '' : 'hidden' }}>
                 </form>
 
               </div>

@@ -39,6 +39,6 @@ class Maintenance extends Model
     public function maintenanceStatus()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
-        return $this->hasMany(MaintenanceStatus::class, 'id', 'maintenance_id');
+        return $this->hasMany(MaintenanceStatus::class, 'maintenance_id');
     }
 }

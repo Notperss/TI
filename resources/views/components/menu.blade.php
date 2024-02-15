@@ -456,7 +456,7 @@
             </li>
             {{-- @endcan --}}
 
-            <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
+            <li class=" nav-item"><a href="{{ route('backsite.software.index') }}" hidden><i
                   class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
                   class="menu-title" data-i18n="Software"><strong>Monitoring</strong></span></a>
               <ul class="menu-content">
@@ -494,7 +494,7 @@
         {{-- END Jaringan --}}
 
         {{-- Lattol --}}
-        <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
+        <li class=" nav-item"><a href="{{ route('backsite.software.index') }}" hidden><i
               class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-area-chart bx-flashing' : 'la la-area-chart' }}"></i><span
               class="menu-title amber" data-i18n="Software"><strong>Lattol</strong></span></a>
           <ul class="menu-content">
@@ -539,7 +539,7 @@
         {{-- END Lattol --}}
 
         {{-- TPT --}}
-        <li class=" nav-item"><a href="{{ route('backsite.software.index') }}"><i
+        <li class=" nav-item"><a href="{{ route('backsite.software.index') }}" hidden><i
               class="{{ request()->is('backsite/software') || request()->is('backsite/software/*') || request()->is('backsite/*/software') || request()->is('backsite/*/software/*') ? 'la la-line-chart bx-flashing' : 'la la-line-chart' }}"></i><span
               class="menu-title teal" data-i18n="Software"><strong>TPT</strong></span></a>
           <ul class="menu-content">
@@ -575,7 +575,7 @@
         {{-- END TPT --}}
 
         {{-- Link Aplikasi --}}
-        <li class=" nav-item"><a href="{{ route('backsite.application.app_link') }}"><i
+        <li class=" nav-item"><a href="{{ route('backsite.application.app_link') }}" hidden><i
               class="{{ request()->is('backsite/mainbacksite.application.app_link') || request()->is('backsite/application.app_link/*') || request()->is('backsite/*/application.app_link') || request()->is('backsite/*/application.app_link/*') ? 'la la-share-alt bx-flashing' : 'la la-share-alt' }}"></i><span
               class="menu-title pink" data-i18n="application.app_link"><strong>Link Aplikasi</strong></span></a> </li>
         {{-- END Link Aplikasi --}}
