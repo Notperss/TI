@@ -65,7 +65,7 @@ class MaintenanceController extends Controller
              <div class="btn-group mr-1 mb-1">
                    <button type="button" class="btn btn-success btn-sm" title="Fixing" onclick="fixing(' . $item->id . ')" ' . (MaintenanceStatus::where('maintenance_id', $item->id)->exists() ? 'hidden' : '') . '>
                     Fixing</button>
-                   <button type="button" class="btn btn-warning btn-sm" title="Fixing" onclick="analysis(' . $item->id . ')" ' . ($item->stats == 2 || $item->barcode ? 'hidden' : '') . '>
+                   <button type="button" class="btn btn-warning btn-sm" title="Analisa" onclick="analysis(' . $item->id . ')" ' . ($item->stats == 2 || $item->barcode || $item->type_malfunction ? 'hidden' : '') . '>
                    Analisa</button>
                     <button type="button" class="btn btn-cyan btn-sm" title="Update" onclick="update(' . $item->id . ')" ' . ($item->stats == 2 ? 'hidden' : '') . '>
                     Update</button>

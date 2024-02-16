@@ -36,6 +36,11 @@ class Maintenance extends Model
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(Barang::class, 'goods_id');
     }
+    public function asset_barcode()
+    {
+        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+        return $this->belongsTo(Barang::class, 'barcode');
+    }
     public function maintenanceStatus()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)

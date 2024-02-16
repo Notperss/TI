@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\Maintenance\Maintenance;
 use App\Models\ManagementAccess\DetailUser;
 use Illuminate\Http\Request;
 
@@ -37,8 +38,16 @@ class DashboardController extends Controller
         //     ->toJson();
 
         $attendances = Attendance::orderBy('start_date', 'desc')->limit(5)->get();
+        $modelMaintenance = Maintenance::with('employee', 'asset_barcode')->orderBy('date', 'desc')->get();
 
-        return view('pages.dashboard.index', compact('attendances'));
+        $maintenances = $modelMaintenance->where('stats', 1)->take(5);
+        // $totalMalfunction = $modelMaintenance->where('goods_id', $modelMaintenance->goods_id)->orderBy('date', 'desc')->get();
+        $totalMalfunctions = Maintenance::select('barcode', 'asset_name', DB::raw('count(*) as count'))
+            ->groupBy('barcode', 'asset_name')
+            ->orderByRaw('barcode IS NULL, count DESC')
+            ->take(5)
+            ->get();
+        return view('pages.dashboard.index', compact('attendances', 'maintenances', 'totalMalfunctions'));
     }
 
     /**

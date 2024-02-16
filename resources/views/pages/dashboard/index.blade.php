@@ -22,75 +22,86 @@
       <div class="content-body">
         <div class="row">
           {{-- Jumlah Absensi --}}
-          <div class="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div class="col-xl-6 col-lg-12 col-md-12 col-12">
             <div class="card pull-up ">
               <div class="card-content info ">
                 <div class="card-body">
                   <div class="media d-flex mb-1">
                     <div class="media-body text-left">
                       <h1>
-                        {{ DB::table('attendances')->where('category', 'Sakit')->whereYear('created_at', now()->year)->count() }}
+                        <strong class="info">Absensi</strong>
                       </h1>
-                      <strong class="warning">S</strong>
                     </div>
-                    <div class="media-body text-left">
-                      <h1>
-                        {{ DB::table('attendances')->where('category', 'Tukar Tugas')->whereYear('created_at', now()->year)->count() }}
-                      </h1>
-                      <strong class="info">T/T</strong>
+
+                    <div class="media-body text-right">
+                      <div class="attendance-info">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'Sakit')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="warning">S</strong>
+                      </div>
+
+                      <div class="attendance-info">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'Tukar Tugas')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="info">T/T</strong>
+                      </div>
+
+                      <div class="attendance-info">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'IDT')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="primary">IDT</strong>
+                      </div>
+
+                      <div class="attendance-info">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'IPC')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="secondary">IPC</strong>
+                      </div>
+
+                      <div class="attendance-info">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'Absen')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="danger">A</strong>
+                      </div>
                     </div>
-                    <div class="media-body text-left">
-                      <h1>
-                        {{ DB::table('attendances')->where('category', 'IDT')->whereYear('created_at', now()->year)->count() }}
-                      </h1>
-                      <strong class="primary">IDT</strong>
-                    </div>
-                    <div class="media-body text-left">
-                      <h1>
-                        {{ DB::table('attendances')->where('category', 'IPC')->whereYear('created_at', now()->year)->count() }}
-                      </h1>
-                      <strong class="secondary">IPC</strong>
-                    </div>
-                    <div class="media-body text-left">
-                      <h1>
-                        {{ DB::table('attendances')->where('category', 'Absen')->whereYear('created_at', now()->year)->count() }}
-                      </h1>
-                      <strong class="danger"> A</strong>
-                    </div>
+
                     <div>
                       <i class="la la-book font-large-2 float-right info"></i>
                     </div>
                   </div>
-                  <div class="container">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="table-responsive">
-                          <table class="table w-auto small">
-                            <thead>
+                  <div class="row">
+                    <div class="col-12 mx-auto">
+                      <div class="table-responsive">
+                        <table class="table w-100 small">
+                          <thead>
+                            <tr>
+                              <th scope="col">No.</th>
+                              <th scope="col">Nama</th>
+                              <th scope="col">Jenis Absensi</th>
+                              <th scope="col">Tgl</th>
+                              {{-- <th scope="col">Tgl Selesai</th> --}}
+                              {{-- <th scope="col">Keterangan</th> --}}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach ($attendances as $attendance)
                               <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">Jenis Absensi</th>
-                                <th scope="col">Tgl</th>
-                                {{-- <th scope="col">Tgl Selesai</th> --}}
-                                {{-- <th scope="col">Keterangan</th> --}}
+                                <th scope="row">{{ $loop->iteration }}</th>
+                                <td>{{ $attendance->detail_user->user->name }}</td>
+                                <td>{{ $attendance->category }}</td>
+                                <td> {{ Carbon\Carbon::parse($attendance->start_date)->translatedFormat('d-m-Y') }}
+                                </td>
+                                {{-- <td>{{ $attendance->finish_date }}</td> --}}
+                                {{-- <td>{{ $attendance->description }}</td> --}}
                               </tr>
-                            </thead>
-                            <tbody>
-                              @foreach ($attendances as $attendance)
-                                <tr>
-                                  <th scope="row">{{ $loop->iteration }}</th>
-                                  <td>{{ $attendance->detail_user->user->name }}</td>
-                                  <td>{{ $attendance->category }}</td>
-                                  <td> {{ Carbon\Carbon::parse($attendance->start_date)->translatedFormat('d-m-Y') }}
-                                  </td>
-                                  {{-- <td>{{ $attendance->finish_date }}</td> --}}
-                                  {{-- <td>{{ $attendance->description }}</td> --}}
-                                </tr>
-                              @endforeach
-                            </tbody>
-                          </table>
-                        </div>
+                            @endforeach
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
@@ -104,14 +115,14 @@
           </div>
 
           {{-- jumlah Asset --}}
-          <div class="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div class="col-xl-6 col-lg-12 col-md-12 col-12">
             <div class="card pull-up ">
               <div class="card-content warning ">
                 <div class="card-body">
                   <div class="media d-flex mb-1">
                     <div class="media-body text-left">
                       <h1>
-                        <strong class="warning">Jumlah Asset</strong>
+                        <strong class="warning">Asset TI</strong>
                       </h1>
                     </div>
                     <div>
@@ -276,6 +287,230 @@
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
                     <a href="{{ route('backsite.barang.index') }}" class="btn btn-block btn-sm btn-warning">
+                      Lihat Semua Asset</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {{-- Laporan Gangguan --}}
+          <div class="col-xl-6 col-lg-12 col-md-12 col-12">
+            <div class="card pull-up ">
+              <div class="card-content primary ">
+                <div class="card-body">
+                  <div class="media d-flex mb-1">
+                    <div class="media-body text-left">
+                      <h1>
+                        <strong class="primary">Laporan Gangguan</strong>
+                      </h1>
+                    </div>
+
+                    {{-- <div class="media-body text-right">
+                      <div class="attendance-primary">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'Sakit')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="warning">S</strong>
+                      </div>
+
+                      <div class="attendance-primary">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'Tukar Tugas')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="primary">T/T</strong>
+                      </div>
+
+                      <div class="attendance-primary">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'IDT')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="primary">IDT</strong>
+                      </div>
+
+                      <div class="attendance-primary">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'IPC')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="secondary">IPC</strong>
+                      </div>
+
+                      <div class="attendance-primary">
+                        <h5>
+                          {{ DB::table('attendances')->where('category', 'Absen')->whereYear('created_at', now()->year)->count() }}
+                        </h5>
+                        <strong class="danger">A</strong>
+                      </div>
+                    </div> --}}
+
+                    <div>
+                      <i class="la la-book font-large-2 float-right primary"></i>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 mx-auto">
+                      <div class="table-responsive">
+                        <table class="table w-100 small">
+                          <thead>
+                            <tr>
+                              {{-- <th scope="col">No</th> --}}
+                              <th scope="col">Pelapor</th>
+                              <th scope="col">Tgl Laporan</th>
+                              <th scope="col">Keterangan</th>
+                              <th scope="col">Penerima</th>
+                              {{-- <th scope="col">Tgl Selesai</th> --}}
+                              {{-- <th scope="col">Keterangan</th> --}}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach ($maintenances as $maintenance)
+                              <tr>
+                                {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
+                                <td>
+                                  @if ($maintenance->employee)
+                                    {{ $maintenance->employee->name }}
+                                  @else
+                                    N/A
+                                  @endif
+                                </td>
+                                <td> {{ Carbon\Carbon::parse($maintenance->date)->translatedFormat('d-m-Y') }}
+                                <td>{{ $maintenance->description }}</td>
+                                <td>{{ $maintenance->reporter }}</td>
+                                </td>
+                                {{-- <td>{{ $attendance->finish_date }}</td> --}}
+                                {{-- <td>{{ $attendance->description }}</td> --}}
+                              </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="{{ route('backsite.maintenance.index') }}" class="btn btn-block btn-sm btn-primary">
+                      Lihat Semua Absen</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {{-- jumlah Kategori Asset --}}
+          <div class="col-xl-3 col-lg-6 col-md-6 col-6">
+            <div class="card pull-up ">
+              <div class="card-content warning ">
+                <div class="card-body">
+                  <div class="media d-flex mb-1">
+                    <div class="media-body text-left">
+                      <h4>
+                        <strong class="warning">Kategori Gangguan</strong>
+                      </h4>
+                    </div>
+
+                  </div>
+                  <div class="container">
+                    <div class="row">
+
+                      <div class="col-12">
+                        <ul class="list-group">
+                          <li class="list-group-item bg-grey">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('maintenances')->where('type_malfunction', 'HARDWARE')->count() }}
+                            </span>
+                            Hardware
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('maintenances')->where('type_malfunction', 'SOFTWARE')->count() }}
+                            </span>
+                            Software
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('maintenances')->where('type_malfunction', 'JARINGAN')->count() }}
+                            </span>
+                            Jaringan
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('maintenances')->where('type_malfunction', 'LATTOL')->count() }}
+                            </span>
+                            Lattol
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-pill bg-warning float-right font-medium-1">
+                              {{ DB::table('maintenances')->where('type_malfunction', 'LAIN-LAIN')->count() }}
+                            </span>
+                            Lain-lain
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="{{ route('backsite.barang.index') }}" class="btn btn-block btn-sm btn-warning">
+                      Lihat Semua Asset</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {{-- jumlah Kategori Asset --}}
+          <div class="col-xl-3 col-lg-6 col-md-6 col-6">
+            <div class="card pull-up ">
+              <div class="card-content primary ">
+                <div class="card-body">
+                  <div class="media d-flex mb-1">
+                    <div class="media-body text-left">
+                      <h5>
+                        <strong class="primary">Paling Sering Gangguan</strong>
+                      </h5>
+                    </div>
+                  </div>
+
+                  {{-- <div class="table-responsive">
+                    <table class="table table-bordered table-sm text-center">
+                      <thead>
+                        <tr>
+                          <th class="sort text-center">Asset</th>
+                          <th class="sort text-center">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody class="list">
+                        @foreach ($totalMalfunctions as $item)
+                          <tr>
+                            <td>{{ $item->asset->name ?? '' }}</td>
+                            <td>
+                              {{ $item->goods_id? DB::table('maintenances')->where('goods_id', $item->goods_id)->count(): '' }}
+                            </td>
+                          </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div> --}}
+
+
+                  <div class="col-12">
+                    <ul class="list-group">
+                      @foreach ($totalMalfunctions as $totalMalfunction)
+                        <li class="list-group-item">
+                          <span class="badge badge-pill bg-primary float-right font-medium-1">
+                            {{ $totalMalfunction->barcode? DB::table('maintenances')->where('barcode', $totalMalfunction->barcode)->count(): '' }}
+                          </span>
+                          <h6>{{ $totalMalfunction->asset_name }} <p class="font-small-2">
+                              ({{ $totalMalfunction->barcode }})
+                            </p>
+                          </h6>
+
+                        </li>
+                      @endforeach
+                    </ul>
+                  </div>
+
+                  <div class="mt-1 mb-0 box-shadow-2">
+                    <a href="{{ route('backsite.barang.index') }}" class="btn btn-block btn-sm btn-primary">
                       Lihat Semua Asset</a>
                   </div>
                 </div>
@@ -515,6 +750,12 @@
       background: linear-gradient(to top,
           white,
           rgba(214, 212, 212, 0.678));
+    }
+
+    .media-body .attendance-info {
+      display: inline-block;
+      margin-right: 20px;
+      /* Adjust the margin as needed */
     }
   </style>
 @endpush

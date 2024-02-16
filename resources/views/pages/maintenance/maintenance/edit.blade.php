@@ -54,6 +54,8 @@
                             Software</option>
                           <option value="JARINGAN"{{ $maintenance->type_malfunction == 'JARINGAN' ? 'selected' : '' }}>
                             Jaringan</option>
+                          <option value="LATTOL"{{ $maintenance->type_malfunction == 'LATTOL' ? 'selected' : '' }}>
+                            Lattol</option>
                           <option value="LAIN-LAIN"{{ $maintenance->type_malfunction == 'LAIN-LAIN' ? 'selected' : '' }}>
                             Lain-lain</option>
                         </select>

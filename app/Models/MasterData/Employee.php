@@ -61,4 +61,8 @@ class Employee extends Model
     {
         return $this->hasMany(Distribution::class, 'user_id', 'id');
     }
+    public function maintenance()
+    {
+        return $this->hasMany(Distribution::class, 'employee_id', 'id');
+    }
 }
