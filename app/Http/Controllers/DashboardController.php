@@ -42,9 +42,11 @@ class DashboardController extends Controller
 
         $maintenances = $modelMaintenance->where('stats', 1)->take(5);
         // $totalMalfunction = $modelMaintenance->where('goods_id', $modelMaintenance->goods_id)->orderBy('date', 'desc')->get();
-        $totalMalfunctions = Maintenance::select('barcode', 'asset_name', DB::raw('count(*) as count'))
-            ->groupBy('barcode', 'asset_name')
-            ->orderByRaw('barcode IS NULL, count DESC')
+        $totalMalfunctions = Maintenance::select('goods_id', DB::raw('count(*) as count'))
+            ->groupBy('goods_id')
+            // ->groupBy('barcode', 'asset_name', 'goods_id')
+            // ->orderByRaw('barcode IS NULL, count DESC')
+            ->orderByRaw('goods_id IS NULL, count DESC')
             ->take(5)
             ->get();
         return view('pages.dashboard.index', compact('attendances', 'maintenances', 'totalMalfunctions'));

@@ -41,10 +41,11 @@
             </div>
 
             <div class="form-group row">
-              <label class="col-md-4 label-control" for="report_status">Status Gangguan</label>
+              <label class="col-md-4 label-control" for="report_status">Status Gangguan<code
+                  style="color:red;">*</code></label>
               <div class="col-md-8 mx-auto">
                 <select type="text" id="report_status" name="report_status" class="form-control select2"
-                  style="width: 100%">
+                  style="width: 100%" required>
                   <option value="" selected disabled>Choose</option>
                   <option value="1">Open</option>
                   <option value="2">Penanganan</option>
@@ -140,6 +141,7 @@
       output.innerHTML = '<ul>' + children + '</ul>';
     }
   </script>
+
   {{-- 1 = Open
                 2 = Penanganan
                 3 = Penanganan Lanjutan

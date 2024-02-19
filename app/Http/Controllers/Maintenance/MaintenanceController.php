@@ -17,6 +17,7 @@ use App\Models\Maintenance\MaintenanceStatus;
 use App\Models\Network\Distribution\Distribution;
 use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
+use Illuminate\Support\Facades\Validator;
 
 class MaintenanceController extends Controller
 {
@@ -480,6 +481,7 @@ class MaintenanceController extends Controller
     public function form_update_status(Request $request)
     {
         if ($request->ajax()) {
+
             $id = $request->id;
             $users = User::where('name', '!=', 'Administrator')
                 ->whereHas('detail_user', function ($query) {
@@ -503,6 +505,14 @@ class MaintenanceController extends Controller
 
     public function add_status(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'report_status' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $maintenance = Maintenance::find($request->id);
 
         // save to file test material

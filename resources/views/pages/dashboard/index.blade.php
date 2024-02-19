@@ -301,9 +301,9 @@
                 <div class="card-body">
                   <div class="media d-flex mb-1">
                     <div class="media-body text-left">
-                      <h1>
-                        <strong class="primary">Laporan Gangguan</strong>
-                      </h1>
+                      <h2>
+                        <strong class="primary">Laporan Gangguan dalam penanganan</strong>
+                      </h2>
                     </div>
 
                     {{-- <div class="media-body text-right">
@@ -344,7 +344,7 @@
                     </div> --}}
 
                     <div>
-                      <i class="la la-book font-large-2 float-right primary"></i>
+                      <i class="la la-gears font-large-2 float-right primary"></i>
                     </div>
                   </div>
                   <div class="row">
@@ -388,7 +388,7 @@
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
                     <a href="{{ route('backsite.maintenance.index') }}" class="btn btn-block btn-sm btn-primary">
-                      Lihat Semua Absen</a>
+                      Lihat Semua Laporan Gangguan</a>
                   </div>
                 </div>
               </div>
@@ -449,15 +449,15 @@
                     </div>
                   </div>
                   <div class="mt-1 mb-0 box-shadow-2">
-                    <a href="{{ route('backsite.barang.index') }}" class="btn btn-block btn-sm btn-warning">
-                      Lihat Semua Asset</a>
+                    <a href="{{ route('backsite.maintenance.index') }}" class="btn btn-block btn-sm btn-warning">
+                      Lihat Semua Laporan Gangguan</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {{-- jumlah Kategori Asset --}}
+          {{-- top 5 --}}
           <div class="col-xl-3 col-lg-6 col-md-6 col-6">
             <div class="card pull-up ">
               <div class="card-content primary ">
@@ -495,12 +495,33 @@
                   <div class="col-12">
                     <ul class="list-group">
                       @foreach ($totalMalfunctions as $totalMalfunction)
+                        @php
+                          $employeeNames = [];
+                          $asset = $totalMalfunction->asset;
+                          $distributionAssets = $asset->distribution_asset;
+
+                          foreach ($distributionAssets as $distributionAsset) {
+                              $distribution = $distributionAsset->distribution;
+
+                              if ($distribution && ($employee = $distribution->employee)) {
+                                  $employeeNames[] = $employee->name;
+                              }
+                          }
+
+                          // Concatenate employee names with a separator (e.g., comma)
+                          $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
+
+                        @endphp
                         <li class="list-group-item">
                           <span class="badge badge-pill bg-primary float-right font-medium-1">
-                            {{ $totalMalfunction->barcode? DB::table('maintenances')->where('barcode', $totalMalfunction->barcode)->count(): '' }}
+                            {{ $totalMalfunction->goods_id? DB::table('maintenances')->where('goods_id', $totalMalfunction->goods_id)->count(): '' }}
                           </span>
-                          <h6>{{ $totalMalfunction->asset_name }} <p class="font-small-2">
-                              ({{ $totalMalfunction->barcode }})
+                          <h6>{{ $totalMalfunction->asset->name }}
+                            <p class="font-small-2">
+                              ({{ $totalMalfunction->asset->barcode }})
+                              {{-- ({{ $totalMalfunction->asset->id }}) --}}
+                              <br>
+                              ({{ $employeeName }})
                             </p>
                           </h6>
 
@@ -510,8 +531,8 @@
                   </div>
 
                   <div class="mt-1 mb-0 box-shadow-2">
-                    <a href="{{ route('backsite.barang.index') }}" class="btn btn-block btn-sm btn-primary">
-                      Lihat Semua Asset</a>
+                    <a href="{{ route('backsite.maintenance.index') }}" class="btn btn-block btn-sm btn-primary">
+                      Lihat Semua Laporan Gangguan</a>
                   </div>
                 </div>
               </div>

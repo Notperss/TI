@@ -62,16 +62,31 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-4 label-control second-part" for="barcode">Asset User<code
-                style="color:red;">*</code></label>
+            <label class="col-md-4 label-control second-part" for="barcode">Asset User</label>
             <div class="col-md-8 second-part">
-              <select type="text" id="barcode" name="barcode" class="form-control select2" style="width: 100%"
-                required>
+              <select type="text" id="barcode" name="barcode" class="form-control select2" style="width: 100%">
                 <option value="" selected disabled>Choose</option>
                 @foreach ($barang as $asset)
-                  <option value="{{ $asset->barcode }}"
+                  @php
+                    $employeeNames = [];
+                    $distributionAssets = $asset->distribution_asset;
+
+                    foreach ($distributionAssets as $distributionAsset) {
+                        $distribution = $distributionAsset->distribution;
+
+                        if ($distribution && ($employee = $distribution->employee)) {
+                            $employeeNames[] = $employee->name;
+                        }
+                    }
+
+                    // Concatenate employee names with a separator (e.g., comma)
+                    $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
+
+                  @endphp
+                  <option value="{{ $asset->barcode }}" data-value1="{{ $asset->id }}"
                     data-value="{{ $asset->name }}"{{ $asset->barcode == $maintenance->barcode ? 'selected' : '' }}>
-                    {{ $asset->barcode }}</option>
+                    {{ $asset->barcode }} → {{ $asset->name }} → {{ $employeeName }}
+                  </option>
                 @endforeach
               </select>
               @if ($errors->has('barcode'))
@@ -88,6 +103,17 @@
               @if ($errors->has('asset_name'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('asset_name') }}</p>
+              @endif
+            </div>
+          </div>
+
+          <div class="form-group row" hidden>
+            <label class="col-md-4 label-control" for="goods_id">id</label>
+            <div class="col-md-8">
+              <input type="hidden" class="form-control" id="goods_id" name="goods_id" readonly hidden>
+              @if ($errors->has('goods_id'))
+                <p style="font-style: bold; color: red;">
+                  {{ $errors->first('goods_id') }}</p>
               @endif
             </div>
           </div>
@@ -158,6 +184,10 @@
     $('#barcode').on('change', function() {
       var input_value = $(this).find(':selected').data('value');
       $('#nama_asset').val(input_value);
+    });
+    $('#barcode').on('change', function() {
+      var input_value = $(this).find(':selected').data('value1');
+      $('#goods_id').val(input_value);
     });
   });
 </script>
