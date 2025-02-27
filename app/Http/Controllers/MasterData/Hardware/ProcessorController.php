@@ -112,7 +112,7 @@ class ProcessorController extends Controller
         $processor = Processor::find($decrypt_id);
 
         // hapus location
-        $processor->forceDelete();
+        $processor->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

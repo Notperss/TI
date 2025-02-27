@@ -112,7 +112,7 @@ class RamController extends Controller
         $ram = Ram::find($decrypt_id);
 
         // hapus location
-        $ram->forceDelete();
+        $ram->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

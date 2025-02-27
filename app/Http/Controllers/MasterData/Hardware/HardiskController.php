@@ -112,7 +112,7 @@ class HardiskController extends Controller
         $hardisk = Hardisk::find($decrypt_id);
 
         // hapus location
-        $hardisk->forceDelete();
+        $hardisk->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

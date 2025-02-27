@@ -142,7 +142,7 @@ class AdditionalDeviceController extends Controller
         }
 
         // hapus location
-        $additional_device->forceDelete();
+        $additional_device->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

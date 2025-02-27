@@ -134,7 +134,7 @@ class EmployeeController extends Controller
         $employee = Employee::find($decrypt_id);
 
         // hapus employee
-        $employee->forceDelete();
+        $employee->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

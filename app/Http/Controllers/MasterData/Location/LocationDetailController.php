@@ -131,7 +131,7 @@ class LocationDetailController extends Controller
         $location_detail = LocationDetail::find($decrypt_id);
 
         // hapus location
-        $location_detail->forceDelete();
+        $location_detail->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

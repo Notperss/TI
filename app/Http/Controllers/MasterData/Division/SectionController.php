@@ -120,7 +120,7 @@ class SectionController extends Controller
         $section = Section::find($decrypt_id);
 
         // hapus department
-        $section->forceDelete();
+        $section->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

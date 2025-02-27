@@ -34,14 +34,14 @@ class LocationSubController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a class="dropdown-item" href="' . route('backsite.location_sub.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="'.route('backsite.location_sub.edit', encrypt($item->id)).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.location_sub.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.location_sub.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
@@ -143,7 +143,7 @@ class LocationSubController extends Controller
         $location_sub = LocationSub::find($decrypt_id);
 
         // hapus location
-        $location_sub->forceDelete();
+        $location_sub->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

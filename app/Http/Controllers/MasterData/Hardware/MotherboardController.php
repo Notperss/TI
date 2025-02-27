@@ -112,7 +112,7 @@ class MotherboardController extends Controller
         $motherboard = Motherboard::find($decrypt_id);
 
         // hapus location
-        $motherboard->forceDelete();
+        $motherboard->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();

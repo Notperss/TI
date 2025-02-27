@@ -9,10 +9,12 @@ use App\Models\Network\Distribution\Distribution;
 use App\Models\Network\Distribution\DistributionAsset;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Barang extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = "goods";
     protected $fillable = [
         'name',

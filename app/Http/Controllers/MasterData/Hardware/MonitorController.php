@@ -112,7 +112,7 @@ class MonitorController extends Controller
         $monitor = Monitor::find($decrypt_id);
 
         // hapus location
-        $monitor->forceDelete();
+        $monitor->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
