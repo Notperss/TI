@@ -44,9 +44,7 @@ class DashboardController extends Controller
         // $totalMalfunction = $modelMaintenance->where('goods_id', $modelMaintenance->goods_id)->orderBy('date', 'desc')->get();
         $totalMalfunctions = Maintenance::select('goods_id', DB::raw('count(*) as count'))
             ->groupBy('goods_id')
-            // ->groupBy('barcode', 'asset_name', 'goods_id')
-            // ->orderByRaw('barcode IS NULL, count DESC')
-            ->orderByRaw('goods_id IS NULL, count DESC')
+            ->whereNotNull('goods_id') // Exclude records where 'goods_id' is null
             ->take(5)
             ->get();
         return view('pages.dashboard.index', compact('attendances', 'maintenances', 'totalMalfunctions'));

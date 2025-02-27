@@ -47,7 +47,7 @@
                 <select type="text" id="report_status" name="report_status" class="form-control select2"
                   style="width: 100%" required>
                   <option value="" selected disabled>Choose</option>
-                  <option value="1">Open</option>
+                  {{-- <option value="1">Open</option> --}}
                   <option value="2">Penanganan</option>
                   <option value="3">Penanganan Lanjutan</option>
                   <option value="4">Form LK</option>

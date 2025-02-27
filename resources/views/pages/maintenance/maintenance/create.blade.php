@@ -48,38 +48,37 @@
                       </div>
 
                       <div class="form-group row col-12">
-                        <label class="col-md-4 label-control" for="employee_id">Pelapor</label>
+                        <label class="col-md-4 label-control" for="reporter">Pelapor</label>
                         <div class="col-md-8">
-                          <select type="text" id="employee_id" name="employee_id" class="form-control select2"
-                            style="width: 100%">
+                          <select type="text" id="reporter" name="reporter" class="form-control" style="width: 100%">
                             <option value="" disabled selected>Choose</option>
                             @foreach ($employees as $employee)
-                              <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                            @endforeach
-                          </select>
-                          @if ($errors->has('employee_id'))
-                            <p style="font-style: bold; color: red;">
-                              {{ $errors->first('employee_id') }}</p>
-                          @endif
-                        </div>
-                      </div>
-
-                      <div class="form-group row col-12">
-                        <label class="col-md-4 label-control" for="reporter">yang Menerima<code
-                            style="color:red;">*</code></label>
-                        <div class="col-md-8">
-                          <select type="text" id="reporter" name="reporter" class="form-control select2"
-                            style="width: 100%" required>
-                            <option value="" disabled selected>Choose</option>
-                            @foreach ($users as $user)
-                              <option value="{{ $user->name }}"
-                                {{ $user->name == auth()->user()->name ? 'selected' : '' }}>
-                                {{ $user->name }}</option>
+                              <option value="{{ $employee->name }}">{{ $employee->name }}</option>
                             @endforeach
                           </select>
                           @if ($errors->has('reporter'))
                             <p style="font-style: bold; color: red;">
                               {{ $errors->first('reporter') }}</p>
+                          @endif
+                        </div>
+                      </div>
+
+                      <div class="form-group row col-12">
+                        <label class="col-md-4 label-control" for="user_id">yang Menerima<code
+                            style="color:red;">*</code></label>
+                        <div class="col-md-8">
+                          <select type="text" id="user_id" name="user_id" class="form-control select2"
+                            style="width: 100%" required>
+                            <option value="" disabled selected>Choose</option>
+                            @foreach ($users as $user)
+                              <option value="{{ $user->id }}"
+                                {{ $user->id == auth()->user()->name ? 'selected' : '' }}>
+                                {{ $user->name }}</option>
+                            @endforeach
+                          </select>
+                          @if ($errors->has('user_id'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('user_id') }}</p>
                           @endif
                         </div>
                       </div>
@@ -162,8 +161,18 @@
       });
     });
   </script> --}}
-
   <script>
+    $(document).ready(function() {
+      $('#reporter').select2({
+        tags: true, // Memungkinkan input manual
+        tokenSeparators: [','], // Bisa dipisah dengan koma
+        placeholder: "Choose or type new",
+        allowClear: true
+      });
+    });
+  </script>
+
+  {{-- <script>
     $(document).ready(function() {
       $('#employee_id').change(function() {
         var assetId = $(this).val();
@@ -207,5 +216,5 @@
         }
       });
     });
-  </script>
+  </script> --}}
 @endpush

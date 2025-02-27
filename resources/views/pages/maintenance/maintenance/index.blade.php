@@ -69,13 +69,15 @@
 
                       <div class="table-responsive">
                         <table id="information-table"
-                          class="table table-striped table-bordered text-inputs-searching default-table">
+                          class="table table-striped table-bordered text-inputs-searching default-table"
+                          style="font-size:80%">
                           <thead>
                             <tr>
                               <th style="text-align:center; width:100px;">No</th>
                               <th class="text-center">No.Laporan</th>
                               <th class="text-center">Pelapor</th>
                               <th class="text-center">Tgl Laporan</th>
+                              <th class="text-center">Tipe Gangguan</th>
                               <th class="text-center">Keterangan</th>
                               <th class="text-center">Penerima</th>
                               <th class="text-center">Status</th>
@@ -91,6 +93,7 @@
                               <th>Laporan Gangguan</th>
                               <th>Keterangan</th>
                               <th>Status</th>
+                              <th>Action</th>
                               <th>Action</th>
                               <th>Action</th>
                               <th>Action</th>
@@ -124,7 +127,8 @@
     var datatable = $('#information-table').dataTable({
       processing: true,
       serverSide: true,
-      ordering: false,
+      ordering: true,
+      searching: true,
       dom: 'Bfrtip',
       buttons: [{
           extend: 'copy',
@@ -157,30 +161,40 @@
           data: 'numberAndStatus',
           name: 'numberAndStatus',
           width: '10%',
+          orderable: false,
+          searchable: false,
         },
         {
-          data: 'employee_id',
-          name: 'employee_id',
+          data: 'reporter',
+          name: 'reporter',
         },
         {
           data: 'date',
           name: 'date',
         },
         {
+          data: 'type_malfunction',
+          name: 'type_malfunction',
+        },
+        {
           data: 'description',
           name: 'description',
         },
         {
-          data: 'recipient',
-          name: 'recipient',
+          data: 'user.name',
+          name: 'user.name',
         },
         {
           data: 'LastStats',
           name: 'LastStats',
+          orderable: false,
+          searchable: false,
         },
         {
           data: 'LastDesc',
           name: 'LastDesc',
+          orderable: false,
+          searchable: false,
         },
         {
           data: 'action',

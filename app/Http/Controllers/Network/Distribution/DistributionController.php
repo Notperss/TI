@@ -62,22 +62,22 @@ class DistributionController extends Controller
                 ->addColumn('action', function ($item) {
                     return '
             <div class="btn-group mr-1 mb-1">
-                <button type="button" class="btn btn-' . ($item->stats == 2 ? 'warning' : 'info') . ' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                <button type="button" class="btn btn-'.($item->stats == 2 ? 'warning' : 'info').' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.distribution.show', $item->distribution->id) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.distribution.show', $item->distribution->id).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.distribution.edit', $item->distribution->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.distribution.edit', $item->distribution->id).'">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.distribution.destroy_asset', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.distribution.destroy_asset', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" style="display:' . ($item->stats == 2 ? 'none' : '') . '" value="Delete">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" style="display:'.($item->stats == 2 ? 'none' : '').'" value="Delete">
                     </form>
             </div>
                 ';
@@ -194,9 +194,9 @@ class DistributionController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-distribution', $fullname);
         }
         // store to database
@@ -343,9 +343,9 @@ class DistributionController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-distribution', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
@@ -720,7 +720,7 @@ class DistributionController extends Controller
         return back();
     }
 
-    public function return ($id)
+    public function return($id)
     {
         $distributionAssetId = decrypt($id);
 
@@ -771,7 +771,7 @@ class DistributionController extends Controller
         // }
 
 
-        alert()->success('Sukses', 'Data berhasil dihapus');
+        alert()->success('Sukses', 'Data berhasil di update');
         return back();
     }
 
@@ -793,7 +793,7 @@ class DistributionController extends Controller
         // Apply filters
         if ($name) {
             $query->whereHas('distribution.employee', function ($q) use ($name) {
-                $q->where('name', 'like', '%' . $name . '%');
+                $q->where('name', 'like', '%'.$name.'%');
             });
         }
 
@@ -805,7 +805,7 @@ class DistributionController extends Controller
 
         if ($location) {
             $query->whereHas('distribution.location_room', function ($q) use ($location) {
-                $q->where('name', 'like', '%' . $location . '%');
+                $q->where('name', 'like', '%'.$location.'%');
             });
         }
 

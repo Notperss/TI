@@ -67,23 +67,24 @@
                     </div>
 
                     <div class="form-group row col-11">
-                      <label class="col-md-2 label-control" for="reporter">Yang menerima<code
+                      <label class="col-md-2 label-control" for="user_id">Yang menerima<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4 ">
-                        <select type="text" id="reporter" name="reporter" class="form-control select2"
+                        <select type="text" id="user_id" name="user_id" class="form-control select2"
                           style="width: 100%" required>
                           <option value="" disabled selected>Choose</option>
                           @foreach ($users as $user)
-                            <option value="{{ $user->name }}"
-                              {{ $user->name == $maintenance->reporter ? 'selected' : '' }}>
+                            <option value="{{ $user->id }}"
+                              {{ $user->id == $maintenance->user_id ? 'selected' : '' }}>
                               {{ $user->name }}</option>
                           @endforeach
                         </select>
-                        @if ($errors->has('reporter'))
+                        @if ($errors->has('user_id'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('reporter') }}</p>
+                            {{ $errors->first('user_id') }}</p>
                         @endif
                       </div>
+
                       <label class="col-md-2 label-control second-part" for="barcode">Asset User<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4 second-part">
@@ -103,21 +104,29 @@
                     </div>
 
                     <div class="form-group row col-11">
-                      <label class="col-md-2 label-control" for="employee_id">Pelapor<code
+                      <label class="col-md-2 label-control" for="reporter">Pelapor<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select type="text" id="employee_id" name="employee_id" class="form-control select2"
-                          style="width: 100%" required>
-                          <option value="" disabled selected>Choose</option>
+                        <select id="reporter" name="reporter" class="form-control select2" style="width: 100%" required>
+                          <option value="" disabled selected>Choose or type new</option>
                           @foreach ($employees as $employee)
-                            <option value="{{ $employee->id }}"
-                              {{ $employee->id == $maintenance->employee_id ? 'selected' : '' }}>{{ $employee->name }}
+                            <option value="{{ $employee->name }}"
+                              {{ old('reporter', $maintenance->reporter) == $employee->name ? 'selected' : '' }}>
+                              {{ $employee->name }}
                             </option>
                           @endforeach
+                          @if (
+                              !in_array(old('reporter', $maintenance->reporter), $employees->pluck('name')->toArray()) &&
+                                  old('reporter', $maintenance->reporter))
+                            <option value="{{ old('reporter', $maintenance->reporter) }}" selected>
+                              {{ old('reporter', $maintenance->reporter) }}
+                            </option>
+                          @endif
                         </select>
-                        @if ($errors->has('employee_id'))
+                        @if ($errors->has('reporter'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('employee_id') }}</p>
+                            {{ $errors->first('reporter') }}
+                          </p>
                         @endif
                       </div>
 
@@ -272,14 +281,18 @@
                           <td class="text-center">{{ $status->date }}</td>
                           <td class="text-center">{{ $status->description }}</td>
                           <td class="text-center">
-                            <a data-fancybox data-src="{{ asset('storage/' . $status->file) }}"
-                              class="btn btn-info btn-sm text-white btn-block">
-                              Lihat
-                            </a>
-                            <a href="{{ asset('storage/' . $status->file) }}"
-                              class="btn btn-warning btn-sm text-white btn-block" download>
-                              Unduh
-                            </a>
+                            @if ($status->file)
+                              <a data-fancybox data-src="{{ asset('storage/' . $status->file) }}"
+                                class="btn btn-info btn-sm text-white btn-block">
+                                Lihat
+                              </a>
+                              <a href="{{ asset('storage/' . $status->file) }}"
+                                class="btn btn-warning btn-sm text-white btn-block" download>
+                                Unduh
+                              </a>
+                            @else
+                              N/A
+                            @endif
                           </td>
 
                           <td class="text-center">
@@ -314,6 +327,16 @@
   <div class="viewmodal" style="display: none;"></div>
 @endsection
 @push('after-script')
+  <script>
+    $(document).ready(function() {
+      $('#reporter').select2({
+        tags: true, // Memungkinkan input manual
+        tokenSeparators: [','], // Bisa dipisah dengan koma
+        placeholder: "Choose or type new",
+        allowClear: true
+      });
+    });
+  </script>
   {{-- <script>
     $(document).ready(function() {
       // Initially check the value and show/hide the second part accordingly

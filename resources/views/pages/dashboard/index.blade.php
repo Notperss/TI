@@ -497,34 +497,35 @@
                       @foreach ($totalMalfunctions as $totalMalfunction)
                         @php
                           $employeeNames = [];
+
                           $asset = $totalMalfunction->asset;
-                          $distributionAssets = $asset->distribution_asset;
 
-                          foreach ($distributionAssets as $distributionAsset) {
-                              $distribution = $distributionAsset->distribution;
+                          // Check if $distributionAssets is not null and not empty
+                          if ($asset && ($distributionAssets = $asset->distribution_asset) && !empty($distributionAssets)) {
+                              foreach ($distributionAssets as $distributionAsset) {
+                                  $distribution = $distributionAsset->distribution;
 
-                              if ($distribution && ($employee = $distribution->employee)) {
-                                  $employeeNames[] = $employee->name;
+                                  if ($distribution && ($employee = $distribution->employee)) {
+                                      $employeeNames[] = $employee->name;
+                                  }
                               }
                           }
-
-                          // Concatenate employee names with a separator (e.g., comma)
-                          $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
+                          // Use the ternary operator to set $employeeName to the last employee's name or 'N/A'
+$employeeName = $employeeNames ? end($employeeNames) : 'N/A';
 
                         @endphp
                         <li class="list-group-item">
                           <span class="badge badge-pill bg-primary float-right font-medium-1">
                             {{ $totalMalfunction->goods_id? DB::table('maintenances')->where('goods_id', $totalMalfunction->goods_id)->count(): '' }}
                           </span>
-                          <h6>{{ $totalMalfunction->asset->name }}
+                          <h6>{{ $totalMalfunction->asset->name ?? '' }}
                             <p class="font-small-2">
-                              ({{ $totalMalfunction->asset->barcode }})
+                              ({{ $totalMalfunction->asset->barcode ?? '' }})
                               {{-- ({{ $totalMalfunction->asset->id }}) --}}
                               <br>
                               ({{ $employeeName }})
                             </p>
                           </h6>
-
                         </li>
                       @endforeach
                     </ul>

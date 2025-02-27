@@ -3,7 +3,7 @@
     var input_value = $(this).find(':selected').data('value');;
     $('#category').val(input_value);
     var input_value = $(this).find(':selected').data('value2');;
-    $('#barcode').val(input_value);
+    $('#name').val(input_value);
     var imgSrc = $(this).find(':selected').data('value4');
     // $('#file').val(imgSrc);
     $('#img').attr('src', imgSrc);
@@ -13,7 +13,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload File</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Asset</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -24,14 +24,14 @@
         <div class="modal-body">
           <input type="hidden" name="id" id="id" value="{{ $id }}">
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="asset_id">Nama Barang<code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="asset_id">Barcode<code style="color:red;">*</code></label>
             <div class="col-md-8">
               <select name="asset_id" id="asset_id" class="form-control select21" style="width: 100%" required>
                 <option value="" disabled selected>Choose</option>
                 @foreach ($barang as $goods)
                   <option value="{{ $goods->id }}" data-value="{{ $goods->category }}"
-                    data-value2="{{ $goods->barcode }}" data-value4="{{ asset('storage/' . $goods->file) }}">
-                    {{ $goods->name }}</option>
+                    data-value2="{{ $goods->name }}" data-value4="{{ asset('storage/' . $goods->file) }}">
+                    {{ $goods->barcode }}</option>
                 @endforeach
               </select>
             </div>
@@ -41,15 +41,15 @@
             @endif
           </div>
           <div class="form-group row">
-            <div class="col-md-4 label-control">Category</div>
+            <div class="col-md-4 label-control">Nama Barang</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" id="category" disabled>
+              <input type="text" class="form-control" id="name" disabled>
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-md-4 label-control">Barcode</div>
+            <div class="col-md-4 label-control">Category</div>
             <div class="col-md-8">
-              <input type="text" class="form-control" id="barcode" disabled>
+              <input type="text" class="form-control" id="category" disabled>
             </div>
           </div>
           <div class="form-group row">

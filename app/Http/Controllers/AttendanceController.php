@@ -43,30 +43,30 @@ class AttendanceController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.attendance.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">
+                    <a class="dropdown-item" href="'.route('backsite.attendance.edit', encrypt($item->id)).'">
                         Edit
                                 </a>
-                    <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.attendance.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
             </div>
-                    <form action="' . route('backsite.attendance.approve', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.attendance.approve', encrypt($item->id)).'" method="POST"
                     onsubmit="
-                    ' . ($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Approve?\')' : 'return confirm(\'Are You Sure Want to Cancel Approve?\')') . '
+                    '.($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Approve?\')' : 'return confirm(\'Are You Sure Want to Cancel Approve?\')').'
                     ">
-                        ' . method_field('PUT') . csrf_field() . '
+                        '.method_field('PUT').csrf_field().'
                         <input type="hidden" name="_method" value="PUT">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Approve' : 'Cancel-Approve') . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Approve' : 'Cancel-Approve').'">
                     </form>
 
                 ';
@@ -147,14 +147,14 @@ class AttendanceController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.attendance.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
-                    <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">Edit</a>
-                    <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
+                    <a class="dropdown-item" href="'.route('backsite.attendance.edit', encrypt($item->id)).'">Edit</a>
+                    <form action="'.route('backsite.attendance.destroy', encrypt($item->id)).'" method="POST"
                         onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
                 </div>
@@ -165,16 +165,16 @@ class AttendanceController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.attendance.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
                 </div>
             </div>';
                         } else {
-                            return '  <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
+                            return '  <form action="'.route('backsite.attendance.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                     </form>';
                         }
@@ -186,7 +186,26 @@ class AttendanceController extends Controller
                 ->editColumn('finish_date', function ($item) {
                     return Carbon::parse($item->finish_date)->translatedFormat('d-m-Y');
                 })
-                ->rawColumns(['action',])
+                ->editColumn('category', function ($item) {
+
+                    $dataFile = 'data-fancybox  title="Lihat File"
+                                data-src="'.asset('storage/'.$item->file).'"';
+
+                    if ($item->category === '0') {
+                        return '<span>N/A</span>';
+                    } elseif ($item->category === 'Absen') {
+                        return '<h5><span type="button" class="badge bg-danger" '.$dataFile.'>Absen</span></h5>';
+                    } elseif ($item->category === 'Sakit') {
+                        return '<h5><span type="button" class="badge bg-warning" '.$dataFile.'>Sakit</span></h5>';
+                    } elseif ($item->category === 'Dinas') {
+                        return '<h5><span type="button" class="badge bg-info" '.$dataFile.'>Dinas</span></h5>';
+                    } elseif ($item->category === 'Cuti') {
+                        return '<h5><span type="button" class="badge bg-secondary" '.$dataFile.'>Cuti</span></h5>';
+                    } else {
+                        return '<h5><span type="button" class="badge bg-default" '.$dataFile.'>'.$item->category.'</span></h5>';
+                    }
+                })
+                ->rawColumns(['action', 'category'])
                 ->toJson();
         }
 
@@ -222,9 +241,9 @@ class AttendanceController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-attendance', $fullname);
         }
         // store to database
@@ -285,9 +304,9 @@ class AttendanceController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-attendance', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {

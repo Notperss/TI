@@ -30,7 +30,7 @@ class MaintenanceController extends Controller
     {
         if (request()->ajax()) {
 
-            $maintenance = Maintenance::with('maintenanceStatus')->orderby('created_at', 'desc');
+            $maintenance = Maintenance::with('maintenanceStatus', 'user')->orderby('created_at', 'desc');
 
             // if ($request->filled('from_date') && $request->filled('to_date')) {
             //     $maintenance = $maintenance->whereBetween('created_at', [$request->from_date, $request->to_date]);
@@ -47,28 +47,28 @@ class MaintenanceController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.maintenance.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.maintenance.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Laporan" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.maintenance.edit', encrypt($item->id)) . '" ' . ($isAdmin || $item->stats == 1 ? '' : 'hidden') . '>
+                    <a class="dropdown-item" href="'.route('backsite.maintenance.edit', encrypt($item->id)).'" '.($isAdmin || $item->stats == 1 ? '' : 'hidden').'>
                         Edit
                                 </a>
-                    <form action="' . route('backsite.maintenance.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.maintenance.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete" ' . ($isAdmin || $item->stats == 1 ? '' : 'hidden') . '>
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete" '.($isAdmin || $item->stats == 1 ? '' : 'hidden').'>
                     </form>
             </div>
             </div>
              <div class="btn-group mr-1 mb-1">
-                   <button type="button" class="btn btn-success btn-sm" title="Fixing" onclick="fixing(' . $item->id . ')" ' . (MaintenanceStatus::where('maintenance_id', $item->id)->exists() ? 'hidden' : '') . '>
+                   <button type="button" class="btn btn-success btn-sm" title="Fixing" onclick="fixing('.$item->id.')" '.(MaintenanceStatus::where('maintenance_id', $item->id)->exists() ? 'hidden' : '').'>
                     Fixing</button>
-                   <button type="button" class="btn btn-warning btn-sm" title="Analisa" onclick="analysis(' . $item->id . ')" ' . ($item->stats == 2 || $item->barcode || $item->type_malfunction ? 'hidden' : '') . '>
-                   Analisa</button>
-                    <button type="button" class="btn btn-cyan btn-sm" title="Update" onclick="update(' . $item->id . ')" ' . ($item->stats == 2 ? 'hidden' : '') . '>
+                   <button type="button" class="btn btn-warning btn-sm" title="Info User" onclick="analysis('.$item->id.')" '.($item->stats == 2 || $item->barcode || $item->type_malfunction ? 'hidden' : '').'>
+                  Info User</button>
+                    <button type="button" class="btn btn-cyan btn-sm" title="Update" onclick="update('.$item->id.')" '.($item->stats == 2 ? 'hidden' : '').'>
                     Update</button>
             </div>
         </div>
@@ -76,9 +76,9 @@ class MaintenanceController extends Controller
 
                 })->editColumn('numberAndStatus', function ($item) {
                     if ($item->stats == 1) {
-                        return ' ' . $item->report_number . '<br><span class="badge bg-danger">Open</span>';
+                        return ' '.$item->report_number.'<br><span class="badge bg-danger">Open</span>';
                     } elseif ($item->stats == 2) {
-                        return '  ' . $item->report_number . '<br><span class="badge bg-info">Closed</span>';
+                        return '  '.$item->report_number.'<br><span class="badge bg-info">Closed</span>';
                     }
                 })->editColumn('recipient', function ($item) {
                     // Access the distribution_asset relationship
@@ -174,25 +174,25 @@ class MaintenanceController extends Controller
                             $formattedDate = $carbonDate->translatedFormat('d-m-Y, H:i');
 
                             if ($lateststatus == 1) {
-                                return '<span class="badge bg-info">Open</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-info">Open</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 2) {
-                                return '<span class="badge bg-warning">Penanganan</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">Penanganan</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 3) {
-                                return '<span class="badge bg-warning">Penanganan Lanjutan</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">Penanganan Lanjutan</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 4) {
-                                return '<span class="badge bg-warning">Form LK</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">Form LK</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 5) {
-                                return '<span class="badge bg-warning">Perbaikan Vendor</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">Perbaikan Vendor</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 6) {
-                                return '<span class="badge bg-warning">Menyerahkan Barang ke Vendor</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">Menyerahkan Barang ke Vendor</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 7) {
-                                return '<span class="badge bg-warning">Menerima Barang dari Vendor</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">Menerima Barang dari Vendor</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 8) {
-                                return '<span class="badge bg-warning">BA</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-warning">BA</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 9) {
-                                return '<span class="badge bg-success">Selesai</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-success">Selesai</span><br>'.$formattedDate.'';
                             } elseif ($lateststatus == 10) {
-                                return '<span class="badge bg-danger">Tidak Selesai - Rusak</span><br>' . $formattedDate . '';
+                                return '<span class="badge bg-danger">Tidak Selesai - Rusak</span><br>'.$formattedDate.'';
                             }
 
                             // return $lateststatus;
@@ -251,9 +251,9 @@ class MaintenanceController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-laporan-maintenance', $fullname);
         }
         // store to database
@@ -319,9 +319,9 @@ class MaintenanceController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-laporan-maintenance', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
@@ -505,23 +505,35 @@ class MaintenanceController extends Controller
 
     public function add_status(Request $request)
     {
+        $maintenance = Maintenance::find($request->id);
+
         $validator = Validator::make($request->all(), [
             'report_status' => 'required',
-        ]);
+            'date' => [
+                'required',
+                'date', // Pastikan input adalah format tanggal yang valid
+                function ($attribute, $value, $fail) use ($maintenance) {
+                    $inputDate = Carbon::parse($value);
+                    $maintenanceDate = Carbon::parse($maintenance->date);
 
+                    if ($inputDate->lessThan($maintenanceDate)) { // Ubah ke lessThan
+                        $fail('Tanggal tidak boleh kurang dari '.$maintenanceDate->format('Y-m-d H:i:s'));
+                    }
+                }
+            ],
+        ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $maintenance = Maintenance::find($request->id);
 
         // save to file test material
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-laporan-status', $fullname);
 
                 MaintenanceStatus::create([
@@ -548,6 +560,12 @@ class MaintenanceController extends Controller
 
         if ($request->report_status == 9 || $request->report_status == 10) {
             $maintenance->update(['stats' => 2]);
+            if ($maintenance->goods_id && $request->report_status == 10) {
+                $goods = Barang::find($maintenance->goods_id);
+                $goods->update(['stats' => 4]);
+
+                $goods->distribution_asset()->update(['stats' => 2]);
+            }
         }
 
         // dd($request->all());

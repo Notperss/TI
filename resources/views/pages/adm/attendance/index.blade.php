@@ -186,21 +186,21 @@
         {
           data: 'category',
           name: 'category',
-          render: function(data) {
-            if (data === '0') {
-              return '<span>N/A</span>';
-            } else if (data === 'Absen') {
-              return '<h5><span class="badge bg-danger">Absen</span></h5>';
-            } else if (data === 'Sakit') {
-              return '<h5><span class="badge bg-warning">Sakit</span></h5>';
-            } else if (data === 'Dinas') {
-              return '<h5><span class="badge bg-info">Dinas</span></h5>';
-            } else if (data === 'Cuti') {
-              return '<h5><span class="badge bg-secondary">Cuti</span></h5>';
-            } else {
-              return '<h5><span class="badge bg-default">' + data + '</span></h5>';
-            }
-          },
+          // render: function(data) {
+          //   if (data === '0') {
+          //     return '<span>N/A</span>';
+          //   } else if (data === 'Absen') {
+          //     return '<h5><span class="badge bg-danger">Absen</span></h5>';
+          //   } else if (data === 'Sakit') {
+          //     return '<h5><span class="badge bg-warning">Sakit</span></h5>';
+          //   } else if (data === 'Dinas') {
+          //     return '<h5><span class="badge bg-info">Dinas</span></h5>';
+          //   } else if (data === 'Cuti') {
+          //     return '<h5><span class="badge bg-secondary">Cuti</span></h5>';
+          //   } else {
+          //     return '<h5><span class="badge bg-default">' + data + '</span></h5>';
+          //   }
+          // },
         },
         {
           data: 'start_date',

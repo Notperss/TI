@@ -43,7 +43,7 @@
 
       @endphp
       <th>User</th>
-      <td>{{ $employeeName }}</td>
+      <td>{{ $barang->stats == 2 ? $employeeName : '-' }}</td>
     </tr>
   </table>
 
@@ -119,7 +119,7 @@
 
       @endphp
       <th> Lokasi</th>
-      <td>{{ $location_roomName }}</td>
+      <td>{{ $barang->stats == 2 ? $location_roomName : '-' }}</td>
     </tr>
   </table>
 </div>

@@ -244,7 +244,7 @@
                                   </form>
 
                                   <form action="{{ route('backsite.distribution.return', encrypt($asset->id ?? '')) }}"
-                                    method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data ini ?');">
+                                    method="POST" onsubmit="return confirm('Apakah Barang ini sudah dikembalikan ?');">
                                     <input type="hidden" name="_method" value="PUT">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <input type="submit"id="update_asset" class="btn"value="Dikembalikan">

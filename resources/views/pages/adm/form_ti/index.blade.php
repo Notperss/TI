@@ -73,7 +73,7 @@
                         <tr>
                           <th>No</th>
                           <th>Nama Form</th>
-                          <th>No Form</th>
+                          <th>Pengirim</th>
                           <th>Tgl Form</th>
                           <th>Keterangan</th>
                           <th>File</th>

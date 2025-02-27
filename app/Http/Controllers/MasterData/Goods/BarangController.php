@@ -36,7 +36,7 @@ class BarangController extends Controller
     {
         if (request()->ajax()) {
 
-            $barang = Barang::with('distribution_asset.distribution.employee')->orderby('created_at', 'desc');
+            $barang = Barang::with('distribution_asset.distribution.employee', 'maintenance', 'maintenance.maintenanceStatus')->orderby('created_at', 'desc');
 
             return DataTables::of($barang)
                 ->addIndexColumn()
@@ -63,15 +63,15 @@ class BarangController extends Controller
                 <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.barang.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.barang.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.barang.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.barang.edit', $item->id).'">
                         Edit
                     </a>
             </div>
-            <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', $item->id) . '" data-toggle="modal"
+            <a href="#mymodal" data-remote="'.route('backsite.barang.showBarcode', $item->id).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
                         Print
             </a>
@@ -85,22 +85,22 @@ class BarangController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.barang.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.barang.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.barang.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.barang.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.barang.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.barang.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
-              <a href="#mymodal" data-remote="' . route('backsite.barang.showBarcode', $item->id) . '" data-toggle="modal"
+              <a href="#mymodal" data-remote="'.route('backsite.barang.showBarcode', $item->id).'" data-toggle="modal"
                         data-target="#mymodal" data-title="QR-Code" class=" btn btn-sm list-group-item-info">
                         Print
             </a>
@@ -109,8 +109,8 @@ class BarangController extends Controller
                 })
                 ->editColumn('barcode', function ($item) {
                     return '
-                    <a  style="text-decoration: none; color: white; display:"  title="Lihat semua data history ' . $item->barcode . '" class="btn btn-sm btn-info"
-                        href="' . route('backsite.barang.history_index', $item->id) . '" >' . $item->barcode . '</a>
+                    <a  style="text-decoration: none; color: white; display:"  title="Lihat semua data history '.$item->barcode.'" class="btn btn-sm btn-info"
+                        href="'.route('backsite.barang.history_index', $item->id).'" >'.$item->barcode.'</a>
                     ';
                 })
                 ->editColumn('distribution_asset', function ($item) {
@@ -143,12 +143,12 @@ class BarangController extends Controller
                             // return implode(', ', $userNames);
     
                             $latestUserName = end($userNames);
-                            return ($item->stats == 1) ? 'Available' : $latestUserName;
+                            return ($item->stats == 2) ? $latestUserName : 'Tidak Dipakai';
                         } else {
                             return 'No user names found';
                         }
                     } else {
-                        return 'Available';
+                        return 'Tidak Dipakai';
                     }
                 })
 
@@ -181,7 +181,33 @@ class BarangController extends Controller
                 //         return 'Available';
                 //     }
                 // })
-                ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at', 'barcode'])
+                ->editColumn('stats', function ($item) {
+                    $latestMaintenance = $item->maintenance()->latest()->first();
+                    if (! $latestMaintenance) {
+                        return '<span class="badge bg-success">Baik Berfungsi</span>';
+                    }
+
+                    $latestStatus = $latestMaintenance->maintenanceStatus()->latest()->first();
+                    if (! $latestStatus) {
+                        return '<span class="badge bg-success">Baik Berfungsi</span>';
+                    }
+
+                    $statusBadges = [
+                        1 => '<span class="badge bg-info">Open</span>',
+                        2 => '<span class="badge bg-warning">Penanganan</span>',
+                        3 => '<span class="badge bg-warning">Penanganan Lanjutan</span>',
+                        4 => '<span class="badge bg-warning">Form LK</span>',
+                        5 => '<span class="badge bg-warning">Perbaikan Vendor</span>',
+                        6 => '<span class="badge bg-warning">Menyerahkan Barang ke Vendor</span>',
+                        7 => '<span class="badge bg-warning">Menerima Barang dari Vendor</span>',
+                        8 => '<span class="badge bg-warning">BA</span>',
+                        9 => '<span class="badge bg-success">Baik Berfungsi</span>',
+                        10 => '<span class="badge bg-danger">Rusak</span>',
+                    ];
+
+                    return $statusBadges[$latestStatus->report_status] ?? '-';
+                })
+                ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at', 'barcode', 'stats'])
 
                 ->toJson();
         }
@@ -253,10 +279,10 @@ class BarangController extends Controller
         function getNextSequentialBarcode($barcode)
         {
             $prefix = 'TI-';
-            preg_match('/^' . preg_quote($prefix) . '(\d+)$/', $barcode, $matches);
+            preg_match('/^'.preg_quote($prefix).'(\d+)$/', $barcode, $matches);
 
             $numberPart = isset($matches[1]) ? $matches[1] : null;
-            return $prefix . ($numberPart + 1);
+            return $prefix.($numberPart + 1);
         }
         // Custom validation messages
         $messages = [
@@ -277,9 +303,9 @@ class BarangController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-goods', $fullname);
         }
 
@@ -377,10 +403,10 @@ class BarangController extends Controller
         function getNextSequentialBarcodeEdit($barcode)
         {
             $prefix = 'TI-';
-            preg_match('/^' . preg_quote($prefix) . '(\d+)$/', $barcode, $matches);
+            preg_match('/^'.preg_quote($prefix).'(\d+)$/', $barcode, $matches);
 
             $numberPart = isset($matches[1]) ? $matches[1] : null;
-            return $prefix . ($numberPart + 1);
+            return $prefix.($numberPart + 1);
         }
         // Custom validation messages
         $messages = [
@@ -404,9 +430,9 @@ class BarangController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-goods', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
@@ -476,9 +502,9 @@ class BarangController extends Controller
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-barang', $fullname);
             }
         }
@@ -855,10 +881,10 @@ class BarangController extends Controller
                 ->addColumn('action', function ($item) {
                     return '
             <div class="btn-group mr-1 mb-1">
-                <button type="button" class="btn btn-' . ($item->stats == 2 ? 'warning' : 'info') . ' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                <button type="button" class="btn btn-'.($item->stats == 2 ? 'warning' : 'info').' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                  <a href="#mymodal" data-remote="' . route('backsite.distribution.show', $item->distribution->id) . '" data-toggle="modal"
+                  <a href="#mymodal" data-remote="'.route('backsite.distribution.show', $item->distribution->id).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
                         Show
                     </a>
@@ -900,7 +926,7 @@ class BarangController extends Controller
         $nextBarcode = $lastRecord ? (int) substr($lastRecord->barcode, 3) + 1 : 1;
 
         // Format the final barcode
-        $finalBarcode = 'TI-' . $nextBarcode;
+        $finalBarcode = 'TI-'.$nextBarcode;
 
         return response()->json(['finalBarcode' => $finalBarcode]);
 

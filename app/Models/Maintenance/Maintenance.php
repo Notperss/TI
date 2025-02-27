@@ -4,6 +4,7 @@ namespace App\Models\Maintenance;
 
 use App\Models\MasterData\Employee;
 use App\Models\MasterData\Goods\Barang;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,6 +14,7 @@ class Maintenance extends Model
 
     protected $fillable = [
         'employee_id',
+        'user_id',
         'goods_id',
         'reporter',
         'report_number',
@@ -24,12 +26,18 @@ class Maintenance extends Model
 
         'asset_name',
         'barcode',
+        'pic',
     ];
 
     public function employee()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+    public function user()
+    {
+        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function asset()
     {
