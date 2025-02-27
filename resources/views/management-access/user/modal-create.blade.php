@@ -90,10 +90,10 @@
                 Choose
               </option>
 
-              <option value="Manajer"{{ old('job_position') == 'Manajer' ? 'selected' : '' }}>
-                Manajer </option>
-              <option value="Kepala Departemen"{{ old('job_position') == 'Kepala Departemen' ? 'selected' : '' }}>
-                Kepala Departemen </option>
+              <option value="Manager"{{ old('job_position') == 'Manager' ? 'selected' : '' }}>
+                Manager </option>
+              <option value="Assistant Manager"{{ old('job_position') == 'Assistant Manager' ? 'selected' : '' }}>
+                Assistant Manager </option>
               <option value="Administrasi"{{ old('job_position') == 'Administrasi' ? 'selected' : '' }}>
                 Administrasi </option>
               <option value="Hardware dan Jaringan"

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'PP')
+@section('title', 'PR')
 
 @section('content')
 
@@ -28,12 +28,12 @@
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-          <h3 class="content-header-title mb-0 d-inline-block">PP</h3>
+          <h3 class="content-header-title mb-0 d-inline-block">PR</h3>
           <div class="row breadcrumbs-top d-inline-block">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">Dashboard</li>
-                <li class="breadcrumb-item active">PP</li>
+                <li class="breadcrumb-item active">PR</li>
               </ol>
             </div>
           </div>
@@ -47,7 +47,7 @@
             <div class="col-12">
 
               <a href="{{ route('backsite.pp.create') }}" class="btn btn-success col-2 mb-2">
-                Tambah Data PP</a>
+                Tambah Data PR</a>
             </div>
           </div>
         </section>
@@ -61,7 +61,7 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h4 class="card-title">List PP</h4>
+                  <h4 class="card-title">List PR</h4>
                   <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                 </div>
                 <div class="card-body card-dashboard">
@@ -88,7 +88,7 @@
                           <th
                             style="display: {{ in_array(Auth::user()->detail_user->job_position, [1, 3]) || Auth::user()->detail_user->nik == 'M0203002' ? '' : 'none' }}">
                             User</th>
-                          <th>No PP</th>
+                          <th>No PR</th>
                           <th>Tahun</th>
                           <th>Pekerjaan</th>
                           <th>Nominal PP</th>

@@ -92,11 +92,11 @@
               <option value="{{ '' }}" disabled selected>
                 Choose Job Position
               </option>
-              <option value="Manajer"{{ old('job_position', $user->job_position) == 'Manajer' ? 'selected' : '' }}>
-                Manajer </option>
+              <option value="Manager"{{ old('job_position', $user->job_position) == 'Manager' ? 'selected' : '' }}>
+                Manager </option>
               <option
-                value="Kepala Departemen"{{ old('job_position', $user->job_position) == 'Kepala Departemen' ? 'selected' : '' }}>
-                Kepala Departemen </option>
+                value="Assistant Manager"{{ old('job_position', $user->job_position) == 'Assistant Manager' ? 'selected' : '' }}>
+                Assistant Manager </option>
               <option
                 value="Administrasi"{{ old('job_position', $user->job_position) == 'Administrasi' ? 'selected' : '' }}>
                 Administrasi </option>

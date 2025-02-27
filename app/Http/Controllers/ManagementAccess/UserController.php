@@ -131,7 +131,7 @@ class UserController extends Controller
         if ($email) {
             $user->update([
                 'email' => $email,
-                'icon' => $icon,
+                'icon' => $icon ?? '',
                 'email_verified_at' => $request->verified ? now() : null,
             ] + $request->except('email'));
         }

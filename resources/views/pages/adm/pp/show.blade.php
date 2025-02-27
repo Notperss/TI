@@ -1,7 +1,7 @@
 <table class="table table-bordered">
   <input type="hidden" name="id" id="id" value="{{ $pp->id }}">
   <tr>
-    <th>No PP</th>
+    <th>No PR</th>
     <td>{{ isset($pp->no_pp) ? $pp->no_pp : 'N/A' }}
     </td>
   </tr>
@@ -10,7 +10,7 @@
     <td>{{ isset($pp->job_name) ? $pp->job_name : 'N/A' }}</td>
   </tr>
   <tr>
-    <th>Nilai PP</th>
+    <th>Nilai PR</th>
     <td>Rp. {{ isset($pp->job_value) ? $pp->job_value : 'N/A' }}</td>
   </tr>
   <tr>

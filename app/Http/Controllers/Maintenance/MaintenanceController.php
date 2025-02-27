@@ -8,16 +8,17 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\MasterData\Employee;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Maintenance\Maintenance;
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 use App\Models\ManagementAccess\DetailUser;
 use App\Models\Maintenance\MaintenanceStatus;
 use App\Models\Network\Distribution\Distribution;
 use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
-use Illuminate\Support\Facades\Validator;
 
 class MaintenanceController extends Controller
 {
@@ -40,7 +41,7 @@ class MaintenanceController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     $user = auth()->user()->detail_user;
-                    $isAdmin = $user->type_user_id === 1;
+                    $isAdmin = Auth::user()->hasRole('super-admin');
                     return '
         <div class="container">
             <div class="btn-group mr-1 mb-1">

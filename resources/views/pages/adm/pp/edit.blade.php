@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'PP')
+@section('title', 'PR')
 @section('content')
   <div class="app-content content">
     <div class="content-overlay"></div>
@@ -14,7 +14,7 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Edit Data PP</h4>
+                  <h4 class="card-title text-white">Edit Data PR</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.pp.update', $pp->id) }}" method="POST"
                   enctype="multipart/form-data">
@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_pp">No PP<code style="color:red;">*</code></label>
+                      <label class="col-md-2 label-control" for="no_pp">No PR<code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" id="no_pp" name="no_pp"
                           value="{{ old('no_pp', $pp->no_pp) }}" required>
@@ -36,7 +36,7 @@
                             {{ $errors->first('no_pp') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="date">Tanggal PP<code
+                      <label class="col-md-2 label-control" for="date">Tanggal PR<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="date" class="form-control" id="date" name="date"
@@ -72,7 +72,7 @@
                             {{ $errors->first('year') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="job_value">Nilai PP
+                      <label class="col-md-2 label-control" for="job_value">Nilai PR
                         <code style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <div class="input-group">

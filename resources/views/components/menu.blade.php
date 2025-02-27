@@ -254,7 +254,7 @@
             <li
               class="{{ request()->is('backsite/pp') || request()->is('backsite/pp/*') || request()->is('backsite/*/pp') || request()->is('backsite/*/pp/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.pp.index') }}">
-                <i></i><span>PP</span>
+                <i></i><span>PR</span>
               </a>
             </li>
             {{-- @endcan --}}

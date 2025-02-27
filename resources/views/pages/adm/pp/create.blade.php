@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- set title --}}
-@section('title', 'PP')
+@section('title', 'PR')
 @section('content')
   <div class="app-content content" id="pp">
     <div class="content-overlay"></div>
@@ -14,7 +14,7 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Tambah Data PP</h4>
+                  <h4 class="card-title text-white">Tambah Data PR</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.pp.store') }}" method="POST"
                   enctype="multipart/form-data">
@@ -26,7 +26,7 @@
                     <input type="hidden" id="user_id" name="user_id" value="{{ isset($user_id) ? $user_id : '' }}">
                     <input type="hidden" id="stats" name="stats" value="1">
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_pp">No PP</label>
+                      <label class="col-md-2 label-control" for="no_pp">No PR</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" id="no_pp" name="no_pp"
                           value="{{ old('no_pp') }}">
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="date">Tanggal PP<code
+                      <label class="col-md-2 label-control" for="date">Tanggal PR<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
                         <input type="date" class="form-control" id="date" name="date"
