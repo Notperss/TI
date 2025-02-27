@@ -31,8 +31,9 @@
           <ul class="float-right nav navbar-nav">
             <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
                 href="#" data-toggle="dropdown"><span
-                  class="mr-1 user-name text-bold-700">{{ Auth::user()->name }}</span> <i
-                  class="la la-bars font-large-1 float-right"></i><span class="avatar avatar-online">
+                  class="mr-1 user-name text-bold-700">{{ Auth::user()->name }}
+                  <small> {{ Auth::user()->getRoleNames()->first() ?? '' }}</small></span>
+                <i class="la la-bars font-large-1 float-right"></i><span class="avatar avatar-online">
                   @if (Auth::user()->icon)
                     <img src="{{ asset('storage/' . Auth::user()->icon) }}" alt="avatar">
                   @else

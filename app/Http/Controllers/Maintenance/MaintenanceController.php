@@ -455,6 +455,7 @@ class MaintenanceController extends Controller
             $id = $request->id;
             // $barang = Barang::where('id', $maintenance->goods_id)->orderBy('barcode', 'asc')->get();
             $barang = Barang::orderBy('barcode', 'asc')->get();
+            $employees = Employee::orderBy('name', 'asc')->get();
             $users = User::where('name', '!=', 'Administrator')
                 ->whereHas('detail_user', function ($query) {
                     $query->where('status', '=', '1');
@@ -468,6 +469,7 @@ class MaintenanceController extends Controller
                 'users' => $users,
                 'barang' => $barang,
                 'maintenance' => $row,
+                'employees' => $employees,
             ];
 
             $msg = [

@@ -33,12 +33,12 @@
                   class="menu-title" data-i18n="Lokasi"> <strong>User</strong></span></a>
               <ul class="menu-content">
                 {{-- @can('location_detail') --}}
-                <li
+                {{-- <li
                   class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') ? 'active' : '' }} ">
                   <a class="menu-item" href="{{ route('backsite.user.index') }}">
                     <i></i><span>User Aplikasi</span>
                   </a>
-                </li>
+                </li> --}}
                 {{-- @endcan --}}
 
                 {{-- @can('location_detail') --}}
@@ -613,7 +613,7 @@
 
       {{-- END Kegiatan Harian --}}
 
-      @if (Auth::user()->detail_user->type_user_id == 1)
+      @role('super-admin')
         {{-- @can('management_access') --}}
         <li class="nav-item"><a href="#"><i
               class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') || request()->is('backsite/type_user') || request()->is('backsite/type_user/*') || request()->is('backsite/*/type_user') || request()->is('backsite/*/type_user/*') ? 'bx bx-group bx-flashing' : 'bx bx-group' }}"></i><span
@@ -621,16 +621,29 @@
           <ul class="menu-content">
             {{-- @can('type_user_access') --}}
             <li
+              class="{{ request()->is('permission') || request()->is('permission/*') || request()->is('*/permission') || request()->is('*/permission/*') ? 'active' : '' }} ">
+              <a class="menu-item" href="{{ route('permission.index') }}">
+                <i></i><span>Permission</span>
+              </a>
+            </li>
+
+            <li
+              class="{{ request()->is('role') || request()->is('role/*') || request()->is('*/role') || request()->is('*/role/*') ? 'active' : '' }} ">
+              <a class="menu-item" href="{{ route('role.index') }}">
+                <i></i><span>Role</span>
+              </a>
+            </li>
+            {{-- <li
               class="{{ request()->is('backsite/type_user') || request()->is('backsite/type_user/*') || request()->is('backsite/*/type_user') || request()->is('backsite/*/type_user/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.type_user.index') }}">
                 <i></i><span>Type User</span>
               </a>
-            </li>
+            </li> --}}
             {{-- @endcan --}}
             {{-- @can('user_access') --}}
             <li
-              class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') ? 'active' : '' }} ">
-              <a class="menu-item" href="{{ route('backsite.user.index') }}">
+              class="{{ request()->is('user') || request()->is('user/*') || request()->is('*/user') || request()->is('*/user/*') ? 'active' : '' }} ">
+              <a class="menu-item" href="{{ route('user.index') }}">
                 <i></i><span>User</span>
               </a>
             </li>
@@ -638,7 +651,7 @@
           </ul>
         </li>
         {{-- @endcan --}}
-      @endif
+      @endrole
 
       {{-- @can('setting') --}}
       <li class=" nav-item"><a href="#"><i

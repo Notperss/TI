@@ -70,7 +70,7 @@ class UserController extends Controller
         $detail_user = new DetailUser;
         // upload icon
         if ($request->hasFile('icon')) {
-            $detail_user->icon = $request->file('icon')->storeAs('storage/app/assets/icon-user', $id . '-' . $request->file('icon')->getClientOriginalName());
+            $detail_user->icon = $request->file('icon')->storeAs('storage/app/assets/icon-user', $id.'-'.$request->file('icon')->getClientOriginalName());
         }
         $detail_user->user_id = $user['id'];
         $detail_user->type_user_id = $request['type_user_id'];
@@ -144,7 +144,7 @@ class UserController extends Controller
         // upload process here
         // upload icon
         if ($request->hasFile('icon')) {
-            $detail_user->icon = $request->file('icon')->storeAs('storage/app/assets/icon-user', $id . '-' . $request->file('icon')->getClientOriginalName());
+            $detail_user->icon = $request->file('icon')->storeAs('storage/app/assets/icon-user', $id.'-'.$request->file('icon')->getClientOriginalName());
             // hapus file
             if ($path_icon != null || $path_icon != '') {
                 Storage::delete($path_icon);

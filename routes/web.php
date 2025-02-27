@@ -29,9 +29,11 @@ use App\Http\Controllers\MasterData\EmployeeController;
 use App\Http\Controllers\MasterData\SoftwareController;
 use App\Http\Controllers\MasterData\VendorTiController;
 use App\Http\Controllers\Data\Hardware\DeviceController;
+use App\Http\Controllers\ManagementAccess\RoleController;
 use App\Http\Controllers\ManagementAccess\UserController;
 use App\Http\Controllers\Data\Hardware\DevicePcController;
 use App\Http\Controllers\MasterData\InformationController;
+use App\Http\Controllers\Maintenance\MaintenanceController;
 use App\Http\Controllers\MasterData\Goods\BarangController;
 use App\Http\Controllers\MasterData\Hardware\RamController;
 use App\Http\Controllers\MasterData\Network\CctvController;
@@ -43,29 +45,29 @@ use App\Http\Controllers\ManagementAccess\TypeUserController;
 use App\Http\Controllers\SystemInformation\DRC\DRCController;
 use App\Http\Controllers\SystemInformation\TPT\TPTController;
 use App\Http\Controllers\Data\Hardware\DeviceMonitorController;
+
+use App\Http\Controllers\ManagementAccess\PermissionController;
 use App\Http\Controllers\MasterData\Division\SectionController;
 use App\Http\Controllers\MasterData\Hardware\HardiskController;
-
 use App\Http\Controllers\MasterData\Hardware\MonitorController;
 use App\Http\Controllers\MasterData\Division\DivisionController;
 use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
-use App\Http\Controllers\Maintenance\MaintenanceController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
 use App\Http\Controllers\MasterData\Location\LocationSubController;
 use App\Models\SystemInformation\Application\ApplicationMonitoring;
 use App\Http\Controllers\MasterData\Location\LocationRoomController;
+use App\Http\Controllers\Network\Distribution\DistributionController;
 use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\Network\Cctv\CctvController as CctvCctvController;
-use App\Http\Controllers\Network\Distribution\DistributionController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringController;
 
@@ -94,14 +96,28 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+// Route::group(['middleware' => ['web', 'auth', 'role:super-admin', 'verified',]], function () {
+Route::group(['middleware' => ['web', 'auth', 'role:super-admin', 'verified',]], function () {
+    // Route::resource('route', RouteController::class)->only('index', 'store', 'update', 'destroy');
+    Route::resource('permission', PermissionController::class)->only('index', 'store', 'update', 'destroy');
+    Route::resource('role', RoleController::class)->only('index', 'store', 'update', 'destroy');
+    // Route::resource('menu', MenuGroupController::class)->only('index', 'store', 'update', 'destroy');
+    // Route::resource('menu.item', MenuItemController::class)->only('index', 'store', 'update', 'destroy');
+    // Route::resource('company', CompanyController::class)->only('index', 'store', 'update', 'destroy');
+
+    // Route::resource('activity-log', ActivityLogController::class)->only('index');
+    Route::resource('user', UserController::class);
+
+
+});
+
 // backsite
-Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['auth:sanctum', 'verified']], function () {
+Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['auth', 'verified']], function () {
     // dashboard
     Route::resource('dashboard', DashboardController::class);
     // type_user
     Route::resource('type_user', TypeUserController::class);
     // detial_user
-    Route::resource('user', UserController::class);
     // profile
     Route::resource('profile', ProfileController::class);
     // location
