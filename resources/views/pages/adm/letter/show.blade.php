@@ -51,15 +51,24 @@
     <td>{{ isset($letter->sender) ? $letter->sender : 'N/A' }}</td>
   </tr>
   <tr>
+    <th>Divisi</th>
+    <td>{{ isset($letter->division->name) ? $letter->division->name : 'N/A' }}</td>
+  </tr>
+  <tr>
     <th>keterangan</th>
     <td style="word-break: break-all">{{ isset($letter->description) ? $letter->description : 'N/A' }}</td>
   </tr>
   <tr>
     <th>File</th>
     @if ($letter->file)
-      <td> <a data-fancybox="gallery" data-src="{{ asset('storage/' . $letter->file) }}"
+      <td>
+        <a data-fancybox="gallery" data-src="{{ asset('storage/' . $letter->file) }}"
           class="btn btn-sm btn-blue text-white">
           Lihat
+        </a>
+        <a type="button" href="{{ asset('storage/' . $letter->file) }}" class="btn btn-sm btn-warning text-white"
+          download>
+          Unduh File
         </a>
         <br>
 

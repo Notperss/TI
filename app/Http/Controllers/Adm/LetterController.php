@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\MasterData\Division\Division;
 use App\Http\Requests\Adm\Letter\StoreLetterRequest;
 use App\Http\Requests\Adm\Letter\UpdateLetterRequest;
 
@@ -23,7 +24,7 @@ class LetterController extends Controller
     {
         if (request()->ajax()) {
 
-            $letter = Letter::orderby('created_at', 'desc');
+            $letter = Letter::with('division')->orderby('created_at', 'desc');
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $letter = $letter->whereBetween('date_letter', [$request->from_date, $request->to_date]);
@@ -37,22 +38,18 @@ class LetterController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.letter.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.letter.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Surat" class="dropdown-item">
                         Show
                     </a>
-                       <a type="button" href="' . asset('storage/' . $item->file) . '"
-                                class="dropdown-item  ' . ($item->file ? '' : 'hidden') . '" download>
-                                Unduh File
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.letter.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.letter.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.letter.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.letter.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
                   
@@ -61,37 +58,37 @@ class LetterController extends Controller
                 })
                 ->editColumn('type_letter', function ($item) {
 
-                    $filePath = asset('storage/' . $item->file);
+                    $filePath = asset('storage/'.$item->file);
 
                     if ($item->type_letter == '') {
                         return '<span>N/A</span>';
                     } elseif ($item->type_letter == 'SURAT MASUK') {
                         return '<h5><span type="button" class="badge bg-primary" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Surat Masuk</span></h5>';
+                                data-src="'.$filePath.'">Surat Masuk</span></h5>';
                     } elseif ($item->type_letter == 'BA') {
                         return '<h5><span type="button" class="badge bg-info" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Berita Acara</span></h5>';
+                                data-src="'.$filePath.'">Berita Acara</span></h5>';
                     } elseif ($item->type_letter == 'PPFTI') {
                         return '<h5><span type="button" class="badge bg-success" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">PPFTI</span></h5>';
+                                data-src="'.$filePath.'">PPFTI</span></h5>';
                     } elseif ($item->type_letter == 'LK') {
                         return '<h5><span type="button" class="badge bg-danger" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Laporan Kerusakan</span></h5>';
+                                data-src="'.$filePath.'">Laporan Kerusakan</span></h5>';
                     } elseif ($item->type_letter == 'SURAT KELUAR') {
                         return '<h5><span type="button" class="badge bg-warning" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Surat Keluar</span></h5>';
+                                data-src="'.$filePath.'">Surat Keluar</span></h5>';
                     } elseif ($item->type_letter == 'MEMO') {
                         return '<h5><span type="button" class="badge bg-info" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Memo</span></h5>';
+                                data-src="'.$filePath.'">Memo</span></h5>';
                     } elseif ($item->type_letter == 'MEMO IN') {
                         return '<h5><span type="button" class="badge bg-primary" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Memo In</span></h5>';
+                                data-src="'.$filePath.'">Memo In</span></h5>';
                     } elseif ($item->type_letter == 'MEMO OUT') {
                         return '<h5><span class="badge  bg-warning" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Memo Out</span></h5>';
+                                data-src="'.$filePath.'">Memo Out</span></h5>';
                     } elseif ($item->type_letter == 'LAIN-LAIN') {
                         return '<h5><span type="button" class="badge bg-secondary" data-fancybox  title="Lihat File"
-                                data-src="' . $filePath . '">Lain-lain</span></h5>';
+                                data-src="'.$filePath.'">Lain-lain</span></h5>';
                     } else {
                         return '-';
                     }
@@ -112,7 +109,8 @@ class LetterController extends Controller
      */
     public function create()
     {
-        return view("pages.adm.letter.create");
+        $divisions = Division::orderBy('name', 'asc')->get();
+        return view("pages.adm.letter.create", compact('divisions'));
     }
 
     /**
@@ -131,9 +129,9 @@ class LetterController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
         }
         // store to database
@@ -166,9 +164,10 @@ class LetterController extends Controller
     public function edit(Letter $letter)
     {
         $letter = Letter::findOrFail($letter->id);
+        $divisions = Division::orderBy('name', 'asc')->get();
         $filepath = storage_path($letter->file);
         $fileName = basename($filepath);
-        return view('pages.adm.letter.edit', compact('letter', 'fileName'));
+        return view('pages.adm.letter.edit', compact('letter', 'fileName', 'divisions'));
     }
 
     /**
@@ -190,9 +189,9 @@ class LetterController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {

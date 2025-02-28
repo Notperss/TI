@@ -88,6 +88,7 @@
                           <th>No Surat</th>
                           <th>Tanggal</th>
                           <th>Pengirim</th>
+                          <th>Divisi</th>
                           <th>Keterangan</th>
                           <th>Action</th>
                         </tr>
@@ -99,6 +100,7 @@
                         <th>Tipe Surat</th>
                         <th>No Surat</th>
                         <th>Tagl/th>
+                        <th>File</th>
                         <th>File</th>
                         <th>File</th>
                         <th>Action</th>
@@ -186,6 +188,13 @@
           data: 'sender',
           name: 'sender',
           width: '10%',
+        },
+        {
+          data: 'division.name',
+          name: 'division.name',
+          render: function(data, type, row) {
+            return data ? data : '-';
+          }
         },
         {
           data: 'description',

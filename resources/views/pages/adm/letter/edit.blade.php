@@ -120,7 +120,25 @@
                             {{ $errors->first('date_sent') }}</p>
                         @endif
                       </div>
+                      <label class="col-md-2 label-control" for="division_id">Divisi</label>
+                      <div class="col-md-4">
+                        <select id="division_id" name="division_id" class="form-control select2"
+                          value="{{ old('division_id') }}">
+                          <option value="">Choose</option>
+                          @foreach ($divisions as $division)
+                            <option value="{{ $division->id }}"
+                              {{ $letter->division_id == $division->id ? 'selected' : '' }}>
+                              {{ $division->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('division_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('division_id') }}</p>
+                        @endif
+                      </div>
+                    </div>
 
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-3">
                         <div class="custom-file">
