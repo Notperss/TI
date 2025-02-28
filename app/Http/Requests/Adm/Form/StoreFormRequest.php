@@ -26,7 +26,7 @@ class StoreFormRequest extends FormRequest
         return [
             'name_form' => 'required|max:255',
             'category' => 'required|max:255',
-            'file' => 'max:255',
+            'file' => 'max:51200',
             'description' => 'required',
         ];
     }

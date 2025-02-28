@@ -26,7 +26,7 @@ class StoreDistributionRequest extends FormRequest
         return [
             'date' => 'required',
             'description' => 'required',
-            'file' => 'max:255',
+            'file' => 'max:51200',
         ];
     }
 }

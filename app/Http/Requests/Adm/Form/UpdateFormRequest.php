@@ -27,7 +27,7 @@ class UpdateFormRequest extends FormRequest
             'name_form' => 'required|max:255',
             'category' => 'required|max:255',
             'description' => 'required',
-            'file' => 'max:255',
+            'file' => 'max:51200',
         ];
     }
 }

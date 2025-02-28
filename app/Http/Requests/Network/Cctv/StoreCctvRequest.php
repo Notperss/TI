@@ -37,7 +37,7 @@ class StoreCctvRequest extends FormRequest
             'password_cctv' => 'required|max:255',
             'lon_lat' => 'max:255',
             'installation_date' => 'required|max:255',
-            'file' => 'max:255',
+            'file' => 'max:51200',
             'description' => 'max:255',
             'stats' => 'required|max:255',
         ];
