@@ -33,11 +33,11 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h4 class="fw-normal mb-0 text-body card-title">permissions list</h4>
                 @can('permission.store')
-                  <button type="button" class="btn btn-primary btn-md " data-toggle="modal"
-                    data-target="#modal-form-add-permission">
-                    Add
-                  </button>
                 @endcan
+                <button type="button" class="btn btn-primary btn-md " data-toggle="modal"
+                  data-target="#modal-form-add-permission">
+                  Add
+                </button>
               </div>
             </div>
             <div class="card-body">

@@ -7,8 +7,8 @@
       <ul class="flex-row nav navbar-nav">
         <li class="mr-auto nav-item mobile-menu d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
             href="#"><i class="ft-menu font-large-1"></i></a></li>
-        <li class="nav-item"><a class="navbar-brand" href="{{ route('backsite.dashboard.index') }}"><img
-              class="brand-logo" alt="modern admin logo" src="{{ asset('/assets/app-assets/images/ico/cmnp.png') }}">
+        <li class="nav-item"><a class="navbar-brand" href="{{ route('dashboard.index') }}"><img class="brand-logo"
+              alt="modern admin logo" src="{{ asset('/assets/app-assets/images/ico/cmnp.png') }}">
             <h4 class="brand-text">Teknologi Informasi</h4>
           </a></li>
         <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse"

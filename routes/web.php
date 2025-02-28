@@ -90,7 +90,7 @@ Route::get('/detail/{id}', [MaintenanceController::class, 'detailBarang'])
 Route::get('/', function () {
     // cek apakah sudah login atau belum
     if (Auth::user() != null) {
-        return redirect()->intended('backsite/dashboard');
+        return redirect()->intended('dashboard');
     }
 
     return view('auth.login');
@@ -112,9 +112,10 @@ Route::group(['middleware' => ['web', 'auth', 'role:super-admin', 'verified',]],
 });
 
 // backsite
-Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['auth', 'verified']], function () {
+Route::resource('dashboard', DashboardController::class)->middleware(['auth', 'verified', 'web',]);
+
+Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['auth', 'verified', 'web',]], function () {
     // dashboard
-    Route::resource('dashboard', DashboardController::class);
     // type_user
     Route::resource('type_user', TypeUserController::class);
     // detial_user

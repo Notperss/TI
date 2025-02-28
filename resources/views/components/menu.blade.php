@@ -4,7 +4,7 @@
     @if (Auth::user() != null)
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
         <li class="active">
-          <a href="{{ route('backsite.dashboard.index') }}">
+          <a href="{{ route('dashboard.index') }}">
             <i
               class="{{ request()->is('backsite/dashboard') || request()->is('backsite/dashboard/*') ? 'bx bx-category-alt bx-flashing' : 'bx bx-category-alt' }}"></i>
             <span class="menu-title" data-i18n="Dashboard"><strong>Dashboard</strong></span>
@@ -612,8 +612,8 @@
       </ul>
 
       {{-- END Kegiatan Harian --}}
-
-      @role('super-admin')
+      @if (Auth::user()->hasRole('super-admin'))
+        {{-- @role('super-admin') --}}
         {{-- @can('management_access') --}}
         <li class="nav-item"><a href="#"><i
               class="{{ request()->is('backsite/user') || request()->is('backsite/user/*') || request()->is('backsite/*/user') || request()->is('backsite/*/user/*') || request()->is('backsite/type_user') || request()->is('backsite/type_user/*') || request()->is('backsite/*/type_user') || request()->is('backsite/*/type_user/*') ? 'bx bx-group bx-flashing' : 'bx bx-group' }}"></i><span
@@ -651,7 +651,9 @@
           </ul>
         </li>
         {{-- @endcan --}}
-      @endrole
+        {{-- @endrole --}}
+      @endif
+
 
       {{-- @can('setting') --}}
       <li class=" nav-item"><a href="#"><i

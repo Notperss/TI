@@ -192,95 +192,6 @@
                             Switch
                           </li>
                         </ul>
-                        {{-- <div class="row">
-                          <div class="col-4">
-                            <div class="card bg-light mb-1" style="max-width: 18rem;">
-                              <div class="card-body">
-                                <h6 class="card-title">PC/AIO</h6>
-                                <p class="card-text">
-                                <h1 class="warning">
-                                  <strong>
-                                    {{ DB::table('goods')->where('category', 'PC')->where('category', 'PC AIO')->count() }}
-                                  </strong>
-                                </h1>
-                                <p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="card bg-light mb-1" style="max-width: 18rem;">
-                              <div class="card-body">
-                                <h6 class="card-title">CCTV</h6>
-                                <p class="card-text">
-                                <h1 class="warning">
-                                  <strong>
-                                    {{ DB::table('goods')->where('category', 'CCTV')->count() }}
-                                  </strong>
-                                </h1>
-                                <p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="card bg-light mb-1" style="max-width: 18rem;">
-                              <div class="card-body">
-                                <h6 class="card-title">Laptop</h6>
-                                <p class="card-text">
-                                <h1 class="warning">
-                                  <strong>
-                                    {{ DB::table('goods')->where('category', 'LAPTOP')->count() }}
-                                  </strong>
-                                </h1>
-                                <p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-4 ">
-                            <div class="card bg-light mb-1" style="max-width: 18rem;">
-                              <div class="card-body">
-                                <h6 class="card-title">Server</h6>
-                                <p class="card-text">
-                                <h1 class="warning">
-                                  <strong>
-                                    {{ DB::table('goods')->where('category', 'SERVER')->count() }}
-                                  </strong>
-                                </h1>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="card bg-light mb-1" style="max-width: 18rem;">
-                              <div class="card-body">
-                                <h6 class="card-title">Printer</h6>
-                                <p class="card-text">
-                                <h1 class="warning">
-                                  <strong>
-                                    {{ DB::table('goods')->where('category', 'PRINTER')->count() }}
-                                  </strong>
-                                </h1>
-                                <p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="card bg-light mb-1" style="max-width: 18rem;">
-                              <div class="card-body">
-                                <h6 class="card-title">Wifi Router</h6>
-                                <p class="card-text">
-                                <h1 class="warning">
-                                  <strong>
-                                    {{ DB::table('goods')->where('category', 'ROUTER')->where('category', 'WIFI')->count() }}
-                                  </strong>
-                                </h1>
-                                <p>
-                              </div>
-                            </div>
-                          </div>
-                        </div> --}}
                       </div>
 
                     </div>
@@ -305,43 +216,6 @@
                         <strong class="primary">Laporan Gangguan dalam penanganan</strong>
                       </h2>
                     </div>
-
-                    {{-- <div class="media-body text-right">
-                      <div class="attendance-primary">
-                        <h5>
-                          {{ DB::table('attendances')->where('category', 'Sakit')->whereYear('created_at', now()->year)->count() }}
-                        </h5>
-                        <strong class="warning">S</strong>
-                      </div>
-
-                      <div class="attendance-primary">
-                        <h5>
-                          {{ DB::table('attendances')->where('category', 'Tukar Tugas')->whereYear('created_at', now()->year)->count() }}
-                        </h5>
-                        <strong class="primary">T/T</strong>
-                      </div>
-
-                      <div class="attendance-primary">
-                        <h5>
-                          {{ DB::table('attendances')->where('category', 'IDT')->whereYear('created_at', now()->year)->count() }}
-                        </h5>
-                        <strong class="primary">IDT</strong>
-                      </div>
-
-                      <div class="attendance-primary">
-                        <h5>
-                          {{ DB::table('attendances')->where('category', 'IPC')->whereYear('created_at', now()->year)->count() }}
-                        </h5>
-                        <strong class="secondary">IPC</strong>
-                      </div>
-
-                      <div class="attendance-primary">
-                        <h5>
-                          {{ DB::table('attendances')->where('category', 'Absen')->whereYear('created_at', now()->year)->count() }}
-                        </h5>
-                        <strong class="danger">A</strong>
-                      </div>
-                    </div> --}}
 
                     <div>
                       <i class="la la-gears font-large-2 float-right primary"></i>
@@ -501,7 +375,11 @@
                           $asset = $totalMalfunction->asset;
 
                           // Check if $distributionAssets is not null and not empty
-                          if ($asset && ($distributionAssets = $asset->distribution_asset) && !empty($distributionAssets)) {
+                          if (
+                              $asset &&
+                              ($distributionAssets = $asset->distribution_asset) &&
+                              !empty($distributionAssets)
+                          ) {
                               foreach ($distributionAssets as $distributionAsset) {
                                   $distribution = $distributionAsset->distribution;
 
@@ -512,11 +390,10 @@
                           }
                           // Use the ternary operator to set $employeeName to the last employee's name or 'N/A'
 $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
-
                         @endphp
                         <li class="list-group-item">
                           <span class="badge badge-pill bg-primary float-right font-medium-1">
-                            {{ $totalMalfunction->goods_id? DB::table('maintenances')->where('goods_id', $totalMalfunction->goods_id)->count(): '' }}
+                            {{ $totalMalfunction->goods_id ? DB::table('maintenances')->where('goods_id', $totalMalfunction->goods_id)->count() : '' }}
                           </span>
                           <h6>{{ $totalMalfunction->asset->name ?? '' }}
                             <p class="font-small-2">
