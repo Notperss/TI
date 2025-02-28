@@ -36,8 +36,9 @@ class AttendanceController extends Controller
             return DataTables::of($attendance)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    if (Auth::user()->detail_user->job_position == 1) {
-                        return '
+
+                    $isAdmin = Auth::user()->hasRole('super-admin');
+                    return '
                         <div class="container">
             <div class="btn-group mr-1 mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -47,7 +48,8 @@ class AttendanceController extends Controller
                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="'.route('backsite.attendance.edit', encrypt($item->id)).'">
+                    <a class="dropdown-item" href="'.route('backsite.attendance.edit', encrypt($item->id)).'" 
+                    '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                         Edit
                                 </a>
                     <form action="'.route('backsite.attendance.destroy', encrypt($item->id)).'" method="POST"
@@ -55,130 +57,21 @@ class AttendanceController extends Controller
                         '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="'.csrf_token().'">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="submit" class="dropdown-item" value="Delete" '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                     </form>
             </div>
             </div>
                     <form action="'.route('backsite.attendance.approve', encrypt($item->id)).'" method="POST"
                     onsubmit="
-                    '.($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Approve?\')' : 'return confirm(\'Are You Sure Want to Cancel Approve?\')').'
+                    '.($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Close?\')' : 'return confirm(\'Are You Sure Want to Open?\')').'
                     ">
                         '.method_field('PUT').csrf_field().'
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="_token" value="'.csrf_token().'">
-                        <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Approve' : 'Cancel-Approve').'">
+                        <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Close' : 'Open').'"
+                        '.($item->stats == 1 && Auth::user()->job_position == 'Administrasi' || $isAdmin ? '' : 'hidden').'>
                     </form>
-
                 ';
-                    }
-                    //                      else if (Auth::user()->detail_user->job_position == 1) {
-//                         return '
-//             <div class="btn-group mr-1 mb-1">
-//                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-//                     aria-expanded="false">Action</button>
-//                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-//                     <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
-//                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
-//                         Show
-//                     </a>
-//                     <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">
-//                         Edit
-//                                 </a>
-//                     <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
-//                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-//                         ' . method_field('delete') . csrf_field() . '
-//                         <input type="hidden" name="_method" value="DELETE">
-//                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-//                         <input type="submit" class="dropdown-item" value="Delete">
-//                     </form>
-//             </div>
-//              <div class="btn-group">
-//                                  <form action="' . route('backsite.attendance.approve', encrypt($item->id)) . '" method="POST"
-//                     onsubmit="return confirm(\'Are You Sure Want to Approve?\')">
-//                         ' . method_field('PUT') . csrf_field() . '
-//                         <input type="hidden" name="_method" value="PUT">
-//                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-//                         <input type="submit" class="btn btn-sm btn-danger" value="Cancel Approve">
-//                     </form>
-//             </div>
-//                 ';
-//                     } else if (Auth::user()->detail_user->job_position !== 1 && $item->stats == '1') {
-//                         return '
-//             <div class="btn-group mr-1 mb-1">
-//                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-//                     aria-expanded="false">Action</button>
-//                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-//                     <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
-//                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
-//                         Show
-//                     </a>
-//                     <a class="dropdown-item" href="' . route('backsite.attendance.edit', encrypt($item->id)) . '">
-//                         Edit
-//                                 </a>
-//                     <form action="' . route('backsite.attendance.destroy', encrypt($item->id)) . '" method="POST"
-//                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-//                         ' . method_field('delete') . csrf_field() . '
-//                         <input type="hidden" name="_method" value="DELETE">
-//                         <input type="hidden" name="_token" value="' . csrf_token() . '">
-//                         <input type="submit" class="dropdown-item" value="Delete">
-//                     </form>
-//             </div>
-//                 ';
-//                     } else if (Auth::user()->detail_user->job_position !== 1 && $item->stats == '2') {
-//                         return '
-//             <div class="btn-group mr-2 mb-1">
-//                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-//                     aria-expanded="false">Action</button>
-//                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-//                     <a href="#mymodal" data-remote="' . route('backsite.attendance.show', encrypt($item->id)) . '" data-toggle="modal"
-//                         data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">
-//                         Show
-//                     </a>
-//             </div>
-    
-                    //   <span class="badge badge-sm badge-icon badge-success mx-1"><i class="la la-check"></i></span>
-    
-                    //             ';
-//                     } 
-                    else {
-                        if ($item->stats == '1' && Auth::user()->detail_user->job_position !== 1) {
-                            return '
-            <div class="btn-group mr-1 mb-1">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Action</button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="'.route('backsite.attendance.show', encrypt($item->id)).'" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
-                    <a class="dropdown-item" href="'.route('backsite.attendance.edit', encrypt($item->id)).'">Edit</a>
-                    <form action="'.route('backsite.attendance.destroy', encrypt($item->id)).'" method="POST"
-                        onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        '.method_field('delete').csrf_field().'
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="'.csrf_token().'">
-                        <input type="submit" class="dropdown-item" value="Delete">
-                    </form>
-                </div>
-            </div>';
-                        } else if ($item->stats == '2') {
-                            return '
-            <div class="btn-group mr-2 mb-1">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Action</button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="'.route('backsite.attendance.show', encrypt($item->id)).'" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Absensi" class="dropdown-item">Show</a>
-                </div>
-            </div>';
-                        } else {
-                            return '  <form action="'.route('backsite.attendance.destroy', encrypt($item->id)).'" method="POST"
-                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        '.method_field('delete').csrf_field().'
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="'.csrf_token().'">
-                        <input type="submit" class="btn btn-sm btn-danger" value="Delete">
-                    </form>';
-                        }
-                    }
                 })
                 ->editColumn('start_date', function ($item) {
                     return Carbon::parse($item->start_date)->translatedFormat('d-m-Y');
