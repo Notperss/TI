@@ -77,23 +77,20 @@
                     </div>
                   </div>
                   <button id="filterButton" class="btn btn btn-primary mb-1">Filter Tanggal</button>
-
-
                   <div class="table-responsive">
-                    <table class="table table-striped table-bordered text-inputs-searching default-table activity-table"
-                      id="pp-table">
+                    <table class="table table-striped table-bordered default-table activity-table" id="pp-table">
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th
+                          {{-- <th
                             style="display: {{ in_array(Auth::user()->detail_user->job_position, [1, 3]) || Auth::user()->detail_user->nik == 'M0203002' ? '' : 'none' }}">
-                            User</th>
+                            User</th> --}}
                           <th>No PR</th>
                           <th>Tahun</th>
                           <th>Pekerjaan</th>
-                          <th>Nominal PP</th>
+                          <th>Nominal PR</th>
                           <th>Tanggal</th>
-                          <th>Dokumentasi Status</th>
+                          <th>Status PR</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -102,7 +99,7 @@
                       </tbody>
                       <tfoot hidden>
                         <th>no</th>
-                        <th style="display: none">No PP</th>
+                        {{-- <th style="display: none">No PP</th> --}}
                         <th>No PP</th>
                         <th>Tahun</th>
                         <th>Pekerjaan</th>
@@ -190,12 +187,11 @@
           searchable: false,
           width: '3%',
         },
-        {
-          name: 'username',
-          data: 'username',
-          visible: false,
-
-        },
+        // {
+        //   name: 'username',
+        //   data: 'username',
+        //   visible: false,
+        // },
         {
           data: 'no_pp',
           name: 'no_pp',
@@ -229,10 +225,14 @@
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';
+            } else if (data === '4') {
+              return '<span class="badge bg-danger">Batal</span>';
+            } else if (data === '3') {
+              return '<span class="badge bg-success">Closed</span>';
             } else if (data === '2') {
-              return '<span class="badge bg-success">Open</span>';
+              return '<span class="badge bg-primary">Tagihan</span>';
             } else if (data === '1') {
-              return '<span class="badge bg-danger">Closed</span>';
+              return '<span class="badge bg-warning">Process</span>';
             } else {
               return '-';
             }
@@ -243,7 +243,7 @@
           name: 'action',
           orderable: false,
           searchable: false,
-          width: '15%',
+          width: '10%',
           className: 'no-print' // Add this class to exclude the column from printing
 
         },

@@ -29,14 +29,15 @@ class PPController extends Controller
 
 
 
-            $user = auth()->user()->detail_user;
-            $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
+            // $isManagerOrViceManager = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
 
-            $ppQuery = $isManagerOrViceManager ? PP::with('detail_user.user', 'pp_status')->orderBy('created_at', 'desc')
-                : PP::where('user_id', $user->id)->orderBy('created_at', 'desc');
+            $isAdmin = Auth::user()->hasRole('super-admin');
+            $administrasi = Auth::user()->job_position == 'Administrasi';
+
+            $ppQuery = $isAdmin || $administrasi ? PP::with('detail_user.user', 'pp_status')->orderBy('created_at', 'desc')
+                : PP::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc');
 
             $pp = $ppQuery->get();
-
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $pp = $pp->whereBetween('date', [$request->from_date, $request->to_date]);
@@ -44,46 +45,56 @@ class PPController extends Controller
 
             return DataTables::of($pp)
                 ->addIndexColumn()
-                ->addColumn('action', function ($item) {
+                ->addColumn('action', function ($item) use ($isAdmin, $administrasi) {
                     $action = '
         <div class="container">
             <div class="btn-group mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.pp.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data PP" class="dropdown-item">
+                    <a href="#mymodal" data-remote="'.route('backsite.pp.show', encrypt($item->id)).'" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Data PR" class="dropdown-item">
                         Show
-                    </a>';
-
-                    $user = auth()->user()->detail_user;
-                    $Access = $user->job_position === 1 || $user->nik === 'M0203002';
-
-                    if ($item->stats == 1 || $Access) {
-                        $action .= '<a class="dropdown-item" href="' . route('backsite.pp.edit', encrypt($item->id)) . '">
+                    </a>
+                       
+                    <a class="dropdown-item" href="'.route('backsite.pp.edit', encrypt($item->id)).'"
+                     '.($isAdmin || $item->stats == 1 ? '' : 'hidden').'>
                         Edit
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.bill.create_bill', $item->id) . '">
+
+                    <a class="dropdown-item" href="'.route('backsite.bill.create_bill', $item->id).'"
+                    '.($isAdmin || $item->stats == 2 ? '' : 'hidden').'>
                         Tambah tagihan
                     </a>
-                    <form action="' . route('backsite.pp.destroy', encrypt($item->id)) . '" method="POST"
+
+                    <form action="'.route('backsite.pp.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete" '.($isAdmin || $item->stats == 1 ? '' : 'hidden').'>
                     </form>
+                </div>
             </div>
         </div>';
-                    }
-                    if ($Access) {
-                        $action .= '<form action="' . route('backsite.pp.approve', encrypt($item->id)) . '" method="POST"
-                    onsubmit="return confirm(\'' . ($item->stats == 1 ? 'Apakah yakin ingin membuka kembali?' : 'Jika di Closed anda tidak akan bisa meng-Edit kembali!') . '\')">
-                        ' . method_field('PUT') . csrf_field() . '
+
+                    if ($isAdmin || $administrasi || $item->stats == 1) {
+                        $action .= '<form action="'.route('backsite.pp.approve', encrypt($item->id)).'" method="POST"
+                    onsubmit="return confirm(\'Apakah anda yakin?\')">
+                        '.method_field('PUT').csrf_field().'
                         <input type="hidden" name="_method" value="PUT">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                     <input type="submit"
-                        title= Open/Closed" class="btn btn-sm btn-' . ($item->stats == 1 ? 'success' : 'danger') . ' w-100" value="' . ($item->stats == 1 ? 'Open' : 'Closed') . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary flex-grow-1" name="status" value="Tagihan" title="Tagihan" '.($isAdmin || $item->stats == 1 ? '' : 'hidden').'>
+                                Tagihan
+                            </button>
+                            <button type="submit" class="btn btn-sm btn-danger flex-grow-1" name="status" value="Batal" title="Batal"  '.($isAdmin || $item->stats == 1 ? '' : 'hidden').'>
+                                Batal
+                            </button>
+                            <button type="submit" class="btn btn-sm btn-success flex-grow-1" name="status" value="Close" title="Close" '.($isAdmin || $item->stats == 2 ? '' : 'hidden').'>
+                                Close
+                            </button>
+                        </div>
                     </form>';
                     }
                     return $action;
@@ -147,14 +158,14 @@ class PPController extends Controller
                         return 'N/A';
                     }
                 })
-                ->addColumn('username', function ($item) {
-                    $user = auth()->user()->detail_user;
-                    $access = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
+                // ->addColumn('username', function ($item) {
+                //     $user = auth()->user()->detail_user;
+                //     $access = $user->job_position === 1 || $user->job_position === 3 || $user->nik === 'M0203002';
 
-                    return $access ? $item->detail_user->user->name : null;
-                })
+                //     return $access ? $item->detail_user->user->name : null;
+                // })
 
-                ->rawColumns(['action', 'date', 'username', 'dokumentasiStats'])
+                ->rawColumns(['action', 'date', 'dokumentasiStats'])
                 ->toJson();
         }
         return view("pages.adm.pp.index");
@@ -312,9 +323,9 @@ class PPController extends Controller
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-pp', $fullname);
                 Pp_file::create([
                     'pp_id' => $request->id,
@@ -457,22 +468,29 @@ class PPController extends Controller
         return back();
     }
 
-    public function approve($id)
+    public function approve($id, Request $request)
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
         $pp = PP::find($decrypt_id);
-        if ($pp->stats == 1) {
-            $pp->update(['stats' => 2]);
-        } elseif ($pp->stats == 2) {
-            $pp->update(['stats' => 1]);
+
+        if ($request->status) {
+            if ($request->status == 'Tagihan') {
+                $statusPP = 2;
+            } elseif ($request->status == 'Batal') {
+                $statusPP = 4;
+            } elseif ($request->status == 'Close') {
+                $statusPP = 3;
+            } else {
+                alert()->error('Error', 'Status tidak valid');
+                return back();
+            }
+
+            $pp->update(['stats' => $statusPP]);
+            alert()->success('Sukses', 'Data berhasil dirubah');
         } else {
             alert()->error('Error', 'Data gagal dirubah');
-            return back();
         }
-        alert()->success('Sukses', 'Data berhasil dirubah');
         return back();
-
     }
-
 }
