@@ -57,6 +57,24 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="division_id">Divisi<code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-5">
+                        <select id="division_id" name="division_id" class="form-control select2"
+                          value="{{ old('division_id') }}">
+                          <option value="">Choose</option>
+                          @foreach ($divisions as $division)
+                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                          @endforeach
+                        </select>
+                        @if ($errors->has('division_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('division_id') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="date_form">Tanggal Form<code
                           style="color:red;">*</code></label>
                       <div class="col-md-5">

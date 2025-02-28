@@ -74,6 +74,7 @@
                           <th>No</th>
                           <th>Nama Form</th>
                           <th>Pengirim</th>
+                          <th>Divisi</th>
                           <th>Tgl Form</th>
                           <th>Keterangan</th>
                           <th>File</th>
@@ -85,6 +86,7 @@
                       <tfoot hidden>
                         <th>No</th>
                         <th>Nama Form</th>
+                        <th>No Form</th>
                         <th>No Form</th>
                         <th>Tgl Form</th>
                         <th>Keterangan</th>
@@ -129,6 +131,13 @@
         {
           data: 'no_form',
           name: 'no_form',
+        },
+        {
+          data: 'division.name',
+          name: 'division.name',
+          render: function(data, type, row) {
+            return data ? data : '-';
+          }
         },
         {
           data: 'date_form',

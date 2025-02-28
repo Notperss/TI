@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\MasterData\Division\Division;
 use App\Http\Requests\Adm\FormTi\StoreFormTiRequest;
 use App\Http\Requests\Adm\FormTi\UpdateFormTiRequest;
 
@@ -25,7 +26,7 @@ class FormTiController extends Controller
     {
         if (request()->ajax()) {
 
-            $form_ti = FormTi::orderby('created_at', 'desc');
+            $form_ti = FormTi::with('division')->orderby('created_at', 'desc');
 
             return DataTables::of($form_ti)
                 ->addIndexColumn()
@@ -35,18 +36,18 @@ class FormTiController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.form_ti.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.form_ti.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.form_ti.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.form_ti.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="' . route('backsite.form_ti.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.form_ti.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="dropdown-item" value="Delete">
                     </form>
             </div>
@@ -57,11 +58,11 @@ class FormTiController extends Controller
                 ->editColumn('file', function ($item) {
                     if ($item->file) {
                         return '<a type="button" data-fancybox
-                                data-src="' . asset('storage/' . $item->file) . '"
+                                data-src="'.asset('storage/'.$item->file).'"
                                 class="btn btn-info btn-sm text-white ">
                                 Lihat
                             </a>
-                            <a type="button" href="' . asset('storage/' . $item->file) . '"
+                            <a type="button" href="'.asset('storage/'.$item->file).'"
                                 class="btn btn-warning btn-sm" download>
                                 Unduh
                             </a>
@@ -84,7 +85,8 @@ class FormTiController extends Controller
     public function create(Request $request)
     {
         $forms = Form::where('category', '!=', 'ABSENSI')->orderby("created_at", "desc")->get();
-        return view("pages.adm.form_ti.create", compact("forms"));
+        $divisions = Division::orderBy('name', 'asc')->get();
+        return view("pages.adm.form_ti.create", compact("forms", 'divisions'));
     }
 
     /**
@@ -102,9 +104,9 @@ class FormTiController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
         }
 
@@ -140,7 +142,8 @@ class FormTiController extends Controller
     {
         $form_ti = FormTi::find($id);
         $forms = Form::where('category', '!=', 'ABSENSI')->orderBy('created_at', 'desc')->get();
-        return view('pages.adm.form_ti.edit', compact('form_ti', 'forms'));
+        $divisions = Division::orderBy('name', 'asc')->get();
+        return view('pages.adm.form_ti.edit', compact('form_ti', 'forms', 'divisions'));
     }
 
     /**
@@ -161,9 +164,9 @@ class FormTiController extends Controller
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $file = $files->getClientOriginalName();
-            $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
             $extension = $files->getClientOriginalExtension();
-            $fullname = $basename . '.' . $extension;
+            $fullname = $basename.'.'.$extension;
             $data['file'] = $request->file('file')->storeAs('assets/file-form', $fullname);
             // hapus file
             if ($path_file != null || $path_file != '') {
@@ -200,7 +203,7 @@ class FormTiController extends Controller
             Storage::delete($path_file);
         }
 
-        $form_ti->forceDelete();
+        $form_ti->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
