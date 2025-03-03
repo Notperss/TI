@@ -139,7 +139,7 @@ class ProfileController extends Controller
         }
 
         $user->update([
-            'icon' => $icon,
+            'icon' => $icon ?? $path_file,
         ]);
 
         alert()->success('success', 'User has been updated successfully!');
