@@ -138,17 +138,17 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code
+                      <label class="col-md-2 label-control" for="is_active">Status<code
                           style="color:red;">*</code></label>
                       <div class="col-md-3">
-                        <select name="stats" id="stats" class="form-control select2">
+                        <select name="is_active" id="is_active" class="form-control select2">
                           <option value="" disabled selected>Choose</option>
                           <option value="1">Aktif</option>
-                          <option value="2">Tidak Aktif</option>
+                          <option value="0">Tidak Aktif</option>
                         </select>
-                        @if ($errors->has('stats'))
+                        @if ($errors->has('is_active'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
+                            {{ $errors->first('is_active') }}</p>
                         @endif
                       </div>
                     </div>

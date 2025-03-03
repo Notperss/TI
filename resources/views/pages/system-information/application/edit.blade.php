@@ -139,18 +139,18 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="stats">Status<code
+                      <label class="col-md-2 label-control" for="is_active">Status<code
                           style="color:red;">*</code></label>
                       <div class="col-md-3">
-                        <select name="stats" id="stats" class="form-control select2">
+                        <select name="is_active" id="is_active" class="form-control select2">
                           <option value="" disabled selected>Choose</option>
-                          <option value="1"{{ $app->stats == 1 ? 'selected' : '' }}>Aktif</option>
-                          <option value="2"{{ $app->stats == 2 ? 'selected' : '' }}>Tidak Aktif
+                          <option value="1"{{ $app->is_active == 1 ? 'selected' : '' }}>Aktif</option>
+                          <option value="0"{{ $app->is_active == 0 ? 'selected' : '' }}>Tidak Aktif
                           </option>
                         </select>
-                        @if ($errors->has('stats'))
+                        @if ($errors->has('is_active'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('stats') }}</p>
+                            {{ $errors->first('is_active') }}</p>
                         @endif
                       </div>
                     </div>

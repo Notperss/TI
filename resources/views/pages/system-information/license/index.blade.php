@@ -89,6 +89,7 @@
                           <th>Versi</th>
                           <th>Barcode</th>
                           <th>Tanggal Berakhir</th>
+                          <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -100,6 +101,7 @@
                         <th>Jumlah Lisensi</th>
                         <th>Versi</th>
                         <th>Barcode</th>
+                        <th>Tanggal Berakhir</th>
                         <th>Tanggal Berakhir</th>
                         <th>Action</th>
                       </tfoot>
@@ -187,6 +189,21 @@
         {
           data: 'date_finish',
           name: 'date_finish',
+        },
+        {
+          data: 'stats',
+          name: 'stats',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<span class="badge bg-danger">Open</span>';
+            } else if (data === '2') {
+              return '<span class="badge bg-success">Close</span>';
+            } else {
+              return '-';
+            }
+          }
         },
         {
           data: 'action',

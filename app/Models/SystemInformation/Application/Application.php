@@ -19,6 +19,7 @@ class Application extends Model
         'path_file',
         'description',
         'stats',
+        'is_active',
     ];
 
     public function app()

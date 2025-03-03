@@ -33,7 +33,7 @@ class StoreApplicationRequest extends FormRequest
             'path_database' => 'required',
             'path_file' => 'required',
             'description' => 'required',
-            'stats' => 'required',
+            'is_active' => 'required',
         ];
     }
 }

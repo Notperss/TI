@@ -20,6 +20,7 @@ class License extends Model
         'pp',
         'barcode',
         'num_of_licenses',
+        'stats',
         'description',
     ];
 }

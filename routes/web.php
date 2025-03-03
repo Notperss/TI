@@ -315,6 +315,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/license/upload', 'upload')->name('license.upload');
         Route::post('/license/show_file', 'show_file')->name('license.show_file');
         Route::delete('/license/{id}/delete_file', 'delete_file')->name('license.delete_file');
+        Route::put('/license/approve/{id}', 'approve')->name('license.approve');
     });
 
     Route::resource('drc', DRCController::class);
@@ -358,6 +359,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     Route::resource('application', ApplicationController::class);
     Route::get('/app_link', [ApplicationController::class, 'app_link'])->name('application.app_link');
+    Route::put('/application/approve/{id}', [ApplicationController::class, 'approve'])->name('application.approve');
 
     Route::controller(ApplicationController::class)->group(function () {
         Route::post('/application/form_upload_note', 'form_upload_note')->name('application.form_upload_note');

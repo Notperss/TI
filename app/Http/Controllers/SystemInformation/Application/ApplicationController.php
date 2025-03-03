@@ -37,30 +37,48 @@ class ApplicationController extends Controller
             return DataTables::of($application)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
+                    $isAdmin = Auth::user()->hasRole('super-admin');
                     return '
-            <div class="btn-group">
+            <div class="container">
+            <div class="btn-group mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.application.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.application.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Aplikasi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.application.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.application.edit', $item->id).'"  
+                    '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                         Edit
                     </a>
-                    <form action="' . route('backsite.application.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.application.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete" 
+                         '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                     </form>
             </div>
+             </div>
+             <form action="'.route('backsite.application.approve', encrypt($item->id)).'" method="POST"
+                    onsubmit="
+                    '.($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Close?\')' : 'return confirm(\'Are You Sure Want to Open?\')').'
+                    ">
+                        '.method_field('PUT').csrf_field().'
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Close' : 'Open').'"
+                        '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
+                    </form>
                 ';
                 })->editColumn('date_finish', function ($item) {
                     return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
-                })->rawColumns(['action', 'date_finish',])
+                })->editColumn('name_app', function ($item) {
+                    return $item->name_app.'<br><span class="badge badge-'.($item->is_active ? 'success' : 'danger').'">'.
+                        ($item->is_active ? 'Aktif' : 'Tidak Aktif').'</span>';
+                })->rawColumns(['action', 'date_finish', 'name_app'])
                 ->toJson();
         }
         return view("pages.system-information.application.index");
@@ -170,9 +188,9 @@ class ApplicationController extends Controller
 
         $file = FileApp::where('app_id', $decrypt_id)->get();
         // hapus file
-        foreach ($file as $file) {
-            if ($file->file != null || $file->file != '') {
-                Storage::delete($file->file);
+        foreach ($file as $fil) {
+            if ($fil->file != null || $fil->file != '') {
+                Storage::delete($fil->file);
             }
         }
 
@@ -232,9 +250,9 @@ class ApplicationController extends Controller
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-app-note', $fullname);
             }
         }
@@ -326,9 +344,9 @@ class ApplicationController extends Controller
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-app', $fullname);
             }
         }
@@ -370,7 +388,7 @@ class ApplicationController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.application.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.application.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Aplikasi" class="dropdown-item">
                         Show
                     </a>
@@ -382,6 +400,23 @@ class ApplicationController extends Controller
                 ->toJson();
         }
         return view("pages.system-information.application.index_link");
+    }
+
+    public function approve($id)
+    {
+        // deskripsi id
+        $decrypt_id = decrypt($id);
+        $app = Application::find($decrypt_id);
+        if ($app->stats == 1) {
+            $app->update(['stats' => 2]);
+        } elseif ($app->stats == 2) {
+            $app->update(['stats' => 1]);
+        } else {
+            alert()->error('Error', 'Data gagal diubah');
+            return back();
+        }
+        alert()->success('Sukses', 'Data berhasil diubah');
+        return back();
     }
 
 }

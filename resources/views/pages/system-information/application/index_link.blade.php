@@ -168,8 +168,8 @@
           name: 'description',
         },
         {
-          data: 'stats',
-          name: 'stats',
+          data: 'is_active',
+          name: 'is_active',
           render: function(data) {
             if (data === '0') {
               return '<span>N/A</span>';

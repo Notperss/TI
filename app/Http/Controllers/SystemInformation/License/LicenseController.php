@@ -13,6 +13,7 @@ use App\Models\SystemInformation\License\License;
 use App\Models\SystemInformation\License\LicenseFile;
 use App\Http\Requests\SystemInformation\License\StoreLicenseRequest;
 use App\Http\Requests\SystemInformation\License\UpdateLicenseRequest;
+use Illuminate\Support\Facades\Auth;
 
 class LicenseController extends Controller
 {
@@ -34,28 +35,47 @@ class LicenseController extends Controller
             return DataTables::of($license)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
+                    $isAdmin = Auth::user()->hasRole('super-admin');
                     return '
-                    <button type="button" class="btn btn-cyan btn-sm" title="Tambah File" onclick="upload(' . $item->id . ')"><i
+                    <div class="row ml-1">
+                    <button type="button" class="btn btn-cyan btn-sm" title="Tambah File" onclick="upload('.$item->id.')" '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'><i
                         class="bx bx-file"></i></button>
+
             <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.license.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.license.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Lisensi" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.license.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.license.edit', $item->id).'" '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                         Edit
                     </a>
-                    <form action="' . route('backsite.license.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.license.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete" '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                     </form>
-            </div>
+                    </div>
+                    </div>
+
+                      <div class="row mt-1">
+                      <form action="'.route('backsite.license.approve', encrypt($item->id)).'" method="POST"
+                    onsubmit="
+                    '.($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Close?\')' : 'return confirm(\'Are You Sure Want to Open?\')').'
+                    ">
+                        '.method_field('PUT').csrf_field().'
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Close' : 'Open').'"
+                        '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
+                    </form>
+                      </div>
+                    
+           
                 ';
                 })->editColumn('date_finish', function ($item) {
                     return Carbon::parse($item->date_finish)->translatedFormat('l, d F Y');
@@ -221,9 +241,9 @@ class LicenseController extends Controller
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $image) {
                 $file = $image->getClientOriginalName();
-                $basename = pathinfo($file, PATHINFO_FILENAME) . ' - ' . Str::random(5);
+                $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(5);
                 $ext = $image->getClientOriginalExtension();
-                $fullname = $basename . '.' . $ext;
+                $fullname = $basename.'.'.$ext;
                 $file = $image->storeAs('assets/file-license-file', $fullname);
             }
         }
@@ -264,6 +284,24 @@ class LicenseController extends Controller
         $licenseFile->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+    public function approve($id)
+    {
+        // deskripsi id
+        $decrypt_id = decrypt($id);
+        // dd($decrypt_id);
+        $license = License::find($decrypt_id);
+        if ($license->stats == 1) {
+            $license->update(['stats' => 2]);
+        } elseif ($license->stats == 2) {
+            $license->update(['stats' => 1]);
+        } else {
+            alert()->error('Error', 'Data gagal diubah');
+            return back();
+        }
+        alert()->success('Sukses', 'Data berhasil diubah');
         return back();
     }
 

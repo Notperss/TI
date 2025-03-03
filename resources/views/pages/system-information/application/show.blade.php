@@ -43,14 +43,10 @@
   <tr>
     <th>Status</th>
     <td>
-      @if ($app->stats == '')
-        <span>N/A</span>';
-      @elseif ($app->stats == '2')
-        <h5><span class="badge bg-danger">Tidak Aktif</span></h5>
-      @elseif ($app->stats == '1')
+      @if ($app->is_active)
         <h5><span class="badge bg-info">Aktif</span></h5>
       @else
-        <h5><span> - </span></h5>
+        <h5><span class="badge bg-danger">Tidak Aktif</span></h5>
       @endif
     </td>
   </tr>
