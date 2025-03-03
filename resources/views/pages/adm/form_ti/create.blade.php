@@ -43,15 +43,15 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_form">Pengirim<code
+                      <label class="col-md-2 label-control" for="sender">Pengirim<code
                           style="color:red;">*</code></label>
                       <div class="col-md-5">
-                        <input type="text" class="form-control" id="no_form" name="no_form"
-                          value="{{ old('no_form') }}" required>
+                        <input type="text" class="form-control" id="sender" name="sender"
+                          value="{{ old('sender') }}" required>
                         </select>
-                        @if ($errors->has('no_form'))
+                        @if ($errors->has('sender'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('no_form') }}</p>
+                            {{ $errors->first('sender') }}</p>
                         @endif
                       </div>
                     </div>

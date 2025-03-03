@@ -45,15 +45,15 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="no_form">Pengirim<code
+                      <label class="col-md-2 label-control" for="sender">Pengirim<code
                           style="color:red;">*</code></label>
                       <div class="col-md-5">
-                        <input type="text" class="form-control" id="no_form" name="no_form"
-                          value="{{ old('no_form', $form_ti->no_form) }}" required>
+                        <input type="text" class="form-control" id="sender" name="sender"
+                          value="{{ old('sender', $form_ti->sender) }}" required>
                         </select>
-                        @if ($errors->has('no_form'))
+                        @if ($errors->has('sender'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('no_form') }}</p>
+                            {{ $errors->first('sender') }}</p>
                         @endif
                       </div>
                     </div>
@@ -95,7 +95,7 @@
                       <label class="col-md-2 label-control" for="file">File</label>
                       <div class="col-md-5">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="file" name="file" required>
+                          <input type="file" class="custom-file-input" id="file" name="file">
                           <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                             File</label>
                           @if ($form_ti->file)

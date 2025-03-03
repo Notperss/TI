@@ -5,6 +5,10 @@
     <td>{{ isset($form_ti->type_form) ? $form_ti->type_form : 'N/A' }}</td>
   </tr>
   <tr>
+    <th>Pengirim</th>
+    <td>{{ isset($form_ti->sender) ? $form_ti->sender : 'N/A' }}</td>
+  </tr>
+  <tr>
     <th>Tanggal Form</th>
     <td>
       {{ isset($form_ti->date_form) ? Carbon\Carbon::parse($form_ti->date_form)->translatedFormat('l, d F Y') : 'N/A' }}

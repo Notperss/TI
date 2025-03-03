@@ -211,6 +211,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('demand', DemandController::class);
 
     Route::resource('atk', ATKController::class);
+    Route::put('/atk/approve/{atk}', [ATKController::class, 'approve'])->name('atk.approve');
 
     Route::resource('letter', LetterController::class);
 
@@ -262,6 +263,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/form_ti/upload', 'upload')->name('form_ti.upload');
         Route::post('/form_ti/show_file', 'show_file')->name('form_ti.show_file');
         Route::delete('/form_ti/{id}/hapus_file', 'hapus_file')->name('form_ti.hapus_file');
+        Route::delete('/form_ti/{id}/hapus_file', 'hapus_file')->name('form_ti.hapus_file');
+        Route::put('/form_ti/approve/{id}', 'approve')->name('form_ti.approve');
+
     });
 
     Route::resource('lendingfacility', LendingFacilityController::class);

@@ -102,15 +102,17 @@
                       @forelse ($lending_goods as $lends)
                         <tbody>
                           <td class="text-center" style="width: 5%;">{{ $loop->iteration }}</td>
-                          <td class="text-center">{{ $lends->barang->name }}</td>
-                          <td class="text-center">{{ $lends->barang->category }}</td>
-                          <td class="text-center">{{ $lends->barang->barcode }}</td>
+                          <td class="text-center">{{ $lends->barang->name ?? '' }}</td>
+                          <td class="text-center">{{ $lends->barang->category ?? '' }}</td>
+                          <td class="text-center">{{ $lends->barang->barcode ?? '' }}</td>
                           <td class="text-center">
-                            <a type="button" data-fancybox data-src="{{ asset('storage/' . $lends->barang->file) }}"
-                              class="btn btn-info btn-sm text-white ">
-                              Lihat
-                            </a> <a type="button" href="{{ asset('storage/' . $lends->barang->file) }}"
-                              class="btn btn-warning btn-sm text-white" download>Unduh</a>
+                            @if (isset($lends->barang->file))
+                              <a type="button" data-fancybox data-src="{{ asset('storage/' . $lends->barang->file) }}"
+                                class="btn btn-info btn-sm text-white ">
+                                Lihat
+                              </a> <a type="button" href="{{ asset('storage/' . $lends->barang->file) }}"
+                                class="btn btn-warning btn-sm text-white" download>Unduh</a>
+                            @endif
                           </td>
                           <td class="text-center">
                             <div class="btn-group">

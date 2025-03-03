@@ -8,6 +8,7 @@ use App\Models\Adm\FormTi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\MasterData\Division\Division;
@@ -31,8 +32,10 @@ class FormTiController extends Controller
             return DataTables::of($form_ti)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
+                    $isAdmin = Auth::user()->hasRole('super-admin');
                     return '
-            <div class="btn-group">
+            <div class="container">
+            <div class="btn-group mr-1 mb-1">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
@@ -40,7 +43,7 @@ class FormTiController extends Controller
                         data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="'.route('backsite.form_ti.edit', $item->id).'">
+                    <a class="dropdown-item" href="'.route('backsite.form_ti.edit', $item->id).'"  '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                         Edit
                     </a>
                     <form action="'.route('backsite.form_ti.destroy', encrypt($item->id)).'" method="POST"
@@ -48,30 +51,33 @@ class FormTiController extends Controller
                         '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="'.csrf_token().'">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="submit" class="dropdown-item" value="Delete"  '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                     </form>
             </div>
+             </div>
+             <form action="'.route('backsite.form_ti.approve', encrypt($item->id)).'" method="POST"
+                    onsubmit="
+                    '.($item->stats == 1 ? 'return confirm(\'Are You Sure Want to Close?\')' : 'return confirm(\'Are You Sure Want to Open?\')').'
+                    ">
+                        '.method_field('PUT').csrf_field().'
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Close' : 'Open').'"
+                        '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
+                    </form>
                 ';
                 })->editColumn('date_form', function ($item) {
                     return Carbon::parse($item->date_form)->translatedFormat('l, d F Y');
                 })
-                ->editColumn('file', function ($item) {
+                ->editColumn('type_form', function ($item) {
                     if ($item->file) {
-                        return '<a type="button" data-fancybox
-                                data-src="'.asset('storage/'.$item->file).'"
-                                class="btn btn-info btn-sm text-white ">
-                                Lihat
-                            </a>
-                            <a type="button" href="'.asset('storage/'.$item->file).'"
-                                class="btn btn-warning btn-sm" download>
-                                Unduh
-                            </a>
-                                ';
+                        return '<button type="button" class="btn btn-primary btn-min-width" style="font-size:80%;" data-fancybox  title="Lihat File"
+                                data-src="'.asset('storage/'.$item->file).'">'.$item->type_form.'</button>';
                     } else {
-                        return '<span>File not found</span>';
+                        return '<h5><span type="button" class="badge bg-secondary">-</span></h5>';
                     }
                 })
-                ->rawColumns(['action', 'date_form', 'file'])
+                ->rawColumns(['action', 'date_form', 'type_form'])
                 ->toJson();
         }
         return view("pages.adm.form_ti.index");
@@ -206,6 +212,23 @@ class FormTiController extends Controller
         $form_ti->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+    public function approve($id)
+    {
+        // deskripsi id
+        $decrypt_id = decrypt($id);
+        $form = FormTi::find($decrypt_id);
+        if ($form->stats == 1) {
+            $form->update(['stats' => 2]);
+        } elseif ($form->stats == 2) {
+            $form->update(['stats' => 1]);
+        } else {
+            alert()->error('Error', 'Data gagal diubah');
+            return back();
+        }
+        alert()->success('Sukses', 'Data berhasil diubah');
         return back();
     }
 }

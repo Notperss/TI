@@ -11,10 +11,11 @@ class FormTi extends Model
     use HasFactory;
     protected $fillable = [
         'division_id',
-        'no_form',
+        'sender',
         'type_form',
         'file',
         'date_form',
+        'stats',
         'description',
     ];
 

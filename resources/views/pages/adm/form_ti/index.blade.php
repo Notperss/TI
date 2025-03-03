@@ -77,7 +77,7 @@
                           <th>Divisi</th>
                           <th>Tgl Form</th>
                           <th>Keterangan</th>
-                          <th>File</th>
+                          <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -129,8 +129,8 @@
           name: 'type_form',
         },
         {
-          data: 'no_form',
-          name: 'no_form',
+          data: 'sender',
+          name: 'sender',
         },
         {
           data: 'division.name',
@@ -147,9 +147,24 @@
           data: 'description',
           name: 'description',
         },
+        // {
+        //   data: 'file',
+        //   name: 'file',
+        // },
         {
-          data: 'file',
-          name: 'file',
+          data: 'stats',
+          name: 'stats',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<span class="badge bg-danger">Open</span>';
+            } else if (data === '2') {
+              return '<span class="badge bg-success">Close</span>';
+            } else {
+              return '-';
+            }
+          }
         },
         {
           data: 'action',

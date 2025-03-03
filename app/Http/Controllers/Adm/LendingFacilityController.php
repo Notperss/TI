@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Adm\LendingGoods;
 use App\Models\Adm\LendingFacility;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -37,47 +38,34 @@ class LendingFacilityController extends Controller
             return DataTables::of($lendingfacility)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    if ($item->stats == 1) {
-                        return '
+                    $isAdmin = Auth::user()->hasRole('super-admin');
+                    return '
             <div class="btn-group">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.lendingfacility.show', encrypt($item->id)) . '" data-toggle="modal"
+                    <a href="#mymodal" data-remote="'.route('backsite.lendingfacility.show', encrypt($item->id)).'" data-toggle="modal"
                         data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
                         Show
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.lendingfacility.returning', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.lendingfacility.returning', $item->id).'"
+                    '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                     Dikembalikan
                     </a>
-                    <a class="dropdown-item" href="' . route('backsite.lendingfacility.edit', $item->id) . '">
+                    <a class="dropdown-item" href="'.route('backsite.lendingfacility.edit', $item->id).'" 
+                    '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                         Edit
                     </a>
-                    <form action="' . route('backsite.lendingfacility.destroy', encrypt($item->id)) . '" method="POST"
+                    <form action="'.route('backsite.lendingfacility.destroy', encrypt($item->id)).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        ' . method_field('delete') . csrf_field() . '
+                        '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="submit" class="dropdown-item" value="Delete">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="dropdown-item" value="Delete" '.($item->stats == 1 || $isAdmin ? '' : 'hidden').'>
                     </form>
             </div>
                 ';
-                    } else {
-                        return '
-            <div class="btn-group">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Action</button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="' . route('backsite.lendingfacility.show', encrypt($item->id)) . '" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data Peminjaman Fasilitas" class="dropdown-item">
-                        Show
-                    </a>
-                    <a class="dropdown-item" href="' . route('backsite.lendingfacility.returning', $item->id) . '">
-                    Dikembalikan
-                    </a>
-            </div>
-                ';
-                    }
+
                 })->editColumn('date_return', function ($item) {
                     if ($item->date_return) {
                         return Carbon::parse($item->date_return)->translatedFormat('l, d F Y');

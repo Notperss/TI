@@ -254,10 +254,10 @@ class AttendanceController extends Controller
         } else if ($attendance->stats == 2) {
             $attendance->update(['stats' => 1]);
         } else {
-            alert()->error('Error', 'Data gagal di Approve');
+            alert()->error('Error', 'Data gagal di ubah');
             return back();
         }
-        alert()->success('Sukses', 'Data berhasil di Approve');
+        alert()->success('Sukses', 'Data berhasil di ubah');
         return back();
 
     }

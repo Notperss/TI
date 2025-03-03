@@ -10,9 +10,10 @@ class ATK extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description',
         'file',
         'date',
         'usage',
+        'stats',
+        'description',
     ];
 }

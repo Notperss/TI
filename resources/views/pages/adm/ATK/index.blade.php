@@ -88,6 +88,7 @@
                           <th>Keterangan</th>
                           <th>File</th>
                           <th>Pemakaian</th>
+                          <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -98,6 +99,7 @@
                         <th>Tanggal Terima</th>
                         <th>Keterangan</th>
                         <th>File</th>
+                        <th>Pemakaian</th>
                         <th>Pemakaian</th>
                         <th>Action</th>
                       </tfoot>
@@ -183,6 +185,21 @@
         {
           data: 'usage',
           name: 'usage',
+        },
+        {
+          data: 'stats',
+          name: 'stats',
+          render: function(data) {
+            if (data === '0') {
+              return '<span>N/A</span>';
+            } else if (data === '1') {
+              return '<span class="badge bg-danger">Open</span>';
+            } else if (data === '2') {
+              return '<span class="badge bg-success">Close</span>';
+            } else {
+              return '-';
+            }
+          }
         },
         {
           data: 'action',

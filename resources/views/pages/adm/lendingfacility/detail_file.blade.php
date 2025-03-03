@@ -14,21 +14,21 @@
       <tbody>
         <td class="text-center">{{ $loop->iteration }}</td>
         <td class="text-center">
-          @if ($file->barang->name)
+          @if (isset($file->barang->name))
             {{ $file->barang->name }}
           @else
             <p style="color:red;">Name File is Empty!</p>
           @endif
         </td>
         <td class="text-center">
-          @if ($file->barang->category)
+          @if (isset($file->barang->category))
             {{ $file->barang->category }}
           @else
             <p style="color:red;">Category name is Empty!</p>
           @endif
         </td>
         <td class="text-center">
-          @if ($file->barang->barcode)
+          @if (isset($file->barang->barcode))
             {{ $file->barang->barcode }}
           @else
             <p style="color:red;">Barcode name is Empty!</p>
@@ -39,12 +39,14 @@
             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Action</button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->barang->file) }}"
-                class="btn text-nowrap ">
-                Show
-              </a>
-              <a type="button" href="{{ asset('storage/' . $file->barang->file) }}" class="btn text-nowrap"
-                download>Download</a>
+              @if (isset($file->barang->file))
+                <a type="button" data-fancybox data-src="{{ asset('storage/' . $file->barang->file) }}"
+                  class="btn text-nowrap ">
+                  Show
+                </a>
+                <a type="button" href="{{ asset('storage/' . $file->barang->file) }}" class="btn text-nowrap"
+                  download>Download</a>
+              @endif
               {{-- <a class="dropdown-item" href="{{ route('backsite.pp.edit', encrypt($file->id)) }}">
                 Edit
               </a> --}}
