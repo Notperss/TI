@@ -24,6 +24,19 @@
         </div>
       @endif
 
+      @if ($errors->updatePassword->any())
+        <div class="alert bg-danger alert-dismissible mb-2" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <ul>
+            @foreach ($errors->updatePassword->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
+
       {{-- breadcumb --}}
       <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
@@ -47,6 +60,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
+
                   <h4 class="card-title" id="horz-layout-basic">Form Input</h4>
                   <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                   <div class="heading-elements">
@@ -56,123 +70,98 @@
                     </ul>
                   </div>
                 </div>
+
+
                 <div class="card-content collpase show">
                   <div class="card-body">
                     <div class="card-text">
                       <p>Isi input <code>*</code>, Sebelum menekan tombol submit. </p>
                     </div>
-                    <form class="form form-horizontal" action="{{ route('backsite.profile.store') }}" method="POST"
+                    <div class="float-right">
+                      <a data-toggle="modal" data-target="#modal-form-edit-password-{{ auth()->user()->id }}"
+                        class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i>
+                        Change Password</a>
+                    </div>
+
+                    <form class="form " action="{{ route('backsite.profile.store') }}" method="POST"
                       enctype="multipart/form-data">
                       @csrf
-
                       <div class="form-body">
-
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control" for="name">Nama </label>
-                          <div class="col-md-9 mx-auto">
-                            <input type="text" id="name" name="name" class="form-control"
-                              value="{{ old('name', isset($user->name) ? $user->name : '') }}" autocomplete="off"
-                              readonly>
-
-                            @if ($errors->has('name'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('name') }}</p>
-                            @endif
+                        <div class="row">
+                          <!-- Profile Image Upload Section -->
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <div class="media my-2">
+                                <a href="javascript:void(0);">
+                                  <img id="profile-img"
+                                    src="{{ $user->icon ? asset('storage/' . $user->icon) : asset('default-user.png') }}"
+                                    class="rounded mr-80" alt="profile image" height="200" width="150">
+                                </a>
+                              </div>
+                              <div class="d-flex flex-sm-row flex-column">
+                                <label class="btn btn-sm btn-primary ml-2 mb-2 mb-sm-0 cursor-pointer"
+                                  for="account-upload">
+                                  Upload new photo
+                                </label>
+                                <input type="file" id="account-upload" name="icon" hidden>
+                                <a class="btn btn-sm btn-secondary text-white ml-2" id="reset-btn">Reset</a>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control" for="email">E-mail</label>
-                          <div class="col-md-9 mx-auto">
-                            <input type="text" id="email" name="email" class="form-control"
-                              value="{{ old('email', isset($user->email) ? $user->email : '') }}" autocomplete="off"
-                              readonly>
 
-                            @if ($errors->has('email'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('email') }}</p>
-                            @endif
-                          </div>
-                        </div>
+                          <!-- User Information Section -->
+                          <div class="col-md-9">
+                            <div class="form-group">
+                              <div class="row mb-2">
+                                <label class="col-md-3 col-form-label" for="name">Nama</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="name" name="name" class="form-control"
+                                    value="{{ old('name', $user->name ?? '') }}" readonly>
+                                  @error('name')
+                                    <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                              </div>
+                            </div>
 
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control">Type User</label>
-                          <div class="col-md-9 mx-auto">
-                            <input type="text" id="type_user_id" name="type_user_id" class="form-control"
-                              value="{{ old('type_user_id', isset($user->detail_user->type_user->name) ? $user->detail_user->type_user->name : '') }}"
-                              autocomplete="off" readonly>
+                            <div class="form-group">
+                              <div class="row mb-2">
+                                <label class="col-md-3 col-form-label" for="email">E-mail</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="email" name="email" class="form-control"
+                                    value="{{ old('email', $user->email ?? '') }}" readonly>
+                                  @error('email')
+                                    <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                              </div>
+                            </div>
 
-                            @if ($errors->has('type_user_id'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('type_user_id') }}</p>
-                            @endif
-                          </div>
-                        </div>
+                            <div class="form-group">
+                              <div class="row mb-2">
+                                <label class="col-md-3 col-form-label">Role</label>
+                                <div class="col-md-9">
+                                  <input type="text" id="type_user_id" name="type_user_id" class="form-control"
+                                    value="{{ old('type_user_id', Auth::user()->getRoleNames()->first() ?? '') }}"
+                                    readonly>
+                                  @error('type_user_id')
+                                    <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                              </div>
+                            </div>
 
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control">Job Position </label>
-                          <div class="col-md-9 mx-auto">
-                            @if ($user->detail_user->job_position == 1)
-                              <span class="badge badge-success">{{ 'Manager' }}</span>
-                            @elseif($user->detail_user->job_position == 2)
-                              <span class="badge badge-cyan">{{ 'Kepala Departemen' }}</span>
-                            @elseif($user->detail_user->job_position == 3)
-                              <span class="badge badge-danger">{{ 'Administrasi' }}</span>
-                            @elseif($user->detail_user->job_position == 4)
-                              <span class="badge badge-warning">{{ 'Hardware & Jaringan' }}</span>
-                            @elseif($user->detail_user->job_position == 5)
-                              <span class="badge badge-secondary">{{ 'Peralatan Tol' }}</span>
-                            @elseif($user->detail_user->job_position == 6)
-                              <span class="badge badge-info">{{ 'Sistem Informasi' }}</span>
-                            @else
-                              <span>{{ 'N/A' }}</span>
-                            @endif
-
-                            @if ($errors->has('job_position'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('job_position') }}</p>
-                            @endif
-                          </div>
-                        </div>
-
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control" for="password_lama">Password
-                            Lama <code style="color:red;">*</code></label>
-                          <div class="col-md-9 mx-auto">
-                            <input type="password" id="password_lama" name="password_lama" class="form-control"
-                              placeholder="password lama" value="{{ old('password_lama') }}">
-
-                            @if ($errors->has('password_lama'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('password_lama') }}</p>
-                            @endif
-                          </div>
-                        </div>
-
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control" for="password_baru">Password
-                            Baru <code style="color:red;">*</code></label>
-                          <div class="col-md-9 mx-auto">
-                            <input type="password" id="password_baru" name="password_baru" class="form-control"
-                              placeholder="password baru" value="{{ old('password_baru') }}">
-
-                            @if ($errors->has('password_baru'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('password_baru') }}</p>
-                            @endif
-                          </div>
-                        </div>
-
-                        <div class="form-group row">
-                          <label class="col-md-3 label-control" for="confirm_password">Confirm
-                            New Password <code style="color:red;">*</code></label>
-                          <div class="col-md-9 mx-auto">
-                            <input type="password" id="confirm_password" name="confirm_password" class="form-control"
-                              placeholder="konfirmasi password baru" value="{{ old('confirm_password') }}">
-
-                            @if ($errors->has('confirm_password'))
-                              <p style="font-style: bold; color: red;">
-                                {{ $errors->first('confirm_password') }}</p>
-                            @endif
+                            <div class="form-group">
+                              <div class="row">
+                                <label class="col-md-3 col-form-label">Job Position</label>
+                                <div class="col-md-9">
+                                  <span class="badge bg-success">{{ $user->job_position }}</span>
+                                  @error('job_position')
+                                    <p class="text-danger font-weight-bold">{{ $message }}</p>
+                                  @enderror
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -191,9 +180,24 @@
           </div>
         </section>
       </div>
-
+      @include('pages.management-access.profile.edit')
     </div>
   </div>
   <!-- END: Content-->
+
+  <script>
+    document.getElementById("account-upload").addEventListener("change", function(event) {
+      var reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById("profile-img").src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function() {
+      document.getElementById("profile-img").src = "{{ asset('storage/' . $user->icon) }}";
+      document.getElementById("account-upload").value = "";
+    });
+  </script>
 
 @endsection

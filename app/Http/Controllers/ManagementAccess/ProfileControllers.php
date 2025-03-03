@@ -47,13 +47,13 @@ class ProfileController extends Controller
         $this->validate($request, [
             'password_lama' => 'required|string',
             'password_baru' => 'required|string',
-            'confirm_password' => 'required|string'
+            'confirm_password' => 'required|string',
         ]);
 
         $auth = Auth::user();
 
         // The passwords matches
-        if (!Hash::check($request->get('password_lama'), $auth->password)) {
+        if (! Hash::check($request->get('password_lama'), $auth->password)) {
             alert()->warning('Gagal', 'Password lama tidak diketahui');
             return back();
         }
@@ -65,14 +65,14 @@ class ProfileController extends Controller
         }
 
         //New password and confirm password are not same
-        if (!(strcmp($request->get('password_baru'), $request->get('confirm_password'))) == 0) {
+        if (! (strcmp($request->get('password_baru'), $request->get('confirm_password'))) == 0) {
             alert()->warning('Gagal', 'Password baru harus sama dengan password anda yang dikonfirmasi');
             return back();
         }
 
         // updatean user
-        $user =  User::find($auth->id);
-        $user->password =  Hash::make($request->confirm_password);
+        $user = User::find($auth->id);
+        $user->password = Hash::make($request->confirm_password);
         $user->save();
         alert()->success('Sukses', 'Profile berhasil diupdate');
         return back();

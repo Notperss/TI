@@ -45,34 +45,34 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'password_lama' => 'required|string',
-            'password_baru' => 'required|string',
-            'confirm_password' => 'required|string'
+            'current_password' => 'required|string',
+            'password' => 'required|string',
+            'password_confirmation' => 'required|string',
         ]);
 
         $auth = Auth::user();
 
         // The passwords matches
-        if (!Hash::check($request->get('password_lama'), $auth->password)) {
+        if (! Hash::check($request->get('current_password'), $auth->password)) {
             alert()->warning('Gagal', 'Password lama tidak diketahui');
             return back();
         }
 
         // Current password and new password same
-        if (strcmp($request->get('password_lama'), $request->password_baru) == 0) {
+        if (strcmp($request->get('current_password'), $request->password) == 0) {
             alert()->warning('Gagal', 'Password baru tidak boleh sama dengan password lama');
             return back();
         }
 
         //New password and confirm password are not same
-        if (!(strcmp($request->get('password_baru'), $request->get('confirm_password'))) == 0) {
+        if (! (strcmp($request->get('password'), $request->get('password_confirmation'))) == 0) {
             alert()->warning('Gagal', 'Password baru harus sama dengan password anda yang dikonfirmasi');
             return back();
         }
 
         // updatean user
-        $user =  User::find($auth->id);
-        $user->password =  Hash::make($request->confirm_password);
+        $user = User::find($auth->id);
+        $user->password = Hash::make($request->password_confirmation);
         $user->save();
         alert()->success('Sukses', 'Profile berhasil diupdate');
         return back();
