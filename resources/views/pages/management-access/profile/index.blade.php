@@ -77,15 +77,20 @@
                     <div class="card-text">
                       <p>Isi input <code>*</code>, Sebelum menekan tombol submit. </p>
                     </div>
-                    <div class="float-right">
+                    <div class="flex-shrink-0">
                       <a data-toggle="modal" data-target="#modal-form-edit-password-{{ auth()->user()->id }}"
                         class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i>
                         Change Password</a>
                     </div>
+                    @include('pages.management-access.profile.edit')
 
-                    <form class="form " action="{{ route('backsite.profile.store') }}" method="POST"
+
+
+                    <form class="form " id="updateProfile"
+                      action="{{ route('backsite.profile.update', Auth::user()->id) }}" method="POST"
                       enctype="multipart/form-data">
                       @csrf
+                      @method('put')
                       <div class="form-body">
                         <div class="row">
                           <!-- Profile Image Upload Section -->
@@ -95,7 +100,7 @@
                                 <a href="javascript:void(0);">
                                   <img id="profile-img"
                                     src="{{ $user->icon ? asset('storage/' . $user->icon) : asset('default-user.png') }}"
-                                    class="rounded mr-80" alt="profile image" height="200" width="150">
+                                    class="rounded mr-80" alt="profile image" width="150">
                                 </a>
                               </div>
                               <div class="d-flex flex-sm-row flex-column">
@@ -115,7 +120,7 @@
                               <div class="row mb-2">
                                 <label class="col-md-3 col-form-label" for="name">Nama</label>
                                 <div class="col-md-9">
-                                  <input type="text" id="name" name="name" class="form-control"
+                                  <input type="text" id="name" class="form-control"
                                     value="{{ old('name', $user->name ?? '') }}" readonly>
                                   @error('name')
                                     <p class="text-danger font-weight-bold">{{ $message }}</p>
@@ -128,7 +133,7 @@
                               <div class="row mb-2">
                                 <label class="col-md-3 col-form-label" for="email">E-mail</label>
                                 <div class="col-md-9">
-                                  <input type="text" id="email" name="email" class="form-control"
+                                  <input type="text" id="email" class="form-control"
                                     value="{{ old('email', $user->email ?? '') }}" readonly>
                                   @error('email')
                                     <p class="text-danger font-weight-bold">{{ $message }}</p>
@@ -141,7 +146,7 @@
                               <div class="row mb-2">
                                 <label class="col-md-3 col-form-label">Role</label>
                                 <div class="col-md-9">
-                                  <input type="text" id="type_user_id" name="type_user_id" class="form-control"
+                                  <input type="text" id="type_user_id" class="form-control"
                                     value="{{ old('type_user_id', Auth::user()->getRoleNames()->first() ?? '') }}"
                                     readonly>
                                   @error('type_user_id')
@@ -166,24 +171,39 @@
                         </div>
                       </div>
 
+
                       <div class="form-actions text-right">
-                        <button type="submit" style="width:120px;" class="btn btn-cyan"
-                          onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini ?')">
+                        <a style="width:120px;" class="btn btn-cyan" onclick="updateProfile()">
                           <i class="la la-check-square-o"></i> Submit
-                        </button>
+                        </a>
                       </div>
                     </form>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         </section>
       </div>
-      @include('pages.management-access.profile.edit')
     </div>
   </div>
+  {{-- @include('pages.management-access.profile.edit') --}}
   <!-- END: Content-->
+
+  <script>
+    function updatePassword() {
+      if (confirm('Are you sure you want to Update Password?')) {
+        document.getElementById('updatePassword').submit();
+      }
+    }
+
+    function updateProfile() {
+      if (confirm('Are you sure you want to Update Profile?')) {
+        document.getElementById('updateProfile').submit();
+      }
+    }
+  </script>
 
   <script>
     document.getElementById("account-upload").addEventListener("change", function(event) {

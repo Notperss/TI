@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\ManagementAccess;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Str;
 
 // use library here
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 // use model here
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -109,7 +111,40 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return abort(404);
+        // dd($id);
+        $user = User::findOrFail($id);
+        $this->validate($request, [
+            'icon' => 'nullable|file|max:51200', // 50MB
+        ]);
+        // cari old photo
+        $path_file = $user['icon'];
+
+        // Upload process here
+        if ($request->hasFile('icon')) {
+            $files = $request->file('icon');
+            $file = $files->getClientOriginalName();
+            $basename = pathinfo($file, PATHINFO_FILENAME).' - '.Str::random(3);
+            $extension = $files->getClientOriginalExtension();
+            $fullname = $basename.'.'.$extension;
+
+            // Store new file
+            $icon = $request->file('icon')->storeAs('assets/user-icon', $fullname);
+
+            // Delete old file if it exists
+            if (! empty($path_file) && Storage::exists($path_file)) {
+                Storage::delete($path_file);
+            }
+        } else {
+            $request['icon'] = $path_file;
+        }
+
+        $user->update([
+            'icon' => $icon,
+        ]);
+
+        alert()->success('success', 'User has been updated successfully!');
+        return back();
+
     }
 
     /**
