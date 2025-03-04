@@ -18,7 +18,7 @@ class TypeAssetController extends Controller
     {
         if (request()->ajax()) {
 
-            $typeAsset = TypeAsset::orderBy('created_at', 'desc')->get();
+            $typeAsset = TypeAsset::orderBy('created_at', 'desc');
 
             return DataTables::of($typeAsset)
                 ->addIndexColumn()
