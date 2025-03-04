@@ -66,6 +66,8 @@ use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
+use App\Http\Controllers\MasterData\Lattol\AssetIndicatorController;
+use App\Http\Controllers\MasterData\Lattol\TypeAssetController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\Network\Cctv\CctvController as CctvCctvController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
@@ -247,6 +249,8 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::get('/generate-barcode', 'generateBarcode')->name('barang.generateBarcode');
         Route::get('/getNextSequentialBarcode', 'getNextSequentialBarcode')->name('barang.getNextSequentialBarcode');
 
+        Route::get('/asset-latol', 'assetLatol')->name('barang.assetLatol');
+
     });
 
     Route::resource('attendance', AttendanceController::class);
@@ -409,4 +413,11 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::post('/maintenance/show_status', 'show_status')->name('maintenance.show_status');
         Route::delete('/maintenance/{id}/delete_status', 'delete_status')->name('maintenance.delete_status');
     });
+
+    Route::resource('type-asset', TypeAssetController::class)->except('show');
+    // Route::get('type-asset', [TypeAssetController::class, 'index'])->name('typeAsset.index');
+
+    Route::resource('asset-indicator', AssetIndicatorController::class)->except('show');
+    // Route::get('asset-indicator', [AssetIndicatorController::class, 'index'])->name('AssetIndicator.index');
+
 });

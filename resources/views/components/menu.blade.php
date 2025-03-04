@@ -197,8 +197,8 @@
 
                 {{-- @can('location_room') --}}
                 <li
-                  class="{{ request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') ? 'active' : '' }} ">
-                  <a class="menu-item" href="{{ route('backsite.location_sub.index') }}">
+                  class="{{ request()->is('backsite/asset-indicator') || request()->is('backsite/asset-indicator/*') || request()->is('backsite/*/asset-indicator') || request()->is('backsite/*/asset-indicator/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.asset-indicator.index') }}">
                     <i></i><span>Indikator</span>
                   </a>
                 </li>
