@@ -50,15 +50,7 @@
                 </li>
                 {{-- @endcan --}}
               </ul>
-
-              {{-- @can('location_detail') --}}
-              {{-- <li
-            class="{{ request()->is('backsite/device_pc') || request()->is('backsite/device_pc/*') || request()->is('backsite/*/device_pc') || request()->is('backsite/*/device_pc/*') ? 'active' : '' }} ">
-            <a class="menu-item" href="{{ route('backsite.device_pc.index') }}">
-              <i></i><span>PC</span>
-            </a>
-          </li> --}}
-              {{-- @endcan --}}
+            </li>
 
             <li class=" nav-item"><a href="#"><i
                   class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
@@ -92,6 +84,7 @@
                 </li>
                 {{-- @endcan --}}
               </ul>
+            </li>
 
             <li class=" nav-item"><a href="#"><i
                   class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
@@ -143,6 +136,7 @@
               </li> --}}
                 {{-- @endcan --}}
               </ul>
+            </li>
 
             <li class=" nav-item"><a href="#"><i
                   class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
@@ -176,8 +170,44 @@
                 </li>
                 {{-- @endcan --}}
               </ul>
+            </li>
 
-              {{-- @can('location') --}}
+            <li class=" nav-item"><a href="#"><i
+                  class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
+                  class="menu-title" data-i18n="Latol"><strong>Lattol</strong></span></a>
+              <ul class="menu-content">
+
+                {{-- @can('location_room') --}}
+                {{-- <li
+                  class="{{ request()->is('backsite/asset-latol') || request()->is('backsite/asset-latol/*') || request()->is('backsite/*/asset-latol') || request()->is('backsite/*/asset-latol/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.barang.assetLatol') }}">
+                    <i></i><span>Jenis Peralatan</span>
+                  </a>
+                </li> --}}
+                {{-- @endcan --}}
+
+                {{-- @can('location_room') --}}
+                <li
+                  class="{{ request()->is('backsite/type-asset') || request()->is('backsite/type-asset/*') || request()->is('backsite/*/type-asset') || request()->is('backsite/*/type-asset/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.type-asset.index') }}">
+                    <i></i><span>Jenis Peralatan</span>
+                  </a>
+                </li>
+                {{-- @endcan --}}
+
+                {{-- @can('location_room') --}}
+                <li
+                  class="{{ request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.location_sub.index') }}">
+                    <i></i><span>Indikator</span>
+                  </a>
+                </li>
+                {{-- @endcan --}}
+
+              </ul>
+            </li>
+
+            {{-- @can('location') --}}
             <li
               class="{{ request()->is('backsite/jobdesk') || request()->is('backsite/jobdesk/*') || request()->is('backsite/*/jobdesk') || request()->is('backsite/*/jobdesk/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.jobdesk.index') }}">
@@ -449,7 +479,7 @@
 
             {{-- @can('location_detail') --}}
             <li
-              class="{{ request()->is('backsite/barang') || request()->is('backsite/barang/*') || request()->is('backsite/*/barang') || request()->is('backsite/*/barang/*') ? 'active' : '' }} ">
+              class="{{ request()->is('backsite/barang') || request()->is('backsite/*/barang/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.barang.index') }}">
                 <i></i><span>Hardware</span>
               </a>
@@ -583,16 +613,16 @@
         {{-- Maintenance --}}
         <li class=" nav-item"><a href="{{ route('backsite.maintenance.index') }}"><i
               class="{{ request()->is('backsite/mainbacksite.maintenance.index') || request()->is('backsite/mainbacksite.maintenance.index/*') || request()->is('backsite/*/mainbacksite.maintenance.index') || request()->is('backsite/*/mainbacksite.maintenance.index/*') ? 'la la-wrench bx-flashing' : 'la la-wrench' }}"></i><span
-              class="menu-title purple bg-darken-4" data-i18n="mainbacksite.maintenance.index"><strong>Laporan
-                Gangguan</strong></span></a>
+              class="menu-title purple bg-darken-4" data-i18n="mainbacksite.maintenance.index">
+              <strong>Laporan Gangguan</strong></span></a>
         </li>
         {{-- END Maintenance --}}
 
         {{-- Kegiatan Harian --}}
         <li class=" nav-item"><a href="{{ route('backsite.act_daily.index') }}"><i
               class="{{ request()->is('backsite/act_daily') || request()->is('backsite/act_daily/*') || request()->is('backsite/*/act_daily') || request()->is('backsite/*/act_daily/*') ? 'bx bx-code-block bx-flashing' : 'bx bx-code-block' }}"></i><span
-              class="menu-title cyan" data-i18n="Aktivitas Harian"><strong>Aktivitas
-                Harian</strong></span></a>
+              class="menu-title cyan" data-i18n="Aktivitas Harian">
+              <strong>Aktivitas Harian</strong></span></a>
           <ul class="menu-content">
             {{-- @can('location_detail') --}}
             <li
