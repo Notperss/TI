@@ -54,7 +54,7 @@ class TypeAssetController extends Controller
      */
     public function create()
     {
-        return view('pages.master-data.lattol.asset-indicator.create');
+        return view('pages.master-data.lattol.type-asset.create');
     }
 
     /**
@@ -92,7 +92,7 @@ class TypeAssetController extends Controller
      */
     public function edit(TypeAsset $typeAsset)
     {
-        return view('pages.master-data.lattol.asset-indicator.edit', compact('typeAsset'));
+        return view('pages.master-data.lattol.type-asset.edit', compact('typeAsset'));
     }
 
     /**

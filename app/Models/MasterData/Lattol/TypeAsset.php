@@ -15,7 +15,7 @@ class TypeAsset extends Model
         'description',
     ];
 
-    public function assetIndicator()
+    public function assetIndicators()
     {
         return $this->hasMany(AssetIndicator::class);
     }
