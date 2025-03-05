@@ -180,8 +180,8 @@
           searchable: false,
         },
         {
-          data: 'detail_user.user.name',
-          name: 'users_id',
+          data: 'user.name',
+          name: 'user.name',
         },
         {
           data: 'category',

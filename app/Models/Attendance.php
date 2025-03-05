@@ -19,7 +19,7 @@ class Attendance extends Model
         'file',
     ];
 
-    public function users()
+    public function user()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(User::class, 'users_id', 'id');

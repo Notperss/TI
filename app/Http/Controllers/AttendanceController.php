@@ -27,7 +27,7 @@ class AttendanceController extends Controller
     {
         if (request()->ajax()) {
 
-            $attendance = Attendance::with('detail_user.user')->orderby('start_date', 'desc');
+            $attendance = Attendance::with('user')->orderby('start_date', 'desc');
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $attendance = $attendance->whereBetween('start_date', [$request->from_date, $request->to_date]);

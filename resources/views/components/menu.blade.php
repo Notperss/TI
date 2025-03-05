@@ -263,12 +263,12 @@
           <ul class="menu-content">
 
             {{-- @can('location_detail') --}}
-            <li
+            {{-- <li
               class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.location_detail.index') }}">
                 <i></i><span>Job Desk</span>
               </a>
-            </li>
+            </li> --}}
             {{-- @endcan --}}
 
             {{-- @can('location_detail') --}}
