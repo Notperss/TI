@@ -4,15 +4,10 @@ namespace App\Http\Controllers\ManagementAccess;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ManagementAccess\JobPosition;
 
-// request
-use App\Http\Requests\ManagementAccess\TypeUser\StoreTypeUserRequest;
-use App\Http\Requests\ManagementAccess\TypeUser\UpdateTypeUserRequest;
 
-// use model here
-use App\Models\ManagementAccess\TypeUser;
-
-class TypeUserController extends Controller
+class JobPositionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,9 +16,9 @@ class TypeUserController extends Controller
      */
     public function index()
     {
-        $type_user = TypeUser::where('name', '!=', 'Admin')->orderBy('name', 'asc')->get();
+        $jobPositions = JobPosition::orderBy('name', 'asc')->get();
 
-        return view('pages.management-access.type-user.index', compact('type_user'));
+        return view('pages.management-access.job-position.index', compact('jobPositions'));
     }
 
     /**
@@ -33,7 +28,7 @@ class TypeUserController extends Controller
      */
     public function create()
     {
-        return abort(404);
+        return view('pages.management-access.job-position.create');
     }
 
     /**
@@ -42,16 +37,19 @@ class TypeUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTypeUserRequest $request)
+    public function store(Request $request)
     {
-        // get all request from frontsite
-        $data = $request->all();
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ], [
+            'name.required' => 'Nama indikator wajib diisi.',
+            'name.max' => 'Nama indikator tidak boleh lebih dari 255 karakter.',
+        ]);
 
-        // store to database
-        $type_user = TypeUser::create($data);
+        JobPosition::create($validatedData);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.type_user.index');
+        return redirect()->route('job-position.index');
     }
 
     /**
@@ -62,7 +60,7 @@ class TypeUserController extends Controller
      */
     public function show($id)
     {
-        return abort(404);
+        //
     }
 
     /**
@@ -75,9 +73,9 @@ class TypeUserController extends Controller
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $type_user = TypeUser::find($decrypt_id);
+        $jobPosition = JobPosition::find($decrypt_id);
 
-        return view('pages.management-access.type-user.edit', compact('type_user'));
+        return view('pages.management-access.job-position.edit', compact('jobPosition'));
     }
 
     /**
@@ -87,16 +85,18 @@ class TypeUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTypeUserRequest $request, TypeUser $type_user)
+    public function update(Request $request, JobPosition $jobPosition)
     {
-        // get all request from frontsite
-        $data = $request->all();
-
-        // update to database
-        $type_user->update($data);
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ], [
+            'name.required' => 'Nama indikator wajib diisi.',
+            'name.max' => 'Nama indikator tidak boleh lebih dari 255 karakter.',
+        ]);
+        $jobPosition->update($validatedData);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.type_user.index');
+        return redirect()->route('job-position.index');
     }
 
     /**
@@ -109,12 +109,13 @@ class TypeUserController extends Controller
     {
         // deskripsi id
         $decrypt_id = decrypt($id);
-        $type_user = TypeUser::find($decrypt_id);
+        $jobPosition = JobPosition::find($decrypt_id);
 
-        // hapus daily activity
-        $type_user->forceDelete();
+        // hapus jobposition
+        $jobPosition->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
     }
+
 }

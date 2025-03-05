@@ -92,7 +92,7 @@
                             @foreach ($attendances as $attendance)
                               <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $attendance->detail_user->user->name }}</td>
+                                <td>{{ $attendance->user->name }}</td>
                                 <td>{{ $attendance->category }}</td>
                                 <td> {{ Carbon\Carbon::parse($attendance->start_date)->translatedFormat('d-m-Y') }}
                                 </td>
@@ -417,7 +417,7 @@ $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
             </div>
           </div>
 
-          <div class="container" hidden>
+          {{-- <div class="container">
             <div class="col-xl-2 col-lg-3 col-md-6 col-12 ">
               <div class="card pull-up ">
                 <div class="card-content teal">
@@ -633,7 +633,7 @@ $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
 
         </div>
       </div>

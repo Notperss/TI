@@ -55,6 +55,7 @@ use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
+use App\Http\Controllers\ManagementAccess\JobPositionController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
@@ -109,6 +110,7 @@ Route::group(['middleware' => ['web', 'auth', 'role:super-admin', 'verified',]],
 
     // Route::resource('activity-log', ActivityLogController::class)->only('index');
     Route::resource('user', UserController::class);
+    Route::resource('job-position', JobPositionController::class);
 
 
 });

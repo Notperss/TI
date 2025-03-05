@@ -663,6 +663,13 @@
                 <i></i><span>Role</span>
               </a>
             </li>
+
+            <li
+              class="{{ request()->is('job-position') || request()->is('job-position/*') || request()->is('*/job-position') || request()->is('*/job-position/*') ? 'active' : '' }} ">
+              <a class="menu-item" href="{{ route('job-position.index') }}">
+                <i></i><span>Job Position</span>
+              </a>
+            </li>
             {{-- <li
               class="{{ request()->is('backsite/type_user') || request()->is('backsite/type_user/*') || request()->is('backsite/*/type_user') || request()->is('backsite/*/type_user/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.type_user.index') }}">
