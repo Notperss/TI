@@ -34,7 +34,7 @@ class PPController extends Controller
             $isAdmin = Auth::user()->hasRole('super-admin');
             $administrasi = Auth::user()->job_position == 'Administrasi';
 
-            $ppQuery = $isAdmin || $administrasi ? PP::with('detail_user.user', 'pp_status')->orderBy('created_at', 'desc')
+            $ppQuery = $isAdmin || $administrasi ? PP::with('user', 'pp_status')->orderBy('created_at', 'desc')
                 : PP::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc');
 
             $pp = $ppQuery->get();
