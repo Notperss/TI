@@ -40,7 +40,6 @@ class MaintenanceController extends Controller
             return DataTables::of($maintenance)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
-                    $user = auth()->user()->detail_user;
                     $isAdmin = Auth::user()->hasRole('super-admin');
                     return '
         <div class="container">
@@ -81,36 +80,36 @@ class MaintenanceController extends Controller
                     } elseif ($item->stats == 2) {
                         return '  '.$item->report_number.'<br><span class="badge bg-info">Closed</span>';
                     }
-                })->editColumn('recipient', function ($item) {
-                    // Access the distribution_asset relationship
-                    $maintenanceStatuses = $item->maintenanceStatus;
-
-                    // Check if maintenanceStatus is not empty
-                    if ($maintenanceStatuses->isNotEmpty()) {
-                        // Initialize an array to store user names
-                        $userNames = [];
-
-                        // Loop through each distributionAsset
-                        foreach ($maintenanceStatuses as $maintenanceStatus) {
-                            // Check if the distribution relationship exists
-                            if ($user = $maintenanceStatus->user) {
-                                // Check if the detail_user relationship exists
-                                $userNames[] = $user->name;
-                            }
-                        }
-
-                        // Check if there are any user names in the array
-                        if (! empty($userNames)) {
-                            // return implode(', ', $userNames);
+                    // })->editColumn('recipient', function ($item) {
+                    //     // Access the distribution_asset relationship
+                    //     $maintenanceStatuses = $item->maintenanceStatus;
     
-                            $latestUserName = end($userNames);
-                            return $latestUserName;
-                        } else {
-                            return 'N/A';
-                        }
-                    } else {
-                        return 'N/A';
-                    }
+                    //     // Check if maintenanceStatus is not empty
+                    //     if ($maintenanceStatuses->isNotEmpty()) {
+                    //         // Initialize an array to store user names
+                    //         $userNames = [];
+    
+                    //         // Loop through each distributionAsset
+                    //         foreach ($maintenanceStatuses as $maintenanceStatus) {
+                    //             // Check if the distribution relationship exists
+                    //             if ($user = $maintenanceStatus->user) {
+                    //                 // Check if the detail_user relationship exists
+                    //                 $userNames[] = $user->name;
+                    //             }
+                    //         }
+    
+                    //         // Check if there are any user names in the array
+                    //         if (! empty($userNames)) {
+                    //             // return implode(', ', $userNames);
+    
+                    //             $latestUserName = end($userNames);
+                    //             return $latestUserName;
+                    //         } else {
+                    //             return 'N/A';
+                    //         }
+                    //     } else {
+                    //         return 'N/A';
+                    //     }
                 })->editColumn('LastDesc', function ($item) {
                     // Access the distribution_asset relationship
                     $maintenanceStatuses = $item->maintenanceStatus;
@@ -228,9 +227,7 @@ class MaintenanceController extends Controller
     {
         $employees = Employee::orderBy('name', 'asc')->get();
         $users = User::where('name', '!=', 'Administrator')
-            ->whereHas('detail_user', function ($query) {
-                $query->where('status', '=', '1');
-            })
+            ->whereNotNull('email_verified_at')
             ->orderBy('name', 'asc')
             ->get();
         // $users = User::where(['name', '!=', 'Administrator'], [DetailUser::where('status', '=', '1')])->orderBy('name', 'asc')->get();
@@ -293,9 +290,7 @@ class MaintenanceController extends Controller
         // $barang = Barang::where('id', $maintenance->goods_id)->orderBy('barcode', 'asc')->get();
         $barang = Barang::orderBy('barcode', 'asc')->get();
         $users = User::where('name', '!=', 'Administrator')
-            ->whereHas('detail_user', function ($query) {
-                $query->where('status', '=', '1');
-            })
+            ->whereNotNull('email_verified_at')
             ->orderBy('name', 'asc')
             ->get();
         $statusReport = MaintenanceStatus::where('maintenance_id', $maintenance->id)->orderBy('created_at', 'desc')->get();
@@ -458,9 +453,7 @@ class MaintenanceController extends Controller
             $barang = Barang::orderBy('barcode', 'asc')->get();
             $employees = Employee::orderBy('name', 'asc')->get();
             $users = User::where('name', '!=', 'Administrator')
-                ->whereHas('detail_user', function ($query) {
-                    $query->where('status', '=', '1');
-                })
+                ->whereNotNull('email_verified_at')
                 ->orderBy('name', 'asc')
                 ->get();
 
@@ -487,9 +480,7 @@ class MaintenanceController extends Controller
 
             $id = $request->id;
             $users = User::where('name', '!=', 'Administrator')
-                ->whereHas('detail_user', function ($query) {
-                    $query->where('status', '=', '1');
-                })
+                ->whereNotNull('email_verified_at')
                 ->orderBy('name', 'asc')
                 ->get();
             $row = Maintenance::find($id);
@@ -583,8 +574,7 @@ class MaintenanceController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
 
-            $user = auth()->user()->detail_user;
-            $isAdmin = $user->type_user_id === 1;
+            $isAdmin = Auth::user()->hasRole('super-admin');
 
             $maintenanceStatus = MaintenanceStatus::where('maintenance_id', $id)->orderBy('created_at', 'desc')->get();
             $data = [

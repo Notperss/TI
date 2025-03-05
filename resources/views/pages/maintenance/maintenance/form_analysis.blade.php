@@ -27,7 +27,7 @@
           {{-- <input type="hidden" name="id" id="id" value="{{ $id }}"> --}}
 
           <div class="form-group row">
-            <label class="col-md-4 label-control" for="users_id">Yang Menerima<code style="color:red;">*</code></label>
+            <label class="col-md-4 label-control" for="users_id">Pelapor<code style="color:red;">*</code></label>
             <div class="col-md-8">
               <input type="text" class="form-control" value="{{ $maintenance->reporter }}" readonly>
               @if ($errors->has('users_id'))
@@ -69,6 +69,7 @@
                 @foreach ($barang as $asset)
                   @php
                     $employeeNames = [];
+                    $employeeIds = [];
                     $distributionAssets = $asset->distribution_asset;
 
                     foreach ($distributionAssets as $distributionAsset) {
@@ -76,15 +77,18 @@
 
                         if ($distribution && ($employee = $distribution->employee)) {
                             $employeeNames[] = $employee->name;
+                            $employeeIds[] = $employee->id;
                         }
                     }
 
                     // Concatenate employee names with a separator (e.g., comma)
                     $employeeName = $employeeNames ? end($employeeNames) : 'N/A';
+                    $employeeId = $employeeIds ? end($employeeIds) : 'N/A';
 
                   @endphp
-                  <option value="{{ $asset->barcode }}" data-value1="{{ $asset->id }}"
-                    data-value="{{ $asset->name }}"{{ $asset->barcode == $maintenance->barcode ? 'selected' : '' }}>
+                  <option value="{{ $asset->barcode }}" data-value2="{{ $employeeId }}"
+                    data-value1="{{ $asset->id }}" data-value="{{ $asset->name }}"
+                    {{ $asset->barcode == $maintenance->barcode ? 'selected' : '' }}>
                     {{ $asset->barcode }} → {{ $asset->name }} → {{ $employeeName }}
                   </option>
                 @endforeach
@@ -103,6 +107,23 @@
               @if ($errors->has('asset_name'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('asset_name') }}</p>
+              @endif
+            </div>
+          </div>
+
+          <div class="form-group row ">
+            <label class="col-md-4 label-control" for="employee_id">Nama User <code>*</code></label>
+            <div class="col-md-8">
+              <select type="text" class="form-control select2" id="employee_id" name="employee_id"
+                style="width: 100%" required>
+                <option value="">Choose</option>
+                @foreach ($employees as $employee)
+                  <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                @endforeach
+              </select>
+              @if ($errors->has('employee_id'))
+                <p style="font-style: bold; color: red;">
+                  {{ $errors->first('employee_id') }}</p>
               @endif
             </div>
           </div>
@@ -132,8 +153,8 @@
                     class="btn btn-info btn-sm text-white ">
                     Lihat
                   </a>
-                  <a type="button" href="{{ asset('storage/' . $maintenance->file) }}" class="btn btn-warning btn-sm"
-                    download>
+                  <a type="button" href="{{ asset('storage/' . $maintenance->file) }}"
+                    class="btn btn-warning btn-sm" download>
                     Unduh
                   </a>
                 @else
@@ -188,6 +209,11 @@
     $('#barcode').on('change', function() {
       var input_value = $(this).find(':selected').data('value1');
       $('#goods_id').val(input_value);
+    });
+
+    $('#barcode').on('change', function() {
+      var employeeId = $(this).find(':selected').data('value2'); // Get employee ID
+      $('#employee_id').val(employeeId).trigger('change'); // Set value & refresh Select2
     });
   });
 </script>

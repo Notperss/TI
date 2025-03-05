@@ -7,7 +7,7 @@
     </tr>
     <tr>
       <th>Pelapor</th>
-      <td>{{ isset($maintenance->employee->name) ? $maintenance->employee->name : 'N/A' }}</td>
+      <td>{{ isset($maintenance->reporter) ? $maintenance->reporter : 'N/A' }}</td>
     </tr>
     <tr>
       <th>User Asset</th>
@@ -17,12 +17,19 @@
       </td>
     </tr>
     <tr>
+    <tr>
+      <th>Nama User</th>
+      <td>
+        {{ isset($maintenance->employee->name) ? $maintenance->employee->name : 'N/A' }}
+      </td>
+    </tr>
+    <tr>
       <th>Tipe gangguan</th>
       <td>{{ isset($maintenance->type_malfunction) ? $maintenance->type_malfunction : 'N/A' }}</td>
     </tr>
     <tr>
       <th>Yang Menerima</th>
-      <td>{{ isset($maintenance->reporter) ? $maintenance->reporter : 'N/A' }}</td>
+      <td>{{ isset($maintenance->user->name) ? $maintenance->user->name : 'N/A' }}</td>
     </tr>
     <tr>
       <th>Tanggal Laporan</th>
