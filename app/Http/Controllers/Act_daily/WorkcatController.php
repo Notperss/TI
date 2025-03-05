@@ -107,7 +107,7 @@ class WorkcatController extends Controller
         $work_category = Workcat::find($decrypt_id);
 
         // hapus location
-        $work_category->forceDelete();
+        $work_category->delete();
 
         alert()->success('Sukses', 'Data berhasil dihapus');
         return back();
