@@ -79,7 +79,7 @@
                       <i class="la la-check-square-o"></i> Submit
                     </button>
 
-                    <a href="{{ route('backsite.information.index') }}" class="btn btn-success text-left ml-2">
+                    <a href="{{ route('backsite.type-asset.index') }}" class="btn btn-success text-left ml-2">
                       <i class="la la-arrow-left"></i> Kembali</a>
                   </div>
               </div>

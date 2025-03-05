@@ -70,9 +70,20 @@ class AssetIndicatorController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        // Validasi data
+        $validatedData = $request->validate([
+            'type_asset_id' => ['required', 'exists:type_assets,id'], // Pastikan ID aset valid
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ], [
+            'type_asset_id.required' => 'Peralatan wajib diisi.',
+            'type_asset_id.exists' => 'Peralatan yang dipilih tidak valid.',
+            'name.required' => 'Nama indikator wajib diisi.',
+            'name.max' => 'Nama indikator tidak boleh lebih dari 255 karakter.',
+            'description.string' => 'Keterangan harus berupa teks.',
+        ]);
 
-        AssetIndicator::create($data);
+        AssetIndicator::create($validatedData);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.asset-indicator.index', );
@@ -110,9 +121,19 @@ class AssetIndicatorController extends Controller
      */
     public function update(Request $request, AssetIndicator $assetIndicator)
     {
-        $data = $request->all();
+        $validatedData = $request->validate([
+            'type_asset_id' => ['required', 'exists:type_assets,id'], // Pastikan ID aset valid
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ], [
+            'type_asset_id.required' => 'Peralatan wajib diisi.',
+            'type_asset_id.exists' => 'Peralatan yang dipilih tidak valid.',
+            'name.required' => 'Nama indikator wajib diisi.',
+            'name.max' => 'Nama indikator tidak boleh lebih dari 255 karakter.',
+            'description.string' => 'Keterangan harus berupa teks.',
+        ]);
 
-        $assetIndicator->update($data);
+        $assetIndicator->update($validatedData);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
         return redirect()->route('backsite.asset-indicator.index');

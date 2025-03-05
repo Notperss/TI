@@ -65,9 +65,16 @@ class TypeAssetController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'description.string' => 'Keterangan harus berupa teks.',
+        ]);
 
-        TypeAsset::create($data);
+        TypeAsset::create($validatedData);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
         return redirect()->route('backsite.type-asset.index', );
@@ -104,9 +111,16 @@ class TypeAssetController extends Controller
      */
     public function update(Request $request, TypeAsset $typeAsset)
     {
-        $data = $request->all();
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'description.string' => 'Keterangan harus berupa teks.',
+        ]);
 
-        $typeAsset->update($data);
+        $typeAsset->update($validatedData);
 
         alert()->success('Sukses', 'Data berhasil diupdate');
         return redirect()->route('backsite.type-asset.index');
