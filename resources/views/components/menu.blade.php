@@ -207,6 +207,13 @@
               </ul>
             </li>
 
+            <li
+              class="{{ request()->is('backsite/hardware-category') || request()->is('backsite/hardware-category/*') || request()->is('backsite/*/hardware-category') || request()->is('backsite/*/hardware-category/*') ? 'active' : '' }} ">
+              <a class="menu-item" href="{{ route('backsite.hardware-category.index') }}">
+                <i></i><span>Category Hardware</span>
+              </a>
+            </li>
+
             {{-- @can('location') --}}
             <li
               class="{{ request()->is('backsite/jobdesk') || request()->is('backsite/jobdesk/*') || request()->is('backsite/*/jobdesk') || request()->is('backsite/*/jobdesk/*') ? 'active' : '' }} ">

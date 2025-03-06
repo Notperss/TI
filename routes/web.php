@@ -56,6 +56,7 @@ use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
 use App\Http\Controllers\ManagementAccess\JobPositionController;
+use App\Http\Controllers\MasterData\CategoryHardwareController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
@@ -67,6 +68,7 @@ use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
+use App\Http\Controllers\MasterData\HardwareCategoryController;
 use App\Http\Controllers\MasterData\Lattol\AssetIndicatorController;
 use App\Http\Controllers\MasterData\Lattol\TypeAssetController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
@@ -422,4 +424,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('asset-indicator', AssetIndicatorController::class)->except('show');
     // Route::get('asset-indicator', [AssetIndicatorController::class, 'index'])->name('AssetIndicator.index');
 
+    // Route::resource('category-hardware', CategoryHardwareController::class)->except('show');
+
+    Route::resource('hardware-category', HardwareCategoryController::class)->except('show');
 });
