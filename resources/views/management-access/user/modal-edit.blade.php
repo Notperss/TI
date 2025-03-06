@@ -88,11 +88,14 @@
           <div class="mb-1">
             <label class="label-control" for="hasil">Job Position
               <code style="color:red;">*</code></label>
-            <select name="job_position" id="job_position" class="form-control select2" required>
-              <option value="{{ '' }}" disabled selected>
-                Choose Job Position
-              </option>
-              <option value="Manager"{{ old('job_position', $user->job_position) == 'Manager' ? 'selected' : '' }}>
+            <select name="job_position_id" id="job_position_id" class="form-control select2" required>
+              <option value="" disabled selected> Choose </option>
+              @foreach ($jobPositions as $jobPosition)
+                <option value="{{ $jobPosition->id }}"
+                  {{ old('job_position_id') == $jobPosition->id ? 'selected' : '' }}>
+                  {{ $jobPosition->name }}</option>
+              @endforeach
+              {{-- <option value="Manager"{{ old('job_position', $user->job_position) == 'Manager' ? 'selected' : '' }}>
                 Manager </option>
               <option
                 value="Assistant Manager"{{ old('job_position', $user->job_position) == 'Assistant Manager' ? 'selected' : '' }}>
@@ -111,12 +114,12 @@
                 Sistem Informasi </option>
               <option
                 value="Senior Officer"{{ old('job_position', $user->job_position) == 'Senior Officer' ? 'selected' : '' }}>
-                Senior Officer </option>
+                Senior Officer </option> --}}
             </select>
 
-            @if ($errors->has('job_position'))
+            @if ($errors->has('job_position_id'))
               <p style="font-style: bold; color: red;">
-                {{ $errors->first('job_position') }}</p>
+                {{ $errors->first('job_position_id') }}</p>
             @endif
           </div>
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ManagementAccess\StoreUserRequest;
 use App\Http\Requests\ManagementAccess\UpdateUserRequest;
+use App\Models\ManagementAccess\JobPosition;
 
 class UserController extends Controller
 {
@@ -25,15 +26,16 @@ class UserController extends Controller
                 return $query
                     ->where('name', 'like', '%'.$request->search.'%')
                     ->orWhere('email', 'like', '%'.$request->search.'%');
-            })
+            })->with('jobPosition')
             ->with('roles', function ($query) {
                 return $query->select('name');
             })
             ->latest()->get();
         $roles = Role::orderBy('name')->get();
+        $jobPositions = JobPosition::orderBy('name')->get();
         // $companies = Company::orderBy('name')->get();
 
-        return view('management-access.user.index', compact('users', 'roles', ));
+        return view('management-access.user.index', compact('users', 'roles', 'jobPositions'));
     }
 
     /**

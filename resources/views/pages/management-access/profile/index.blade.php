@@ -160,10 +160,7 @@
                               <div class="row">
                                 <label class="col-md-3 col-form-label">Job Position</label>
                                 <div class="col-md-9">
-                                  <span class="badge bg-success">{{ $user->job_position }}</span>
-                                  @error('job_position')
-                                    <p class="text-danger font-weight-bold">{{ $message }}</p>
-                                  @enderror
+                                  <span class="badge bg-success">{{ $user->jobPosition->name }}</span>
                                 </div>
                               </div>
                             </div>

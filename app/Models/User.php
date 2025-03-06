@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ManagementAccess\JobPosition;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Act_daily\ActDaily;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -32,7 +33,7 @@ class User extends Authenticatable
         'nik',
         'name',
         'email',
-        'job_position',
+        'job_position_id',
         'password',
         'email_verified_at',
     ];
@@ -89,9 +90,12 @@ class User extends Authenticatable
         // 2 parameter (path model, field foreign key)
         return $this->hasMany(ActDaily::class, 'executor');
     }
-
     public function attendance()
     {
         return $this->hasMany(Attendance::class, 'users_id');
+    }
+    public function jobPosition()
+    {
+        return $this->belongsTo(JobPosition::class);
     }
 }

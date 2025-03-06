@@ -82,9 +82,6 @@
                       <thead>
                         <tr>
                           <th>No</th>
-                          {{-- <th
-                            style="display: {{ in_array(Auth::user()->detail_user->job_position, [1, 3]) || Auth::user()->detail_user->nik == 'M0203002' ? '' : 'none' }}">
-                            User</th> --}}
                           <th>No PR</th>
                           <th>Tahun</th>
                           <th>Pekerjaan</th>
@@ -248,11 +245,7 @@
 
         },
       ],
-      createdRow: function(row, data, dataIndex) {
-        if (data.detail_user && data.detail_user.job_position === 1) {
-          table.column('username:name').visible(true);
-        }
-      },
+
       columnDefs: [{
         className: 'text-center',
         targets: '_all'

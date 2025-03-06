@@ -12,7 +12,7 @@
         </div>
         <div class="modal-body">
           <div class="mb-1">
-            <label for="nik" class="form-label">Nik</label>
+            <label for="nik" class="form-label">NIK</label>
             <input type="text" class="form-control @error('nik') is-invalid @enderror" id="nik"
               placeholder="User Nik" name="nik">
             @error('nik')
@@ -22,7 +22,6 @@
                 </small>
               </a>
             @enderror
-            {{--  --}}
           </div>
 
           <div class="mb-1">
@@ -36,7 +35,6 @@
                 </small>
               </a>
             @enderror
-            {{--  --}}
           </div>
 
           <div class="mb-1">
@@ -50,7 +48,6 @@
                 </small>
               </a>
             @enderror
-            {{-- <x-form.validation.error name="email" /> --}}
           </div>
           {{-- 
           <div class="mb-1">
@@ -84,38 +81,40 @@
           <div class="mb-1">
             <label class="label-control" for="hasil">Job Position
               <code style="color:red;">*</code></label>
+            <select name="job_position_id" id="job_position_id" class="form-control select2" required>
+              <option value="" disabled selected> Choose </option>
+              @foreach ($jobPositions as $jobPosition)
+                <option value="{{ $jobPosition->id }}"
+                  {{ old('job_position_id') == $jobPosition->id ? 'selected' : '' }}>
+                  {{ $jobPosition->name }}</option>
+              @endforeach
 
-            <select name="job_position" id="job_position" class="form-control select2" required>
-              <option value="" disabled selected>
-                Choose
-              </option>
-
-              <option value="Manager"{{ old('job_position') == 'Manager' ? 'selected' : '' }}>
-                Manager </option>
-              <option value="Assistant Manager"{{ old('job_position') == 'Assistant Manager' ? 'selected' : '' }}>
-                Assistant Manager </option>
-              <option value="Administrasi"{{ old('job_position') == 'Administrasi' ? 'selected' : '' }}>
-                Administrasi </option>
-              <option value="Hardware dan Jaringan"
-                {{ old('job_position') == 'Hardware dan Jaringan' ? 'selected' : '' }}>
-                Hardware dan Jaringan</option>
-              <option value="Peralatan Tol" {{ old('job_position') == 'Peralatan Tol' ? 'selected' : '' }}>
-                Peralatan Tol </option>
-              <option value="Sistem Informasi"{{ old('job_position') == 'Sistem Informasi' ? 'selected' : '' }}>
-                Sistem Informasi </option>
-              <option value="Senior Officer"{{ old('job_position') == 'Senior Officer' ? 'selected' : '' }}>
-                Senior Officer </option>
+              {{-- <option value="Manager"{{ old('job_position') == 'Manager' ? 'selected' : '' }}>
+                    Manager </option>
+                  <option value="Assistant Manager"{{ old('job_position') == 'Assistant Manager' ? 'selected' : '' }}>
+                    Assistant Manager </option>
+                  <option value="Administrasi"{{ old('job_position') == 'Administrasi' ? 'selected' : '' }}>
+                    Administrasi </option>
+                  <option value="Hardware dan Jaringan"
+                    {{ old('job_position') == 'Hardware dan Jaringan' ? 'selected' : '' }}>
+                    Hardware dan Jaringan</option>
+                  <option value="Peralatan Tol" {{ old('job_position') == 'Peralatan Tol' ? 'selected' : '' }}>
+                    Peralatan Tol </option>
+                  <option value="Sistem Informasi"{{ old('job_position') == 'Sistem Informasi' ? 'selected' : '' }}>
+                    Sistem Informasi </option>
+                  <option value="Senior Officer"{{ old('job_position') == 'Senior Officer' ? 'selected' : '' }}>
+              Senior Officer </option> --}}
             </select>
 
-            @if ($errors->has('job_position'))
+            @if ($errors->has('job_position_id'))
               <p style="font-style: bold; color: red;">
-                {{ $errors->first('job_position') }}</p>
+                {{ $errors->first('job_position_id') }}</p>
             @endif
           </div>
 
           <div class="mb-1">
             <label for="role" class="form-label">Role Name</label>
-            <select class="form-control choices @error('role') is-invalid @enderror" id="role" name="role">
+            <select class="form-control select2 @error('role') is-invalid @enderror" id="role" name="role">
               <option value=""disabled selected>Choose</option>
               @foreach ($roles as $role)
                 <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -128,7 +127,6 @@
                 </small>
               </a>
             @enderror
-            {{-- <x-form.validation.error name="role" /> --}}
           </div>
 
           <div class="mb-1">
@@ -156,7 +154,6 @@
               <input class="form-check-input code-switcher" type="checkbox" id="tables-small-showcode" name="verified"
                 value="1">
             </div>
-            {{-- <x-form.validation.error name="verified" /> --}}
           </div>
 
         </div>

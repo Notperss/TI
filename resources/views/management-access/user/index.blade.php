@@ -63,7 +63,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->nik }}</td>
                         <td>{{ $user->name }}</td>
-                        <td>{{ $user->job_position }}</td>
+                        <td>{{ $user->jobPosition->name ?? '-' }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
                           @foreach ($user->roles as $role)
