@@ -36,14 +36,14 @@ class ActDaily extends Model
     ];
 
     protected $with = [
-        'users',
-        'detail_user',
+        'user',
+        // 'detail_user',
         'work_type',
         'location_room',
     ];
 
     // one to many
-    public function users()
+    public function user()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
         return $this->belongsTo(User::class, 'users_id', 'id');
@@ -54,11 +54,11 @@ class ActDaily extends Model
     //     return $this->belongsTo(User::class, 'executor', 'id');
     // }
     // one to many
-    public function detail_user()
-    {
-        // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
-        return $this->belongsTo(DetailUser::class, 'executor', 'id');
-    }
+    // public function detail_user()
+    // {
+    //     // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
+    //     return $this->belongsTo(DetailUser::class, 'executor', 'id');
+    // }
     // one to many
     //  public function work_category()
     //  {

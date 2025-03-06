@@ -200,7 +200,7 @@
         },
         {
           data: 'work_type.job_type',
-          name: 'work_type_id',
+          name: 'work_type.job_type',
         },
         {
           data: 'activity',
@@ -217,9 +217,9 @@
             if (data === '0') {
               return '<span>N/A</span>';
             } else if (data === '1') {
-              return '<span class="badge bg-danger">Belum<br> Approve</span>';
+              return '<span class="badge bg-danger">Open</span>';
             } else if (data === '2') {
-              return '<span class="badge bg-success">Approved</span>';
+              return '<span class="badge bg-success">Close</span>';
             } else {
               return '-';
             }
