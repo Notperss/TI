@@ -2,14 +2,16 @@
 
 namespace App\Models\MasterData\Goods;
 
-use App\Models\Adm\LendingFacility;
 use App\Models\Adm\LendingGoods;
+use App\Models\Adm\LendingFacility;
 use App\Models\Maintenance\Maintenance;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\MasterData\HardwareCategory;
+use App\Models\ManagementAccess\JobPosition;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Network\Distribution\Distribution;
 use App\Models\Network\Distribution\DistributionAsset;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Barang extends Model
 {
@@ -27,6 +29,8 @@ class Barang extends Model
         'size',
         'year',
         'description',
+        'job_position_id',
+        'hardware_category_id',
         'file',
     ];
     public function lending_goods()
@@ -70,5 +74,13 @@ class Barang extends Model
     public function distribution()
     {
         return $this->belongsTo(Distribution::class, 'id');
+    }
+    public function jobPosition()
+    {
+        return $this->belongsTo(JobPosition::class, );
+    }
+    public function hardwareCategory()
+    {
+        return $this->belongsTo(HardwareCategory::class, );
     }
 }

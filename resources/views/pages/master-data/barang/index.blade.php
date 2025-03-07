@@ -158,8 +158,8 @@
           name: 'name',
         },
         {
-          data: 'category',
-          name: 'category',
+          data: 'hardwareCategory',
+          name: 'hardwareCategory.name',
         },
         {
           data: 'distribution_asset',

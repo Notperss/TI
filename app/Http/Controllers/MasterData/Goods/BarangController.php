@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MasterData\Goods;
 
+use App\Models\MasterData\HardwareCategory;
 use App\Models\MasterData\Hardware\Motherboard;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -36,7 +37,7 @@ class BarangController extends Controller
     {
         if (request()->ajax()) {
 
-            $barang = Barang::with('distribution_asset.distribution.employee', 'maintenance', 'maintenance.maintenanceStatus')->orderby('created_at', 'desc');
+            $barang = Barang::with('distribution_asset.distribution.employee', 'maintenance', 'maintenance.maintenanceStatus', 'hardwareCategory')->orderby('created_at', 'desc');
 
             return DataTables::of($barang)
                 ->addIndexColumn()
@@ -44,68 +45,41 @@ class BarangController extends Controller
                     // Access the distribution_asset relationship
                     $distributionAssets = $item->distribution_asset;
 
-                    // Check if distributionAssets is not empty
-                    if ($distributionAssets->isNotEmpty()) {
-                        // Initialize an array to store distribution asset creation dates
-                        $StatsValue = [];
+                    $StatsValue = [];
 
-                        // Loop through each distributionAsset
-                        foreach ($distributionAssets as $distributionAsset) {
-                            // Add the created_at value to the array
-                            $StatsValue[] = $distributionAsset->stats;
+                    // Loop through each distributionAsset
+                    foreach ($distributionAssets as $distributionAsset) {
+                        // Add the created_at value to the array
+                        $StatsValue[] = $distributionAsset->stats;
 
-                        }
-
-                        // Check if there are any created_at values in the array
-                        if (! empty($StatsValue)) {
-                            return '
-            <div class="btn-group">
-                <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Action</button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="'.route('backsite.barang.show', encrypt($item->id)).'" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
-                        Show
-                    </a>
-                    <a class="dropdown-item" href="'.route('backsite.barang.edit', $item->id).'">
-                        Edit
-                    </a>
-            </div>
-            <a href="#mymodal" data-remote="'.route('backsite.barang.showBarcode', $item->id).'" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data" class=" btn btn-sm list-group-item-info">
-                        Print
-            </a>
-                ';
-                        } else {
-                            return 'No created_at values found';
-                        }
-                    } else {
-                        return '
-            <div class="btn-group">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Action</button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a href="#mymodal" data-remote="'.route('backsite.barang.show', encrypt($item->id)).'" data-toggle="modal"
-                        data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
-                        Show
-                    </a>
-                    <a class="dropdown-item" href="'.route('backsite.barang.edit', $item->id).'">
-                        Edit
-                    </a>
-                    <form action="'.route('backsite.barang.destroy', encrypt($item->id)).'" method="POST"
-                    onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
-                        '.method_field('delete').csrf_field().'
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="'.csrf_token().'">
-                        <input type="submit" class="dropdown-item" value="Delete">
-                    </form>
-            </div>
-              <a href="#mymodal" data-remote="'.route('backsite.barang.showBarcode', $item->id).'" data-toggle="modal"
-                        data-target="#mymodal" data-title="QR-Code" class=" btn btn-sm list-group-item-info">
-                        Print
-            </a>
-                ';
                     }
+
+                    return '
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-'.($StatsValue ? 'warning' : 'info').' btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">Action</button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                            <a href="#mymodal" data-remote="'.route('backsite.barang.show', encrypt($item->id)).'" data-toggle="modal"
+                                data-target="#mymodal" data-title="Detail Data" class="dropdown-item">
+                                Show
+                            </a>
+                            <a class="dropdown-item" href="'.route('backsite.barang.edit', $item->id).'">
+                                Edit
+                            </a>
+                            <form action="'.route('backsite.barang.destroy', encrypt($item->id)).'" method="POST"
+                            onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
+                                '.method_field('delete').csrf_field().'
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="'.csrf_token().'">
+                                <input type="submit" class="dropdown-item" value="Delete" '.($StatsValue ? 'hidden' : '').'>
+                            </form>
+                    </div>
+                      <a href="#mymodal" data-remote="'.route('backsite.barang.showBarcode', $item->id).'" data-toggle="modal"
+                                data-target="#mymodal" data-title="QR-Code" class=" btn btn-sm list-group-item-info">
+                                Print
+                    </a>
+                        ';
+
                 })
                 ->editColumn('barcode', function ($item) {
                     return '
@@ -151,36 +125,6 @@ class BarangController extends Controller
                         return 'Tidak Dipakai';
                     }
                 })
-
-                // ->editColumn('distribution_asset_created_at', function ($item) {
-                //     // Access the distribution_asset relationship
-                //     $distributionAssets = $item->distribution_asset;
-
-                //     // Check if distributionAssets is not empty
-                //     if ($distributionAssets->isNotEmpty()) {
-                //         // Initialize an array to store distribution asset creation dates
-                //         $createdAtValues = [];
-
-                //         // Loop through each distributionAsset
-                //         foreach ($distributionAssets as $distributionAsset) {
-                //             // Add the created_at value to the array
-                //             $createdAtValues[] = $distributionAsset->created_at->format('l, d F Y');
-
-                //         }
-
-                //         // Check if there are any created_at values in the array
-                //         if (! empty($createdAtValues)) {
-                //             // return implode(', ', $createdAtValues);
-                //             $latestCreatedAt = end($createdAtValues);
-
-                //             return ($item->stats == 1) ? 'Available' : $latestCreatedAt;
-                //         } else {
-                //             return 'No created_at values found';
-                //         }
-                //     } else {
-                //         return 'Available';
-                //     }
-                // })
                 ->editColumn('stats', function ($item) {
                     $latestMaintenance = $item->maintenance()->latest()->first();
                     if (! $latestMaintenance) {
@@ -207,6 +151,9 @@ class BarangController extends Controller
 
                     return $statusBadges[$latestStatus->report_status] ?? '-';
                 })
+                ->editColumn('hardwareCategory', function ($item) {
+                    return $item->hardwareCategory->name ?? '';
+                })
                 ->rawColumns(['action', 'distribution_asset', 'distribution_asset_created_at', 'barcode', 'stats'])
 
                 ->toJson();
@@ -221,7 +168,8 @@ class BarangController extends Controller
      */
     public function create()
     {
-        return view('pages.master-data.barang.create');
+        $hardwareCategories = HardwareCategory::orderBy('name')->get();
+        return view('pages.master-data.barang.create', compact('hardwareCategories'));
     }
 
     /**
@@ -346,7 +294,9 @@ class BarangController extends Controller
         $motherboards = GoodsMotherboard::with('motherboard')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $hardisks = GoodsHardisk::with('hardisk')->where('goods_id', $barang->id)->orderBy('created_at', 'desc')->get();
         $assets = DistributionAsset::where('asset_id', $barang->id)->get();
-        return view('pages.master-data.barang.edit', compact('barang', 'files', 'hardisks', 'processors', 'rams', 'assets', 'motherboards'));
+        $hardwareCategories = HardwareCategory::orderBy('name')->get();
+        return view('pages.master-data.barang.edit',
+            compact('barang', 'files', 'hardisks', 'processors', 'rams', 'assets', 'motherboards', 'hardwareCategories'));
     }
 
     /**
@@ -943,6 +893,5 @@ class BarangController extends Controller
         $qr = FacadesQrCode::size(170)->style('round')->generate(route('detailBarang', $id));
         return view('pages.master-data.barang.show-barcode', compact('barang', 'qr'));
     }
-
 
 }

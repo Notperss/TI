@@ -14,7 +14,7 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Tambah Barang</h4>
+                  <h4 class="card-title text-white">Edit Data Barang</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.barang.update', $barang->id) }}" method="POST"
                   enctype="multipart/form-data">
@@ -24,7 +24,7 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
-                    <input name="stats" id="stats" class="form-control" value="1" hidden>
+                    {{-- <input name="stats" id="stats" class="form-control" value="1" hidden> --}}
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="name">Nama Barang<code
                           style="color:red;">*</code></label>
@@ -49,15 +49,18 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="category">Category<code
+                      <label class="col-md-2 label-control" for="hardware_category_id">Kategori Hardware<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="category" id="category" class="form-control select21" onchange="showDiv(this)"
-                          @if ($assets->isEmpty()) @else disabled @endif required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="PC" {{ $barang->category == 'PC' ? 'selected' : '' }}>PC</option>
+                        <select name="hardware_category_id" id="hardware_category_id" class="form-control select21"
+                          onchange="showDiv(this)" @if ($assets->isEmpty()) @else disabled @endif required>
+                          <option value="{{ '' }}" disabled selected> Choose </option>
+                          @foreach ($hardwareCategories as $hardwareCategory)
+                            <option value="{{ $hardwareCategory->id }}" data-name="{{ $hardwareCategory->name }}"
+                              {{ old('hardware_category_id', $barang->hardware_category_id) == $hardwareCategory->id ? 'selected' : '' }}>
+                              {{ $hardwareCategory->name ?? '' }}</option>
+                          @endforeach
+                          {{-- <option value="PC" {{ $barang->category == 'PC' ? 'selected' : '' }}>PC</option>
                           <option value="PC AIO"{{ $barang->category == 'PC AIO' ? 'selected' : '' }}>PC AIO</option>
                           <option value="MONITOR"{{ $barang->category == 'MONITOR' ? 'selected' : '' }}>Monitor</option>
                           <option value="TV"{{ $barang->category == 'TV' ? 'selected' : '' }}>TV</option>
@@ -107,6 +110,7 @@
                           </option>
                           <option value="LTS"{{ $barang->category == 'LTS' ? 'selected' : '' }}>LTS</option>
                           <option value="DVR/NVR"{{ $barang->category == 'DVR/NVR' ? 'selected' : '' }}>DVR/NVR</option>
+                          <option value="ROUTER"{{ $barang->category == 'ROUTER' ? 'selected' : '' }}>ROUTER</option> --}}
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -123,7 +127,7 @@
                           <option value="ASET"{{ $barang->type_assets == 'ASET' ? 'selected' : '' }}>Aset</option>
                           <option value="ASET TI"{{ $barang->type_assets == 'ASET TI' ? 'selected' : '' }}>Aset TI
                           </option>
-                          <option value="ASET LATOL"{{ $barang->type_assets == 'ASET LATOL' ? 'selected' : '' }}>Aset
+                          <option value="ASET LATTOL"{{ $barang->type_assets == 'ASET LATTOL' ? 'selected' : '' }}>Aset
                             Lattol
                           </option>
                         </select>
@@ -229,6 +233,21 @@
                             {{ $errors->first('file') }}</p>
                         @endif
                       </div>
+
+                      {{-- @if (Auth::user()->job_position == 'Peralatan Tol')
+                        <label class="col-md-2 label-control" for="testing">Test Unit</label>
+                        <div class="col-md-4">
+                          <select name="testing" id="testing" class="form-control select2">
+                            <option value="" selected disabled>Choose</option>
+                            <option value="1"{{ $barang->testing == '1' ? 'selected' : '' }}>Ya</option>
+                            <option value="0"{{ $barang->testing == '0' ? 'selected' : '' }}>Tidak</option>
+                          </select>
+                          @if ($errors->has('testing'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('testing') }}</p>
+                          @endif
+                        </div>
+                      @endif --}}
                     </div>
 
                     <div class="form-group row">
@@ -374,7 +393,7 @@
                 </div>
 
                 <div id="hidden_div" class="hardware-section">
-                  @if (in_array($barang->category, ['PC', 'PC AIO', 'SERVER', 'LAPTOP', 'NAS']))
+                  @if (in_array($barang->hardwareCategory->name, ['PC', 'PC AIO', 'SERVER', 'LAPTOP', 'NAS']))
                     {{-- tambahin disini --}}
 
                     {{-- motherboard --}}
@@ -636,19 +655,21 @@
 
   <script type="text/javascript">
     function showDiv(select) {
-      if (
-        select.value == 'PC' ||
-        select.value == 'PC AIO' ||
-        select.value == 'LAPTOP' ||
-        select.value == 'SERVER' ||
-        select.value == 'NAS'
-      ) {
-        document.getElementById('hidden_div').style.display = "block";
+      // Ambil elemen <option> yang dipilih
+      let selectedOption = select.options[select.selectedIndex];
+
+      // Ambil nilai dari atribut data-name
+      let categoryName = selectedOption.getAttribute("data-name");
+
+      // Daftar kategori yang harus menampilkan hidden_div
+      let showCategories = ["PC", "PC AIO", "LAPTOP", "SERVER", "NAS"];
+
+      // Cek apakah categoryName ada di daftar showCategories
+      if (showCategories.includes(categoryName)) {
+        document.getElementById("hidden_div").style.display = "block";
       } else {
-        document.getElementById('hidden_div').style.display = "none";
+        document.getElementById("hidden_div").style.display = "none";
       }
-
-
 
       $(document).ready(function() {
         $('html,body').animate({

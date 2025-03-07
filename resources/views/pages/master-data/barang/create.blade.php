@@ -14,7 +14,7 @@
               <div class="card">
 
                 <div class="card-header bg-success">
-                  <h4 class="card-title text-white">Tambah Barang</h4>
+                  <h4 class="card-title text-white">Tambah Data Barang</h4>
                 </div>
                 <form class="form" action="{{ route('backsite.barang.store') }}" method="POST"
                   enctype="multipart/form-data">
@@ -23,7 +23,7 @@
                     <div class="form-section">
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
-                    <input name="stats" id="stats" class="form-control" value="1" hidden>
+                    <input type="hidden" name="job_position_id" value="{{ Auth::user()->job_position_id }}" hidden>
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="name">Nama Barang<code
                           style="color:red;">*</code></label>
@@ -47,14 +47,17 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="category">Category<code
+                      <label class="col-md-2 label-control" for="hardware_category_id">Category Hardware<code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select name="category" id="category" class="form-control select2" required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="PC">PC</option>
+                        <select name="hardware_category_id" id="hardware_category_id" class="form-control select2">
+                          <option value="{{ '' }}" disabled selected> Choose </option>
+                          @foreach ($hardwareCategories as $hardwareCategory)
+                            <option value="{{ $hardwareCategory->id }}"
+                              {{ old('hardware_category_id') == $hardwareCategory->id ? 'selected' : '' }}>
+                              {{ $hardwareCategory->name }}</option>
+                          @endforeach
+                          {{-- <option value="PC">PC</option>
                           <option value="PC AIO">PC AIO</option>
                           <option value="MONITOR">Monitor</option>
                           <option value="TV">TV</option>
@@ -89,7 +92,9 @@
                           <option value="TCT">Toll Collection Terminal</option>
                           <option value="OBS">Optical Beam Sensor</option>
                           <option value="LTS">LTS</option>
+                          <option value="ALB">ALB</option>
                           <option value="DVR/NVR">DVR/NVR</option>
+                          <option value="ROUTER">ROUTER</option> --}}
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -105,7 +110,9 @@
                           </option>
                           <option value="ASET">Aset</option>
                           <option value="ASET TI">Aset TI</option>
-                          <option value="ASET LATOL">Aset Lattol</option>
+                          <option value="ASET LATTOL"
+                            {{ Auth::user()->jobPosition == 'Peralatan Tol' ? 'selected' : '' }}>Aset Lattol
+                          </option>
                         </select>
                         @if ($errors->has('type_assets'))
                           <p style="font-style: bold; color: red;">
@@ -168,7 +175,7 @@
                             {{ $errors->first('stats') }}</p>
                         @endif
                       </div>
-                    </div> --}}
+                        </div> --}}
                       <label class="col-md-2 label-control" for="year">Tahun</label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="year" id="year"
@@ -196,6 +203,21 @@
                           @endif
                         </div>
                       </div>
+
+                      {{-- @if (Auth::user()->jobPosition == 'Peralatan Tol' || Auth::user()->hasRole('super-admin'))
+                        <label class="col-md-2 label-control" for="testing">Test Unit</label>
+                        <div class="col-md-4">
+                          <select name="testing" id="testing" class="form-control select2">
+                            <option value="" selected disabled>Choose</option>
+                            <option value="1">Ya</option>
+                            <option value="0">Tidak</option>
+                          </select>
+                          @if ($errors->has('testing'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('testing') }}</p>
+                          @endif
+                        </div>
+                      @endif --}}
                     </div>
 
                     <div class="form-group row">

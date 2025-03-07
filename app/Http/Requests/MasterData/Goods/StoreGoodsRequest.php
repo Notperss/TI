@@ -26,7 +26,7 @@ class StoreGoodsRequest extends FormRequest
     {
         return [
             'type_assets' => 'required|max:255',
-            'stats' => 'required|max:255',
+            // 'stats' => 'required|max:255',
             'name' => 'required|max:255',
             'sku' => ['max:255',
                 function ($attribute, $value, $fail) {
