@@ -39,6 +39,39 @@
                         @endif
                       </div>
                     </div>
+
+                    <div class="form-group row col-10">
+                      <label class="col-md-3 label-control" for="has_indicator">Ada Indikator <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select id="has_indicator" name="has_indicator" class="form-control select2" required>
+                          <option value="" disabled selected>Choose</option>
+                          <option value="1">YA</option>
+                          <option value="0">TIDAK</option>
+                        </select>
+                        @if ($errors->has('has_indicator'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('has_indicator') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row col-10" id="has_test_group" style="display: none;">
+                      <label class="col-md-3 label-control" for="has_test">Ada Testing <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select id="has_test" name="has_test" class="form-control select2">
+                          <option value="" disabled selected>Choose</option>
+                          <option value="1">YA</option>
+                          <option value="0">TIDAK</option>
+                        </select>
+                        @if ($errors->has('has_test'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('has_test') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
                   </div>
 
                   <div class="form-actions ">
@@ -60,3 +93,29 @@
 
 
 @endsection
+@push('after-script')
+  <script>
+    $(document).ready(function() {
+      let hasIndicator = $("#has_indicator");
+      let hasTest = $("#has_test");
+      let hasTestGroup = hasTest.closest(".form-group");
+
+      function toggleHasTest() {
+        if (hasIndicator.val() === "1") {
+          hasTestGroup.show();
+        } else {
+          hasTestGroup.hide();
+          hasTest.val("").trigger("change"); // Reset pilihan ke default
+        }
+      }
+
+      // Event listener ketika has_indicator berubah
+      hasIndicator.change(function() {
+        toggleHasTest();
+      });
+
+      // Jalankan saat halaman dimuat untuk menangani nilai yang sudah dipilih sebelumnya
+      toggleHasTest();
+    });
+  </script>
+@endpush

@@ -40,6 +40,38 @@
                         @endif
                       </div>
                     </div>
+                    <div class="form-group row col-10">
+                      <label class="col-md-3 label-control" for="has_indicator">Ada Indikator <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select id="has_indicator" name="has_indicator" class="form-control select2" required>
+                          <option value="" disabled selected>Choose</option>
+                          <option value="1" {{ $hardwareCategory->has_indicator == 1 ? 'selected' : '' }}>YA</option>
+                          <option value="0" {{ $hardwareCategory->has_indicator == 0 ? 'selected' : '' }}>TIDAK
+                          </option>
+                        </select>
+                        @if ($errors->has('has_indicator'))
+                          <p style="font-style: bold; color: red;">{{ $errors->first('has_indicator') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row col-10" id="has_test_group"
+                      style="{{ $hardwareCategory->has_indicator == 1 ? '' : 'display: none;' }}">
+                      <label class="col-md-3 label-control" for="has_test">Ada Testing <code
+                          style="color:red;">*</code></label>
+                      <div class="col-md-4">
+                        <select id="has_test" name="has_test" class="form-control select2" required>
+                          <option value="" disabled selected>Choose</option>
+                          <option value="1" {{ $hardwareCategory->has_test == 1 ? 'selected' : '' }}>YA</option>
+                          <option value="0" {{ $hardwareCategory->has_test == 0 ? 'selected' : '' }}>TIDAK</option>
+                        </select>
+                        @if ($errors->has('has_test'))
+                          <p style="font-style: bold; color: red;">{{ $errors->first('has_test') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
                   </div>
 
                   <div class="form-actions ">
@@ -62,3 +94,28 @@
 
 
 @endsection
+@push('after-script')
+  <script>
+    $(document).ready(function() {
+      let hasIndicator = $("#has_indicator");
+      let hasTestGroup = $("#has_test_group");
+
+      function toggleHasTest() {
+        if (hasIndicator.val() === "1") {
+          hasTestGroup.show();
+        } else {
+          hasTestGroup.hide();
+          $("#has_test").val("").trigger("change"); // Reset nilai saat disembunyikan
+        }
+      }
+
+      // Event listener saat has_indicator berubah
+      hasIndicator.change(function() {
+        toggleHasTest();
+      });
+
+      // Jalankan saat halaman dimuat untuk menangani nilai yang sudah tersimpan
+      toggleHasTest();
+    });
+  </script>
+@endpush

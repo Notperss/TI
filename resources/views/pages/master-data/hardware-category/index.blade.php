@@ -109,8 +109,6 @@
                             <tr>
                               <th>No</th>
                               <th>Informasi</th>
-                              <th>Keterangan</th>
-                              <th>Status</th>
                               <th>Action</th>
                             </tr>
                           </tfoot>

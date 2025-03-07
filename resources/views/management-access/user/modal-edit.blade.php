@@ -92,7 +92,7 @@
               <option value="" disabled selected> Choose </option>
               @foreach ($jobPositions as $jobPosition)
                 <option value="{{ $jobPosition->id }}"
-                  {{ old('job_position_id') == $jobPosition->id ? 'selected' : '' }}>
+                  {{ old('job_position_id', $user->job_position_id) == $jobPosition->id ? 'selected' : '' }}>
                   {{ $jobPosition->name }}</option>
               @endforeach
               {{-- <option value="Manager"{{ old('job_position', $user->job_position) == 'Manager' ? 'selected' : '' }}>

@@ -41,6 +41,8 @@ class HardwareCategoryController extends Controller
         // Validasi data
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'has_indicator' => ['required', 'boolean'],
+            'has_test' => ['required', 'boolean'],
         ], [
             'name.required' => 'Nama wajib diisi.',
             'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
@@ -85,6 +87,8 @@ class HardwareCategoryController extends Controller
     {
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'has_indicator' => ['required', 'boolean'],
+            'has_test' => ['required', 'boolean'],
         ], [
             'name.required' => 'Nama wajib diisi.',
             'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
