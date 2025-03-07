@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\MasterData\Lattol\TypeAsset;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 
 return new class extends Migration
 {
@@ -14,13 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('asset_indicators', function (Blueprint $table) {
+        Schema::create('hardware_testings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(TypeAsset::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(HardwareCategory::class)->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->longText('description')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asset_indikators');
+        Schema::dropIfExists('hardware_testings');
     }
 };

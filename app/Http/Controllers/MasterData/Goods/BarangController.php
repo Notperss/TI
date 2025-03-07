@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\MasterData\Goods;
 
-use App\Models\MasterData\HardwareCategory;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 use App\Models\MasterData\Hardware\Motherboard;
 use Carbon\Carbon;
 use Illuminate\Support\Str;

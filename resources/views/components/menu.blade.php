@@ -174,32 +174,39 @@
 
             <li class=" nav-item"><a href="#"><i
                   class="{{ request()->is('backsite/location_detail') || request()->is('backsite/location_detail/*') || request()->is('backsite/*/location_detail') || request()->is('backsite/*/location_detail/*') || request()->is('backsite/location') || request()->is('backsite/location/*') || request()->is('backsite/*/location') || request()->is('backsite/*/location/*') || request()->is('backsite/location_sub') || request()->is('backsite/location_sub/*') || request()->is('backsite/*/location_sub') || request()->is('backsite/*/location_sub/*') || request()->is('backsite/location_room') || request()->is('backsite/location_room/*') || request()->is('backsite/*/location_room') || request()->is('backsite/*/location_room/*') ? 'la la-caret-right bx-flashing' : 'la la-caret-right' }}"></i><span
-                  class="menu-title" data-i18n="Latol"><strong>Lattol</strong></span></a>
+                  class="menu-title" data-i18n="Latol"><strong>Kategori Hardware</strong></span></a>
               <ul class="menu-content">
 
                 {{-- @can('location_room') --}}
                 {{-- <li
-                  class="{{ request()->is('backsite/asset-latol') || request()->is('backsite/asset-latol/*') || request()->is('backsite/*/asset-latol') || request()->is('backsite/*/asset-latol/*') ? 'active' : '' }} ">
-                  <a class="menu-item" href="{{ route('backsite.barang.assetLatol') }}">
+                  class="{{ request()->is('backsite/type-hardware') || request()->is('backsite/type-asset/*') || request()->is('backsite/*/type-asset') || request()->is('backsite/*/type-asset/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.type-asset.index') }}">
                     <i></i><span>Jenis Peralatan</span>
                   </a>
                 </li> --}}
                 {{-- @endcan --}}
 
+                <li
+                  class="{{ request()->is('backsite/hardware-category') || request()->is('backsite/hardware-category/*') || request()->is('backsite/*/hardware-category') || request()->is('backsite/*/hardware-category/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.hardware-category.index') }}">
+                    <i></i><span>Jenis Peralatan</span>
+                  </a>
+                </li>
+
                 {{-- @can('location_room') --}}
                 <li
-                  class="{{ request()->is('backsite/type-asset') || request()->is('backsite/type-asset/*') || request()->is('backsite/*/type-asset') || request()->is('backsite/*/type-asset/*') ? 'active' : '' }} ">
-                  <a class="menu-item" href="{{ route('backsite.type-asset.index') }}">
-                    <i></i><span>Jenis Peralatan</span>
+                  class="{{ request()->is('backsite/hardware-indicator') || request()->is('backsite/hardware-indicator/*') || request()->is('backsite/*/hardware-indicator') || request()->is('backsite/*/hardware-indicator/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.hardware-indicator.index') }}">
+                    <i></i><span>Indikator</span>
                   </a>
                 </li>
                 {{-- @endcan --}}
 
                 {{-- @can('location_room') --}}
                 <li
-                  class="{{ request()->is('backsite/asset-indicator') || request()->is('backsite/asset-indicator/*') || request()->is('backsite/*/asset-indicator') || request()->is('backsite/*/asset-indicator/*') ? 'active' : '' }} ">
-                  <a class="menu-item" href="{{ route('backsite.asset-indicator.index') }}">
-                    <i></i><span>Indikator</span>
+                  class="{{ request()->is('backsite/hardware-testing') || request()->is('backsite/hardware-testing/*') || request()->is('backsite/*/hardware-testing') || request()->is('backsite/*/hardware-testing/*') ? 'active' : '' }} ">
+                  <a class="menu-item" href="{{ route('backsite.hardware-testing.index') }}">
+                    <i></i><span>Testing</span>
                   </a>
                 </li>
                 {{-- @endcan --}}

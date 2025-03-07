@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\MasterData\Location\LocationRoom;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,13 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('type_assets', function (Blueprint $table) {
+        Schema::create('hardware_indicators', function (Blueprint $table) {
             $table->id();
-            // $table->foreignIdFor(LocationRoom::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(HardwareCategory::class)->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->longText('description')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_assets');
+        Schema::dropIfExists('hardware_indicators');
     }
 };

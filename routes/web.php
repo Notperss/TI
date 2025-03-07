@@ -50,13 +50,12 @@ use App\Http\Controllers\ManagementAccess\PermissionController;
 use App\Http\Controllers\MasterData\Division\SectionController;
 use App\Http\Controllers\MasterData\Hardware\HardiskController;
 use App\Http\Controllers\MasterData\Hardware\MonitorController;
+use App\Http\Controllers\ManagementAccess\JobPositionController;
 use App\Http\Controllers\MasterData\Division\DivisionController;
 use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
-use App\Http\Controllers\ManagementAccess\JobPositionController;
-use App\Http\Controllers\MasterData\CategoryHardwareController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
@@ -68,12 +67,14 @@ use App\Http\Controllers\SystemInformation\License\LicenseController;
 use App\Http\Controllers\MasterData\Location\LocationDetailController;
 use App\Http\Controllers\SystemInformation\DRC\DRCMonitoringController;
 use App\Http\Controllers\MasterData\Hardware\AdditionalDeviceController;
-use App\Http\Controllers\MasterData\HardwareCategoryController;
-use App\Http\Controllers\MasterData\Lattol\AssetIndicatorController;
-use App\Http\Controllers\MasterData\Lattol\TypeAssetController;
+use App\Http\Controllers\MasterData\HardwareCategory\TypeAssetController;
 use App\Http\Controllers\SystemInformation\Antivirus\AntivirusController;
 use App\Http\Controllers\Network\Cctv\CctvController as CctvCctvController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationController;
+use App\Http\Controllers\MasterData\HardwareCategory\AssetIndicatorController;
+use App\Http\Controllers\MasterData\HardwareCategory\HardwareTestingController;
+use App\Http\Controllers\MasterData\HardwareCategory\HardwareCategoryController;
+use App\Http\Controllers\MasterData\HardwareCategory\HardwareIndicatorController;
 use App\Http\Controllers\SystemInformation\Application\ApplicationMonitoringController;
 
 /*
@@ -418,13 +419,11 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
         Route::delete('/maintenance/{id}/delete_status', 'delete_status')->name('maintenance.delete_status');
     });
 
-    Route::resource('type-asset', TypeAssetController::class)->except('show');
-    // Route::get('type-asset', [TypeAssetController::class, 'index'])->name('typeAsset.index');
+    // Route::resource('type-asset', TypeAssetController::class)->except('show');
 
-    Route::resource('asset-indicator', AssetIndicatorController::class)->except('show');
-    // Route::get('asset-indicator', [AssetIndicatorController::class, 'index'])->name('AssetIndicator.index');
-
-    // Route::resource('category-hardware', CategoryHardwareController::class)->except('show');
+    // Route::resource('asset-indicator', AssetIndicatorController::class)->except('show');
 
     Route::resource('hardware-category', HardwareCategoryController::class)->except('show');
+    Route::resource('hardware-indicator', HardwareIndicatorController::class)->except('show');
+    Route::resource('hardware-testing', HardwareTestingController::class)->except('show');
 });

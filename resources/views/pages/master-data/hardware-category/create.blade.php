@@ -56,18 +56,18 @@
                       </div>
                     </div>
 
-                    <div class="form-group row col-10" id="has_test_group" style="display: none;">
-                      <label class="col-md-3 label-control" for="has_test">Ada Testing <code
+                    <div class="form-group row col-10" id="has_testing_group" style="display: none;">
+                      <label class="col-md-3 label-control" for="has_testing">Ada Testing <code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select id="has_test" name="has_test" class="form-control select2">
+                        <select id="has_testing" name="has_testing" class="form-control select2">
                           <option value="" disabled selected>Choose</option>
                           <option value="1">YA</option>
                           <option value="0">TIDAK</option>
                         </select>
-                        @if ($errors->has('has_test'))
+                        @if ($errors->has('has_testing'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('has_test') }}</p>
+                            {{ $errors->first('has_testing') }}</p>
                         @endif
                       </div>
                     </div>
@@ -97,7 +97,7 @@
   <script>
     $(document).ready(function() {
       let hasIndicator = $("#has_indicator");
-      let hasTest = $("#has_test");
+      let hasTest = $("#has_testing");
       let hasTestGroup = hasTest.closest(".form-group");
 
       function toggleHasTest() {

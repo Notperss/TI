@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\MasterData;
+namespace App\Models\MasterData\HardwareCategory;
 
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,11 +14,20 @@ class HardwareCategory extends Model
     protected $fillable = [
         'name',
         'has_indicator',
-        'has_test',
+        'has_testing',
     ];
 
     public function goods()
     {
         return $this->hasMany(Barang::class);
+    }
+
+    public function hardwareIndicators()
+    {
+        return $this->hasMany(HardwareIndicator::class);
+    }
+    public function hardwareTestings()
+    {
+        return $this->hasMany(HardwareTesting::class);
     }
 }

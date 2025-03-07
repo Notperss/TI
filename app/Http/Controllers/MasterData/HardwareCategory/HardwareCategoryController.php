@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\MasterData;
+namespace App\Http\Controllers\MasterData\HardwareCategory;
 
 use App\Http\Controllers\Controller;
-use App\Models\MasterData\HardwareCategory;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 use Illuminate\Http\Request;
 
 class HardwareCategoryController extends Controller
@@ -42,7 +42,7 @@ class HardwareCategoryController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'has_indicator' => ['required', 'boolean'],
-            'has_test' => ['required', 'boolean'],
+            'has_testing' => ['required', 'boolean'],
         ], [
             'name.required' => 'Nama wajib diisi.',
             'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
@@ -57,7 +57,7 @@ class HardwareCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\MasterData\HardwareCategory  $hardwareCategory
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareCategory  $hardwareCategory
      * @return \Illuminate\Http\Response
      */
     public function show(HardwareCategory $hardwareCategory)
@@ -68,7 +68,7 @@ class HardwareCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\MasterData\HardwareCategory  $hardwareCategory
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareCategory  $hardwareCategory
      * @return \Illuminate\Http\Response
      */
     public function edit(HardwareCategory $hardwareCategory)
@@ -80,7 +80,7 @@ class HardwareCategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MasterData\HardwareCategory  $hardwareCategory
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareCategory  $hardwareCategory
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, HardwareCategory $hardwareCategory)
@@ -88,7 +88,7 @@ class HardwareCategoryController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'has_indicator' => ['required', 'boolean'],
-            'has_test' => ['required', 'boolean'],
+            'has_testing' => ['required', 'boolean'],
         ], [
             'name.required' => 'Nama wajib diisi.',
             'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
@@ -103,7 +103,7 @@ class HardwareCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\MasterData\HardwareCategory  $hardwareCategory
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareCategory  $hardwareCategory
      * @return \Illuminate\Http\Response
      */
     public function destroy(HardwareCategory $hardwareCategory)

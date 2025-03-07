@@ -6,7 +6,7 @@ use App\Models\Adm\LendingGoods;
 use App\Models\Adm\LendingFacility;
 use App\Models\Maintenance\Maintenance;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\MasterData\HardwareCategory;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 use App\Models\ManagementAccess\JobPosition;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Network\Distribution\Distribution;

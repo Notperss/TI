@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Models\MasterData\Lattol;
+namespace App\Models\MasterData\HardwareCategory;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AssetIndicator extends Model
+class HardwareTesting extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'type_asset_id',
+        'hardware_category_id',
         'name',
         'description',
     ];
 
-    public function typeAsset()
+    public function hardwareCategory()
     {
-        return $this->belongsTo(TypeAsset::class, 'type_asset_id');
+        return $this->belongsTo(HardwareCategory::class);
     }
 }

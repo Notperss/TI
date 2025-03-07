@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\MasterData\Lattol;
+namespace App\Http\Controllers\MasterData\HardwareCategory;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\MasterData\Lattol\TypeAsset;
+use App\Models\MasterData\HardwareCategory\HardwareTesting;
 
-class TypeAssetController extends Controller
+class HardwareTestingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +19,9 @@ class TypeAssetController extends Controller
     {
         if (request()->ajax()) {
 
-            $typeAsset = TypeAsset::orderBy('created_at', 'desc');
+            $hardwareTestings = HardwareTesting::with('hardwareCategory')->orderBy('name', 'asc')->latest();
 
-            return DataTables::of($typeAsset)
+            return DataTables::of($hardwareTestings)
                 ->addIndexColumn()
                 ->addColumn('action', function ($item) {
                     return '
@@ -28,10 +29,10 @@ class TypeAssetController extends Controller
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">Action</button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                    <a class="dropdown-item" href="'.route('backsite.type-asset.edit', $item->id).'">
+                    <a class="dropdown-item" href="'.route('backsite.hardware-testing.edit', $item->id).'">
                         Edit
                     </a>
-                    <form action="'.route('backsite.type-asset.destroy', $item->id).'" method="POST"
+                    <form action="'.route('backsite.hardware-testing.destroy', $item->id).'" method="POST"
                     onsubmit="return confirm(\'Are You Sure Want to Delete?\')">
                         '.method_field('delete').csrf_field().'
                         <input type="hidden" name="_method" value="DELETE">
@@ -41,10 +42,13 @@ class TypeAssetController extends Controller
             </div>
                 ';
                 })
+                ->addColumn('hardwareCategory.name', function ($item) {
+                    return $item->hardwareCategory ? $item->hardwareCategory->name : 'N/A'; // Jika null, tampilkan "N/A"
+                })
                 ->rawColumns(['action',])
                 ->toJson();
         }
-        return view('pages.master-data.lattol.type-asset.index');
+        return view('pages.master-data.hardware-category.hardware-testing.index');
     }
 
     /**
@@ -54,7 +58,8 @@ class TypeAssetController extends Controller
      */
     public function create()
     {
-        return view('pages.master-data.lattol.type-asset.create');
+        $hardwareCategories = HardwareCategory::where('has_testing', true)->get();
+        return view('pages.master-data.hardware-category.hardware-testing.create', compact('hardwareCategories'));
     }
 
     /**
@@ -65,28 +70,32 @@ class TypeAssetController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi data
         $validatedData = $request->validate([
+            'hardware_category_id' => ['required', 'exists:hardware_categories,id'], // Pastikan ID aset valid
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
         ], [
-            'name.required' => 'Nama wajib diisi.',
-            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'hardware_category_id.required' => 'Peralatan wajib diisi.',
+            'hardware_category_id.exists' => 'Peralatan yang dipilih tidak valid.',
+            'name.required' => 'Nama indikator wajib diisi.',
+            'name.max' => 'Nama indikator tidak boleh lebih dari 255 karakter.',
             'description.string' => 'Keterangan harus berupa teks.',
         ]);
 
-        TypeAsset::create($validatedData);
+        HardwareTesting::create($validatedData);
 
         alert()->success('Sukses', 'Data berhasil ditambahkan');
-        return redirect()->route('backsite.type-asset.index', );
+        return redirect()->route('backsite.hardware-testing.index', );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\MasterData\Lattol\TypeAsset  $typeAsset
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareTesting  $hardwareTesting
      * @return \Illuminate\Http\Response
      */
-    public function show(TypeAsset $typeAsset)
+    public function show(HardwareTesting $hardwareTesting)
     {
         //
     }
@@ -94,49 +103,35 @@ class TypeAssetController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\MasterData\Lattol\TypeAsset  $typeAsset
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareTesting  $hardwareTesting
      * @return \Illuminate\Http\Response
      */
-    public function edit(TypeAsset $typeAsset)
+    public function edit(HardwareTesting $hardwareTesting)
     {
-        return view('pages.master-data.lattol.type-asset.edit', compact('typeAsset'));
+        $hardwareCategories = HardwareCategory::where('has_testing', true)->get();
+        return view('pages.master-data.hardware-category.hardware-testing.edit', compact('hardwareCategories', 'hardwareTesting'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MasterData\Lattol\TypeAsset  $typeAsset
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareTesting  $hardwareTesting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TypeAsset $typeAsset)
+    public function update(Request $request, HardwareTesting $hardwareTesting)
     {
-        $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-        ], [
-            'name.required' => 'Nama wajib diisi.',
-            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
-            'description.string' => 'Keterangan harus berupa teks.',
-        ]);
-
-        $typeAsset->update($validatedData);
-
-        alert()->success('Sukses', 'Data berhasil diupdate');
-        return redirect()->route('backsite.type-asset.index');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\MasterData\Lattol\TypeAsset  $typeAsset
+     * @param  \App\Models\MasterData\HardwareCategory\HardwareTesting  $hardwareTesting
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TypeAsset $typeAsset)
+    public function destroy(HardwareTesting $hardwareTesting)
     {
-        $typeAsset->Delete();
-
-        alert()->success('Sukses', 'Data berhasil dihapus');
-        return back();
+        //
     }
 }

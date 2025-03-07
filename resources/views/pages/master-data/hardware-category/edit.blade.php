@@ -56,18 +56,19 @@
                       </div>
                     </div>
 
-                    <div class="form-group row col-10" id="has_test_group"
+                    <div class="form-group row col-10" id="has_testing_group"
                       style="{{ $hardwareCategory->has_indicator == 1 ? '' : 'display: none;' }}">
-                      <label class="col-md-3 label-control" for="has_test">Ada Testing <code
+                      <label class="col-md-3 label-control" for="has_testing">Ada Testing <code
                           style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select id="has_test" name="has_test" class="form-control select2" required>
+                        <select id="has_testing" name="has_testing" class="form-control select2" required>
                           <option value="" disabled selected>Choose</option>
-                          <option value="1" {{ $hardwareCategory->has_test == 1 ? 'selected' : '' }}>YA</option>
-                          <option value="0" {{ $hardwareCategory->has_test == 0 ? 'selected' : '' }}>TIDAK</option>
+                          <option value="1" {{ $hardwareCategory->has_testing == 1 ? 'selected' : '' }}>YA</option>
+                          <option value="0" {{ $hardwareCategory->has_testing == 0 ? 'selected' : '' }}>TIDAK
+                          </option>
                         </select>
-                        @if ($errors->has('has_test'))
-                          <p style="font-style: bold; color: red;">{{ $errors->first('has_test') }}</p>
+                        @if ($errors->has('has_testing'))
+                          <p style="font-style: bold; color: red;">{{ $errors->first('has_testing') }}</p>
                         @endif
                       </div>
                     </div>
@@ -98,14 +99,14 @@
   <script>
     $(document).ready(function() {
       let hasIndicator = $("#has_indicator");
-      let hasTestGroup = $("#has_test_group");
+      let hasTestGroup = $("#has_testing_group");
 
       function toggleHasTest() {
         if (hasIndicator.val() === "1") {
           hasTestGroup.show();
         } else {
           hasTestGroup.hide();
-          $("#has_test").val("").trigger("change"); // Reset nilai saat disembunyikan
+          $("#has_testing").val("").trigger("change"); // Reset nilai saat disembunyikan
         }
       }
 
