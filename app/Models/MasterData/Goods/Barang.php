@@ -32,6 +32,7 @@ class Barang extends Model
         'job_position_id',
         'hardware_category_id',
         'file',
+        'is_inspected',
     ];
     public function lending_goods()
     {

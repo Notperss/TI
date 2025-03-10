@@ -60,57 +60,7 @@
                               {{ old('hardware_category_id', $barang->hardware_category_id) == $hardwareCategory->id ? 'selected' : '' }}>
                               {{ $hardwareCategory->name ?? '' }}</option>
                           @endforeach
-                          {{-- <option value="PC" {{ $barang->category == 'PC' ? 'selected' : '' }}>PC</option>
-                          <option value="PC AIO"{{ $barang->category == 'PC AIO' ? 'selected' : '' }}>PC AIO</option>
-                          <option value="MONITOR"{{ $barang->category == 'MONITOR' ? 'selected' : '' }}>Monitor</option>
-                          <option value="TV"{{ $barang->category == 'TV' ? 'selected' : '' }}>TV</option>
-                          <option value="PROYEKTOR"{{ $barang->category == 'PROYEKTOR' ? 'selected' : '' }}>Proyektor
-                          </option>
-                          <option value="SCANNER"{{ $barang->category == 'SCANNER' ? 'selected' : '' }}>Scanner</option>
-                          <option value="PRINTER"{{ $barang->category == 'PRINTER' ? 'selected' : '' }}>Printer</option>
-                          <option value="PRINTER AIO"{{ $barang->category == 'PRINTER AIO' ? 'selected' : '' }}>Printer
-                            AIO</option>
-                          <option value="SWITCH"{{ $barang->category == 'SWITCH' ? 'selected' : '' }}>Switch</option>
-                          <option value="MIKROTIK"{{ $barang->category == 'MIKROTIK' ? 'selected' : '' }}>Mikrotik
-                          </option>
-                          <option value="WIFI"{{ $barang->category == 'WIFI' ? 'selected' : '' }}>WiFi</option>
-                          <option value="CONVERTER FO"{{ $barang->category == 'CONVERTER FO' ? 'selected' : '' }}>
-                            Converter FO</option>
-                          <option value="SERVER"{{ $barang->category == 'SERVER' ? 'selected' : '' }}>Server</option>
-                          <option value="NAS"{{ $barang->category == 'NAS' ? 'selected' : '' }}>NAS</option>
-                          <option value="CAMERA"{{ $barang->category == 'CAMERA' ? 'selected' : '' }}>Camera</option>
-                          <option value="MIC"{{ $barang->category == 'MIC' ? 'selected' : '' }}>Mic</option>
-                          <option value="SPEAKER"{{ $barang->category == 'SPEAKER' ? 'selected' : '' }}>Speaker</option>
-                          <option value="UPS"{{ $barang->category == 'UPS' ? 'selected' : '' }}>UPS</option>
-                          <option value="CCTV"{{ $barang->category == 'CCTV' ? 'selected' : '' }}>CCTV</option>
-                          <option value="IP PHONE"{{ $barang->category == 'IP PHONE' ? 'selected' : '' }}>IP Phone
-                          </option>
-                          <option
-                            value="HARDDISK EXTERNAL"{{ $barang->category == 'HARDDISK EXTERNAL' ? 'selected' : '' }}>
-                            Hard Disk External</option>
-                          <option value="PART PC"{{ $barang->category == 'PART PC' ? 'selected' : '' }}>Part PC</option>
-                          <option value="LAPTOP"{{ $barang->category == 'LAPTOP' ? 'selected' : '' }}>Laptop</option>
-                          <option value="PART SERVER"{{ $barang->category == 'PART SERVER' ? 'selected' : '' }}>Part
-                            Server</option>
-                          <option value="PART NETWORK"{{ $barang->category == 'PART NETWORK' ? 'selected' : '' }}>Part
-                            Network</option>
-                          <option value="TOOLS"{{ $barang->category == 'TOOLS' ? 'selected' : '' }}>Tools</option>
-                          <option value="MR"{{ $barang->category == 'MR' ? 'selected' : '' }}>Mobile Reader</option>
-                          <option value="PDB"{{ $barang->category == 'PDB' ? 'selected' : '' }}>Panel Distribution Box
-                          </option>
-                          <option value="CDP"{{ $barang->category == 'CDP' ? 'selected' : '' }}>Customer Display Panel
-                          </option>
-                          <option value="ALB"{{ $barang->category == 'ALB' ? 'selected' : '' }}>Automatic Lane Barrier
-                          </option>
-                          <option value="LPR"{{ $barang->category == 'LPR' ? 'selected' : '' }}>Thermal Printer
-                          </option>
-                          <option value="TCT"{{ $barang->category == 'TCT' ? 'selected' : '' }}>Toll Collection
-                            Terminal</option>
-                          <option value="OBS"{{ $barang->category == 'OBS' ? 'selected' : '' }}>Optical Beam Sensor
-                          </option>
-                          <option value="LTS"{{ $barang->category == 'LTS' ? 'selected' : '' }}>LTS</option>
-                          <option value="DVR/NVR"{{ $barang->category == 'DVR/NVR' ? 'selected' : '' }}>DVR/NVR</option>
-                          <option value="ROUTER"{{ $barang->category == 'ROUTER' ? 'selected' : '' }}>ROUTER</option> --}}
+
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -234,20 +184,18 @@
                         @endif
                       </div>
 
-                      {{-- @if (Auth::user()->job_position == 'Peralatan Tol')
-                        <label class="col-md-2 label-control" for="testing">Test Unit</label>
-                        <div class="col-md-4">
-                          <select name="testing" id="testing" class="form-control select2">
-                            <option value="" selected disabled>Choose</option>
-                            <option value="1"{{ $barang->testing == '1' ? 'selected' : '' }}>Ya</option>
-                            <option value="0"{{ $barang->testing == '0' ? 'selected' : '' }}>Tidak</option>
-                          </select>
-                          @if ($errors->has('testing'))
-                            <p style="font-style: bold; color: red;">
-                              {{ $errors->first('testing') }}</p>
-                          @endif
-                        </div>
-                      @endif --}}
+                      <label class="col-md-2 label-control" for="is_inspected">Monitoring</label>
+                      <div class="col-md-4">
+                        <select name="is_inspected" id="is_inspected" class="form-control select2">
+                          <option value="" selected disabled>Choose</option>
+                          <option value="1"{{ $barang->is_inspected == '1' ? 'selected' : '' }}>Ya</option>
+                          <option value="0"{{ $barang->is_inspected == '0' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @if ($errors->has('is_inspected'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('is_inspected') }}</p>
+                        @endif
+                      </div>
                     </div>
 
                     <div class="form-group row">
@@ -261,64 +209,6 @@
                         @endif
                       </div>
                     </div>
-                    {{-- 
-                    <div class="form-group row">
-                      <label class="col-md-2 label-control" for="category">Category<code
-                          style="color:red;">*</code></label>
-                      <div class="col-md-4">
-                        <select name="category" id="category" class="form-control select21" onchange="showDiv(this)"
-                          required>
-                          <option value="{{ '' }}" disabled selected>
-                            Choose
-                          </option>
-                          <option value="PC" {{ $barang->category == 'PC' ? 'selected' : '' }}>PC</option>
-                          <option value="PC AIO"{{ $barang->category == 'PC AIO' ? 'selected' : '' }}>PC AIO</option>
-                          <option value="MONITOR"{{ $barang->category == 'MONITOR' ? 'selected' : '' }}>Monitor
-                          </option>
-                          <option value="TV"{{ $barang->category == 'TV' ? 'selected' : '' }}>TV</option>
-                          <option value="PROYEKTOR"{{ $barang->category == 'PROYEKTOR' ? 'selected' : '' }}>Proyektor
-                          </option>
-                          <option value="SCANNER"{{ $barang->category == 'SCANNER' ? 'selected' : '' }}>Scanner
-                          </option>
-                          <option value="PRINTER"{{ $barang->category == 'PRINTER' ? 'selected' : '' }}>Printer
-                          </option>
-                          <option value="PRINTER AIO"{{ $barang->category == 'PRINTER AIO' ? 'selected' : '' }}>
-                            Printer
-                            AIO</option>
-                          <option value="SWITCH"{{ $barang->category == 'SWITCH' ? 'selected' : '' }}>Switch</option>
-                          <option value="MIKROTIK"{{ $barang->category == 'MIKROTIK' ? 'selected' : '' }}>Mikrotik
-                          </option>
-                          <option value="WIFI"{{ $barang->category == 'WIFI' ? 'selected' : '' }}>WiFi</option>
-                          <option value="CONVERTER FO"{{ $barang->category == 'CONVERTER FO' ? 'selected' : '' }}>
-                            Converter FO</option>
-                          <option value="SERVER"{{ $barang->category == 'SERVER' ? 'selected' : '' }}>Server</option>
-                          <option value="NAS"{{ $barang->category == 'NAS' ? 'selected' : '' }}>NAS</option>
-                          <option value="CAMERA"{{ $barang->category == 'CAMERA' ? 'selected' : '' }}>Camera</option>
-                          <option value="MIC"{{ $barang->category == 'MIC' ? 'selected' : '' }}>Mic</option>
-                          <option value="SPEAKER"{{ $barang->category == 'SPEAKER' ? 'selected' : '' }}>Speaker
-                          </option>
-                          <option value="UPS"{{ $barang->category == 'UPS' ? 'selected' : '' }}>UPS</option>
-                          <option value="CCTV"{{ $barang->category == 'CCTV' ? 'selected' : '' }}>CCTV</option>
-                          <option value="IP PHONE"{{ $barang->category == 'IP PHONE' ? 'selected' : '' }}>IP Phone
-                          </option>
-                          <option
-                            value="HARDDISK EXTERNAL"{{ $barang->category == 'HARDDISK EXTERNAL' ? 'selected' : '' }}>
-                            Hard Disk External</option>
-                          <option value="PART PC"{{ $barang->category == 'PART PC' ? 'selected' : '' }}>Part PC
-                          </option>
-                          <option value="LAPTOP"{{ $barang->category == 'LAPTOP' ? 'selected' : '' }}>Laptop</option>
-                          <option value="PART SERVER"{{ $barang->category == 'PART SERVER' ? 'selected' : '' }}>Part
-                            Server</option>
-                          <option value="PART NETWORK"{{ $barang->category == 'PART NETWORK' ? 'selected' : '' }}>Part
-                            Network</option>
-                          <option value="TOOLS"{{ $barang->category == 'TOOLS' ? 'selected' : '' }}>Tools</option>
-                        </select>
-                        @if ($errors->has('category'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('category') }}</p>
-                        @endif
-                      </div>
-                    </div> --}}
 
                   </div>
                   <div class="form-actions ">

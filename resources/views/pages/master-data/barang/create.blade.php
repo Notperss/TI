@@ -57,44 +57,6 @@
                               {{ old('hardware_category_id') == $hardwareCategory->id ? 'selected' : '' }}>
                               {{ $hardwareCategory->name }}</option>
                           @endforeach
-                          {{-- <option value="PC">PC</option>
-                          <option value="PC AIO">PC AIO</option>
-                          <option value="MONITOR">Monitor</option>
-                          <option value="TV">TV</option>
-                          <option value="PROYEKTOR">Proyektor</option>
-                          <option value="SCANNER">Scanner</option>
-                          <option value="PRINTER">Printer</option>
-                          <option value="PRINTER AIO">Printer AIO</option>
-                          <option value="SWITCH">Switch</option>
-                          <option value="MIKROTIK">Mikrotik</option>
-                          <option value="WIFI">WiFi</option>
-                          <option value="CONVERTER FO">Converter FO</option>
-                          <option value="SERVER">Server</option>
-                          <option value="NAS">NAS</option>
-                          <option value="CAMERA">Camera</option>
-                          <option value="MIC">Mic</option>
-                          <option value="SPEAKER">Speaker</option>
-                          <option value="UPS">UPS</option>
-                          <option value="CCTV">CCTV</option>
-                          <option value="IP PHONE">IP Phone</option>
-                          <option value="HARDDISK EXTERNAL">Hard Disk External</option>
-                          <option value="VGA CARD">VGA Card</option>
-                          <option value="LAPTOP">Laptop</option>
-                          <option value="PART PC">Part PC</option>
-                          <option value="PART SERVER">Part Server</option>
-                          <option value="PART NETWORK">Part Network</option>
-                          <option value="TOOLS">Tools</option>
-                          <option value="MR">Mobile Reader</option>
-                          <option value="PDB">Panel Distribution Box</option>
-                          <option value="CDP">Customer Display Panel</option>
-                          <option value="ALB">Automatic Lane Barrier</option>
-                          <option value="LPR">Thermal Printer</option>
-                          <option value="TCT">Toll Collection Terminal</option>
-                          <option value="OBS">Optical Beam Sensor</option>
-                          <option value="LTS">LTS</option>
-                          <option value="ALB">ALB</option>
-                          <option value="DVR/NVR">DVR/NVR</option>
-                          <option value="ROUTER">ROUTER</option> --}}
                         </select>
                         @if ($errors->has('category'))
                           <p style="font-style: bold; color: red;">
@@ -204,20 +166,19 @@
                         </div>
                       </div>
 
-                      {{-- @if (Auth::user()->jobPosition == 'Peralatan Tol' || Auth::user()->hasRole('super-admin'))
-                        <label class="col-md-2 label-control" for="testing">Test Unit</label>
-                        <div class="col-md-4">
-                          <select name="testing" id="testing" class="form-control select2">
-                            <option value="" selected disabled>Choose</option>
-                            <option value="1">Ya</option>
-                            <option value="0">Tidak</option>
-                          </select>
-                          @if ($errors->has('testing'))
-                            <p style="font-style: bold; color: red;">
-                              {{ $errors->first('testing') }}</p>
-                          @endif
-                        </div>
-                      @endif --}}
+                      <label class="col-md-2 label-control" for="is_inspected">Monitoring</label>
+                      <div class="col-md-4">
+                        <select name="is_inspected" id="is_inspected" class="form-control select2">
+                          {{-- <option value="" selected disabled>Choose</option> --}}
+                          <option value="1">Ya</option>
+                          <option value="0" selected>Tidak</option>
+                        </select>
+                        @if ($errors->has('is_inspected'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('is_inspected') }}</p>
+                        @endif
+                      </div>
+
                     </div>
 
                     <div class="form-group row">
