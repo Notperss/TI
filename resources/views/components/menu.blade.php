@@ -214,12 +214,12 @@
               </ul>
             </li>
 
-            <li
+            {{-- <li
               class="{{ request()->is('backsite/hardware-category') || request()->is('backsite/hardware-category/*') || request()->is('backsite/*/hardware-category') || request()->is('backsite/*/hardware-category/*') ? 'active' : '' }} ">
               <a class="menu-item" href="{{ route('backsite.hardware-category.index') }}">
                 <i></i><span>Category Hardware</span>
               </a>
-            </li>
+            </li> --}}
 
             {{-- @can('location') --}}
             <li
@@ -626,9 +626,17 @@
 
         {{-- Maintenance --}}
         <li class=" nav-item"><a href="{{ route('backsite.maintenance.index') }}"><i
-              class="{{ request()->is('backsite/mainbacksite.maintenance.index') || request()->is('backsite/mainbacksite.maintenance.index/*') || request()->is('backsite/*/mainbacksite.maintenance.index') || request()->is('backsite/*/mainbacksite.maintenance.index/*') ? 'la la-wrench bx-flashing' : 'la la-wrench' }}"></i><span
-              class="menu-title purple bg-darken-4" data-i18n="mainbacksite.maintenance.index">
+              class="{{ request()->is('backsite/maintenance') || request()->is('backsite/maintenance/*') || request()->is('backsite/*/maintenance') || request()->is('backsite/*/maintenance/*') ? 'la la-wrench bx-flashing' : 'la la-wrench' }}"></i><span
+              class="menu-title purple bg-darken-4" data-i18n="maintenance">
               <strong>Laporan Gangguan</strong></span></a>
+        </li>
+        {{-- END Maintenance --}}
+
+        {{-- Maintenance --}}
+        <li class=" nav-item"><a href="{{ route('backsite.inspection.index') }}"><i
+              class="{{ request()->is('backsite/inspection') || request()->is('backsite/inspection/*') || request()->is('backsite/*/inspection') || request()->is('backsite/*/inspection/*') ? 'la la-list-alt bx-flashing' : 'la la-list-alt' }}"></i><span
+              class="menu-title teal bg-darken-4" data-i18n="inspection">
+              <strong>Inspeksi</strong></span></a>
         </li>
         {{-- END Maintenance --}}
 

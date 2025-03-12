@@ -56,6 +56,7 @@ use App\Http\Controllers\MasterData\Location\LocationController;
 use App\Http\Controllers\MasterData\Work\WorkCategoryController;
 use App\Http\Controllers\MasterData\Hardware\ProcessorController;
 use App\Http\Controllers\Data\Hardware\DeviceAdditionalController;
+use App\Http\Controllers\Inspection\InspectionController;
 use App\Http\Controllers\MasterData\Division\DepartmentController;
 use App\Http\Controllers\MasterData\Hardware\TypeDeviceController;
 use App\Http\Controllers\MasterData\Hardware\MotherboardController;
@@ -426,4 +427,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('hardware-category', HardwareCategoryController::class)->except('show');
     Route::resource('hardware-indicator', HardwareIndicatorController::class)->except('show');
     Route::resource('hardware-testing', HardwareTestingController::class)->except('show');
+
+    Route::resource('inspection', InspectionController::class);
+    Route::get('inspection-asset', [InspectionController::class, 'getInspectionAsset'])->name('inspection.getAssets');
 });

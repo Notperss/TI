@@ -39,7 +39,7 @@ class DistributionController extends Controller
         if (request()->ajax()) {
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
-            $distribution = DistributionAsset::with('distribution.detail_user.user', 'asset', 'distribution.location_room', 'distribution', 'distribution.employee')
+            $distribution = DistributionAsset::with('distribution.user', 'asset', 'distribution.location_room', 'distribution', 'distribution.employee')
                 ->orderBy('stats', 'asc')
                 ->orderBy('created_at', 'desc');
 

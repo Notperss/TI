@@ -32,11 +32,13 @@
                       <p>Isi input <code>Required (*)</code>, Sebelum menekan tombol submit. </p>
                     </div>
 
+                    <input type="hidden" value="{{ Auth::user()->job_position_id }}" name="job_position_id" hidden>
+
                     <div class="form-group row">
                       <label class="col-md-2 label-control" for="location_id">Lokasi
                         <code style="color:red;">*</code></label>
                       <div class="col-md-4">
-                        <select id="location_id" class="form-control select2" required>
+                        <select id="location_id" name="location_id" class="form-control select2" required>
                           <option value=""selected disabled>Choose</option>
                           @foreach ($location_id as $loc)
                             <option value="{{ $loc->id }}">{{ $loc->name }}</option>
@@ -69,7 +71,7 @@
                       <label class="col-md-2 label-control" for="sub_location_id">Sub Lokasi
                         <code style="color:red;">*</code></code></label>
                       <div class="col-md-4">
-                        <select id="sub_location_id" class="form-control select2" required>
+                        <select id="sub_location_id" name="sub_location_id" class="form-control select2" required>
                           <option value=""selected disabled>Choose</option>
                         </select>
                         @if ($errors->has('sub_location_id'))
@@ -385,8 +387,6 @@
       }
     });
   </script> --}}
-
-
 
   <script>
     $(document).ready(function() {
