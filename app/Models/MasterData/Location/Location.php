@@ -5,6 +5,7 @@ namespace App\Models\MasterData\Location;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\MasterData\Location\LocationRoom;
+use App\Models\Network\Distribution\Distribution;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
@@ -13,7 +14,7 @@ class Location extends Model
     use SoftDeletes;
 
     // declare table
-    public $table = 'location';
+    // public $table = 'location';
 
     // this field must type date yyyy-mm-dd hh:mm:ss
     protected $dates = [
@@ -46,6 +47,11 @@ class Location extends Model
     {
         // 2 parameter (path model, field foreign key)
         return $this->hasMany(LocationRoom::class, 'location_id', 'id');
+    }
+    public function distributions()
+    {
+        // 2 parameter (path model, field foreign key)
+        return $this->hasMany(Distribution::class, 'location_id', 'id');
     }
 
 }
