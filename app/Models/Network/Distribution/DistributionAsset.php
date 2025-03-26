@@ -2,6 +2,7 @@
 
 namespace App\Models\Network\Distribution;
 
+use App\Models\Inspection\Inspection;
 use App\Models\MasterData\Goods\Barang;
 use App\Models\Network\IpPhone\IpPhone;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,10 @@ class DistributionAsset extends Model
     {
         return $this->belongsTo(IpPhone::class, 'distributionAsset_id');
     }
-
+    // public function inspections()
+    // {
+    //     return $this->belongsToMany(Inspection::class, 'asset_inspection');
+    // }
 
 
 }

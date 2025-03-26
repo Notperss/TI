@@ -4,14 +4,17 @@ namespace App\Models\MasterData\Goods;
 
 use App\Models\Adm\LendingGoods;
 use App\Models\Adm\LendingFacility;
+use App\Models\Inspection\Inspection;
 use App\Models\Maintenance\Maintenance;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\MasterData\HardwareCategory\HardwareCategory;
 use App\Models\ManagementAccess\JobPosition;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Inspection\InspectionTestingAsset;
 use App\Models\Network\Distribution\Distribution;
+use App\Models\Inspection\InspectionIndicatorAsset;
 use App\Models\Network\Distribution\DistributionAsset;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 
 class Barang extends Model
 {
@@ -83,5 +86,17 @@ class Barang extends Model
     public function hardwareCategory()
     {
         return $this->belongsTo(HardwareCategory::class, );
+    }
+    public function inspectionIndicatorAssets()
+    {
+        return $this->hasMany(InspectionIndicatorAsset::class, 'asset_id', 'id');
+    }
+    public function inspectionTestingAssets()
+    {
+        return $this->hasMany(InspectionTestingAsset::class, 'asset_id', 'id');
+    }
+    public function inspections()
+    {
+        return $this->belongsToMany(Inspection::class, 'asset_inspection', 'asset_id', 'inspection_id')->withPivot('file_path');
     }
 }

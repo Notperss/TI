@@ -425,9 +425,21 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     // Route::resource('asset-indicator', AssetIndicatorController::class)->except('show');
 
     Route::resource('hardware-category', HardwareCategoryController::class)->except('show');
+
     Route::resource('hardware-indicator', HardwareIndicatorController::class)->except('show');
+    Route::get('/asset/get-indicators', [HardwareIndicatorController::class, 'getIndicators'])->name('asset.getIndicators');
+
     Route::resource('hardware-testing', HardwareTestingController::class)->except('show');
+    Route::get('/asset/get-testings', [HardwareTestingController::class, 'getTestings'])->name('asset.getTestings');
 
     Route::resource('inspection', InspectionController::class);
     Route::get('inspection-asset', [InspectionController::class, 'getInspectionAsset'])->name('inspection.getAssets');
+    Route::post('inspection-indicator-asset', [InspectionController::class, 'assetIndicatorStore'])->name('inspection.indicator.store');
+    Route::delete('/inspection/delete/indicator', [InspectionController::class, 'deleteAllIndicator'])->name('inspection.indicator.delete');
+    Route::post('inspection-testing-asset', [InspectionController::class, 'assetTestingStore'])->name('inspection.testing.store');
+    Route::delete('/inspection/delete/testing', [InspectionController::class, 'deleteAllTesting'])->name('inspection.testing.delete');
+    Route::post('/asset/upload-file', [InspectionController::class, 'uploadFile'])->name('inspection.uploadFile');
+    Route::delete('/asset/delete-file', [InspectionController::class, 'deleteFile'])->name('inspection.deleteFile');
+
+
 });
