@@ -4,9 +4,10 @@ namespace App\Http\Controllers\MasterData\HardwareCategory;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MasterData\HardwareCategory\HardwareCategory;
+use App\Models\MasterData\Goods\Barang;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\MasterData\HardwareCategory\HardwareTesting;
+use App\Models\MasterData\HardwareCategory\HardwareCategory;
 
 class HardwareTestingController extends Controller
 {
@@ -121,7 +122,23 @@ class HardwareTestingController extends Controller
      */
     public function update(Request $request, HardwareTesting $hardwareTesting)
     {
-        //
+        // Validasi data
+        $validatedData = $request->validate([
+            'hardware_category_id' => ['required', 'exists:hardware_categories,id'], // Pastikan ID aset valid
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ], [
+            'hardware_category_id.required' => 'Peralatan wajib diisi.',
+            'hardware_category_id.exists' => 'Peralatan yang dipilih tidak valid.',
+            'name.required' => 'Nama indikator wajib diisi.',
+            'name.max' => 'Nama indikator tidak boleh lebih dari 255 karakter.',
+            'description.string' => 'Keterangan harus berupa teks.',
+        ]);
+
+        $hardwareTesting->update($validatedData);
+
+        alert()->success('Sukses', 'Data berhasil ditambahkan');
+        return redirect()->route('backsite.hardware-testing.index', );
     }
 
     /**
@@ -132,6 +149,63 @@ class HardwareTestingController extends Controller
      */
     public function destroy(HardwareTesting $hardwareTesting)
     {
-        //
+        $hardwareTesting->Delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
+    }
+
+    public function getTestings(Request $request)
+    {
+        $request->validate([
+            'asset_id' => 'required|exists:goods,id',
+            'inspection_id' => 'required|exists:inspections,id',
+        ]);
+
+        $inspectionId = $request->inspection_id;
+
+        // Ambil asset beserta kategori dan test
+        $asset = Barang::with('hardwareCategory.hardwareTestings')->find($request->asset_id);
+
+        if (! $asset) {
+            return response()->json(['message' => 'Asset tidak ditemukan'], 404);
+        }
+
+        // Ambil data hasil testing yang sudah ada
+        // $inspectionData = $asset->inspectionTestingAssets()
+        //     ->where('inspection_id', $inspectionId)
+        //     ->get()
+        //     ->keyBy('hardware_testing_id');
+
+        // dd($inspectionData);
+
+        // Buat format data hasil
+        $testings = $asset->hardwareCategory->hardwareTestings->map(function ($testing) {
+            return [
+                'id' => $testing->id,
+                'name' => $testing->name,
+            ];
+        });
+
+        $inspectionTestingData = $asset->inspectionTestingAssets()
+            ->where('inspection_id', $inspectionId)
+            ->get()
+            ->map(function ($testingData) {
+                return [
+                    'id' => $testingData->id,
+                    'testingName' => $testingData->testing_name,
+                    'number' => $testingData->number ?? 1,
+                    'lastNumber' => optional($testingData->latest()->first())->number ?? 1,
+                    'result' => $testingData->result ?? '',
+                    'description' => $testingData->description ?? '',
+                ];
+            });
+
+
+        return response()->json([
+            'testings' => $testings,
+            'inspectionTestingData' => $inspectionTestingData,
+        ]);
+
     }
 }
