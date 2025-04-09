@@ -47,7 +47,7 @@
                     <div class="row col-md-11">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="user_id">Inspektor <code style="color:red;">*</code></label>
+                          <label class="label-control" for="user_id">Inspektor <code style="color:red;">*</code></label>
                           <select id="user_id" name="user_id" class="form-control select2" required>
                             <option value="" disabled selected>Choose</option>
                             @foreach ($users as $user)
@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="shift">Shift <code style="color:red;">*</code></label>
+                          <label class="label-control" for="shift">Shift <code style="color:red;">*</code></label>
                           <select id="shift" name="shift" class="form-control select2" required>
                             <option value="" disabled selected>Choose</option>
                             <option value="1" {{ old('shift') == 1 ? 'selected' : '' }}>1</option>
@@ -104,7 +104,8 @@
 
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="location_id">Lokasi Utama <code style="color:red;">*</code></label>
+                          <label class="label-control" for="location_id">Lokasi Utama <code
+                              style="color:red;">*</code></label>
                           <select id="location_id" name="location_id" class="form-control select2" required>
                             <option value="" disabled selected>Choose</option>
                             @foreach ($locations as $location)
@@ -120,7 +121,8 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="sub_location_id">Sub Lokasi <code style="color:red;">*</code></label>
+                          <label class="label-control" for="sub_location_id">Sub Lokasi <code
+                              style="color:red;">*</code></label>
                           <select id="sub_location_id" name="sub_location_id" class="form-control select2" required>
                             <option value="" disabled selected>Choose</option>
 

@@ -159,9 +159,10 @@
 
                       <div class="form-group">
                         <label for="location_room_id">Lokasi </label>
-                        <select id="location_room_id" name="location_room_id" class="form-control select2"
-                          @if ($inspection->location_room_id) disabled @endif>
-                          <option value="" disabled selected>Choose</option>
+                        {{-- <select id="location_room_id" name="location_room_id" class="form-control select2"
+                          @if ($inspection->location_room_id) disabled @endif> --}}
+                        <select id="location_room_id" name="location_room_id" class="form-control select2" disabled>
+                          <option value="" disabled selected></option>
                           @foreach ($roomLocations as $roomLocation)
                             <option value="{{ $roomLocation->id }}"
                               {{ old('location_room_id', $inspection->location_room_id) == $roomLocation->id ? 'selected' : '' }}>
