@@ -8,7 +8,7 @@
 
         <div class="modal-header">
           <h5 class="modal-title" id="modal-form-add-user-label">Add User</h5>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"> </button>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
         <div class="modal-body">
           <div class="mb-1">
@@ -71,11 +71,10 @@
             <label for="division" class="form-label">Divisi</label>
             <select class="form-control" id="division" style="width:100%" placeholder="Guard Name" name="division_id">
               <option value="" selected disabled>Choose</option>
-              {{-- @foreach ($divisions as $division)
+              @foreach ($divisions as $division)
                 <option value="{{ $division->id }}">{{ $division->name }}</option>
               @endforeach
             </select>
-            <x-form.validation.error name="division" />
           </div> --}}
 
           <div class="mb-1">

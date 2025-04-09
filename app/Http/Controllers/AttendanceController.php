@@ -69,7 +69,7 @@ class AttendanceController extends Controller
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="_token" value="'.csrf_token().'">
                         <input type="submit" class="btn btn-sm btn-'.($item->stats == 1 ? 'success' : 'danger').' w-100" value="'.($item->stats == 1 ? 'Close' : 'Open').'"
-                        '.($item->stats == 1 && Auth::user()->jobPosition->name == 'Administrasi' || $isAdmin ? '' : 'hidden').'>
+                        '.(($isAdmin || ($item->stats == 1 && Auth::user()->jobPosition->name == 'Administrasi')) ? '' : 'hidden').'>
                     </form>
                 ';
                 })

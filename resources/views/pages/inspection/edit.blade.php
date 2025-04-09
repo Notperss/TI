@@ -440,10 +440,12 @@
             $('#asset-list').empty();
 
             if (data.length > 0) {
+              const storagePath = @json(asset('storage'));
+
               data.forEach((asset, index) => {
                 let fileButtons = asset.file_path ?
                   `
-        <a data-fancybox data-src="/storage/${asset.file_path}" class="btn btn-success text-white btn-sm">Lihat File</a>
+        <a data-fancybox data-src="${storagePath}/${asset.file_path}" class="btn btn-success text-white btn-sm">Lihat File</a>
         <a href="javascript:void(0)" class="btn btn-info btn-sm text-white btn-file" data-id="${asset.id}">Upload Gambar</a>
       ` :
                   `
@@ -654,14 +656,15 @@
         <table class="table table-bordered table-striped">
           <thead class="text-center">
             <tr>
-              <th>Nama Test</th>
               <th>Test Ke-</th>
+              <th>Nama Test</th>
               <th>Hasil</th>
               <th>Keterangan</th>
             </tr>
           </thead>
           <tbody>
       `;
+
 
                     // Cek apakah data ada
                     if (data.testings.length > 0) {
@@ -695,8 +698,8 @@
 
                         resultList += `
                         <tr>
-                          <td><strong>${inspection.testingName}</strong></td>
                           <td class="text-center"><strong>${inspection.number ?? 1}</strong></td>
+                          <td><strong>${inspection.testingName}</strong></td>
                           <td class="text-center">${resultStatus}</td>
                           <td>${inspection.description || '-'}</td>
                         </tr>`;

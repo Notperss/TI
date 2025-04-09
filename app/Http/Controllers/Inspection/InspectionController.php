@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Inspection;
 
 use Exception;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -94,7 +95,7 @@ class InspectionController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $fileName = 'inspection_'.time().'.'.$file->getClientOriginalExtension();
-                $filePath = $file->storeAs('asset/inspections', $fileName);
+                $filePath = $file->storeAs('assets/inspections', $fileName);
                 $inspection->file_path = $filePath;
                 $inspection->save();
             }
@@ -228,15 +229,14 @@ class InspectionController extends Controller
 
         // Query dasar dengan relasi
         $query = Distribution::with([
-            'distribution_asset' => function ($query) {
-                $query->where('stats', 1)->with([
-                    'asset' => function ($query) {
-                        $query->where('is_inspected', 1);
-                    }
-                ]);
-            },
+            'distribution_asset.asset',
             'location_room.sub_location',
-        ]);
+            'user',
+        ])->whereHas('distribution_asset', function ($q) {
+            $q->where('stats', 1)->whereHas('asset', function ($q) {
+                $q->where('is_inspected', 1);
+            });
+        });
 
         // Filter berdasarkan sub lokasi atau room jika ada
         if ($subLocationId) {
@@ -255,24 +255,31 @@ class InspectionController extends Controller
             return $distribution->distribution_asset->map(function ($distributionAsset) use ($distribution, $inspectionId) {
                 $asset = $distributionAsset->asset;
 
-                // Pastikan asset ada
                 if ($asset) {
-                    // Ambil file_path spesifik berdasarkan asset_inspection.id
-                    $filePath = DB::table('asset_inspection')
-                        ->where('inspection_id', $inspectionId)
-                        ->where('asset_id', $asset->id)
-                        ->select('id', 'file_path')
-                        ->first();
+                    // Cek jika inspectionId ada
+                    $filePath = null;
+                    $assetInspectionId = null;
+
+                    if ($inspectionId) {
+                        $fileData = DB::table('asset_inspection')
+                            ->where('inspection_id', $inspectionId)
+                            ->where('asset_id', $asset->id)
+                            ->select('id', 'file_path')
+                            ->first();
+
+                        $filePath = $fileData->file_path ?? null;
+                        $assetInspectionId = $fileData->id ?? null;
+                    }
 
                     return [
                         'id' => $asset->id,
                         'barcode' => $asset->barcode,
                         'name' => $asset->name,
-                        'description' => $asset->description,
+                        'description' => $distribution->description,
                         'location_room' => optional($distribution->location_room)->name,
                         'sub_room' => optional($distribution->location_room->sub_location)->name,
-                        'file_path' => $filePath->file_path ?? null,
-                        'asset_inspection_id' => $filePath->id ?? null, // Sekalian ambil ID pivot-nya juga
+                        'file_path' => $filePath,
+                        'asset_inspection_id' => $assetInspectionId,
                     ];
                 }
 
@@ -282,6 +289,7 @@ class InspectionController extends Controller
 
         return response()->json($assets);
     }
+
 
     public function assetIndicatorStore(Request $request)
     {
@@ -417,13 +425,14 @@ class InspectionController extends Controller
         ]);
 
         try {
+            $inspection = Inspection::find($request->inspection_id);
+
             // Ambil file dan simpan
             $file = $request->file('file');
-            $fileName = "asset_{$request->asset_id}.".$file->getClientOriginalExtension();
+            $fileName = "asset_{$request->asset_id}_{$inspection->id}_".Str::random(3).'.'.$file->getClientOriginalExtension();
             $filePath = $file->storeAs('assets/inspection-image-asset', $fileName);
 
             // Cari inspection yang cocok
-            $inspection = Inspection::find($request->inspection_id);
 
             if (! $inspection) {
                 return redirect()->back()->with('error', 'Inspection tidak ditemukan');

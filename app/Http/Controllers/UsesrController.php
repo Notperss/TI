@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\ManagementAccess;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ use App\Models\ManagementAccess\DetailUser;
 use App\Models\ManagementAccess\TypeUser;
 use PhpParser\Node\Expr\Isset_;
 
-class UserController extends Controller
+class UsesrController extends Controller
 {
     /**
      * Display a listing of the resource.
