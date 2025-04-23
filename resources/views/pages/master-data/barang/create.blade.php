@@ -35,13 +35,18 @@
                             {{ $errors->first('name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="sku">SKU/SN</label>
+                      <label class="col-md-2 label-control" for="maintenance_operator">Maintainer</label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="sku" id="sku"
-                          value="{{ old('sku') }}">
-                        @if ($errors->has('sku'))
+                        <select name="maintenance_operator" id="maintenance_operator" class="form-control select2">
+                          <option value="" selected disabled>Choose</option>
+                          <option value="MIY">MIY</option>
+                          <option value="Delameta">Delameta</option>
+                          <option value="CPI">CPI</option>
+                          <option value="CMNP">CMNP</option>
+                        </select>
+                        @if ($errors->has('maintenance_operator'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('sku') }}</p>
+                            {{ $errors->first('maintenance_operator') }}</p>
                         @endif
                       </div>
                     </div>
@@ -151,19 +156,14 @@
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-md-2 label-control" for="file">Gambar Barang</label>
+                      <label class="col-md-2 label-control" for="sku">SKU/SN</label>
                       <div class="col-md-4">
-                        <div class="custom-file">
-                          <input type="file" accept="image/*" capture="camera" class="custom-file-input"
-                            id="file" name="file">
-                          <label class="custom-file-label" for="file" aria-describedby="file">Pilih Gambar</label>
-                          <p class="text-muted"><small class="text-danger">Hanya dapat
-                              mengunggah 1 file</small></p>
-                          @if ($errors->has('file'))
-                            <p style="font-style: bold; color: red;">
-                              {{ $errors->first('file') }}</p>
-                          @endif
-                        </div>
+                        <input type="text" class="form-control" name="sku" id="sku"
+                          value="{{ old('sku') }}">
+                        @if ($errors->has('sku'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('sku') }}</p>
+                        @endif
                       </div>
 
                       <label class="col-md-2 label-control" for="is_inspected">Monitoring</label>
@@ -177,6 +177,24 @@
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('is_inspected') }}</p>
                         @endif
+                      </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-2 label-control" for="file">Gambar Barang</label>
+                      <div class="col-md-4">
+                        <div class="custom-file">
+                          <input type="file" accept="image/*" capture="camera" class="custom-file-input"
+                            id="file" name="file">
+                          <label class="custom-file-label" for="file" aria-describedby="file">Pilih Gambar</label>
+                          <p class="text-muted"><small class="text-danger">Hanya dapat
+                              mengunggah 1 file</small></p>
+                          @if ($errors->has('file'))
+                            <p style="font-style: bold; color: red;">
+                              {{ $errors->first('file') }}</p>
+                          @endif
+                        </div>
                       </div>
 
                     </div>
@@ -332,3 +350,11 @@
 5. diserahkan
 6. ip Phone terpakai
 --}}
+
+
+
+{{-- tambah maintener, muncul kan asset per tipe asset, dan tampilkan auth permenu --}}
+
+{{-- show barang, tambah kan riwayat inspeksi dan laporan gangguan --}}
+
+{{-- asset di laporan gangguan di buat statis  --}}

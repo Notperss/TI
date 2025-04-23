@@ -46,7 +46,7 @@ class ActDaily extends Model
     public function user()
     {
         // 3 parameter (path model, field foreign key, field primary key from table hasMany/hasOne)
-        return $this->belongsTo(User::class, 'users_id', 'id');
+        return $this->belongsTo(User::class, 'executor', 'id');
     }
     // public function users_executor()
     // {

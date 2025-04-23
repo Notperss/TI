@@ -4,11 +4,12 @@ namespace App\Http\Controllers\ManagementAccess;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\WorkUnit\Company;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Models\WorkUnit\Company;
 use Spatie\Permission\Models\Permission;
+use App\Models\ManagementAccess\JobPosition;
 use App\Http\Requests\ManagementAccess\StoreRoleRequest;
 use App\Http\Requests\ManagementAccess\UpdateRoleRequest;
 
@@ -60,10 +61,11 @@ class RoleController extends Controller
 
         }
         // $companies = Company::orderBy('name')->get();
+        $jobPositions = JobPosition::orderBy('name')->get();
 
         // dd($permission);
 
-        return view('management-access.role.index', compact('roles', 'users', 'permissions'));
+        return view('management-access.role.index', compact('roles', 'users', 'permissions', 'jobPositions'));
     }
 
     /**

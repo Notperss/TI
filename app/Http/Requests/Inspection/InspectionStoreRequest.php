@@ -81,7 +81,7 @@ class InspectionStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'User harus diisi.',
+            'user_id.required' => 'Harus diisi.',
             'job_position_id.required' => 'Posisi pekerjaan wajib diisi.',
             'location_id.required' => 'Lokasi utama wajib diisi.',
             'sub_location_id.required' => 'Sub lokasi wajib diisi.',

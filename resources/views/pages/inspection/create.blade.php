@@ -48,14 +48,21 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="label-control" for="user_id">Inspektor <code style="color:red;">*</code></label>
-                          <select id="user_id" name="user_id" class="form-control select2" required>
-                            <option value="" disabled selected>Choose</option>
-                            @foreach ($users as $user)
-                              <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                              </option>
-                            @endforeach
-                          </select>
+                          @if (auth()->user()->hasRole('super-admin'))
+                            <select id="user_id" name="user_id" class="form-control select2" required>
+
+                              <option value="" disabled selected>Choose</option>
+                              @foreach ($users as $user)
+                                <option value="{{ $user->id }}"
+                                  {{ old('user_id', auth()->user()->id) == $user->id ? 'selected' : '' }}>
+                                  {{ $user->name }}
+                                </option>
+                              @endforeach
+                            </select>
+                          @else
+                            <input type="text" class="form-control" value="{{ auth()->user()->name }}" readonly>
+                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                          @endif
                           @error('user_id')
                             <p class="text-danger font-weight-bold">{{ $message }}</p>
                           @enderror

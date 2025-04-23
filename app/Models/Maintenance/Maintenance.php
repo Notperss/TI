@@ -27,6 +27,8 @@ class Maintenance extends Model
         'asset_name',
         'barcode',
         'pic',
+        'maintenance_operator',
+        'category_asset',
     ];
 
     public function employee()

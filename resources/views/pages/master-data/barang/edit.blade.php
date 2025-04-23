@@ -37,13 +37,22 @@
                             {{ $errors->first('name') }}</p>
                         @endif
                       </div>
-                      <label class="col-md-2 label-control" for="sku">SKU</label>
+                      <label class="col-md-2 label-control" for="maintenance_operator">Maintainer</label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" name="sku" id="sku"
-                          value="{{ old('sku', $barang->sku) }}" @if ($assets->isEmpty()) @else readonly @endif>
-                        @if ($errors->has('sku'))
+                        <select name="maintenance_operator" id="maintenance_operator" class="form-control select2">
+                          <option value="" selected disabled>Choose</option>
+                          <option value="MIY" {{ $barang->maintenance_operator == 'MIY' ? 'selected' : '' }}>MIY
+                          </option>
+                          <option value="Delameta" {{ $barang->maintenance_operator == 'Delameta' ? 'selected' : '' }}>
+                            Delameta</option>
+                          <option value="CPI" {{ $barang->maintenance_operator == 'CPI' ? 'selected' : '' }}>CPI
+                          </option>
+                          <option value="CMNP" {{ $barang->maintenance_operator == 'CMNP' ? 'selected' : '' }}>CMNP
+                          </option>
+                        </select>
+                        @if ($errors->has('maintenance_operator'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('sku') }}</p>
+                            {{ $errors->first('maintenance_operator') }}</p>
                         @endif
                       </div>
                     </div>
@@ -156,6 +165,32 @@
                     </div>
 
                     <div class="form-group row">
+                      <label class="col-md-2 label-control" for="sku">SKU</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="sku" id="sku"
+                          value="{{ old('sku', $barang->sku) }}"
+                          @if ($assets->isEmpty()) @else readonly @endif>
+                        @if ($errors->has('sku'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('sku') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="is_inspected">Monitoring</label>
+                      <div class="col-md-4">
+                        <select name="is_inspected" id="is_inspected" class="form-control select2">
+                          <option value="" selected disabled>Choose</option>
+                          <option value="1"{{ $barang->is_inspected == '1' ? 'selected' : '' }}>Ya</option>
+                          <option value="0"{{ $barang->is_inspected == '0' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @if ($errors->has('is_inspected'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('is_inspected') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
                       <label class="col-md-2 label-control" for="file">Gambar Barang</label>
                       <div class="col-md-4">
                         <div class="custom-file">
@@ -181,19 +216,6 @@
                         @if ($errors->has('file'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('file') }}</p>
-                        @endif
-                      </div>
-
-                      <label class="col-md-2 label-control" for="is_inspected">Monitoring</label>
-                      <div class="col-md-4">
-                        <select name="is_inspected" id="is_inspected" class="form-control select2">
-                          <option value="" selected disabled>Choose</option>
-                          <option value="1"{{ $barang->is_inspected == '1' ? 'selected' : '' }}>Ya</option>
-                          <option value="0"{{ $barang->is_inspected == '0' ? 'selected' : '' }}>Tidak</option>
-                        </select>
-                        @if ($errors->has('is_inspected'))
-                          <p style="font-style: bold; color: red;">
-                            {{ $errors->first('is_inspected') }}</p>
                         @endif
                       </div>
                     </div>

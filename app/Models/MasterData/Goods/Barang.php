@@ -36,6 +36,7 @@ class Barang extends Model
         'hardware_category_id',
         'file',
         'is_inspected',
+        'maintenance_operator',
     ];
     public function lending_goods()
     {

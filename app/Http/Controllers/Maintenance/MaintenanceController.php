@@ -450,7 +450,10 @@ class MaintenanceController extends Controller
         if ($request->ajax()) {
             $id = $request->id;
             // $barang = Barang::where('id', $maintenance->goods_id)->orderBy('barcode', 'asc')->get();
-            $barang = Barang::orderBy('barcode', 'asc')->get();
+            $barang = Barang::orderBy('barcode', 'asc')
+                ->when(! auth()->user()->hasRole('super-admin'), function ($query) {
+                    return $query->where('job_position_id', auth()->user()->job_position_id);
+                })->get();
             $employees = Employee::orderBy('name', 'asc')->get();
             $users = User::where('name', '!=', 'Administrator')
                 ->whereNotNull('email_verified_at')

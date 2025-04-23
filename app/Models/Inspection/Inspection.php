@@ -5,6 +5,8 @@ namespace App\Models\Inspection;
 use App\Models\ManagementAccess\JobPosition;
 use App\Models\MasterData\Goods\Barang;
 use App\Models\MasterData\Location\Location;
+use App\Models\MasterData\Location\LocationRoom;
+use App\Models\MasterData\Location\LocationSub;
 use App\Models\Network\Distribution\DistributionAsset;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,6 +36,14 @@ class Inspection extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+    public function locationSub()
+    {
+        return $this->belongsTo(LocationSub::class, 'sub_location_id');
+    }
+    public function locationRoom()
+    {
+        return $this->belongsTo(LocationRoom::class, 'location_room_id');
     }
     public function jobPosition()
     {

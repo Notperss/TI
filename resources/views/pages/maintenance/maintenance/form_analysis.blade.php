@@ -86,7 +86,8 @@
                     $employeeId = $employeeIds ? end($employeeIds) : 'N/A';
 
                   @endphp
-                  <option value="{{ $asset->barcode }}" data-value2="{{ $employeeId }}"
+                  <option value="{{ $asset->barcode }}" data-value4="{{ $asset->maintenance_operator }}"
+                    data-value3="{{ $asset->category }}" data-value2="{{ $employeeId }}"
                     data-value1="{{ $asset->id }}" data-value="{{ $asset->name }}"
                     {{ $asset->barcode == $maintenance->barcode ? 'selected' : '' }}>
                     {{ $asset->barcode }} → {{ $asset->name }} → {{ $employeeName }}
@@ -103,10 +104,32 @@
           <div class="form-group row ">
             <label class="col-md-4 label-control" for="asset_name">Nama Asset</label>
             <div class="col-md-8">
-              <input type="text" class="form-control" id="nama_asset" name="asset_name" readonly>
+              <input type="text" class="form-control" id="asset_name" name="asset_name" readonly>
               @if ($errors->has('asset_name'))
                 <p style="font-style: bold; color: red;">
                   {{ $errors->first('asset_name') }}</p>
+              @endif
+            </div>
+          </div>
+
+          <div class="form-group row ">
+            <label class="col-md-4 label-control" for="category_asset">Kategori Asset</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="category_asset" name="category_asset" readonly>
+              @if ($errors->has('category_asset'))
+                <p style="font-style: bold; color: red;">
+                  {{ $errors->first('category_asset') }}</p>
+              @endif
+            </div>
+          </div>
+
+          <div class="form-group row ">
+            <label class="col-md-4 label-control" for="maintenance_operator">Maintainer</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="maintenance_operator" name="maintenance_operator" readonly>
+              @if ($errors->has('maintenance_operator'))
+                <p style="font-style: bold; color: red;">
+                  {{ $errors->first('maintenance_operator') }}</p>
               @endif
             </div>
           </div>
@@ -144,7 +167,8 @@
             </label>
             <div class="col-md-8">
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="file" name="file" onchange="updateList()">
+                <input type="file" class="custom-file-input" id="file" name="file"
+                  onchange="updateList()">
                 <label class="custom-file-label" for="file" aria-describedby="file">Pilih
                   File</label>
                 @if ($maintenance->file)
@@ -199,13 +223,14 @@
   $(document).ready(function() {
     // Set initial value on page load
     var initialSelectedValue = $('#barcode :selected').data('value');
-    $('#nama_asset').val(initialSelectedValue);
+    $('#asset_name').val(initialSelectedValue);
 
     // Handle change event
     $('#barcode').on('change', function() {
       var input_value = $(this).find(':selected').data('value');
-      $('#nama_asset').val(input_value);
+      $('#asset_name').val(input_value);
     });
+
     $('#barcode').on('change', function() {
       var input_value = $(this).find(':selected').data('value1');
       $('#goods_id').val(input_value);
@@ -215,6 +240,17 @@
       var employeeId = $(this).find(':selected').data('value2'); // Get employee ID
       $('#employee_id').val(employeeId).trigger('change'); // Set value & refresh Select2
     });
+
+    $('#barcode').on('change', function() {
+      var input_value = $(this).find(':selected').data('value3');
+      $('#category_asset').val(input_value);
+    });
+
+    $('#barcode').on('change', function() {
+      var input_value = $(this).find(':selected').data('value4');
+      $('#maintenance_operator').val(input_value);
+    });
+
   });
 </script>
 

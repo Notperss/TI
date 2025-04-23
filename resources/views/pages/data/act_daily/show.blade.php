@@ -2,7 +2,7 @@
   <input type="hidden" name="id" id="id" value="{{ $actdaily->id }}">
   <tr>
     <th>Pelaksana</th>
-    <td>{{ isset($actdaily->detail_user->user->name) ? $actdaily->detail_user->user->name : 'N/A' }}
+    <td>{{ isset($actdaily->user->name) ? $actdaily->user->name : 'N/A' }}
     </td>
   </tr>
   <tr>
@@ -41,9 +41,9 @@
     <th>Status</th>
     <td>
       @if ($actdaily->status == 2)
-        <span class="badge badge-success">{{ 'Approve' }}</span>
+        <span class="badge badge-success">{{ 'Close' }}</span>
       @elseif($actdaily->status == 1)
-        <span class="badge badge-danger">{{ 'Belum DiApprove' }}</span>
+        <span class="badge badge-danger">{{ 'Open' }}</span>
       @else
         <span>{{ 'N/A' }}</span>
       @endif

@@ -11,13 +11,17 @@ class InspectionIndicatorAsset extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['asset_id', 'inspection_id', 'hardware_indicator_id', 'indicator_name', 'number', 'status', 'description'];
+    protected $fillable = ['asset_id', 'inspection_id', 'hardware_indicator_id', 'indicator_name', 'number', 'status', 'is_approve', 'description'];
 
     // public function asset()
     // {
     //     return $this->belongsTo(Barang::class);
     // }
 
+    public function asset()
+    {
+        return $this->belongsTo(Barang::class);
+    }
     public function inspection()
     {
         return $this->belongsTo(Inspection::class);

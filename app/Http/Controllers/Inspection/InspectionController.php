@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Inspection\Inspection;
 use App\Models\MasterData\Goods\Barang;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +32,11 @@ class InspectionController extends Controller
     public function index()
     {
 
-        $inspections = Inspection::with('user', 'location')->latest();
+        $inspections = Inspection::with('user', 'location')
+            ->when(! Auth()->user()->hasAnyRole(['manager', 'super-admin']), function ($query) {
+                return $query->where('job_position_id', Auth()->user()->job_position_id);
+            })
+            ->latest();
 
         if (request()->ajax()) {
 
@@ -72,7 +77,12 @@ class InspectionController extends Controller
         $locations = Location::orderBy('name', 'asc')->get();
         $subLocations = LocationSub::orderBy('name', 'asc')->get();
         $roomLocations = LocationRoom::orderBy('name', 'asc')->get();
-        $users = User::whereNotNull('email_verified_at')->orderBy('name', 'asc')->get();
+        $users = User::whereNotNull('email_verified_at')
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'super-admin');
+            })
+            ->orderBy('name', 'asc')
+            ->get();
         $assets = Barang::orderBy('name', 'asc')->get();
         return view('pages.inspection.create', compact('locations', 'users', 'assets', 'subLocations', 'roomLocations'));
 
@@ -137,8 +147,9 @@ class InspectionController extends Controller
         $subLocations = LocationSub::orderBy('name', 'asc')->get();
         $roomLocations = LocationRoom::where('sub_location_id', $inspection->sub_location_id)->orderBy('name', 'asc')->get();
         $users = User::whereNotNull('email_verified_at')->orderBy('name', 'asc')->get();
-        $assets = Barang::orderBy('name', 'asc')->get();
-        return view('pages.inspection.edit', compact('locations', 'users', 'assets', 'subLocations', 'roomLocations', 'inspection'));
+        // $assets = Barang::orderBy('name', 'asc')->get();
+
+        return view('pages.inspection.edit', compact('locations', 'users', 'subLocations', 'roomLocations', 'inspection'));
     }
 
     /**
@@ -236,6 +247,8 @@ class InspectionController extends Controller
             $q->where('stats', 1)->whereHas('asset', function ($q) {
                 $q->where('is_inspected', 1);
             });
+        })->when(! auth()->user()->hasAnyRole(['manager', 'super-admin']), function ($query) {
+            return $query->where('job_position_id', auth()->user()->job_position_id);
         });
 
         // Filter berdasarkan sub lokasi atau room jika ada
@@ -290,7 +303,6 @@ class InspectionController extends Controller
         return response()->json($assets);
     }
 
-
     public function assetIndicatorStore(Request $request)
     {
 
@@ -312,7 +324,6 @@ class InspectionController extends Controller
                     'inspection_id' => $request->inspection_id,
                     'indicator_name' => $indicatorData['indicator_name'],
                     'hardware_indicator_id' => $id,
-                    // 'value' => $indicatorData['value'],
                     'status' => $indicatorData['status'],
                     'description' => $indicatorData['description'],
                 ]);
@@ -480,6 +491,79 @@ class InspectionController extends Controller
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Gagal menghapus file: '.$e->getMessage()]);
         }
+    }
+
+    public function allProblematicItems()
+    {
+
+        if (request()->ajax()) {
+
+            $inspection = InspectionIndicatorAsset::with('asset', 'inspection')
+                ->whereHas('inspection', function ($query) {
+                    $query->where('job_position_id', Auth::user()->job_position_id);
+                })->whereNot('status', 'Baik')
+                ->orderby('created_at', 'desc');
+
+            return DataTables::of($inspection)
+                ->addIndexColumn()
+                ->addColumn('action', function ($item) {
+                    $isAdmin = Auth::user()->hasRole('super-admin');
+                    return '
+            <div class="container">
+            <div class="btn-group mr-1 mb-1">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Action</button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                    <a href="#mymodal" data-remote="'.route('backsite.inspection.problem.show', encrypt($item->id)).'" data-toggle="modal"
+                        data-target="#mymodal" data-title="Detail Inspeksi" class="dropdown-item">
+                        Show
+                    </a>
+                 
+            </div>
+            </div>
+            
+                <form action="'.route('backsite.inspection.problem.approve', encrypt($item->id)).'" method="POST"
+                    onsubmit="
+                    '.($item->is_approve == 1 ? 'return confirm(\'Are You Sure Want to Close?\')' : 'return confirm(\'Are You Sure Want to Open?\')').'
+                    ">
+                        '.method_field('PUT').csrf_field().'
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <input type="submit" class="btn btn-sm btn-'.($item->is_approve == 1 ? 'success' : 'danger').' w-100" value="'.($item->is_approve == 1 ? 'Close' : 'Open').'"
+                        '.($item->is_approve == 1 || $isAdmin ? '' : 'hidden').'>
+                    </form>
+                ';
+                })
+                ->rawColumns(['action', 'date', 'file'])
+                ->toJson();
+        }
+
+        return view('pages.inspection.problem.index');
+    }
+
+    public function showProblematicItem($id)
+    {
+        $decrypt_id = decrypt($id);
+        $inspection = InspectionIndicatorAsset::with('asset', 'inspection', 'hardwareIndicator')
+            ->find($decrypt_id);
+        return view('pages.inspection.problem.show', compact('inspection'));
+    }
+
+    public function approveProblematicItem($id)
+    {
+        // deskripsi id
+        $decrypt_id = decrypt($id);
+        $inspection = InspectionIndicatorAsset::find($decrypt_id);
+        if ($inspection->is_approve == 1) {
+            $inspection->update(['is_approve' => 2]);
+        } elseif ($inspection->is_approve == 2) {
+            $inspection->update(['is_approve' => 1]);
+        } else {
+            alert()->error('Error', 'Data gagal diubah');
+            return back();
+        }
+        alert()->success('Sukses', 'Data berhasil diubah');
+        return back();
     }
 
 

@@ -27,6 +27,7 @@ class UpdateGoodsRequest extends FormRequest
     {
         return [
             'type_assets' => 'required|max:255',
+            'maintenance_operator' => 'required|max:255',
             'category' => 'max:255',
             'name' => 'required|max:255',
             // 'stats' => 'required|max:255',

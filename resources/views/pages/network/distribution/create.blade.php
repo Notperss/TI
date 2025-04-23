@@ -542,7 +542,7 @@
           <select name="inputs[${i}][asset_id]" class="form-control select2 select21" style="width :100%">
             <option value="" disabled selected>Choose</option>
             @foreach ($barang as $goods)
-              <option value="{{ $goods->id }}" data-value="{{ $goods->category }}" data-value2="{{ $goods->barcode }}" data-name="{{ $goods->name }}">{{ $goods->barcode }}</option>
+              <option value="{{ $goods->id }}" data-value="{{ $goods->hardwareCategory->name }}" data-value2="{{ $goods->barcode }}" data-name="{{ $goods->name }}">{{ $goods->barcode }}</option>
             @endforeach
           </select>
         </td>

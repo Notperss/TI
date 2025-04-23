@@ -57,6 +57,10 @@
       <td>{{ isset($barang->size) ? $barang->size : 'N/A' }}</td>
     </tr>
     <tr>
+      <th>Maintainer</th>
+      <td>{{ isset($barang->maintenance_operator) ? $barang->maintenance_operator : 'N/A' }}</td>
+    </tr>
+    <tr>
       <th>Status</th>
       <td>
         @if ($barang->stats == '')
@@ -124,10 +128,55 @@
   </table>
 </div>
 
+<h3>Inspeksi</h3>
 <table class="table table-bordered tampildata my-1" style="word-break: break-all">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Inspektor</th>
+      <th>Tanggal</th>
+      <th>Lokasi</th>
+      <th>Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach ($barang->inspections as $inspection)
+      <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ $inspection->user->name }}</td>
+        <td>{{ Carbon\Carbon::parse($inspection->date_inspection)->translatedFormat('d M Y') }}</td>
+        <td>{{ $inspection->location_room_id ? $inspection->locationRoom->name : $inspection->locationSub->name }}</td>
+        <td>{{ $inspection->description }}</td>
+      </tr>
+    @endforeach
+  </tbody>
 </table>
 
-<script>
+<h3>Laporan Gangguan</h3>
+<table class="table table-bordered tampildata my-1" style="word-break: break-all">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>No. Laporan</th>
+      <th>Pelapor</th>
+      <th>Tgl Laporan</th>
+      <th>Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach ($barang->maintenance as $maintenance)
+      <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ $maintenance->report_number }}</td>
+        <td>{{ $maintenance->user_id ? $maintenance->user->name : $maintenance->reporter }}</td>
+        <td>{{ Carbon\Carbon::parse($maintenance->date)->translatedFormat('d M Y') }}</td>
+        <td>{{ $maintenance->description }}</td>
+      </tr>
+    @endforeach
+  </tbody>
+</table>
+
+{{-- <script>
   function tampilDataFile() {
     $.ajaxSetup({
       headers: {
@@ -160,4 +209,4 @@
   $(document).ready(function() {
     tampilDataFile();
   });
-</script>
+</script> --}}

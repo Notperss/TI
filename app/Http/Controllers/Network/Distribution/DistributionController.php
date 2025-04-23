@@ -40,6 +40,11 @@ class DistributionController extends Controller
 
             // $distribution = Distribution::with('location_room', 'detail_user.user', 'distribution')->orderby('created_at', 'desc');
             $distribution = DistributionAsset::with('distribution.user', 'asset', 'distribution.location_room', 'distribution', 'distribution.employee')
+                ->when(! auth()->user()->hasRole('super-admin'), function ($query) {
+                    return $query->whereHas('distribution', function ($q) {
+                        $q->where('job_position_id', auth()->user()->job_position_id);
+                    });
+                })
                 ->orderBy('stats', 'asc')
                 ->orderBy('created_at', 'desc');
 
@@ -115,7 +120,11 @@ class DistributionController extends Controller
         $sub_location = LocationSub::orderBy('created_at', 'desc')->get();
         $user = Employee::where('status', '1')->orderBy('name', 'asc')->get();
         // $user = DetailUser::where('status', '1')->get();
-        $barang = Barang::where('stats', '1')->get();
+        $barang = Barang::where('stats', '1')
+            ->when(! auth()->user()->hasRole('super-admin'), function ($query) {
+                return $query->where('job_position_id', auth()->user()->job_position_id);
+            })
+            ->get();
         $apps = License::orderBy('created_at', 'desc')->get();
         $division = Division::orderBy('name', 'asc')->get();
         return view('pages.network.distribution.create', compact(
@@ -444,7 +453,11 @@ class DistributionController extends Controller
     {
         if ($request->ajax()) {
             $id = $request->id;
-            $barang = Barang::where('stats', '1')->get();
+            $barang = Barang::where('stats', '1')
+                ->when(! auth()->user()->hasRole('super-admin'), function ($query) {
+                    return $query->where('job_position_id', auth()->user()->job_position_id);
+                })
+                ->get();
             $row = Distribution::find($id);
             $data = [
                 'id' => $row['id'],

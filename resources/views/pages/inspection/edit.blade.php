@@ -496,6 +496,7 @@
                     },
                     success: function(response) {
                       alert(response.message);
+                      location.reload();
                       // $("#indicatorInputBody").html(
                       //   '<tr><td colspan="4" class="text-center text-danger">Semua data dihapus</td></tr>'
                       // );
@@ -608,6 +609,7 @@
                     },
                     success: function(response) {
                       alert(response.message);
+                      location.reload();
                       // $("#testingInputBody").html(
                       //   '<tr><td colspan="4" class="text-center text-danger">Semua data dihapus</td></tr>'
                       // );
@@ -641,30 +643,30 @@
                     // console.log(data.testings);
                     // console.log(data.inspectionTestingData);
                     let inputForm = `
-        <h5 class="text-center mb-3">Input Hasil Tes</h5>
-        <table class="table table-bordered mb-1">
-          <thead class="text-center">
-            <tr>
-              <th style="width:40%">Nama Test</th>
-              <th style="width:20%">Hasil <code>*</code></th>
-              <th style="width:30%">Keterangan</th>
-            </tr>
-          </thead>
-          <tbody id="testingInputBody">
-      `;
+                    <h5 class="text-center mb-3">Input Hasil Tes</h5>
+                    <table class="table table-bordered mb-1">
+                      <thead class="text-center">
+                        <tr>
+                          <th style="width:40%">Nama Test</th>
+                          <th style="width:20%">Hasil <code>*</code></th>
+                          <th style="width:30%">Keterangan</th>
+                        </tr>
+                      </thead>
+                      <tbody id="testingInputBody">
+                  `;
 
                     let resultList = `
-        <table class="table table-bordered table-striped">
-          <thead class="text-center">
-            <tr>
-              <th>Test Ke-</th>
-              <th>Nama Test</th>
-              <th>Hasil</th>
-              <th>Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
+                  <table class="table table-bordered table-striped">
+                    <thead class="text-center">
+                      <tr>
+                        <th>Test Ke-</th>
+                        <th>Nama Test</th>
+                        <th>Hasil</th>
+                        <th>Keterangan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                `;
 
 
                     // Cek apakah data ada

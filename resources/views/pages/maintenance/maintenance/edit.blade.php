@@ -91,7 +91,8 @@
                         <select type="text" id="barcode" name="barcode" class="form-control select2" required>
                           <option value="" selected disabled>Choose</option>
                           @foreach ($barang as $asset)
-                            <option value="{{ $asset->barcode }}"
+                            <option value="{{ $asset->barcode }}" data-value4="{{ $asset->maintenance_operator }}"
+                              data-value3="{{ $asset->category }}" data-value1="{{ $asset->id }}"
                               data-value="{{ $asset->name }}"{{ $asset->barcode == $maintenance->barcode ? 'selected' : '' }}>
                               {{ $asset->barcode }}</option>
                           @endforeach
@@ -130,12 +131,33 @@
                         @endif
                       </div>
 
-                      <label class="col-md-2 label-control" for="file">Nama Asset</label>
+                      <label class="col-md-2 label-control" for="asset_name">Nama Asset</label>
                       <div class="col-md-4">
-                        <input type="text" class="form-control" id="nama_asset" name="file" readonly>
-                        @if ($errors->has('file'))
+                        <input type="text" class="form-control" id="asset_name" name="asset_name" readonly>
+                        @if ($errors->has('asset_name'))
                           <p style="font-style: bold; color: red;">
-                            {{ $errors->first('file') }}</p>
+                            {{ $errors->first('asset_name') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row col-11">
+                      <label class="col-md-2 label-control" for="category_asset">Kategori Asset</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="category_asset" name="category_asset" readonly>
+                        @if ($errors->has('category_asset'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('category_asset') }}</p>
+                        @endif
+                      </div>
+
+                      <label class="col-md-2 label-control" for="maintenance_operator">Maintainer</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="maintenance_operator"
+                          name="maintenance_operator" readonly>
+                        @if ($errors->has('maintenance_operator'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('maintenance_operator') }}</p>
                         @endif
                       </div>
                     </div>
@@ -144,8 +166,9 @@
                       <label class="col-md-2 label-control" for="date">Tanggal Laporan <code
                           style="color:red;">*</code></label>
                       <div class="col-md-4 ">
-                        <input type="datetime-local" id="date" name="date" class="form-control" placeholder=""
-                          value="{{ old('date', $maintenance->date) }}" autocomplete="off" autofocus required>
+                        <input type="datetime-local" id="date" name="date" class="form-control"
+                          placeholder="" value="{{ old('date', $maintenance->date) }}" autocomplete="off" autofocus
+                          required>
                         @if ($errors->has('date'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('date') }}</p>
@@ -201,6 +224,17 @@
                         @if ($errors->has('description'))
                           <p style="font-style: bold; color: red;">
                             {{ $errors->first('description') }}</p>
+                        @endif
+                      </div>
+                    </div>
+
+                    <div class="form-group row" hidden>
+                      <label class="col-md-4 label-control" for="goods_id">id</label>
+                      <div class="col-md-8">
+                        <input type="hidden" class="form-control" id="goods_id" name="goods_id" readonly hidden>
+                        @if ($errors->has('goods_id'))
+                          <p style="font-style: bold; color: red;">
+                            {{ $errors->first('goods_id') }}</p>
                         @endif
                       </div>
                     </div>
@@ -416,12 +450,32 @@
     $(document).ready(function() {
       // Set initial value on page load
       var initialSelectedValue = $('#barcode :selected').data('value');
-      $('#nama_asset').val(initialSelectedValue);
+      $('#asset_name').val(initialSelectedValue);
 
       // Handle change event
       $('#barcode').on('change', function() {
         var input_value = $(this).find(':selected').data('value');
-        $('#nama_asset').val(input_value);
+        $('#asset_name').val(input_value);
+      });
+
+      $('#barcode').on('change', function() {
+        var input_value = $(this).find(':selected').data('value1');
+        $('#goods_id').val(input_value);
+      });
+
+      $('#barcode').on('change', function() {
+        var employeeId = $(this).find(':selected').data('value2'); // Get employee ID
+        $('#employee_id').val(employeeId).trigger('change'); // Set value & refresh Select2
+      });
+
+      $('#barcode').on('change', function() {
+        var input_value = $(this).find(':selected').data('value3');
+        $('#category_asset').val(input_value);
+      });
+
+      $('#barcode').on('change', function() {
+        var input_value = $(this).find(':selected').data('value4');
+        $('#maintenance_operator').val(input_value);
       });
     });
   </script>

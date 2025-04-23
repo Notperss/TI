@@ -76,7 +76,7 @@ class ActDailyController extends Controller
                                 <input type="hidden" name="_method" value="PUT">
                                 <input type="hidden" name="_token" value="'.csrf_token().'">
                                 <input type="submit"
-                                title="approve" class="btn btn-sm btn-'.($item->status == 1 ? 'success' : 'danger').' w-100" value="'.($item->status == 1 ? 'Open' : 'Close').'" 
+                                title="approve" class="btn btn-sm btn-'.($item->status == 1 ? 'success' : 'danger').' w-100" value="'.($item->status == 1 ? 'Close' : 'Open').'" 
                                 '.(Auth::user()->id == $item->executor && $item->status == 1 || $isAdmin ? '' : 'hidden').'>
                     </form>
                             ';

@@ -37,7 +37,11 @@ class BarangController extends Controller
     {
         if (request()->ajax()) {
 
-            $barang = Barang::with('distribution_asset.distribution.employee', 'maintenance', 'maintenance.maintenanceStatus', 'hardwareCategory')->orderby('created_at', 'desc');
+            $barang = Barang::with('distribution_asset.distribution.employee', 'maintenance', 'maintenance.maintenanceStatus', 'hardwareCategory')
+                ->when(! auth()->user()->hasRole('super-admin'), function ($query) {
+                    $query->where('job_position_id', auth()->user()->job_position_id);
+                })
+                ->orderby('created_at', 'desc');
 
             return DataTables::of($barang)
                 ->addIndexColumn()

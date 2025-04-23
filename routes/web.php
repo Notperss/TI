@@ -2,6 +2,7 @@
 // controller
 
 
+use App\Http\Controllers\Inspection\LattolInspectionController;
 use App\Models\Act_daily\Workcat;
 use App\Models\Act_daily\ActDaily;
 use Illuminate\Support\Facades\Log;
@@ -433,13 +434,22 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::get('/asset/get-testings', [HardwareTestingController::class, 'getTestings'])->name('asset.getTestings');
 
     Route::resource('inspection', InspectionController::class);
-    Route::get('inspection-asset', [InspectionController::class, 'getInspectionAsset'])->name('inspection.getAssets');
-    Route::post('inspection-indicator-asset', [InspectionController::class, 'assetIndicatorStore'])->name('inspection.indicator.store');
+
+    Route::get('get-inspection-asset', [InspectionController::class, 'getInspectionAsset'])->name('inspection.getAssets');
+    Route::post('inspection-indicator-asset/store', [InspectionController::class, 'assetIndicatorStore'])->name('inspection.indicator.store');
     Route::delete('/inspection/delete/indicator', [InspectionController::class, 'deleteAllIndicator'])->name('inspection.indicator.delete');
-    Route::post('inspection-testing-asset', [InspectionController::class, 'assetTestingStore'])->name('inspection.testing.store');
+    Route::post('inspection-testing-asset/store', [InspectionController::class, 'assetTestingStore'])->name('inspection.testing.store');
     Route::delete('/inspection/delete/testing', [InspectionController::class, 'deleteAllTesting'])->name('inspection.testing.delete');
     Route::post('/asset/upload-file', [InspectionController::class, 'uploadFile'])->name('inspection.uploadFile');
     Route::delete('/asset/delete-file', [InspectionController::class, 'deleteFile'])->name('inspection.deleteFile');
+
+    Route::get('inspection/problem/index', [InspectionController::class, 'allProblematicItems'])->name('inspection.problem.index');
+    Route::get('inspection/problem/show/{id}', [InspectionController::class, 'showProblematicItem'])->name('inspection.problem.show');
+    Route::put('inspection/problem/approve/{id}', [InspectionController::class, 'approveProblematicItem'])->name('inspection.problem.approve');
+
+    // Route::resource('inspection.problem', LattolInspectionController::class)->except('index', );
+    // Route::get('inspection/problem/', [LattolInspectionController::class, 'index'])->name('inspection.problem.index');
+    // Route::put('/lattol-inspection/approve/{id}', [LattolInspectionController::class, 'approve'])->name('inspection.problem.approve');
 
 
 });
